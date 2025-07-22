@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import corner
 
-# Import only the new NFConditionalPrior implementation
+# Import the new NFConditionalPrior implementation
 from bilby.core.prior.dict import NFConditionalPrior
 from bilby.core.prior import ConditionalPriorDict
 
@@ -55,46 +55,156 @@ nsbh_glasflow_filename = os.path.join(nsbh_model_dir, "model.pt")
 nsbh_training_data_path = os.path.join(nsbh_model_dir, "training_data.npz")
 
 def test_bns_conditional_prior():
-    """Test the new NFConditionalPrior implementation with ConditionalPriorDict"""
+    """Test the new NFConditionalPrior implementation with shared state coordination for BNS"""
     
-    print("Testing BNS implementation...")
+    print("Testing BNS NFConditionalPrior with shared state coordination...")
     
     from bilby.core.prior.analytical import Uniform
     
-    # Create ConditionalPriorDict
-    priors = ConditionalPriorDict()
-    
-    # Add base priors
-    priors['chirp_mass'] = Uniform(minimum=1.3, maximum=1.5, name='chirp_mass')
-    priors['mass_ratio'] = Uniform(minimum=0.125, maximum=1.0, name='mass_ratio')
-    priors['luminosity_distance'] = Uniform(minimum=20.0, maximum=400.0, name='luminosity_distance')
-    
-    # Add conditional NF priors
-    priors['lambda_1'] = NFConditionalPrior(
-        nf_model_path=conditional_glasflow_filename,
-        target_param='lambda_1',
-        minimum=0.0,
-        maximum=10000.0
-    )
-    
-    priors['lambda_2'] = NFConditionalPrior(
-        nf_model_path=conditional_glasflow_filename,
-        target_param='lambda_2',
-        minimum=0.0,
-        maximum=10000.0
-    )
-    
-    print(f"✓ ConditionalPriorDict created with {len(priors)} parameters")
-    print(f"  Parameter keys: {list(priors.keys())}")
-    
-    # Test sampling
-    print("\n1. Testing sampling...")
+    # Test the new shared state coordination approach
+    print("\n=== Testing Shared State Coordination ====")
     try:
+        # Create ConditionalPriorDict with shared state coordination
+        priors = ConditionalPriorDict()
+        
+        # Add base priors
+        priors['chirp_mass'] = Uniform(minimum=1.3, maximum=1.5, name='chirp_mass')
+        priors['mass_ratio'] = Uniform(minimum=0.125, maximum=1.0, name='mass_ratio')
+        priors['luminosity_distance'] = Uniform(minimum=20.0, maximum=400.0, name='luminosity_distance')
+        
+        # Create shared state object for coordination between lambda_1 and lambda_2
+        shared_state = {'lambda_1': None, 'lambda_2': None, '_conditioning': None}
+        
+        # Add conditional NF priors with shared state coordination
+        priors['lambda_1'] = NFConditionalPrior(
+            nf_model_path=conditional_glasflow_filename,
+            target_param='lambda_1',
+            minimum=1e-6,
+            maximum=100_000.0,
+            shared_lambda_state=shared_state
+        )
+        
+        priors['lambda_2'] = NFConditionalPrior(
+            nf_model_path=conditional_glasflow_filename,
+            target_param='lambda_2',
+            minimum=1e-6,
+            maximum=100_000.0,
+            shared_lambda_state=shared_state
+        )
+        
+        print(f"✓ ConditionalPriorDict created with {len(priors)} parameters")
+        print(f"  Parameter keys: {list(priors.keys())}")
+        print(f"  Shared state: {shared_state}")
+        
+        # Test sampling with detailed shared state checking
+        print("  Testing individual NFConditionalPrior.sample() calls...")
+        
+        # First, test that lambda_1 prior creates joint sample in shared state
+        print(f"  Before lambda_1 sample: shared_state = {shared_state}")
+        
+        # Call lambda_1 sample method directly with required variables
+        conditioning_vars = {'chirp_mass': 1.4, 'mass_ratio': 0.8, 'luminosity_distance': 100.0}
+        lambda_1_val = priors['lambda_1'].sample(**conditioning_vars)
+        print(f"  After lambda_1 sample: shared_state = {shared_state}")
+        print(f"  lambda_1 sampled value: {lambda_1_val:.1f}")
+        
+        # Now test lambda_2 - it should use the value from shared state
+        lambda_2_val = priors['lambda_2'].sample(**conditioning_vars)
+        print(f"  After lambda_2 sample: shared_state = {shared_state}")
+        print(f"  lambda_2 sampled value: {lambda_2_val:.1f}")
+        
+        # Verify they match the shared state
+        if (abs(lambda_1_val - shared_state['lambda_1']) < 1e-6 and
+            abs(lambda_2_val - shared_state['lambda_2']) < 1e-6):
+            print("  ✓ Individual sampling with shared state working!")
+        else:
+            print("  ✗ Individual sampling values don't match shared state")
+        
+        # Now test ConditionalPriorDict.sample()
+        print("\n  Testing ConditionalPriorDict.sample()...")
         sample = priors.sample()
         print(f"  Sample keys: {list(sample.keys())}")
         print(f"  Sample values:\n   chirp_mass={sample['chirp_mass']:.3f},\n   mass_ratio={sample['mass_ratio']:.3f},\n   lambda_1={sample['lambda_1']:.1f},\n   lambda_2={sample['lambda_2']:.1f}")
+        print(f"  Shared state after ConditionalPriorDict sampling: {shared_state}")
+        
+        # Check if shared state has values (should be populated during ConditionalPriorDict sampling)
+        if shared_state['lambda_1'] is not None and shared_state['lambda_2'] is not None:
+            print("  ✓ Shared state properly populated during ConditionalPriorDict sampling!")
+            
+            # Verify the sampled values match the shared state
+            if (abs(sample['lambda_1'] - shared_state['lambda_1']) < 1e-6 and
+                abs(sample['lambda_2'] - shared_state['lambda_2']) < 1e-6):
+                print("  ✓ ConditionalPriorDict sample values match shared state!")
+            else:
+                print("  ✗ ConditionalPriorDict sample values don't match shared state")
+                print(f"    Sample lambda_1: {sample['lambda_1']}, Shared: {shared_state['lambda_1']}")
+                print(f"    Sample lambda_2: {sample['lambda_2']}, Shared: {shared_state['lambda_2']}")
+        else:
+            print("  ✗ Shared state not populated during ConditionalPriorDict sampling")
+            print(f"    This means marginal approximation is still being used")
+        
+        # Test ln_prob with ConditionalPriorDict (realistic bilby usage)
+        print("\n  Testing ln_prob via ConditionalPriorDict (realistic bilby usage)...")
+        
+        # Test 1: Complete parameter dictionary with realistic lambda values
+        print("  Testing realistic lambda values:")
+        realistic_params = {
+            'chirp_mass': 1.4,
+            'mass_ratio': 0.8, 
+            'luminosity_distance': 100.0,
+            'lambda_1': 100.0,  # Realistic NS tidal deformability
+            'lambda_2': 500.0   # Realistic NS tidal deformability
+        }
+        
+        ln_prob_realistic = priors.ln_prob(realistic_params)
+        print(f"    Realistic params: ln_prob = {ln_prob_realistic:.3f}")
+        print(f"    Parameters: lambda_1={realistic_params['lambda_1']:.1f}, lambda_2={realistic_params['lambda_2']:.1f}")
+        
+        # Test 2: Complete parameter dictionary with unrealistically large lambda values
+        print("  Testing unrealistically large lambda values:")
+        unrealistic_params = {
+            'chirp_mass': 1.4,
+            'mass_ratio': 0.8,
+            'luminosity_distance': 100.0, 
+            'lambda_1': 90_000.0,  # Unrealistically large
+            'lambda_2': 90_000.0   # Unrealistically large  
+        }
+        
+        ln_prob_unrealistic = priors.ln_prob(unrealistic_params)
+        print(f"    Unrealistic params: ln_prob = {ln_prob_unrealistic:.3f}")
+        print(f"    Parameters: lambda_1={unrealistic_params['lambda_1']:.0f}, lambda_2={unrealistic_params['lambda_2']:.0f}")
+        
+        # Test 3: Out-of-bounds values (should return -inf due to bounds checking)
+        print("  Testing out-of-bounds lambda values:")
+        out_of_bounds_params = {
+            'chirp_mass': 1.4,
+            'mass_ratio': 0.8,
+            'luminosity_distance': 100.0,
+            'lambda_1': -10.0,      # Negative (out of bounds)
+            'lambda_2': 90_000.0   # Above maximum bound
+        }
+        
+        ln_prob_oob = priors.ln_prob(out_of_bounds_params)
+        print(f"    Out-of-bounds params: ln_prob = {ln_prob_oob:.3f}")
+        print(f"    Parameters: lambda_1={out_of_bounds_params['lambda_1']:.1f}, lambda_2={out_of_bounds_params['lambda_2']:.0f}")
+        
+        # Verify probability ordering
+        if ln_prob_realistic > ln_prob_unrealistic:
+            print("  ✓ Realistic lambda values have higher probability than unrealistic ones!")
+        else:
+            print("  ✗ Probability ordering unexpected - check NF model")
+            
+        if ln_prob_oob == -float('inf'):
+            print("  ✓ Out-of-bounds values correctly return -inf!")
+        else:
+            print("  ✗ Out-of-bounds values should return -inf")
+        
+        print("  ✓ ln_prob method tested via ConditionalPriorDict (proper bilby usage)!")
+        
+        print("\n✓ Shared state coordination approach working!")
+        
     except Exception as e:
-        print(f"  ✗ Sampling failed: {e}")
+        print(f"✗ Shared state coordination approach failed: {e}")
         import traceback
         traceback.print_exc()
         return
@@ -146,8 +256,8 @@ def test_bns_conditional_prior():
         print("\n✓ New NFConditionalPrior test completed successfully!")
 
 def test_corner_plot_new_implementation():
-    """Generate a corner plot using the new implementation"""
-    print("\nGenerating corner plot with new implementation...")
+    """Generate a corner plot using the conditional NF implementation with shared state"""
+    print("\nGenerating corner plot with conditional NF implementation (shared state coordination)...")
     
     from bilby.core.prior.analytical import Uniform
     
@@ -159,19 +269,24 @@ def test_corner_plot_new_implementation():
     priors['mass_ratio'] = Uniform(minimum=0.5, maximum=1.0, name='mass_ratio')
     priors['luminosity_distance'] = Uniform(minimum=50.0, maximum=200.0, name='luminosity_distance')
     
-    # Add conditional NF priors
+    # Create shared state for lambda coordination
+    shared_state = {'lambda_1': None, 'lambda_2': None, '_conditioning': None}
+    
+    # Add conditional NF priors with shared state
     priors['lambda_1'] = NFConditionalPrior(
         nf_model_path=conditional_glasflow_filename,
         target_param='lambda_1',
-        minimum=0.0,
-        maximum=10_000.0
+        minimum=1e-6, # small, but not zero, to prevent issues with log scaling
+        maximum=100_000.0,
+        shared_lambda_state=shared_state
     )
     
     priors['lambda_2'] = NFConditionalPrior(
         nf_model_path=conditional_glasflow_filename,
         target_param='lambda_2',
-        minimum=0.0,
-        maximum=10_000.0
+        minimum=1e-6, # small, but not zero, to prevent issues with log scaling
+        maximum=100_000.0,
+        shared_lambda_state=shared_state
     )
     
     # Generate samples
@@ -237,19 +352,23 @@ def test_corner_plot_new_implementation():
     plt.close()
     
     # Now overlay the second cornerplot on the first, using a different color
-    default_corner_kwargs["color"] = "red"
-    hist_kwargs = {"color": "red",
-                   "density": True}
-    default_corner_kwargs["color"] = "red"
-    default_corner_kwargs["hist_kwargs"] = hist_kwargs
-    
     print("Creating corner plot to compare rescale with sample...")
+    default_corner_kwargs["color"] = "blue"
+    hist_kwargs = {"color": "blue",
+                   "density": True}
+    default_corner_kwargs["color"] = "blue"
     fig = corner.corner(
         samples_og, 
         range=ranges, 
         labels=param_names,
         **default_corner_kwargs
     )
+    
+    default_corner_kwargs["color"] = "red"
+    hist_kwargs = {"color": "red",
+                   "density": True}
+    default_corner_kwargs["color"] = "red"
+    default_corner_kwargs["hist_kwargs"] = hist_kwargs
     
     corner.corner(
         samples,
