@@ -8,11 +8,11 @@ os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["MKL_DYNAMIC"] = "FALSE"
 os.environ["OMP_NUM_THREADS"] = "1"
 
-import warnings
-
-# This is to suppress warnings from the bilby library about masked frequencies (coming in GW170817)
-warnings.filterwarnings("ignore", message=".*masked frequencies.*")
-warnings.filterwarnings("ignore", message=".*Masking >3 elements.*")
+# TODO: remove this, does not work
+# # This is to suppress warnings from the bilby library about masked frequencies (coming in GW170817)
+# import warnings
+# warnings.filterwarnings("ignore", message=".*masked frequencies.*")
+# warnings.filterwarnings("ignore", message=".*Masking >3 elements.*")
 
 import sys
 import bilby 
@@ -31,6 +31,18 @@ import signal
 import time
 from contextlib import contextmanager
 warnings.filterwarnings("ignore", "Wswiglal-redir-stdio")
+
+# Custom filter is to suppress specific warnings from the bilby library that keep on appearing again and again and bloat the output files
+import logging
+class MaskingFilter(logging.Filter):
+    def filter(self, record):
+        # Return False if message matches the undesired warnings
+        msg = record.getMessage()
+        if "Masking >3 elements" in msg or "masked frequencies" in msg:
+            return False
+        return True
+logger.addFilter(MaskingFilter())
+
 
 # Timeout context manager for testing
 @contextmanager
@@ -87,8 +99,8 @@ parser.add_argument('--test-sampling',
                     help = "Test sampling with 30 second timeout for debugging")
 parser.add_argument('--n-pool',
                     type = int,
-                    default = 16,
-                    help = "How many cores to use for the sampling. Default is 16, just recommended.")
+                    default = 32,
+                    help = "How many cores to use for the sampling.")
 
 args = parser.parse_args()
 

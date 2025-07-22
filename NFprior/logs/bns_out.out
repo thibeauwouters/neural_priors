@@ -8,20 +8,30 @@ Number of good samples:  0.9949
 Saving training data to ./models/conditional_bns/training_data.npz
 Saving training data DONE
 Taking the log of the Lambdas
+Sanity checking the ranges of the training data
+m1 ranges from 1.00573627106073 to 3.591534891539654
+m2 ranges from 1.0000002094505172 to 3.2292500128850197
+lambda_1 ranges from 1.0574154247296634 to 8.591786214153785
+lambda_2 ranges from 1.2023899311378463 to 8.996587444580467
 We are training BNS and conditional
 np.shape(self.x)
 (100000, 2)
 np.shape(self.u)
 (100000, 2)
-m1 ranges from 1.0056681335430016 to 3.590868953486594
-m2 ranges from 1.0000022516526863 to 3.0022260632109687
-lambda_1 ranges from 0.8981287636698869 to 8.698438387358463
-lambda_2 ranges from 1.5312233126018497 to 8.96298093981043
+m1 ranges from 1.00573627106073 to 3.591534891539654
+m2 ranges from 1.0000002094505172 to 3.2292500128850197
+lambda_1 ranges from 1.0574154247296634 to 8.591786214153785
+lambda_2 ranges from 1.2023899311378463 to 8.996587444580467
 Going to start training for glasflow . . .
 Initializing a glasflow model for conditional training with kwargs:
     n_inputs: 2
     n_conditional_inputs: 2
-    n_transforms: 2
+    n_transforms: 4
     n_neurons: 64
 Using RealNVP for >1D conditional distribution
 Initialized flow: RealNVP
+Saving the training loss plot to ./models/conditional_bns/training_loss.pdf
+Training done. Took around 26.47 minutes
+Saving the model weights to ./models/conditional_bns/model.pt
+Saving the model kwargs to ./models/conditional_bns/model_kwargs.json
+DONE training!

@@ -1,8 +1,12 @@
 import os
 import json
+import arviz
 import numpy as np
 import matplotlib.pyplot as plt
 import corner
+
+from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
+from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
 
 params = {"axes.grid": True,
         "text.usetex" : False,
@@ -37,13 +41,35 @@ default_corner_kwargs = dict(bins=40,
                         truth_color = "red",
                         save=False)
 
-
 DEFAULT_COLOR = 'blue'
-BNS_COLOR = 'red'
-NSBH_COLOR = 'green'
+BNS_COLOR = 'green'
+NSBH_COLOR = 'red'
+
+LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
+              "mass_ratio": r"$q$",
+              "luminosity_distance": r"$d_L$ [Mpc]",
+              "geocent_time": r"$t_c$ [s]",
+              "a_1": r"$a_1$",
+              "a_2": r"$a_2$",
+              "tilt_1": r"$\theta_{1}$",
+              "tilt_2": r"$\theta_{2}$",
+              "phi_12": r"$\phi_{12}$",
+              "phi_jl": r"$\phi_{JL}$",
+              "dec": r"$\delta$",
+              "ra": r"$\alpha$",
+              "theta_jn": r"$\theta_{JN}$",
+              "psi": r"$\psi$",
+              "phase": r"$\phi$",
+              "lambda_1": r"$\Lambda_1$",
+              "lambda_2": r"$\Lambda_2$",
+              "lambda_tilde": r"$\tilde{\Lambda}$",
+              "delta_lambda_tilde": r"$\Delta \tilde{\Lambda}$"
+              }
 
 def create_corner_plot(GW_event: str,
-                       plot_all_params: bool = False):
+                       plot_all_params: bool = False,
+                       plot_default: bool = False,
+                       convert_lambdas: bool = True):
     """
     Create a corner plot comparing posterior samples from BNS, Default, and NSBH runs for a given GW event.
     """
@@ -59,13 +85,21 @@ def create_corner_plot(GW_event: str,
         bns_result = json.load(f)
         bns_posterior = bns_result['posterior']['content']
 
-    with open(default_results_filename, "r") as f:
-        default_result = json.load(f)
-        default_posterior = default_result['posterior']['content']
-
     with open(nsbh_results_filename, "r") as f:
         nsbh_result = json.load(f)
         nsbh_posterior = nsbh_result['posterior']['content']
+        
+    if plot_default:
+        with open(default_results_filename, "r") as f:
+            default_result = json.load(f)
+            default_posterior = default_result['posterior']['content']
+            
+        posteriors_dict = {"bns": bns_posterior,
+                           "default": default_posterior,
+                           "nsbh": nsbh_posterior}
+    else:
+        posteriors_dict = {"bns": bns_posterior,
+                           "nsbh": nsbh_posterior}
 
     # Define parameters to plot (excluding log_likelihood and log_prior)
     if plot_all_params:
@@ -73,27 +107,96 @@ def create_corner_plot(GW_event: str,
                         'a_1', 'a_2', 'tilt_1', 'tilt_2', 'phi_12', 'phi_jl', 
                         'dec', 'ra', 'theta_jn', 'psi', 'phase', 'lambda_1', 'lambda_2']
     else:
-        params_to_plot = ['chirp_mass', 'mass_ratio', 'luminosity_distance', 'geocent_time', 
-                        'a_1', 'a_2', 'lambda_1', 'lambda_2']
+        params_to_plot = ['chirp_mass', 'mass_ratio', 'geocent_time', 'lambda_1', 'lambda_2']
+        
+    # If we convert lambdas, then we need to convert them to lambda_tilde and delta_lambda_tilde
+    if convert_lambdas:
+        
+        # Convert lambda_1 and lambda_2 to lambda_tilde and delta_lambda_tilde
+        for key, posterior in posteriors_dict.items():
+            
+            mass_1, mass_2 = chirp_mass_and_mass_ratio_to_component_masses(
+                np.array(posterior['chirp_mass']),
+                np.array(posterior['mass_ratio']))
+            
+            if 'lambda_1' in posterior and 'lambda_2' in posterior:
+                lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(np.array(posterior['lambda_1']),
+                                                                 np.array(posterior['lambda_2']),
+                                                                 mass_1,
+                                                                 mass_2)
+                delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(np.array(posterior['lambda_1']),
+                                                                             np.array(posterior['lambda_2']),
+                                                                             mass_1,
+                                                                             mass_2)
+                
+                posterior['lambda_tilde'] = np.array(lambda_tilde)
+                posterior['delta_lambda_tilde'] = np.array(delta_lambda_tilde)
+                
+                # Remove old lambdas
+                del posterior['lambda_1']
+                del posterior['lambda_2']
+                
+                # Save again
+                posteriors_dict[key] = posterior
+                
+                # Print the 95% quantiles for lambda_tilde and delta_lambda_tilde
+                print(f"\n{key} posterior quantiles:")
+                med = np.median(posterior['lambda_tilde'])
+                low, high = arviz.hdi(np.array(posterior['lambda_tilde']), hdi_prob=0.95)
+                low = med - low
+                high = high - med
+                
+                # Round to 2 digits
+                med = np.round(med, 2)
+                low = np.round(low, 2)
+                high = np.round(high, 2)
+                print(f"   lambda_tilde: {med}-{low}+{high}")
+                
+                med = np.median(posterior['delta_lambda_tilde'])
+                low, high = arviz.hdi(np.array(posterior['delta_lambda_tilde']), hdi_prob=0.95)
+                low = med - low
+                high = high - med
+                
+                # Round to 2 digits
+                med = np.round(med, 2)
+                low = np.round(low, 2)
+                high = np.round(high, 2)
+                print(f"   delta_lambda_tilde: {med}-{low}+{high}")
+            
+            else:
+                raise ValueError("lambda_1 and lambda_2 must be present in the posterior to convert to lambda_tilde and delta_lambda_tilde.")
+            
+        # Add new labels
+        params_to_plot.append('lambda_tilde')
+        params_to_plot.append('delta_lambda_tilde')
+        
+        del params_to_plot[params_to_plot.index('lambda_1')]
+        del params_to_plot[params_to_plot.index('lambda_2')]
+        
+        print("params_to_plot")
+        print(params_to_plot)
 
     # Create data arrays for each run
     bns_data = []
     default_data = []
     nsbh_data = []
     labels = []
+    latex_labels = []
 
     for param in params_to_plot:
-        if param in bns_posterior and param in default_posterior and param in nsbh_posterior:
+        if param in bns_posterior: # TODO: remove this line?
             bns_data.append(bns_posterior[param])
-            default_data.append(default_posterior[param])
             nsbh_data.append(nsbh_posterior[param])
+            if plot_default:
+                default_data.append(default_posterior[param])
             labels.append(param)
+            latex_labels.append(LaTeX_dict.get(param, param))
 
     # Convert to numpy arrays and transpose to get (n_samples, n_params)
     bns_samples = np.array(bns_data).T
     default_samples = np.array(default_data).T  
     nsbh_samples = np.array(nsbh_data).T
-
+    
     print(f"BNS samples shape: {bns_samples.shape}")
     print(f"Default samples shape: {default_samples.shape}")
     print(f"NSBH samples shape: {nsbh_samples.shape}")
@@ -102,38 +205,60 @@ def create_corner_plot(GW_event: str,
     ranges = []
     for i, param in enumerate(labels):
         # Get all values for this parameter across all runs
-        all_vals = np.concatenate([bns_samples[:, i], default_samples[:, i], nsbh_samples[:, i]])
+        if plot_default:
+            all_vals = np.concatenate([bns_samples[:, i], default_samples[:, i], nsbh_samples[:, i]])
+        else:
+            all_vals = np.concatenate([bns_samples[:, i], nsbh_samples[:, i]])
         
         if param == 'lambda_1' and np.std(nsbh_samples[:, i]) < 1e-10:
             # For constant lambda_1 in NSBH, use range from BNS and Default only
-            non_zero_vals = np.concatenate([bns_samples[:, i], default_samples[:, i]])
+            if plot_default:
+                non_zero_vals = np.concatenate([bns_samples[:, i], default_samples[:, i]])
+            else:
+                non_zero_vals = [bns_samples[:, i]]
             param_range = (np.min(non_zero_vals), np.max(non_zero_vals))
         else:
             # Use full range for all other parameters
             param_range = (np.min(all_vals), np.max(all_vals))
         
         ranges.append(param_range)
+        
+    # Make lambda_1 NaN for NSBH samples for plotting
+    if 'lambda_1' in params_to_plot:
+        lambda_1_index = labels.index('lambda_1')
+        # print("Setting those values to NaN")
+        # # Set lambda_1 values in NSBH samples to NaN
+        # nsbh_samples[:, lambda_1_index]   = np.ones_like(nsbh_samples[:, lambda_1_index]) * np.nan
+        
+        # Turn into very small jitter around zero instead of NaN to make plot pass
+        jitter = 1e-10
+        nsbh_samples[:, lambda_1_index] = np.random.normal(0, jitter, size=nsbh_samples[:, lambda_1_index].shape)
+        
+    print("ranges")
+    print(ranges)
 
     # Create corner plot with three overlaid distributions
     corner_kwargs_with_range = default_corner_kwargs.copy()
-    corner_kwargs_with_range['range'] = ranges
+    # corner_kwargs_with_range['range'] = ranges
 
     # Create three different corner kwargs with different colors
     default_kwargs = corner_kwargs_with_range.copy()
-    default_kwargs.update({'color': DEFAULT_COLOR, 'alpha': 0.7, 'hist_kwargs': {'alpha': 0.7, 'color': DEFAULT_COLOR}})
+    default_kwargs.update({'color': DEFAULT_COLOR, 'alpha': 0.7, 'hist_kwargs': {'alpha': 0.7, 'color': DEFAULT_COLOR, 'density': True}})
 
     bns_kwargs = corner_kwargs_with_range.copy()  
-    bns_kwargs.update({'color': BNS_COLOR, 'alpha': 0.7, 'hist_kwargs': {'alpha': 0.7, 'color': BNS_COLOR}})
+    bns_kwargs.update({'color': BNS_COLOR, 'alpha': 0.7, 'hist_kwargs': {'alpha': 0.7, 'color': BNS_COLOR, 'density': True}})
 
     nsbh_kwargs = corner_kwargs_with_range.copy()
-    nsbh_kwargs.update({'color': NSBH_COLOR, 'alpha': 0.7, 'hist_kwargs': {'alpha': 0.7, 'color': NSBH_COLOR}})
+    nsbh_kwargs.update({'color': NSBH_COLOR, 'alpha': 0.7, 'hist_kwargs': {'alpha': 0.7, 'color': NSBH_COLOR, 'density': True}})
 
-    print(labels)
+    print("latex_labels")
+    print(latex_labels)
 
     # Create the overlaid corner plot
-    fig = corner.corner(default_samples, labels=labels, **default_kwargs)
-    corner.corner(bns_samples, labels=labels, fig=fig, **bns_kwargs)
-    corner.corner(nsbh_samples, labels=labels, fig=fig, **nsbh_kwargs)
+    fig = corner.corner(bns_samples, labels=latex_labels, **bns_kwargs)
+    corner.corner(nsbh_samples, labels=latex_labels, fig=fig, **nsbh_kwargs)
+    if plot_default:
+        corner.corner(default_samples, labels=latex_labels, fig=fig, **default_kwargs)
 
     # Add legend
     if plot_all_params:
@@ -141,8 +266,8 @@ def create_corner_plot(GW_event: str,
     else:
         fs = 26
         
-
-    plt.text(0.95, 0.95, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    if plot_default:
+        plt.text(0.95, 0.95, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     plt.text(0.95, 0.85, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     plt.text(0.95, 0.75, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     if not plot_all_params:
@@ -153,15 +278,17 @@ def create_corner_plot(GW_event: str,
     plt.close()
     
 def main():
-    # Example usage
-    GW_event_list = ["GW170817", "GW190425", "GW230529"]
+    GW_event_list = ["GW190425",
+                     "GW230529",
+                    #  "GW170817"
+                     ]
+    
     for GW_event in GW_event_list:
         print(f"Creating corner plot for {GW_event}...")
-        try:
-            create_corner_plot(GW_event, plot_all_params=False)
-        except Exception as e:
-            print(f"Failed for {GW_event}: {e}")
-        print(f"Corner plot for {GW_event} saved.")
+        create_corner_plot(GW_event,
+                           plot_all_params=False,
+                           plot_default=False,
+                           convert_lambdas=False)
         
 if __name__ == "__main__":
     main()

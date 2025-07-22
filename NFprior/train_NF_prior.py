@@ -53,7 +53,7 @@ class NFPriorCreator:
                  num_epochs: int = 200,
                  learning_rate: float = 1e-3,
                  max_patience: int = 50,
-                 n_transforms: int = 2,
+                 n_transforms: int = 4,
                  n_neurons: int = 64,
                  batch_size: int = 256,
                  n_blocks_per_transform: int = 2,
@@ -66,7 +66,7 @@ class NFPriorCreator:
         Args:
             eos_samples_filename (str, optional): Filename where we load the EOS samples from, which will be converted into the training data for the NF for binary systems. Defaults to None.
             source_type (str, optional): Which kind of source to model: `bns` or `nsbh`. Defaults to "bns".
-            N_samples_training (int, optional): Number of training samples to create.. Defaults to 80_000.
+            N_samples_training (int, optional): Number of training samples to create.. Defaults to 100_000.
             N_samples_plot (int, optional): Number of samples to create the plots. Defaults to 10_000.
             m_max_BH (float, optional): If generating NSBH training data with an NF that is not conditioned on the masses, this is up to which the masses are taken. Defaults to 5.0.
             save_name (str, optional): Where to save the models etc to. Defaults to "".
@@ -265,6 +265,17 @@ class NFPriorCreator:
         # Load the data, from which we infer what system we are training for
         training_filename = os.path.join(self.outdir, "training_data.npz")
         self.load_training_data(training_filename)
+        
+        print("Sanity checking the ranges of the training data")
+        
+        if self.source_type == "nsbh":
+            print(f"m2 (concatenated) ranges from {np.min(self.m2)} to {np.max(self.m2)}")
+            print(f"lambda_2 (concatenated) ranges from {np.min(self.lambda_2)} to {np.max(self.lambda_2)}")
+        else:
+            print(f"m1 ranges from {np.min(self.m1)} to {np.max(self.m1)}")
+            print(f"m2 ranges from {np.min(self.m2)} to {np.max(self.m2)}")
+            print(f"lambda_1 ranges from {np.min(self.lambda_1)} to {np.max(self.lambda_1)}")
+            print(f"lambda_2 ranges from {np.min(self.lambda_2)} to {np.max(self.lambda_2)}")
         
         # Start storing kwargs here to dump later on
         self.nf_kwargs = {"n_transforms": self.n_transforms,

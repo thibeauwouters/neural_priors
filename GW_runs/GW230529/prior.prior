@@ -1,4 +1,4 @@
-chirp_mass = Uniform(name='chirp_mass', minimum=2.0214333426453837, maximum=2.033088646054829, unit='$M_{\odot}$')
+chirp_mass = Uniform(name='chirp_mass', minimum=2.02, maximum=2.04, unit='$M_{\odot}$')
 mass_ratio = Uniform(name='mass_ratio', minimum=0.125, maximum=1)
 luminosity_distance = UniformComovingVolume(name='luminosity_distance', minimum=1, maximum=500.0, unit='Mpc')
 geocent_time = Uniform(minimum=1240215503.017147-0.1, maximum=1240215503.017147+0.1, name='geocent_time')

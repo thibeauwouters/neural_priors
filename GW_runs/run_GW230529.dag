@@ -1,0 +1,4 @@
+JOB run_e /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_e label="GW230529" prior_name="bns" seed="123"
+JOB run_f /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_f label="GW230529" prior_name="nsbh" seed="123"
