@@ -1,0 +1,35 @@
+000 (2259952.000.000) 2025-06-27 01:12:20 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_c
+...
+001 (2259952.000.000) 2025-06-27 01:13:08 Job executing on host: <145.107.4.113:9618?addrs=145.107.4.113-9618+[2a07-8500-120-e070--71]-9618&alias=wn-sate-067.nikhef.nl&noUDP&sock=startd_2168_a56a>
+	SlotName: slot1_1@wn-sate-067.nikhef.nl
+	CondorScratchDir = "/scratch/condor_execute/dir_938358"
+	Cpus = 16
+	Disk = 16779817
+	GPUs = 0
+	Memory = 16384
+...
+006 (2259952.000.000) 2025-06-27 01:13:22 Image size of job updated: 259480
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (2259952.000.000) 2025-06-27 01:13:22 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:05, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:05, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     0.00       16        16 
+	   Disk (KB)            : 17500    16777216  16779817 
+	   GPUs                 :                           0 
+	   Memory (MB)          :     0       16384     16384 
+	   TimeExecute (s)      :    14                       
+	   TimeSlotBusy (s)     :    14                       
+
+	Job terminated of its own accord at 2025-06-26T23:13:22Z with exit-code 1.
+...

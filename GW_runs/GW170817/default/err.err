@@ -1,0 +1,43 @@
+01:13 bilby INFO    : You are running on the Nikhef cluster, setting paths accordingly.
+01:13 bilby INFO    : File validation passed. All required files found.
+01:13 bilby INFO    : Using geocent_time from reference parameters: 1187008882.43
+01:13 bilby INFO    : Showing the reference parameters for GW170817
+01:13 bilby INFO    : chirp_mass: 1.1975896
+01:13 bilby INFO    : symmetric_mass_ratio: 0.2461001
+01:13 bilby INFO    : a_1: 0.01890608
+01:13 bilby INFO    : a_2: 0.04888488
+01:13 bilby INFO    : tilt_1: 0.0
+01:13 bilby INFO    : tilt_2: 0.0
+01:13 bilby INFO    : phi_jl: 0.0
+01:13 bilby INFO    : phi_12: 0.0
+01:13 bilby INFO    : lambda_1: 791.04366468
+01:13 bilby INFO    : lambda_2: 891.04366468
+01:13 bilby INFO    : luminosity_distance: 40.06331818
+01:13 bilby INFO    : phase: 5.88649652
+01:13 bilby INFO    : theta_jn: 1.93095421
+01:13 bilby INFO    : psi: 1.59687217
+01:13 bilby INFO    : ra: 3.39736826
+01:13 bilby INFO    : dec: -0.34000186
+01:13 bilby INFO    : mass_ratio: 0.7779384106788951
+01:13 bilby INFO    : mass_1: 1.5621553813557303
+01:13 bilby INFO    : mass_2: 1.2152606746053602
+01:13 bilby INFO    : Geocent time is 1187008882.43 and duration is 128.0
+01:13 bilby INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+01:13 bilby INFO    : Relative binning delta 0.01
+01:13 bilby INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+01:13 bilby INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+01:13 bilby INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
+01:13 bilby INFO    : Using the default priors
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/pe.py", line 298, in <module>
+    priors = bilby.core.prior.PriorDict(filename=prior_filename)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/prior/dict.py", line 44, in __init__
+    self.from_file(filename)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/prior/dict.py", line 158, in from_file
+    self.from_dictionary(prior)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/prior/dict.py", line 245, in from_dictionary
+    raise TypeError("Unable to parse prior class {}".format(cls))
+TypeError: Unable to parse prior class UniformComovingVolume

@@ -1,0 +1,31 @@
+CUDA is available. Number of devices: 1
+Current CUDA device: 0
+source_type is set by user to nsbh
+Everything for this model will be saved to ./models/conditional_nsbh
+No EOS samples filename was provided, so defaulted to: ../data/eos/eos_samples.npz
+Reading the EOS data from ../data/eos/eos_samples.npz
+Number of good samples:  0.9949
+Saving training data to ./models/conditional_nsbh/training_data.npz
+Saving training data DONE
+NSBH mode: concatenating all neutron star data for single NS modeling
+Taking the log of the Lambdas
+We are training NSBH and conditional - using concatenated NS data
+np.shape(self.x)
+(200000, 1)
+np.shape(self.u)
+(200000, 1)
+m2 (concatenated) ranges from 1.0000028774181842 to 3.6833755119383347
+lambda_2 (concatenated) ranges from 0.9686123312407119 to 8.930790878241812
+Going to start training for glasflow . . .
+Initializing a glasflow model for conditional training with kwargs:
+    n_inputs: 1
+    n_conditional_inputs: 1
+    n_transforms: 2
+    n_neurons: 64
+Using MaskedAffineAutoregressiveFlow for 1D conditional distribution
+Initialized flow: MaskedAffineAutoregressiveFlow
+Saving the training loss plot to ./models/conditional_nsbh/training_loss.pdf
+Training done. Took around 22.55 minutes
+Saving the model weights to ./models/conditional_nsbh/model.pt
+Saving the model kwargs to ./models/conditional_nsbh/model_kwargs.json
+DONE training!

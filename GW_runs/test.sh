@@ -1,0 +1,1 @@
+python pe.py --label GW230529 --prior-name nsbh --seed 123 --n-pool 1

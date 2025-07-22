@@ -1,0 +1,27 @@
+CUDA is available. Number of devices: 1
+Current CUDA device: 0
+source_type is set by user to bns
+Everything for this model will be saved to ./models/conditional_bns
+No EOS samples filename was provided, so defaulted to: ../data/eos/eos_samples.npz
+Reading the EOS data from ../data/eos/eos_samples.npz
+Number of good samples:  0.9949
+Saving training data to ./models/conditional_bns/training_data.npz
+Saving training data DONE
+Taking the log of the Lambdas
+We are training BNS and conditional
+np.shape(self.x)
+(100000, 2)
+np.shape(self.u)
+(100000, 2)
+m1 ranges from 1.0056681335430016 to 3.590868953486594
+m2 ranges from 1.0000022516526863 to 3.0022260632109687
+lambda_1 ranges from 0.8981287636698869 to 8.698438387358463
+lambda_2 ranges from 1.5312233126018497 to 8.96298093981043
+Going to start training for glasflow . . .
+Initializing a glasflow model for conditional training with kwargs:
+    n_inputs: 2
+    n_conditional_inputs: 2
+    n_transforms: 2
+    n_neurons: 64
+Using RealNVP for >1D conditional distribution
+Initialized flow: RealNVP

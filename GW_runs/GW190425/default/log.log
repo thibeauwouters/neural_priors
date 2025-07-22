@@ -1,0 +1,144 @@
+000 (2091663.000.000) 2025-06-04 11:19:08 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_b
+...
+001 (2091663.000.000) 2025-06-04 11:20:41 Job executing on host: <145.107.4.134:9618?addrs=145.107.4.134-9618+[2a07-8500-120-e070--86]-9618&alias=wn-lot-007.nikhef.nl&noUDP&sock=startd_773222_8e7f>
+	SlotName: slot1_19@wn-lot-007.nikhef.nl
+	CondorScratchDir = "/scratch/condor_execute/dir_2297677"
+	Cpus = 16
+	Disk = 16778722
+	GPUs = 0
+	Memory = 16384
+...
+006 (2091663.000.000) 2025-06-04 11:20:55 Image size of job updated: 266412
+	261  -  MemoryUsage of job (MB)
+	266412  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 11:25:56 Image size of job updated: 1381112
+	694  -  MemoryUsage of job (MB)
+	710252  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 11:30:57 Image size of job updated: 1381112
+	697  -  MemoryUsage of job (MB)
+	713456  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 11:35:57 Image size of job updated: 1381112
+	700  -  MemoryUsage of job (MB)
+	715876  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 11:40:57 Image size of job updated: 1381112
+	701  -  MemoryUsage of job (MB)
+	717740  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 11:45:58 Image size of job updated: 1381112
+	703  -  MemoryUsage of job (MB)
+	719272  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 11:50:58 Image size of job updated: 1381112
+	705  -  MemoryUsage of job (MB)
+	720924  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 11:55:58 Image size of job updated: 1381112
+	706  -  MemoryUsage of job (MB)
+	722736  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:00:59 Image size of job updated: 1381112
+	708  -  MemoryUsage of job (MB)
+	724112  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:06:00 Image size of job updated: 1381112
+	709  -  MemoryUsage of job (MB)
+	725360  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:11:00 Image size of job updated: 1381112
+	711  -  MemoryUsage of job (MB)
+	727064  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:16:00 Image size of job updated: 1381112
+	712  -  MemoryUsage of job (MB)
+	728700  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:21:01 Image size of job updated: 1381112
+	713  -  MemoryUsage of job (MB)
+	729756  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:26:01 Image size of job updated: 1381112
+	971  -  MemoryUsage of job (MB)
+	993488  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:31:01 Image size of job updated: 1381112
+	971  -  MemoryUsage of job (MB)
+	993796  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:36:02 Image size of job updated: 1381112
+	971  -  MemoryUsage of job (MB)
+	993960  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:41:03 Image size of job updated: 1381112
+	987  -  MemoryUsage of job (MB)
+	1010404  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:46:03 Image size of job updated: 1381112
+	987  -  MemoryUsage of job (MB)
+	1010556  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:51:04 Image size of job updated: 1381112
+	988  -  MemoryUsage of job (MB)
+	1010912  -  ResidentSetSize of job (KB)
+...
+006 (2091663.000.000) 2025-06-04 12:56:05 Image size of job updated: 1381112
+	999  -  MemoryUsage of job (MB)
+	1022620  -  ResidentSetSize of job (KB)
+...
+004 (2091663.000.000) 2025-06-04 12:58:03 Job was evicted.
+	(0) CPU times
+		Usr 0 17:38:52, Sys 0 00:00:32  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :    11.29       16        16 
+	   Disk (KB)            : 17500    16777216  16778722 
+	   GPUs                 :                           0 
+	   Memory (MB)          :   999       16384     16384 
+	   TimeExecute (s)      :  5842                       
+	   TimeSlotBusy (s)     :  5842                       
+...
+009 (2091663.000.000) 2025-06-04 12:58:03 Job was aborted.
+	removed because <OtherJobRemoveRequirements = DAGManJobId =?= 2091661> fired when job (2091661.0) was removed
+...
+000 (2259950.000.000) 2025-06-27 01:12:20 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_a
+...
+001 (2259950.000.000) 2025-06-27 01:13:08 Job executing on host: <145.107.4.136:9618?addrs=145.107.4.136-9618+[2a07-8500-120-e070--88]-9618&alias=wn-lot-009.nikhef.nl&noUDP&sock=startd_1582_b2ea>
+	SlotName: slot1_13@wn-lot-009.nikhef.nl
+	AvailableGPUs = {  }
+	CondorScratchDir = "/scratch/condor_execute/dir_3310623"
+	Cpus = 16
+	Disk = 16778729
+	GPUs = 0
+	Memory = 16384
+...
+006 (2259950.000.000) 2025-06-27 01:13:22 Image size of job updated: 307312
+	301  -  MemoryUsage of job (MB)
+	307312  -  ResidentSetSize of job (KB)
+...
+005 (2259950.000.000) 2025-06-27 01:13:23 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:06, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:06, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0       16        16 
+	   Disk (KB)            :    17500 16777216  16778729 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      301    16384     16384 
+	   TimeExecute (s)      :       15                    
+	   TimeSlotBusy (s)     :       15                    
+
+	Job terminated of its own accord at 2025-06-26T23:13:23Z with exit-code 1.
+...
