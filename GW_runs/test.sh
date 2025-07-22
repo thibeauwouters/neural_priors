@@ -1,1 +1,1 @@
-python pe.py --label GW230529 --prior-name nsbh --seed 123 --n-pool 1
+python pe.py --label GW230529 --prior-name bns --seed 123 --n-pool 1 --minimum-bin-threshold 10
