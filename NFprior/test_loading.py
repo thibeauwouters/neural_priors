@@ -1,10 +1,8 @@
 import os
+import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 import corner
-import json
-import time
-from functools import wraps
 
 # Import only the new NFConditionalPrior implementation
 from bilby.core.prior.dict import NFConditionalPrior
@@ -45,17 +43,21 @@ default_corner_kwargs = dict(bins=40,
                         save=False)
 
 # Conditional model files
-conditional_model_dir = "./models/conditional_bns/"
-conditional_glasflow_filename = os.path.join(conditional_model_dir, "model.pt")
+bns_model_dir = "./models/conditional_bns/"
+conditional_glasflow_filename = os.path.join(bns_model_dir, "model.pt")
+
+bns_glasflow_filename = os.path.join(bns_model_dir, "model.pt")
+bns_training_data_path = os.path.join(bns_model_dir, "training_data.npz")
 
 # NSBH model files
 nsbh_model_dir = "./models/conditional_nsbh/"
 nsbh_glasflow_filename = os.path.join(nsbh_model_dir, "model.pt")
 nsbh_training_data_path = os.path.join(nsbh_model_dir, "training_data.npz")
 
-def test_new_nf_conditional_prior():
+def test_bns_conditional_prior():
     """Test the new NFConditionalPrior implementation with ConditionalPriorDict"""
-    print("Testing new NFConditionalPrior implementation...")
+    
+    print("Testing BNS implementation...")
     
     from bilby.core.prior.analytical import Uniform
     
@@ -63,12 +65,9 @@ def test_new_nf_conditional_prior():
     priors = ConditionalPriorDict()
     
     # Add base priors
-    priors['chirp_mass'] = Uniform(minimum=1.0, maximum=50.0, name='chirp_mass')
+    priors['chirp_mass'] = Uniform(minimum=1.3, maximum=1.5, name='chirp_mass')
     priors['mass_ratio'] = Uniform(minimum=0.125, maximum=1.0, name='mass_ratio')
-    priors['luminosity_distance'] = Uniform(minimum=1.0, maximum=500.0, name='luminosity_distance')
-    
-    # Add some other priors
-    priors['test_param'] = Uniform(minimum=0.0, maximum=1.0, name='test_param')
+    priors['luminosity_distance'] = Uniform(minimum=20.0, maximum=400.0, name='luminosity_distance')
     
     # Add conditional NF priors
     priors['lambda_1'] = NFConditionalPrior(
@@ -93,7 +92,7 @@ def test_new_nf_conditional_prior():
     try:
         sample = priors.sample()
         print(f"  Sample keys: {list(sample.keys())}")
-        print(f"  Sample values: chirp_mass={sample['chirp_mass']:.3f}, lambda_1={sample['lambda_1']:.1f}, lambda_2={sample['lambda_2']:.1f}")
+        print(f"  Sample values:\n   chirp_mass={sample['chirp_mass']:.3f},\n   mass_ratio={sample['mass_ratio']:.3f},\n   lambda_1={sample['lambda_1']:.1f},\n   lambda_2={sample['lambda_2']:.1f}")
     except Exception as e:
         print(f"  ✗ Sampling failed: {e}")
         import traceback
@@ -122,7 +121,13 @@ def test_new_nf_conditional_prior():
     ln_prob_failed = False
     try:
         if not rescaling_failed:
+            # Construct an example array
             param_dict = {key: val for key, val in zip(keys, rescaled)}
+            print(f"  Parameter dictionary: {param_dict}")
+            print(f"  Parameter keys: {list(param_dict.keys())}")
+            print(f"  Parameter values: {list(param_dict.values())}")
+            
+            # Compute ln prob
             ln_prob = priors.ln_prob(param_dict)
             print(f"  Log probability: {ln_prob}")
         else:
@@ -159,45 +164,102 @@ def test_corner_plot_new_implementation():
         nf_model_path=conditional_glasflow_filename,
         target_param='lambda_1',
         minimum=0.0,
-        maximum=5000.0
+        maximum=10_000.0
     )
     
     priors['lambda_2'] = NFConditionalPrior(
         nf_model_path=conditional_glasflow_filename,
         target_param='lambda_2',
         minimum=0.0,
-        maximum=5000.0
+        maximum=10_000.0
     )
     
     # Generate samples
     N_samples = 10_000
-    samples = []
     
     print(f"Generating {N_samples} samples...")
-    for i in range(N_samples):
-        if i % 1000 == 0:
-            print(f"  Progress: {i}/{N_samples}")
+    samples = []
+    for i in tqdm.tqdm(range(N_samples), desc="Sampling . . ."):
         sample = priors.sample()
         samples.append([sample['chirp_mass'], sample['mass_ratio'], 
                        sample['luminosity_distance'], sample['lambda_1'], sample['lambda_2']])
     
-    samples = np.array(samples)
+    samples_og = np.array(samples)
     param_names = ['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_1', 'lambda_2']
     
     # Create ranges for corner plot
-    ranges = [[np.percentile(col, 0.5), np.percentile(col, 99.5)] for col in samples.T]
+    ranges = [[np.percentile(col, 0.5), np.percentile(col, 99.5)] for col in samples_og.T]
     
     # Create corner plot
     print("Creating corner plot...")
     fig = corner.corner(
-        samples, 
+        samples_og, 
         range=ranges, 
         labels=param_names,
         **default_corner_kwargs
     )
     
     # Save the figure
-    output_path = "./figures/new_nf_conditional_prior_cornerplot.pdf"
+    output_path = "./figures/bns_conditional_prior_cornerplot.pdf"
+    print(f"Saving corner plot to {output_path}")
+    plt.savefig(output_path, bbox_inches="tight")
+    plt.close()
+    
+    print("Also creating the cornerplot with the rescale method to check that")
+    
+    # Do the same using rescaling rather than sample to test that functionality
+    samples = []
+    keys = list(priors.keys())
+    for i in tqdm.tqdm(range(N_samples), desc="Rescaling unit cube samples . . ."):
+        unit_cube = np.random.uniform(0, 1, len(priors))
+        rescaled = priors.rescale(keys, unit_cube)
+        samples.append([rescaled[0], rescaled[1], rescaled[2], rescaled[3], rescaled[4]])
+    samples = np.array(samples)
+    
+    print(np.shape(samples))
+    
+    # Create ranges for corner plot
+    ranges = [[np.percentile(col, 0.5), np.percentile(col, 99.5)] for col in samples.T]
+    
+    # Make the corner plot with rescaled values
+    print("Creating corner plot with rescaled values...")
+    fig_rescaled = corner.corner(
+        samples,
+        range=ranges, 
+        labels=param_names,
+        **default_corner_kwargs
+    )
+    
+    # Save the figure
+    output_path = "./figures/bns_conditional_prior_cornerplot_rescaling.pdf"
+    print(f"Saving corner plot to {output_path}")
+    plt.savefig(output_path, bbox_inches="tight")
+    plt.close()
+    
+    # Now overlay the second cornerplot on the first, using a different color
+    default_corner_kwargs["color"] = "red"
+    hist_kwargs = {"color": "red",
+                   "density": True}
+    default_corner_kwargs["color"] = "red"
+    default_corner_kwargs["hist_kwargs"] = hist_kwargs
+    
+    print("Creating corner plot to compare rescale with sample...")
+    fig = corner.corner(
+        samples_og, 
+        range=ranges, 
+        labels=param_names,
+        **default_corner_kwargs
+    )
+    
+    corner.corner(
+        samples,
+        range=ranges, 
+        labels=param_names,
+        fig=fig,
+        **default_corner_kwargs)
+    
+    # Save the figure
+    output_path = "./figures/bns_conditional_prior_cornerplot_comparison.pdf"
     print(f"Saving corner plot to {output_path}")
     plt.savefig(output_path, bbox_inches="tight")
     plt.close()
@@ -263,9 +325,7 @@ def test_nsbh_conditional_prior():
     
     nf_lambdas = []
     
-    for i in range(N_samples):
-        if i % 1000 == 0:
-            print(f"  Progress: {i}/{N_samples}")
+    for i in tqdm.tqdm(range(N_samples), desc="Sampling . . ."):
         
         try:
             sample = priors.sample()
@@ -289,7 +349,7 @@ def main():
     
     # Test the new implementation
     try:
-        test_new_nf_conditional_prior()
+        test_bns_conditional_prior()
         print("\n✓ Basic functionality test passed!")
     except Exception as e:
         print(f"\n✗ Basic functionality test failed: {e}")
