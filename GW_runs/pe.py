@@ -17,8 +17,9 @@ warnings.filterwarnings("ignore", message=".*Masking >3 elements.*")
 import sys
 import bilby 
 import numpy as np
-from bilby.core.prior.analytical import Uniform, Sine, Cosine
+from bilby.core.prior.analytical import Uniform, Sine, Cosine, DeltaFunction
 from bilby.gw.prior import UniformComovingVolume
+from bilby.core.prior.dict import NFConditionalPrior
 # Imports moved inline where needed
 import argparse
 import json
@@ -277,7 +278,7 @@ if not args.load_data_generation:
                 prior_code = f.read()
             exec(prior_code, safe_globals, local_vars)
             
-            # Use ConditionalPriorDict instead of PriorDict
+            # Use ConditionalPriorDict for BNS conditional prior approach
             priors = bilby.core.prior.ConditionalPriorDict()
             
             # Path to NF model
@@ -289,23 +290,28 @@ if not args.load_data_generation:
                 if var_name not in lambda_params:
                     priors[var_name] = var_value
             
-            # Add conditional NF priors for lambda parameters
+            # Add conditional NF priors for lambda parameters with shared state coordination
             from bilby.core.prior.dict import NFConditionalPrior
+            
+            # Create shared state object for coordination between lambda_1 and lambda_2
+            shared_state = {'lambda_1': None, 'lambda_2': None}
             
             priors['lambda_1'] = NFConditionalPrior(
                 nf_model_path=nf_model_path,
                 target_param='lambda_1',
-                minimum=0.0,
-                maximum=10000.0,
-                latex_label='$\\Lambda_1$'
+                minimum=1e-3,
+                maximum=100_000.0,
+                latex_label='$\\Lambda_1$',
+                shared_lambda_state=shared_state
             )
             
             priors['lambda_2'] = NFConditionalPrior(
                 nf_model_path=nf_model_path,
                 target_param='lambda_2', 
-                minimum=0.0,
-                maximum=10000.0,
-                latex_label='$\\Lambda_2$'
+                minimum=1e-3,
+                maximum=100_000.0,
+                latex_label='$\\Lambda_2$',
+                shared_lambda_state=shared_state
             )
                 
             logger.info("Going to show priors in priors:")
@@ -335,17 +341,14 @@ if not args.load_data_generation:
                     priors[var_name] = var_value
             
             # Add fixed lambda_1 = 0 for black hole (no tidal deformability)
-            from bilby.core.prior.analytical import DeltaFunction
             priors['lambda_1'] = DeltaFunction(peak=0.0, name='lambda_1', latex_label='$\\Lambda_1$')
             
             # Add conditional NF prior for lambda_2 (neutron star)
-            from bilby.core.prior.dict import NFConditionalPrior
-            
             priors['lambda_2'] = NFConditionalPrior(
                 nf_model_path=nf_model_path,
                 target_param='lambda_2',
-                minimum=0.0,
-                maximum=10000.0,
+                minimum=1e-3,
+                maximum=100_000.0,
                 latex_label='$\\Lambda_2$'
             )
                 
