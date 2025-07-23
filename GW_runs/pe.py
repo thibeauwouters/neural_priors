@@ -95,7 +95,7 @@ parser.add_argument('--test-sampling',
                     help = "Test sampling with 30 second timeout for debugging")
 parser.add_argument('--n-pool',
                     type = int,
-                    default = 32,
+                    default = 64,
                     help = "How many cores to use for the sampling.")
 
 args = parser.parse_args()
