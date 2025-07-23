@@ -44,6 +44,7 @@ default_corner_kwargs = dict(bins=40,
 DEFAULT_COLOR = 'blue'
 BNS_COLOR = 'green'
 NSBH_COLOR = 'red'
+HAUKE_COLOR = 'black'
 
 LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
               "mass_ratio": r"$q$",
@@ -63,13 +64,14 @@ LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
               "lambda_1": r"$\Lambda_1$",
               "lambda_2": r"$\Lambda_2$",
               "lambda_tilde": r"$\tilde{\Lambda}$",
-              "delta_lambda_tilde": r"$\Delta \tilde{\Lambda}$"
+              "delta_lambda_tilde": r"$\delta \tilde{\Lambda}$"
               }
 
 def create_corner_plot(GW_event: str,
                        plot_all_params: bool = False,
                        plot_default: bool = False,
-                       convert_lambdas: bool = True):
+                       convert_lambdas: bool = True,
+                       plot_hauke: bool = True):
     """
     Create a corner plot comparing posterior samples from BNS, Default, and NSBH runs for a given GW event.
     """
@@ -257,7 +259,7 @@ def create_corner_plot(GW_event: str,
     if plot_default:
         weights = np.ones(len(default_samples))*len(bns_samples)/len(default_samples)  
         corner.corner(default_samples, labels=latex_labels, fig=fig, weights=weights, **default_kwargs)
-
+        
     # Add legend
     if plot_all_params:
         fs = 64
@@ -268,6 +270,34 @@ def create_corner_plot(GW_event: str,
         plt.text(0.85, 0.85, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     plt.text(0.85, 0.75, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     plt.text(0.85, 0.65, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    
+    if GW_event == "GW170817" and plot_hauke and not plot_all_params:
+        
+        print(f"Loading Hauke's data and adding it to the corner plot...")
+        hauke_gw170817_posterior_filename = "../data/hauke/GW170817_result.npz"
+        hauke_data = np.load(hauke_gw170817_posterior_filename)
+        hauke_Mc, hauke_q, hauke_lambda_1, hauke_lambda_2 = hauke_data['chirp_mass'], hauke_data['mass_ratio'], hauke_data['lambda_1'], hauke_data['lambda_2']
+        
+        # NOTE: this was not sampled!
+        hauke_trigger_time = hauke_data['geocent_time'][0]
+        hauke_tc = np.random.normal(hauke_trigger_time, 0.01, size=len(hauke_Mc))
+        
+        # Convert Hauke's data to lambda_tilde and delta_lambda_tilde
+        if convert_lambdas:
+            hauke_mass_1, hauke_mass_2 = chirp_mass_and_mass_ratio_to_component_masses(hauke_Mc, hauke_q)
+            hauke_lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(hauke_lambda_1, hauke_lambda_2, hauke_mass_1, hauke_mass_2)
+            hauke_delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(hauke_lambda_1, hauke_lambda_2, hauke_mass_1, hauke_mass_2)
+        else:
+            # Bit hacky for now
+            hauke_lambda_tilde = hauke_lambda_1
+            hauke_delta_lambda_tilde = hauke_lambda_2
+            
+        # Make the cornerplot:
+        hauke_kwargs = corner_kwargs_with_range.copy()
+        hauke_kwargs.update({'color': HAUKE_COLOR, 'hist_kwargs': {'color': HAUKE_COLOR, 'density': use_density}})
+        hauke_samples = np.array([hauke_Mc, hauke_q, hauke_tc, hauke_lambda_tilde, hauke_delta_lambda_tilde]).T
+        corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
+        plt.text(0.85, 0.55, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     os.makedirs(f'./figures/{GW_event}', exist_ok=True)
     save_name = f'./figures/{GW_event}/corner' + \
@@ -289,15 +319,11 @@ def main():
                   "plot_default": True,
                   "convert_lambdas": False}
     
-    # settings_3 = {"plot_all_params": True,
-    #               "plot_default": False,
-    #               "convert_lambdas": True}
+    settings_3 = {"plot_all_params": False,
+                  "plot_default": False,
+                  "convert_lambdas": False}
     
-    # settings_4 = {"plot_all_params": True,
-    #               "plot_default": True,
-    #               "convert_lambdas": True}
-    
-    settings_list = [settings_1, settings_2]
+    settings_list = [settings_1, settings_2, settings_3]
     
     GW_event_list = ["GW170817",
                      "GW190425",
