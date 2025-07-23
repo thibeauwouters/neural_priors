@@ -270,7 +270,7 @@ class CheckerBNS:
             def sample_fn(sample_key):
                 val = self.flow.sample(sample_key, (1,), condition=u_jax).flatten()
                 if self.nf_kwargs["take_log_lambda"] == "True":
-                    val = val * 10_000  # Scale back to original Lambda_2
+                    val = np.exp(val)  # Scale back to original Lambda_2
                 return val
 
             # Vectorize over keys
@@ -286,21 +286,14 @@ class CheckerBNS:
                 for _ in range(self.N_samples):
                     value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()
                     if self.nf_kwargs["take_log_lambda"] == "True":
-                        value = value * 10_000  # Scale back to original Lambda_2
+                        value = np.exp(value)  # Scale back to original Lambda_2
                     nf_samples.append(value)
                     
         nf_samples = np.array(nf_samples)
         
         # Apply inverse scaling if scaler was used during training
         if self.scaler is not None:
-            print("Applying inverse scaling to NF samples")
             nf_samples = self.scaler.inverse_transform(nf_samples)
-        
-        print("np.shape(training_samples)")
-        print(np.shape(training_samples))
-        
-        print("np.shape(nf_samples)")
-        print(np.shape(nf_samples))
         
         # Print the ranges: 
         lambda_1_nf, lambda_2_nf = nf_samples[:, 0], nf_samples[:, 1]
@@ -351,7 +344,7 @@ class CheckerNSBH:
         self.N_masses = N_masses
         
         # Load the model and data
-        self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS = self.load_model_and_data()
+        self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS, self.scaler = self.load_model_and_data()
         
     def load_model_and_data(self):
         """
@@ -362,6 +355,7 @@ class CheckerNSBH:
             nf_kwargs (dict): The configuration parameters for the NF.
             masses_EOS (np.ndarray): Masses from the EOS samples.
             Lambdas_EOS (np.ndarray): Corresponding Lambdas from the EOS samples.
+            scaler: The MinMaxScaler used during training (None if not used).
         """
         nf_kwargs_path = os.path.join(self.path, "model_kwargs.json")
         
@@ -403,7 +397,7 @@ class CheckerNSBH:
                 n_conditional_inputs=1,  # fixed for NSBH case
                 n_transforms=nf_kwargs["n_transforms"],
                 n_neurons=nf_kwargs["n_neurons"],
-                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"]
+                # n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"] # FIXME: not passed during training bug here as well
             )
             print(f"Loading glasflow NSBH model from {nf_path}")
             flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
@@ -418,7 +412,16 @@ class CheckerNSBH:
         data = np.load(eos_samples_filename)
         masses_EOS, Lambdas_EOS = data["masses_EOS"], data["Lambdas_EOS"]
         
-        return flow, nf_kwargs, masses_EOS, Lambdas_EOS
+        # Load the scaler if it exists
+        scaler_path = os.path.join(self.path, "scaler.gz")
+        scaler = None
+        if os.path.exists(scaler_path):
+            print(f"Loading scaler from {scaler_path}")
+            scaler = joblib.load(scaler_path)
+        else:
+            print("No scaler found - assuming input was not scaled during training")
+        
+        return flow, nf_kwargs, masses_EOS, Lambdas_EOS, scaler
     
     def check_conditional_nsbh_model(self):
         """
@@ -476,7 +479,7 @@ class CheckerNSBH:
                         
                 value = float(value)
                 if self.nf_kwargs["take_log_lambda"] == "True":
-                    value = value * 10_000
+                    value = np.exp(value)
                 nf_samples.append(value)
         else:
             # glasflow sampling  
@@ -485,10 +488,14 @@ class CheckerNSBH:
                 for _ in range(self.N_samples):
                     value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()[0]
                     if self.nf_kwargs["take_log_lambda"] == "True":
-                        value = value * 10_000  # Scale back to original Lambda_2
+                        value = np.exp(value)  # Scale back to original Lambda_2
                     nf_samples.append(value)
                     
         nf_samples = np.array(nf_samples)
+        
+        # Apply inverse scaling if scaler was used during training
+        if self.scaler is not None:
+            nf_samples = self.scaler.inverse_transform(nf_samples.reshape(-1, 1)).flatten()
         
         # Compare the marginal distributions
         plt.figure(figsize=(10, 6))
@@ -518,17 +525,17 @@ class CheckerNSBH:
 
     
 def main():
-    bns_checker = CheckerBNS("./models/conditional_bns_flowjax/", N_samples=10_000, N_masses=5)
-    print("\n" + "="*50)
-    print("Testing BNS conditional model")
-    print("="*50)
-    bns_checker.check_conditional_bns_model()
-    
-    # nsbh_checker = CheckerNSBH("./models/conditional_nsbh/", N_samples=10_000, N_masses=5)
+    # bns_checker = CheckerBNS("./models/conditional_bns_flowjax/", N_samples=10_000, N_masses=5)
     # print("\n" + "="*50)
-    # print("Testing NSBH conditional model")
+    # print("Testing BNS conditional model")
     # print("="*50)
-    # nsbh_checker.check_conditional_nsbh_model()
+    # bns_checker.check_conditional_bns_model()
+    
+    nsbh_checker = CheckerNSBH("./models/conditional_nsbh/", N_samples=10_000, N_masses=5)
+    print("\n" + "="*50)
+    print("Testing NSBH conditional model")
+    print("="*50)
+    nsbh_checker.check_conditional_nsbh_model()
     
 if __name__ == "__main__":
     main()

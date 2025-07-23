@@ -191,6 +191,20 @@ def test_bns_conditional_prior():
         print(f"    Out-of-bounds params: ln_prob = {ln_prob_oob:.3f}")
         print(f"    Parameters: lambda_1={out_of_bounds_params['lambda_1']:.1f}, lambda_2={out_of_bounds_params['lambda_2']:.0f}")
         
+        # Instance where lambda_1 is bigger than lambda_2, which is not realistic
+        print("  Testing unrealistic lambda_1 > lambda_2:")
+        lambda_order_params = {
+            'chirp_mass': 1.4,
+            'mass_ratio': 0.8,
+            'luminosity_distance': 100.0,
+            'lambda_1': 800.0,
+            'lambda_2': 700.0
+        }
+        
+        ln_prob_order = priors.ln_prob(lambda_order_params)
+        print(f"    Out-of-bounds params: ln_prob = {ln_prob_order:.3f}")
+        print(f"    Parameters: lambda_1={lambda_order_params['lambda_1']:.1f}, lambda_2={lambda_order_params['lambda_2']:.0f}")
+        
         # Verify probability ordering
         if ln_prob_realistic > ln_prob_unrealistic:
             print("  ✓ Realistic lambda values have higher probability than unrealistic ones!")
