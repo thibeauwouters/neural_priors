@@ -383,17 +383,17 @@ class CheckerNSBH:
 
     
 def main():
-    # bns_checker = CheckerBNS("./models/conditional_bns/", N_samples=10_000, N_masses=5)
-    # print("\n" + "="*50)
-    # print("Testing BNS conditional model")
-    # print("="*50)
-    # bns_checker.check_conditional_bns_model()
-    
-    nsbh_checker = CheckerNSBH("./models/conditional_nsbh/", N_samples=10_000, N_masses=5)
+    bns_checker = CheckerBNS("./models/conditional_bns/", N_samples=10_000, N_masses=5)
     print("\n" + "="*50)
-    print("Testing NSBH conditional model")
+    print("Testing BNS conditional model")
     print("="*50)
-    nsbh_checker.check_conditional_nsbh_model()
+    bns_checker.check_conditional_bns_model()
+    
+    # nsbh_checker = CheckerNSBH("./models/conditional_nsbh/", N_samples=10_000, N_masses=5)
+    # print("\n" + "="*50)
+    # print("Testing NSBH conditional model")
+    # print("="*50)
+    # nsbh_checker.check_conditional_nsbh_model()
     
 if __name__ == "__main__":
     main()
