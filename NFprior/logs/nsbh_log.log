@@ -181,3 +181,29 @@
 	979  -  MemoryUsage of job (MB)
 	1002496  -  ResidentSetSize of job (KB)
 ...
+005 (2537113.000.000) 2025-07-23 13:14:10 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:52:28, Sys 0 00:00:12  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:52:28, Sys 0 00:00:12  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            : 17500    16777216  16790353 
+	   GPUs                 :     0.08        1         1 "GPU-9ac85904-bd86-56e5-9296-f45f0116f69c"
+	   GpusMemory (MB)      :  1156                       
+	   Memory (MB)          :   979       16384     16384 
+	   TimeExecute (s)      :  3173                       
+	   TimeSlotBusy (s)     :  3174                       
+
+	Job terminated of its own accord at 2025-07-23T11:14:10Z with exit-code 0.
+...
+000 (2538122.000.000) 2025-07-23 14:04:05 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+009 (2538122.000.000) 2025-07-23 14:04:16 Job was aborted.
+	via condor_rm (by user twouters)
+...

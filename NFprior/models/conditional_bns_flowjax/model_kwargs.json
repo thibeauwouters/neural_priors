@@ -2,6 +2,8 @@
     "n_transforms": 4,
     "n_neurons": 128,
     "n_blocks_per_transform": 4,
+    "nn_depth": 5,
+    "nn_block_dim": 8,
     "names": [
         "lambda_1",
         "lambda_2"
@@ -16,7 +18,7 @@
     "source_type": "bns",
     "N_samples_training": 100000,
     "m_max_BH": 5.0,
-    "num_epochs": 2,
+    "num_epochs": 200,
     "learning_rate": 0.001,
     "max_patience": 50,
     "batch_size": 256,

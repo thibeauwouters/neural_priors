@@ -38,10 +38,14 @@ plt.rcParams.update(params)
 from sklearn.preprocessing import MinMaxScaler
 
 if torch.cuda.is_available():
-    print(f"CUDA is available. Number of devices: {torch.cuda.device_count()}")
-    print(f"Current CUDA device: {torch.cuda.current_device()}")
+    print(f"torch: CUDA is available. Number of devices: {torch.cuda.device_count()}")
+    print(f"torch: Current CUDA device: {torch.cuda.current_device()}")
 else:
-    print("CUDA is not available.")
+    print("torch: CUDA is not available.")
+
+# Also using JAX:
+jax_devices = jax.devices()
+print(f"JAX: devices available: {jax_devices}")
 
 # Get the device as well:
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -61,14 +65,17 @@ class NFPriorCreator:
                  conditional: bool = True,
                  take_log_lambda: bool = True,
                  use_flowjax: bool = True,  # Toggle between glasflow and flowJAX
-                 # training arguments:
-                 num_epochs: int = 2,
+                 num_epochs: int = 200,
                  learning_rate: float = 1e-3,
+                 batch_size: int = 256,
+                 # glasflow-specific training arguments:
                  max_patience: int = 50,
                  n_transforms: int = 4,
                  n_neurons: int = 128,
-                 batch_size: int = 256,
                  n_blocks_per_transform: int = 4,
+                 # glasflow-specific training arguments:
+                 nn_depth: int = 5,
+                 nn_block_dim: int = 8,
                  scale_input: bool = False,
                  num_bins: int = 10  # For autoregressive flows (1D case)
                  ):
@@ -114,6 +121,8 @@ class NFPriorCreator:
         self.max_patience = max_patience
         self.n_transforms = n_transforms
         self.n_neurons = n_neurons
+        self.nn_depth = nn_depth
+        self.nn_block_dim = nn_block_dim
         self.batch_size = batch_size
         self.n_blocks_per_transform = n_blocks_per_transform
         self.scale_input = scale_input
@@ -299,7 +308,9 @@ class NFPriorCreator:
         # Start storing kwargs here to dump later on
         self.nf_kwargs = {"n_transforms": self.n_transforms,
                           "n_neurons": self.n_neurons,
-                          "n_blocks_per_transform": self.n_blocks_per_transform
+                          "n_blocks_per_transform": self.n_blocks_per_transform,
+                          "nn_depth": self.nn_depth,
+                          "nn_block_dim": self.nn_block_dim
                           }
         
         # Build depending on source and conditional
@@ -678,15 +689,15 @@ class NFPriorCreator:
             # )
         else:
             # For >1D conditional, use coupling flow
-            print("Using coupling_flow for conditional >1D distribution")
+            print("Using block_neural_autoregressive_flow for conditional >1D distribution")
             self.nf_kwargs["model_type"] = "block_neural_autoregressive_flow"
             flow = block_neural_autoregressive_flow(
                 key=key,
                 base_dist=base_dist,
                 cond_dim=self.n_conditional_inputs,
-                flow_layers=self.n_transforms,
-                nn_depth=self.n_neurons,
-                nn_block_dim=self.n_blocks_per_transform
+                # flow_layers=self.n_transforms, # TODO: perhaps tune this, for now, use default value
+                nn_depth=self.nn_depth,
+                nn_block_dim=self.nn_block_dim
             )
         
         # Train the flow with conditional data
@@ -709,7 +720,7 @@ class NFPriorCreator:
 
         subkey = jr.key(1234)        
         flow, losses = fit_to_data(
-            subkey,
+            train_key,
             flow,
             data=combined_data,
             learning_rate=self.learning_rate,
