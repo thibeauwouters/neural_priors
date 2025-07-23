@@ -64,8 +64,8 @@ class NFPriorCreator:
                  save_name: str = "",
                  conditional: bool = True,
                  take_log_lambda: bool = False,
-                 use_flowjax: bool = True,  # Toggle between glasflow and flowJAX
-                 num_epochs: int = 1_000,
+                 use_flowjax: bool = False,  # Toggle between glasflow and flowJAX
+                 num_epochs: int = 250,
                  learning_rate: float = 1e-3,
                  batch_size: int = 256,
                  scale_input: bool = True,
@@ -75,7 +75,7 @@ class NFPriorCreator:
                  n_neurons: int = 128,
                  n_blocks_per_transform: int = 4,
                  num_bins: int = 10,
-                 # glasflow-specific training arguments:
+                 # flowJAX-specific training arguments:
                  nn_depth: int = 5,
                  nn_block_dim: int = 8
                  ):
@@ -543,7 +543,7 @@ class NFPriorCreator:
                 n_conditional_inputs=self.n_conditional_inputs,
                 n_transforms=self.n_transforms,
                 n_neurons=self.n_neurons,
-                n_blocks_per_transform=self.n_blocks_per_transform
+                # n_blocks_per_transform=self.n_blocks_per_transform # FIXME: ignore it for now, to be consistent with BNS
             )
             
         else:

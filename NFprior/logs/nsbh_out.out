@@ -1,5 +1,6 @@
-CUDA is available. Number of devices: 1
-Current CUDA device: 0
+torch: CUDA is available. Number of devices: 1
+torch: Current CUDA device: 0
+JAX: devices available: [CudaDevice(id=0)]
 source_type is set by user to nsbh
 Everything for this model will be saved to ./models/conditional_nsbh
 No EOS samples filename was provided, so defaulted to: ../data/eos/eos_samples.npz
@@ -8,17 +9,19 @@ Number of good samples:  0.9949
 Saving training data to ./models/conditional_nsbh/training_data.npz
 Saving training data DONE
 NSBH mode: concatenating all neutron star data for single NS modeling
-Taking the log of the Lambdas
 Sanity checking the ranges of the training data
-m2 (concatenated) ranges from 1.0000165969339967 to 3.5771801753568795
-lambda_2 (concatenated) ranges from 1.0438479181771616 to 8.90941947545374
+m2 (concatenated) ranges from 1.0000054343973126 to 3.6714225327411802
+lambda_2 (concatenated) ranges from 2.5987024809042234 to 7878.4236462117515
 We are training NSBH and conditional - using concatenated NS data
 np.shape(self.x)
 (200000, 1)
 np.shape(self.u)
 (200000, 1)
-m2 (concatenated) ranges from 1.0000165969339967 to 3.5771801753568795
-lambda_2 (concatenated) ranges from 1.0438479181771616 to 8.90941947545374
+m2 (concatenated) ranges from 1.0000054343973126 to 3.6714225327411802
+lambda_2 (concatenated) ranges from 2.5987024809042234 to 7878.4236462117515
+Using MinMaxScaler to scale the input data x
+The scaler will be saved with joblib to ./models/conditional_nsbh/scaler.gz
+Saved sklearn scaler to ./models/conditional_nsbh/scaler.gz
 Going to start training for glasflow . . .
 Initializing a glasflow model for conditional training with kwargs:
     n_inputs: 1
@@ -27,8 +30,3 @@ Initializing a glasflow model for conditional training with kwargs:
     n_neurons: 128
 Using MaskedAffineAutoregressiveFlow for 1D conditional distribution
 Initialized flow: MaskedAffineAutoregressiveFlow
-Saving the training loss plot to ./models/conditional_nsbh/training_loss.pdf
-Training done. Took around 52.58 minutes
-Saving the model weights to ./models/conditional_nsbh/model.pt
-Saving the model kwargs to ./models/conditional_nsbh/model_kwargs.json
-DONE training!

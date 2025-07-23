@@ -2,35 +2,34 @@ torch: CUDA is available. Number of devices: 1
 torch: Current CUDA device: 0
 JAX: devices available: [CudaDevice(id=0)]
 source_type is set by user to bns
-Everything for this model will be saved to ./models/conditional_bns_flowjax
+Everything for this model will be saved to ./models/conditional_bns
 No EOS samples filename was provided, so defaulted to: ../data/eos/eos_samples.npz
 Reading the EOS data from ../data/eos/eos_samples.npz
 Number of good samples:  0.9949
-Saving training data to ./models/conditional_bns_flowjax/training_data.npz
+Saving training data to ./models/conditional_bns/training_data.npz
 Saving training data DONE
 Sanity checking the ranges of the training data
-m1 ranges from 1.0020465766125264 to 3.6092290974144285
-m2 ranges from 1.0000024669632623 to 3.398976261908058
-lambda_1 ranges from 2.475989862099662 to 5481.308458323522
-lambda_2 ranges from 3.8757843092140196 to 7820.974416447201
+m1 ranges from 1.0020875033648124 to 3.5684280970516844
+m2 ranges from 1.0000042003663774 to 3.1513473752168024
+lambda_1 ranges from 2.572110088668347 to 5283.179400442837
+lambda_2 ranges from 4.629487641822543 to 7561.084757648256
 We are training BNS and conditional
 np.shape(self.x)
 (100000, 2)
 np.shape(self.u)
 (100000, 2)
-m1 ranges from 1.0020465766125264 to 3.6092290974144285
-m2 ranges from 1.0000024669632623 to 3.398976261908058
-lambda_1 ranges from 2.475989862099662 to 5481.308458323522
-lambda_2 ranges from 3.8757843092140196 to 7820.974416447201
+m1 ranges from 1.0020875033648124 to 3.5684280970516844
+m2 ranges from 1.0000042003663774 to 3.1513473752168024
+lambda_1 ranges from 2.572110088668347 to 5283.179400442837
+lambda_2 ranges from 4.629487641822543 to 7561.084757648256
 Using MinMaxScaler to scale the input data x
-The scaler will be saved with joblib to ./models/conditional_bns_flowjax/scaler.gz
-Saved sklearn scaler to ./models/conditional_bns_flowjax/scaler.gz
-Going to start training for flowJAX . . .
-Using block_neural_autoregressive_flow for conditional >1D distribution
-Training flowJAX conditional model:
-  x_data shape: (100000, 2)
-  u_data shape: (100000, 2)
-Training done. Took around 19.48 minutes
-Saving the flowJAX model to ./models/conditional_bns_flowjax/model.eqx
-Saving the model kwargs to ./models/conditional_bns_flowjax/model_kwargs.json
-DONE training!
+The scaler will be saved with joblib to ./models/conditional_bns/scaler.gz
+Saved sklearn scaler to ./models/conditional_bns/scaler.gz
+Going to start training for glasflow . . .
+Initializing a glasflow model for conditional training with kwargs:
+    n_inputs: 2
+    n_conditional_inputs: 2
+    n_transforms: 4
+    n_neurons: 128
+Using RealNVP for >1D conditional distribution
+Initialized flow: RealNVP
