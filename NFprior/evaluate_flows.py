@@ -122,11 +122,10 @@ class CheckerBNS:
         self.nf_kwargs = nf_kwargs
         
         flow = RealNVP(
-                n_inputs=2,  # fixed for BNS case
+                n_inputs=2,
+                n_conditional_inputs=2,
                 n_transforms=self.nf_kwargs["n_transforms"],
-                n_conditional_inputs=2,  # fixed for BNS case
                 n_neurons=self.nf_kwargs["n_neurons"],
-                n_blocks_per_transform=self.nf_kwargs["n_blocks_per_transform"],
                 batch_norm_between_transforms=True)
         
         print(f"Loading in the NF from {nf_path}")
