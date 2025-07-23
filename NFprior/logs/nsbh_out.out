@@ -30,3 +30,9 @@ Initializing a glasflow model for conditional training with kwargs:
     n_neurons: 128
 Using MaskedAffineAutoregressiveFlow for 1D conditional distribution
 Initialized flow: MaskedAffineAutoregressiveFlow
+Early stopping triggered at epoch 216
+Saving the training loss plot to ./models/conditional_nsbh/training_loss.pdf
+Training done. Took around 41.34 minutes
+Saving the model weights to ./models/conditional_nsbh/model.pt
+Saving the model kwargs to ./models/conditional_nsbh/model_kwargs.json
+DONE training!
