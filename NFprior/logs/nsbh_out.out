@@ -10,25 +10,20 @@ Saving training data DONE
 NSBH mode: concatenating all neutron star data for single NS modeling
 Taking the log of the Lambdas
 Sanity checking the ranges of the training data
-m2 (concatenated) ranges from 1.0000075192891222 to 3.5779870516919012
-lambda_2 (concatenated) ranges from 1.0593981250518225 to 8.990310142094872
+m2 (concatenated) ranges from 1.0000165969339967 to 3.5771801753568795
+lambda_2 (concatenated) ranges from 1.0438479181771616 to 8.90941947545374
 We are training NSBH and conditional - using concatenated NS data
 np.shape(self.x)
 (200000, 1)
 np.shape(self.u)
 (200000, 1)
-m2 (concatenated) ranges from 1.0000075192891222 to 3.5779870516919012
-lambda_2 (concatenated) ranges from 1.0593981250518225 to 8.990310142094872
+m2 (concatenated) ranges from 1.0000165969339967 to 3.5771801753568795
+lambda_2 (concatenated) ranges from 1.0438479181771616 to 8.90941947545374
 Going to start training for glasflow . . .
 Initializing a glasflow model for conditional training with kwargs:
     n_inputs: 1
     n_conditional_inputs: 1
     n_transforms: 4
-    n_neurons: 64
+    n_neurons: 128
 Using MaskedAffineAutoregressiveFlow for 1D conditional distribution
 Initialized flow: MaskedAffineAutoregressiveFlow
-Saving the training loss plot to ./models/conditional_nsbh/training_loss.pdf
-Training done. Took around 38.87 minutes
-Saving the model weights to ./models/conditional_nsbh/model.pt
-Saving the model kwargs to ./models/conditional_nsbh/model_kwargs.json
-DONE training!
