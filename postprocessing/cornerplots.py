@@ -76,9 +76,6 @@ def create_corner_plot(GW_event: str,
     
     # Load result files to investigate structure
     base_path = f"../GW_runs/{GW_event}"
-    # if GW_event == "GW170817":
-    #     base_path = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification_gitlab/GW_runs/GW170817/"
-    #     print("Using base path for GW170817:", base_path)
     
     bns_results_filename = os.path.join(base_path, "bns/bns_result.json")
     default_results_filename = os.path.join(base_path, "default/default_result.json")
@@ -177,9 +174,6 @@ def create_corner_plot(GW_event: str,
         del params_to_plot[params_to_plot.index('lambda_1')]
         del params_to_plot[params_to_plot.index('lambda_2')]
         
-        print("params_to_plot")
-        print(params_to_plot)
-
     # Create data arrays for each run
     bns_data = []
     default_data = []
@@ -201,10 +195,11 @@ def create_corner_plot(GW_event: str,
     default_samples = np.array(default_data).T  
     nsbh_samples = np.array(nsbh_data).T
     
-    print(f"BNS samples shape: {bns_samples.shape}")
-    print(f"Default samples shape: {default_samples.shape}")
-    print(f"NSBH samples shape: {nsbh_samples.shape}")
-
+    # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
+    if 'delta_lambda_tilde' in params_to_plot:
+        delta_lambda_tilde_index = labels.index('delta_lambda_tilde')
+        bns_samples = bns_samples[bns_samples[:, delta_lambda_tilde_index] > 0]
+    
     # Create range dictionary to handle constant parameters
     ranges = []
     for i, param in enumerate(labels):
@@ -238,12 +233,9 @@ def create_corner_plot(GW_event: str,
         jitter = 1e-10
         nsbh_samples[:, lambda_1_index] = np.random.normal(0, jitter, size=nsbh_samples[:, lambda_1_index].shape)
         
-    print("ranges")
-    print(ranges)
-
     # Create corner plot with three overlaid distributions
     corner_kwargs_with_range = default_corner_kwargs.copy()
-    # corner_kwargs_with_range['range'] = ranges
+    # corner_kwargs_with_range['range'] = ranges # FIXME: this breaks the scaling of the plots
     use_density = True
 
     # Create three different corner kwargs with different colors
@@ -256,26 +248,6 @@ def create_corner_plot(GW_event: str,
     nsbh_kwargs = corner_kwargs_with_range.copy()
     nsbh_kwargs.update({'color': NSBH_COLOR, 'hist_kwargs': {'color': NSBH_COLOR, 'density': use_density}})
 
-    print("latex_labels")
-    print(latex_labels)
-
-    # # Concatenate all samples to create a dummy cornerplot
-    # if plot_default:
-    #     dummy_samples = np.concatenate([default_samples, bns_samples, nsbh_samples], axis=0)
-    # else:
-    #     dummy_samples = np.concatenate([bns_samples, nsbh_samples], axis=0)
-        
-    # # Create a dummy corner plot to set the figure size, make sure this plot is not visible
-    # dummy_corner_kwargs = corner_kwargs_with_range.copy()
-    # dummy_corner_kwargs["plot_density"] = False
-    # dummy_corner_kwargs["fill_contours"] = False
-    # dummy_corner_kwargs["contourf_kwargs"] = {"alpha": 0.0}
-    # dummy_corner_kwargs["contour_kwargs"] = {"alpha": 0.0}
-    # dummy_corner_kwargs["hist_kwargs"] = {"alpha": 0.0, "density": use_density, "color": "white"}
-    
-    # # Finally, add dummy samples to scale appropriately
-    # fig = corner.corner(dummy_samples, labels=latex_labels, **dummy_corner_kwargs)
-    
     # Create the overlaid corner plot
     fig = corner.corner(bns_samples, labels=latex_labels, **bns_kwargs)
     weights = np.ones(len(nsbh_samples))*len(bns_samples)/len(nsbh_samples)  
@@ -286,33 +258,54 @@ def create_corner_plot(GW_event: str,
 
     # Add legend
     if plot_all_params:
-        fs = 26
+        fs = 64
     else:
-        fs = 26
+        fs = 34
         
     if plot_default:
-        plt.text(0.95, 0.95, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-    plt.text(0.95, 0.85, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-    plt.text(0.95, 0.75, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-    if not plot_all_params:
-        save_name = f'./figures/{GW_event}.pdf'
-    else:
-        save_name = f'./figures/{GW_event}_all.pdf'
+        plt.text(0.85, 0.85, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    plt.text(0.85, 0.75, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    plt.text(0.85, 0.65, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    
+    os.makedirs(f'./figures/{GW_event}', exist_ok=True)
+    save_name = f'./figures/{GW_event}/corner' + \
+            ('_all' if plot_all_params else '') + \
+            ('_default' if plot_default else '') + \
+            ('_tilde' if convert_lambdas else '') + '.pdf'
+            
+    print(f"\nSaving corner plot to {save_name}\n")
     plt.savefig(save_name, dpi=300, bbox_inches='tight')
     plt.close()
     
 def main():
-    GW_event_list = ["GW170817"
-                    #  "GW190425",
-                    #  "GW230529",
+    
+    settings_1 = {"plot_all_params": False,
+                  "plot_default": True,
+                  "convert_lambdas": True}
+    
+    settings_2 = {"plot_all_params": False,
+                  "plot_default": True,
+                  "convert_lambdas": False}
+    
+    # settings_3 = {"plot_all_params": True,
+    #               "plot_default": False,
+    #               "convert_lambdas": True}
+    
+    # settings_4 = {"plot_all_params": True,
+    #               "plot_default": True,
+    #               "convert_lambdas": True}
+    
+    settings_list = [settings_1, settings_2]
+    
+    GW_event_list = ["GW170817",
+                     "GW190425",
+                     "GW230529",
                      ]
     
     for GW_event in GW_event_list:
         print(f"Creating corner plot for {GW_event}...")
-        create_corner_plot(GW_event,
-                           plot_all_params=False,
-                           plot_default=True,
-                           convert_lambdas=True)
+        for settings in settings_list:
+            create_corner_plot(GW_event, **settings)
             
 if __name__ == "__main__":
     main()

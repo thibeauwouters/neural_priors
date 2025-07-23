@@ -1,0 +1,3230 @@
+interferometers
+[Interferometer(name='L1', power_spectral_density=PowerSpectralDensity(psd_file='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW190425/glitch_median_PSD_forLI_L1_srate8192.txt', asd_file='None'), minimum_frequency=20.0, maximum_frequency=2048.0, length=4.0, latitude=30.562894333333332, longitude=-90.77424038888887, elevation=-6.574, xarm_azimuth=197.7165, yarm_azimuth=287.7165, xarm_tilt=-0.0003121, yarm_tilt=-0.0006107), Interferometer(name='V1', power_spectral_density=PowerSpectralDensity(psd_file='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW190425/glitch_median_PSD_forLI_V1_srate8192.txt', asd_file='None'), minimum_frequency=20.0, maximum_frequency=2048.0, length=3.0, latitude=43.631414472222225, longitude=10.504496611111112, elevation=51.884, xarm_azimuth=70.56740000000002, yarm_azimuth=160.5674, xarm_tilt=0.0, yarm_tilt=0.0)]
+waveform_generator
+WaveformGenerator(duration=128.0, sampling_frequency=4096.0, start_time=1240215377.017147, frequency_domain_source_model=binary_neutron_star_frequency_sequence, time_domain_source_model=None, parameter_conversion=convert_to_lal_binary_neutron_star_parameters, waveform_arguments={'waveform_approximant': 'IMRPhenomXP_NRTidalv3', 'reference_frequency': 20.0, 'minimum_frequency': 20.0, 'maximum_frequency': 2048.0})
+ref_injection
+{'chirp_mass': 1.4867847675135448, 'symmetric_mass_ratio': 0.24999995594642316, 'a_1': 0.011080273335494708, 'a_2': 0.04692984939031852, 'tilt_1': 2.6219694401252394, 'tilt_2': 1.0090315132594154, 'phi_jl': 0.977223832370418, 'phi_12': 5.868535624409604, 'lambda_1': 456.3727388222372, 'lambda_2': 43.226589341633236, 'luminosity_distance': 160.68570884930463, 'phase': 5.904192752190891, 'theta_jn': 0.20643139003708647, 'psi': 0.3008124663367458, 'ra': 1.4454755957606107, 'dec': 0.07257856505111598, 'mass_ratio': 0.999160794522431, 'mass_1': 1.7085843239096237, 'mass_2': 1.7071504705861102, 'geocent_time': 1240215503.017147, 'duration': 128.0}
+0/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 0 / npoints = 1024
+1/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1 / npoints = 1024
+2/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 2 / npoints = 1024
+3/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 3 / npoints = 1024
+4/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 4 / npoints = 1024
+5/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 5 / npoints = 1024
+6/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 6 / npoints = 1024
+7/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 7 / npoints = 1024
+8/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 8 / npoints = 1024
+9/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 9 / npoints = 1024
+10/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 10 / npoints = 1024
+11/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 11 / npoints = 1024
+12/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 12 / npoints = 1024
+13/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 13 / npoints = 1024
+14/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 14 / npoints = 1024
+15/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 15 / npoints = 1024
+16/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 16 / npoints = 1024
+17/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 17 / npoints = 1024
+18/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 18 / npoints = 1024
+19/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 19 / npoints = 1024
+20/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 20 / npoints = 1024
+21/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 21 / npoints = 1024
+22/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 22 / npoints = 1024
+23/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 23 / npoints = 1024
+24/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 24 / npoints = 1024
+25/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 25 / npoints = 1024
+26/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 26 / npoints = 1024
+27/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 27 / npoints = 1024
+28/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 28 / npoints = 1024
+29/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 29 / npoints = 1024
+30/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 30 / npoints = 1024
+31/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 31 / npoints = 1024
+32/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 32 / npoints = 1024
+33/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 33 / npoints = 1024
+34/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 34 / npoints = 1024
+35/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 35 / npoints = 1024
+36/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 36 / npoints = 1024
+37/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 37 / npoints = 1024
+38/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 38 / npoints = 1024
+39/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 39 / npoints = 1024
+40/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 40 / npoints = 1024
+41/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 41 / npoints = 1024
+42/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 42 / npoints = 1024
+43/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 43 / npoints = 1024
+44/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 44 / npoints = 1024
+45/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 45 / npoints = 1024
+46/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 46 / npoints = 1024
+47/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 47 / npoints = 1024
+48/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 48 / npoints = 1024
+49/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 49 / npoints = 1024
+50/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 50 / npoints = 1024
+51/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 51 / npoints = 1024
+52/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 52 / npoints = 1024
+53/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 53 / npoints = 1024
+54/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 54 / npoints = 1024
+55/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 55 / npoints = 1024
+56/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 56 / npoints = 1024
+57/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 57 / npoints = 1024
+58/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 58 / npoints = 1024
+59/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 59 / npoints = 1024
+60/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 60 / npoints = 1024
+61/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 61 / npoints = 1024
+62/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 62 / npoints = 1024
+63/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 63 / npoints = 1024
+64/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 64 / npoints = 1024
+65/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 65 / npoints = 1024
+66/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 66 / npoints = 1024
+67/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 67 / npoints = 1024
+68/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 68 / npoints = 1024
+69/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 69 / npoints = 1024
+70/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 70 / npoints = 1024
+71/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 71 / npoints = 1024
+72/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 72 / npoints = 1024
+73/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 73 / npoints = 1024
+74/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 74 / npoints = 1024
+75/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 75 / npoints = 1024
+76/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 76 / npoints = 1024
+77/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 77 / npoints = 1024
+78/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 78 / npoints = 1024
+79/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 79 / npoints = 1024
+80/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 80 / npoints = 1024
+81/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 81 / npoints = 1024
+82/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 82 / npoints = 1024
+83/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 83 / npoints = 1024
+84/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 84 / npoints = 1024
+85/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 85 / npoints = 1024
+86/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 86 / npoints = 1024
+87/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 87 / npoints = 1024
+88/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 88 / npoints = 1024
+89/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 89 / npoints = 1024
+90/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 90 / npoints = 1024
+91/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 91 / npoints = 1024
+92/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 92 / npoints = 1024
+93/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 93 / npoints = 1024
+94/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 94 / npoints = 1024
+95/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 95 / npoints = 1024
+96/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 96 / npoints = 1024
+97/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 97 / npoints = 1024
+98/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 98 / npoints = 1024
+99/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 99 / npoints = 1024
+100/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 100 / npoints = 1024
+101/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 101 / npoints = 1024
+102/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 102 / npoints = 1024
+103/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 103 / npoints = 1024
+104/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 104 / npoints = 1024
+105/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 105 / npoints = 1024
+106/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 106 / npoints = 1024
+107/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 107 / npoints = 1024
+108/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 108 / npoints = 1024
+109/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 109 / npoints = 1024
+110/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 110 / npoints = 1024
+111/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 111 / npoints = 1024
+112/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 112 / npoints = 1024
+113/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 113 / npoints = 1024
+114/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 114 / npoints = 1024
+115/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 115 / npoints = 1024
+116/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 116 / npoints = 1024
+117/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 117 / npoints = 1024
+118/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 118 / npoints = 1024
+119/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 119 / npoints = 1024
+120/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 120 / npoints = 1024
+121/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 121 / npoints = 1024
+122/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 122 / npoints = 1024
+123/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 123 / npoints = 1024
+124/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 124 / npoints = 1024
+125/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 125 / npoints = 1024
+126/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 126 / npoints = 1024
+127/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 127 / npoints = 1024
+128/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 128 / npoints = 1024
+129/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 129 / npoints = 1024
+130/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 130 / npoints = 1024
+131/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 131 / npoints = 1024
+132/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 132 / npoints = 1024
+133/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 133 / npoints = 1024
+134/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 134 / npoints = 1024
+135/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 135 / npoints = 1024
+136/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 136 / npoints = 1024
+137/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 137 / npoints = 1024
+138/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 138 / npoints = 1024
+139/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 139 / npoints = 1024
+140/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 140 / npoints = 1024
+141/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 141 / npoints = 1024
+142/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 142 / npoints = 1024
+143/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 143 / npoints = 1024
+144/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 144 / npoints = 1024
+145/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 145 / npoints = 1024
+146/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 146 / npoints = 1024
+147/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 147 / npoints = 1024
+148/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 148 / npoints = 1024
+149/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 149 / npoints = 1024
+150/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 150 / npoints = 1024
+151/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 151 / npoints = 1024
+152/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 152 / npoints = 1024
+153/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 153 / npoints = 1024
+154/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 154 / npoints = 1024
+155/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 155 / npoints = 1024
+156/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 156 / npoints = 1024
+157/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 157 / npoints = 1024
+158/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 158 / npoints = 1024
+159/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 159 / npoints = 1024
+160/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 160 / npoints = 1024
+161/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 161 / npoints = 1024
+162/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 162 / npoints = 1024
+163/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 163 / npoints = 1024
+164/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 164 / npoints = 1024
+165/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 165 / npoints = 1024
+166/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 166 / npoints = 1024
+167/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 167 / npoints = 1024
+168/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 168 / npoints = 1024
+169/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 169 / npoints = 1024
+170/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 170 / npoints = 1024
+171/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 171 / npoints = 1024
+172/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 172 / npoints = 1024
+173/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 173 / npoints = 1024
+174/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 174 / npoints = 1024
+175/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 175 / npoints = 1024
+176/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 176 / npoints = 1024
+177/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 177 / npoints = 1024
+178/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 178 / npoints = 1024
+179/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 179 / npoints = 1024
+180/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 180 / npoints = 1024
+181/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 181 / npoints = 1024
+182/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 182 / npoints = 1024
+183/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 183 / npoints = 1024
+184/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 184 / npoints = 1024
+185/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 185 / npoints = 1024
+186/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 186 / npoints = 1024
+187/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 187 / npoints = 1024
+188/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 188 / npoints = 1024
+189/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 189 / npoints = 1024
+190/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 190 / npoints = 1024
+191/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 191 / npoints = 1024
+192/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 192 / npoints = 1024
+193/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 193 / npoints = 1024
+194/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 194 / npoints = 1024
+195/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 195 / npoints = 1024
+196/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 196 / npoints = 1024
+197/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 197 / npoints = 1024
+198/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 198 / npoints = 1024
+199/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 199 / npoints = 1024
+200/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 200 / npoints = 1024
+201/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 201 / npoints = 1024
+202/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 202 / npoints = 1024
+203/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 203 / npoints = 1024
+204/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 204 / npoints = 1024
+205/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 205 / npoints = 1024
+206/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 206 / npoints = 1024
+207/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 207 / npoints = 1024
+208/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 208 / npoints = 1024
+209/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 209 / npoints = 1024
+210/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 210 / npoints = 1024
+211/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 211 / npoints = 1024
+212/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 212 / npoints = 1024
+213/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 213 / npoints = 1024
+214/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 214 / npoints = 1024
+215/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 215 / npoints = 1024
+216/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 216 / npoints = 1024
+217/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 217 / npoints = 1024
+218/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 218 / npoints = 1024
+219/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 219 / npoints = 1024
+220/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 220 / npoints = 1024
+221/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 221 / npoints = 1024
+222/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 222 / npoints = 1024
+223/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 223 / npoints = 1024
+224/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 224 / npoints = 1024
+225/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 225 / npoints = 1024
+226/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 226 / npoints = 1024
+227/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 227 / npoints = 1024
+228/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 228 / npoints = 1024
+229/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 229 / npoints = 1024
+230/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 230 / npoints = 1024
+231/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 231 / npoints = 1024
+232/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 232 / npoints = 1024
+233/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 233 / npoints = 1024
+234/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 234 / npoints = 1024
+235/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 235 / npoints = 1024
+236/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 236 / npoints = 1024
+237/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 237 / npoints = 1024
+238/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 238 / npoints = 1024
+239/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 239 / npoints = 1024
+240/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 240 / npoints = 1024
+241/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 241 / npoints = 1024
+242/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 242 / npoints = 1024
+243/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 243 / npoints = 1024
+244/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 244 / npoints = 1024
+245/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 245 / npoints = 1024
+246/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 246 / npoints = 1024
+247/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 247 / npoints = 1024
+248/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 248 / npoints = 1024
+249/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 249 / npoints = 1024
+250/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 250 / npoints = 1024
+251/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 251 / npoints = 1024
+252/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 252 / npoints = 1024
+253/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 253 / npoints = 1024
+254/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 254 / npoints = 1024
+255/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 255 / npoints = 1024
+256/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 256 / npoints = 1024
+257/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 257 / npoints = 1024
+258/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 258 / npoints = 1024
+259/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 259 / npoints = 1024
+260/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 260 / npoints = 1024
+261/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 261 / npoints = 1024
+262/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 262 / npoints = 1024
+263/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 263 / npoints = 1024
+264/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 264 / npoints = 1024
+265/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 265 / npoints = 1024
+266/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 266 / npoints = 1024
+267/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 267 / npoints = 1024
+268/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 268 / npoints = 1024
+269/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 269 / npoints = 1024
+270/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 270 / npoints = 1024
+271/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 271 / npoints = 1024
+272/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 272 / npoints = 1024
+273/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 273 / npoints = 1024
+274/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 274 / npoints = 1024
+275/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 275 / npoints = 1024
+276/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 276 / npoints = 1024
+277/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 277 / npoints = 1024
+278/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 278 / npoints = 1024
+279/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 279 / npoints = 1024
+280/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 280 / npoints = 1024
+281/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 281 / npoints = 1024
+282/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 282 / npoints = 1024
+283/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 283 / npoints = 1024
+284/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 284 / npoints = 1024
+285/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 285 / npoints = 1024
+286/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 286 / npoints = 1024
+287/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 287 / npoints = 1024
+288/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 288 / npoints = 1024
+289/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 289 / npoints = 1024
+290/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 290 / npoints = 1024
+291/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 291 / npoints = 1024
+292/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 292 / npoints = 1024
+293/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 293 / npoints = 1024
+294/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 294 / npoints = 1024
+295/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 295 / npoints = 1024
+296/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 296 / npoints = 1024
+297/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 297 / npoints = 1024
+298/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 298 / npoints = 1024
+299/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 299 / npoints = 1024
+300/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 300 / npoints = 1024
+301/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 301 / npoints = 1024
+302/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 302 / npoints = 1024
+303/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 303 / npoints = 1024
+304/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 304 / npoints = 1024
+305/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 305 / npoints = 1024
+306/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 306 / npoints = 1024
+307/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 307 / npoints = 1024
+308/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 308 / npoints = 1024
+309/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 309 / npoints = 1024
+310/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 310 / npoints = 1024
+311/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 311 / npoints = 1024
+312/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 312 / npoints = 1024
+313/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 313 / npoints = 1024
+314/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 314 / npoints = 1024
+315/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 315 / npoints = 1024
+316/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 316 / npoints = 1024
+317/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 317 / npoints = 1024
+318/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 318 / npoints = 1024
+319/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 319 / npoints = 1024
+320/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 320 / npoints = 1024
+321/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 321 / npoints = 1024
+322/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 322 / npoints = 1024
+323/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 323 / npoints = 1024
+324/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 324 / npoints = 1024
+325/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 325 / npoints = 1024
+326/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 326 / npoints = 1024
+327/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 327 / npoints = 1024
+328/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 328 / npoints = 1024
+329/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 329 / npoints = 1024
+330/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 330 / npoints = 1024
+331/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 331 / npoints = 1024
+332/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 332 / npoints = 1024
+333/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 333 / npoints = 1024
+334/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 334 / npoints = 1024
+335/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 335 / npoints = 1024
+336/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 336 / npoints = 1024
+337/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 337 / npoints = 1024
+338/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 338 / npoints = 1024
+339/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 339 / npoints = 1024
+340/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 340 / npoints = 1024
+341/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 341 / npoints = 1024
+342/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 342 / npoints = 1024
+343/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 343 / npoints = 1024
+344/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 344 / npoints = 1024
+345/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 345 / npoints = 1024
+346/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 346 / npoints = 1024
+347/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 347 / npoints = 1024
+348/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 348 / npoints = 1024
+349/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 349 / npoints = 1024
+350/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 350 / npoints = 1024
+351/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 351 / npoints = 1024
+352/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 352 / npoints = 1024
+353/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 353 / npoints = 1024
+354/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 354 / npoints = 1024
+355/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 355 / npoints = 1024
+356/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 356 / npoints = 1024
+357/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 357 / npoints = 1024
+358/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 358 / npoints = 1024
+359/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 359 / npoints = 1024
+360/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 360 / npoints = 1024
+361/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 361 / npoints = 1024
+362/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 362 / npoints = 1024
+363/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 363 / npoints = 1024
+364/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 364 / npoints = 1024
+365/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 365 / npoints = 1024
+366/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 366 / npoints = 1024
+367/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 367 / npoints = 1024
+368/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 368 / npoints = 1024
+369/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 369 / npoints = 1024
+370/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 370 / npoints = 1024
+371/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 371 / npoints = 1024
+372/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 372 / npoints = 1024
+373/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 373 / npoints = 1024
+374/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 374 / npoints = 1024
+375/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 375 / npoints = 1024
+376/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 376 / npoints = 1024
+377/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 377 / npoints = 1024
+378/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 378 / npoints = 1024
+379/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 379 / npoints = 1024
+380/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 380 / npoints = 1024
+381/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 381 / npoints = 1024
+382/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 382 / npoints = 1024
+383/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 383 / npoints = 1024
+384/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 384 / npoints = 1024
+385/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 385 / npoints = 1024
+386/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 386 / npoints = 1024
+387/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 387 / npoints = 1024
+388/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 388 / npoints = 1024
+389/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 389 / npoints = 1024
+390/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 390 / npoints = 1024
+391/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 391 / npoints = 1024
+392/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 392 / npoints = 1024
+393/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 393 / npoints = 1024
+394/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 394 / npoints = 1024
+395/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 395 / npoints = 1024
+396/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 396 / npoints = 1024
+397/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 397 / npoints = 1024
+398/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 398 / npoints = 1024
+399/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 399 / npoints = 1024
+400/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 400 / npoints = 1024
+401/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 401 / npoints = 1024
+402/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 402 / npoints = 1024
+403/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 403 / npoints = 1024
+404/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 404 / npoints = 1024
+405/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 405 / npoints = 1024
+406/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 406 / npoints = 1024
+407/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 407 / npoints = 1024
+408/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 408 / npoints = 1024
+409/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 409 / npoints = 1024
+410/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 410 / npoints = 1024
+411/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 411 / npoints = 1024
+412/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 412 / npoints = 1024
+413/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 413 / npoints = 1024
+414/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 414 / npoints = 1024
+415/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 415 / npoints = 1024
+416/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 416 / npoints = 1024
+417/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 417 / npoints = 1024
+418/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 418 / npoints = 1024
+419/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 419 / npoints = 1024
+420/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 420 / npoints = 1024
+421/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 421 / npoints = 1024
+422/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 422 / npoints = 1024
+423/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 423 / npoints = 1024
+424/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 424 / npoints = 1024
+425/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 425 / npoints = 1024
+426/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 426 / npoints = 1024
+427/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 427 / npoints = 1024
+428/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 428 / npoints = 1024
+429/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 429 / npoints = 1024
+430/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 430 / npoints = 1024
+431/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 431 / npoints = 1024
+432/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 432 / npoints = 1024
+433/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 433 / npoints = 1024
+434/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 434 / npoints = 1024
+435/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 435 / npoints = 1024
+436/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 436 / npoints = 1024
+437/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 437 / npoints = 1024
+438/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 438 / npoints = 1024
+439/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 439 / npoints = 1024
+440/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 440 / npoints = 1024
+441/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 441 / npoints = 1024
+442/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 442 / npoints = 1024
+443/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 443 / npoints = 1024
+444/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 444 / npoints = 1024
+445/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 445 / npoints = 1024
+446/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 446 / npoints = 1024
+447/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 447 / npoints = 1024
+448/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 448 / npoints = 1024
+449/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 449 / npoints = 1024
+450/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 450 / npoints = 1024
+451/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 451 / npoints = 1024
+452/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 452 / npoints = 1024
+453/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 453 / npoints = 1024
+454/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 454 / npoints = 1024
+455/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 455 / npoints = 1024
+456/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 456 / npoints = 1024
+457/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 457 / npoints = 1024
+458/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 458 / npoints = 1024
+459/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 459 / npoints = 1024
+460/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 460 / npoints = 1024
+461/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 461 / npoints = 1024
+462/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 462 / npoints = 1024
+463/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 463 / npoints = 1024
+464/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 464 / npoints = 1024
+465/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 465 / npoints = 1024
+466/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 466 / npoints = 1024
+467/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 467 / npoints = 1024
+468/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 468 / npoints = 1024
+469/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 469 / npoints = 1024
+470/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 470 / npoints = 1024
+471/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 471 / npoints = 1024
+472/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 472 / npoints = 1024
+473/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 473 / npoints = 1024
+474/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 474 / npoints = 1024
+475/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 475 / npoints = 1024
+476/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 476 / npoints = 1024
+477/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 477 / npoints = 1024
+478/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 478 / npoints = 1024
+479/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 479 / npoints = 1024
+480/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 480 / npoints = 1024
+481/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 481 / npoints = 1024
+482/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 482 / npoints = 1024
+483/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 483 / npoints = 1024
+484/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 484 / npoints = 1024
+485/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 485 / npoints = 1024
+486/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 486 / npoints = 1024
+487/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 487 / npoints = 1024
+488/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 488 / npoints = 1024
+489/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 489 / npoints = 1024
+490/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 490 / npoints = 1024
+491/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 491 / npoints = 1024
+492/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 492 / npoints = 1024
+493/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 493 / npoints = 1024
+494/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 494 / npoints = 1024
+495/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 495 / npoints = 1024
+496/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 496 / npoints = 1024
+497/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 497 / npoints = 1024
+498/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 498 / npoints = 1024
+499/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 499 / npoints = 1024
+500/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 500 / npoints = 1024
+501/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 501 / npoints = 1024
+502/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 502 / npoints = 1024
+503/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 503 / npoints = 1024
+504/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 504 / npoints = 1024
+505/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 505 / npoints = 1024
+506/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 506 / npoints = 1024
+507/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 507 / npoints = 1024
+508/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 508 / npoints = 1024
+509/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 509 / npoints = 1024
+510/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 510 / npoints = 1024
+511/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 511 / npoints = 1024
+512/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 512 / npoints = 1024
+513/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 513 / npoints = 1024
+514/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 514 / npoints = 1024
+515/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 515 / npoints = 1024
+516/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 516 / npoints = 1024
+517/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 517 / npoints = 1024
+518/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 518 / npoints = 1024
+519/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 519 / npoints = 1024
+520/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 520 / npoints = 1024
+521/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 521 / npoints = 1024
+522/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 522 / npoints = 1024
+523/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 523 / npoints = 1024
+524/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 524 / npoints = 1024
+525/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 525 / npoints = 1024
+526/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 526 / npoints = 1024
+527/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 527 / npoints = 1024
+528/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 528 / npoints = 1024
+529/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 529 / npoints = 1024
+530/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 530 / npoints = 1024
+531/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 531 / npoints = 1024
+532/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 532 / npoints = 1024
+533/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 533 / npoints = 1024
+534/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 534 / npoints = 1024
+535/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 535 / npoints = 1024
+536/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 536 / npoints = 1024
+537/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 537 / npoints = 1024
+538/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 538 / npoints = 1024
+539/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 539 / npoints = 1024
+540/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 540 / npoints = 1024
+541/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 541 / npoints = 1024
+542/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 542 / npoints = 1024
+543/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 543 / npoints = 1024
+544/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 544 / npoints = 1024
+545/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 545 / npoints = 1024
+546/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 546 / npoints = 1024
+547/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 547 / npoints = 1024
+548/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 548 / npoints = 1024
+549/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 549 / npoints = 1024
+550/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 550 / npoints = 1024
+551/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 551 / npoints = 1024
+552/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 552 / npoints = 1024
+553/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 553 / npoints = 1024
+554/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 554 / npoints = 1024
+555/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 555 / npoints = 1024
+556/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 556 / npoints = 1024
+557/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 557 / npoints = 1024
+558/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 558 / npoints = 1024
+559/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 559 / npoints = 1024
+560/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 560 / npoints = 1024
+561/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 561 / npoints = 1024
+562/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 562 / npoints = 1024
+563/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 563 / npoints = 1024
+564/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 564 / npoints = 1024
+565/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 565 / npoints = 1024
+566/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 566 / npoints = 1024
+567/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 567 / npoints = 1024
+568/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 568 / npoints = 1024
+569/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 569 / npoints = 1024
+570/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 570 / npoints = 1024
+571/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 571 / npoints = 1024
+572/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 572 / npoints = 1024
+573/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 573 / npoints = 1024
+574/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 574 / npoints = 1024
+575/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 575 / npoints = 1024
+576/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 576 / npoints = 1024
+577/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 577 / npoints = 1024
+578/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 578 / npoints = 1024
+579/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 579 / npoints = 1024
+580/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 580 / npoints = 1024
+581/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 581 / npoints = 1024
+582/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 582 / npoints = 1024
+583/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 583 / npoints = 1024
+584/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 584 / npoints = 1024
+585/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 585 / npoints = 1024
+586/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 586 / npoints = 1024
+587/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 587 / npoints = 1024
+588/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 588 / npoints = 1024
+589/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 589 / npoints = 1024
+590/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 590 / npoints = 1024
+591/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 591 / npoints = 1024
+592/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 592 / npoints = 1024
+593/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 593 / npoints = 1024
+594/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 594 / npoints = 1024
+595/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 595 / npoints = 1024
+596/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 596 / npoints = 1024
+597/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 597 / npoints = 1024
+598/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 598 / npoints = 1024
+599/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 599 / npoints = 1024
+600/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 600 / npoints = 1024
+601/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 601 / npoints = 1024
+602/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 602 / npoints = 1024
+603/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 603 / npoints = 1024
+604/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 604 / npoints = 1024
+605/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 605 / npoints = 1024
+606/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 606 / npoints = 1024
+607/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 607 / npoints = 1024
+608/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 608 / npoints = 1024
+609/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 609 / npoints = 1024
+610/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 610 / npoints = 1024
+611/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 611 / npoints = 1024
+612/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 612 / npoints = 1024
+613/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 613 / npoints = 1024
+614/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 614 / npoints = 1024
+615/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 615 / npoints = 1024
+616/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 616 / npoints = 1024
+617/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 617 / npoints = 1024
+618/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 618 / npoints = 1024
+619/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 619 / npoints = 1024
+620/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 620 / npoints = 1024
+621/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 621 / npoints = 1024
+622/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 622 / npoints = 1024
+623/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 623 / npoints = 1024
+624/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 624 / npoints = 1024
+625/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 625 / npoints = 1024
+626/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 626 / npoints = 1024
+627/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 627 / npoints = 1024
+628/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 628 / npoints = 1024
+629/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 629 / npoints = 1024
+630/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 630 / npoints = 1024
+631/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 631 / npoints = 1024
+632/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 632 / npoints = 1024
+633/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 633 / npoints = 1024
+634/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 634 / npoints = 1024
+635/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 635 / npoints = 1024
+636/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 636 / npoints = 1024
+637/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 637 / npoints = 1024
+638/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 638 / npoints = 1024
+639/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 639 / npoints = 1024
+640/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 640 / npoints = 1024
+641/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 641 / npoints = 1024
+642/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 642 / npoints = 1024
+643/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 643 / npoints = 1024
+644/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 644 / npoints = 1024
+645/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 645 / npoints = 1024
+646/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 646 / npoints = 1024
+647/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 647 / npoints = 1024
+648/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 648 / npoints = 1024
+649/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 649 / npoints = 1024
+650/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 650 / npoints = 1024
+651/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 651 / npoints = 1024
+652/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 652 / npoints = 1024
+653/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 653 / npoints = 1024
+654/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 654 / npoints = 1024
+655/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 655 / npoints = 1024
+656/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 656 / npoints = 1024
+657/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 657 / npoints = 1024
+658/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 658 / npoints = 1024
+659/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 659 / npoints = 1024
+660/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 660 / npoints = 1024
+661/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 661 / npoints = 1024
+662/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 662 / npoints = 1024
+663/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 663 / npoints = 1024
+664/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 664 / npoints = 1024
+665/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 665 / npoints = 1024
+666/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 666 / npoints = 1024
+667/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 667 / npoints = 1024
+668/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 668 / npoints = 1024
+669/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 669 / npoints = 1024
+670/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 670 / npoints = 1024
+671/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 671 / npoints = 1024
+672/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 672 / npoints = 1024
+673/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 673 / npoints = 1024
+674/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 674 / npoints = 1024
+675/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 675 / npoints = 1024
+676/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 676 / npoints = 1024
+677/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 677 / npoints = 1024
+678/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 678 / npoints = 1024
+679/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 679 / npoints = 1024
+680/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 680 / npoints = 1024
+681/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 681 / npoints = 1024
+682/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 682 / npoints = 1024
+683/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 683 / npoints = 1024
+684/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 684 / npoints = 1024
+685/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 685 / npoints = 1024
+686/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 686 / npoints = 1024
+687/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 687 / npoints = 1024
+688/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 688 / npoints = 1024
+689/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 689 / npoints = 1024
+690/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 690 / npoints = 1024
+691/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 691 / npoints = 1024
+692/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 692 / npoints = 1024
+693/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 693 / npoints = 1024
+694/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 694 / npoints = 1024
+695/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 695 / npoints = 1024
+696/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 696 / npoints = 1024
+697/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 697 / npoints = 1024
+698/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 698 / npoints = 1024
+699/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 699 / npoints = 1024
+700/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 700 / npoints = 1024
+701/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 701 / npoints = 1024
+702/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 702 / npoints = 1024
+703/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 703 / npoints = 1024
+704/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 704 / npoints = 1024
+705/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 705 / npoints = 1024
+706/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 706 / npoints = 1024
+707/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 707 / npoints = 1024
+708/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 708 / npoints = 1024
+709/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 709 / npoints = 1024
+710/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 710 / npoints = 1024
+711/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 711 / npoints = 1024
+712/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 712 / npoints = 1024
+713/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 713 / npoints = 1024
+714/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 714 / npoints = 1024
+715/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 715 / npoints = 1024
+716/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 716 / npoints = 1024
+717/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 717 / npoints = 1024
+718/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 718 / npoints = 1024
+719/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 719 / npoints = 1024
+720/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 720 / npoints = 1024
+721/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 721 / npoints = 1024
+722/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 722 / npoints = 1024
+723/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 723 / npoints = 1024
+724/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 724 / npoints = 1024
+725/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 725 / npoints = 1024
+726/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 726 / npoints = 1024
+727/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 727 / npoints = 1024
+728/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 728 / npoints = 1024
+729/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 729 / npoints = 1024
+730/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 730 / npoints = 1024
+731/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 731 / npoints = 1024
+732/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 732 / npoints = 1024
+733/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 733 / npoints = 1024
+734/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 734 / npoints = 1024
+735/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 735 / npoints = 1024
+736/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 736 / npoints = 1024
+737/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 737 / npoints = 1024
+738/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 738 / npoints = 1024
+739/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 739 / npoints = 1024
+740/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 740 / npoints = 1024
+741/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 741 / npoints = 1024
+742/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 742 / npoints = 1024
+743/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 743 / npoints = 1024
+744/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 744 / npoints = 1024
+745/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 745 / npoints = 1024
+746/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 746 / npoints = 1024
+747/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 747 / npoints = 1024
+748/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 748 / npoints = 1024
+749/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 749 / npoints = 1024
+750/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 750 / npoints = 1024
+751/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 751 / npoints = 1024
+752/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 752 / npoints = 1024
+753/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 753 / npoints = 1024
+754/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 754 / npoints = 1024
+755/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 755 / npoints = 1024
+756/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 756 / npoints = 1024
+757/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 757 / npoints = 1024
+758/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 758 / npoints = 1024
+759/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 759 / npoints = 1024
+760/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 760 / npoints = 1024
+761/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 761 / npoints = 1024
+762/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 762 / npoints = 1024
+763/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 763 / npoints = 1024
+764/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 764 / npoints = 1024
+765/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 765 / npoints = 1024
+766/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 766 / npoints = 1024
+767/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 767 / npoints = 1024
+768/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 768 / npoints = 1024
+769/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 769 / npoints = 1024
+770/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 770 / npoints = 1024
+771/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 771 / npoints = 1024
+772/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 772 / npoints = 1024
+773/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 773 / npoints = 1024
+774/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 774 / npoints = 1024
+775/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 775 / npoints = 1024
+776/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 776 / npoints = 1024
+777/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 777 / npoints = 1024
+778/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 778 / npoints = 1024
+779/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 779 / npoints = 1024
+780/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 780 / npoints = 1024
+781/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 781 / npoints = 1024
+782/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 782 / npoints = 1024
+783/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 783 / npoints = 1024
+784/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 784 / npoints = 1024
+785/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 785 / npoints = 1024
+786/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 786 / npoints = 1024
+787/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 787 / npoints = 1024
+788/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 788 / npoints = 1024
+789/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 789 / npoints = 1024
+790/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 790 / npoints = 1024
+791/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 791 / npoints = 1024
+792/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 792 / npoints = 1024
+793/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 793 / npoints = 1024
+794/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 794 / npoints = 1024
+795/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 795 / npoints = 1024
+796/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 796 / npoints = 1024
+797/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 797 / npoints = 1024
+798/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 798 / npoints = 1024
+799/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 799 / npoints = 1024
+800/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 800 / npoints = 1024
+801/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 801 / npoints = 1024
+802/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 802 / npoints = 1024
+803/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 803 / npoints = 1024
+804/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 804 / npoints = 1024
+805/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 805 / npoints = 1024
+806/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 806 / npoints = 1024
+807/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 807 / npoints = 1024
+808/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 808 / npoints = 1024
+809/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 809 / npoints = 1024
+810/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 810 / npoints = 1024
+811/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 811 / npoints = 1024
+812/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 812 / npoints = 1024
+813/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 813 / npoints = 1024
+814/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 814 / npoints = 1024
+815/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 815 / npoints = 1024
+816/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 816 / npoints = 1024
+817/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 817 / npoints = 1024
+818/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 818 / npoints = 1024
+819/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 819 / npoints = 1024
+820/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 820 / npoints = 1024
+821/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 821 / npoints = 1024
+822/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 822 / npoints = 1024
+823/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 823 / npoints = 1024
+824/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 824 / npoints = 1024
+825/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 825 / npoints = 1024
+826/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 826 / npoints = 1024
+827/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 827 / npoints = 1024
+828/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 828 / npoints = 1024
+829/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 829 / npoints = 1024
+830/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 830 / npoints = 1024
+831/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 831 / npoints = 1024
+832/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 832 / npoints = 1024
+833/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 833 / npoints = 1024
+834/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 834 / npoints = 1024
+835/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 835 / npoints = 1024
+836/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 836 / npoints = 1024
+837/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 837 / npoints = 1024
+838/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 838 / npoints = 1024
+839/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 839 / npoints = 1024
+840/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 840 / npoints = 1024
+841/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 841 / npoints = 1024
+842/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 842 / npoints = 1024
+843/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 843 / npoints = 1024
+844/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 844 / npoints = 1024
+845/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 845 / npoints = 1024
+846/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 846 / npoints = 1024
+847/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 847 / npoints = 1024
+848/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 848 / npoints = 1024
+849/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 849 / npoints = 1024
+850/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 850 / npoints = 1024
+851/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 851 / npoints = 1024
+852/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 852 / npoints = 1024
+853/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 853 / npoints = 1024
+854/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 854 / npoints = 1024
+855/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 855 / npoints = 1024
+856/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 856 / npoints = 1024
+857/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 857 / npoints = 1024
+858/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 858 / npoints = 1024
+859/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 859 / npoints = 1024
+860/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 860 / npoints = 1024
+861/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 861 / npoints = 1024
+862/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 862 / npoints = 1024
+863/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 863 / npoints = 1024
+864/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 864 / npoints = 1024
+865/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 865 / npoints = 1024
+866/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 866 / npoints = 1024
+867/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 867 / npoints = 1024
+868/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 868 / npoints = 1024
+869/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 869 / npoints = 1024
+870/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 870 / npoints = 1024
+871/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 871 / npoints = 1024
+872/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 872 / npoints = 1024
+873/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 873 / npoints = 1024
+874/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 874 / npoints = 1024
+875/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 875 / npoints = 1024
+876/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 876 / npoints = 1024
+877/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 877 / npoints = 1024
+878/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 878 / npoints = 1024
+879/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 879 / npoints = 1024
+880/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 880 / npoints = 1024
+881/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 881 / npoints = 1024
+882/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 882 / npoints = 1024
+883/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 883 / npoints = 1024
+884/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 884 / npoints = 1024
+885/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 885 / npoints = 1024
+886/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 886 / npoints = 1024
+887/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 887 / npoints = 1024
+888/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 888 / npoints = 1024
+889/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 889 / npoints = 1024
+890/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 890 / npoints = 1024
+891/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 891 / npoints = 1024
+892/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 892 / npoints = 1024
+893/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 893 / npoints = 1024
+894/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 894 / npoints = 1024
+895/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 895 / npoints = 1024
+896/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 896 / npoints = 1024
+897/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 897 / npoints = 1024
+898/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 898 / npoints = 1024
+899/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 899 / npoints = 1024
+900/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 900 / npoints = 1024
+901/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 901 / npoints = 1024
+902/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 902 / npoints = 1024
+903/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 903 / npoints = 1024
+904/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 904 / npoints = 1024
+905/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 905 / npoints = 1024
+906/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 906 / npoints = 1024
+907/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 907 / npoints = 1024
+908/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 908 / npoints = 1024
+909/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 909 / npoints = 1024
+910/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 910 / npoints = 1024
+911/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 911 / npoints = 1024
+912/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 912 / npoints = 1024
+913/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 913 / npoints = 1024
+914/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 914 / npoints = 1024
+915/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 915 / npoints = 1024
+916/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 916 / npoints = 1024
+917/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 917 / npoints = 1024
+918/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 918 / npoints = 1024
+919/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 919 / npoints = 1024
+920/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 920 / npoints = 1024
+921/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 921 / npoints = 1024
+922/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 922 / npoints = 1024
+923/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 923 / npoints = 1024
+924/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 924 / npoints = 1024
+925/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 925 / npoints = 1024
+926/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 926 / npoints = 1024
+927/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 927 / npoints = 1024
+928/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 928 / npoints = 1024
+929/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 929 / npoints = 1024
+930/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 930 / npoints = 1024
+931/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 931 / npoints = 1024
+932/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 932 / npoints = 1024
+933/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 933 / npoints = 1024
+934/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 934 / npoints = 1024
+935/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 935 / npoints = 1024
+936/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 936 / npoints = 1024
+937/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 937 / npoints = 1024
+938/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 938 / npoints = 1024
+939/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 939 / npoints = 1024
+940/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 940 / npoints = 1024
+941/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 941 / npoints = 1024
+942/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 942 / npoints = 1024
+943/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 943 / npoints = 1024
+944/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 944 / npoints = 1024
+945/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 945 / npoints = 1024
+946/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 946 / npoints = 1024
+947/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 947 / npoints = 1024
+948/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 948 / npoints = 1024
+949/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 949 / npoints = 1024
+950/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 950 / npoints = 1024
+951/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 951 / npoints = 1024
+952/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 952 / npoints = 1024
+953/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 953 / npoints = 1024
+954/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 954 / npoints = 1024
+955/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 955 / npoints = 1024
+956/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 956 / npoints = 1024
+957/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 957 / npoints = 1024
+958/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 958 / npoints = 1024
+959/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 959 / npoints = 1024
+960/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 960 / npoints = 1024
+961/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 961 / npoints = 1024
+962/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 962 / npoints = 1024
+963/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 963 / npoints = 1024
+964/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 964 / npoints = 1024
+965/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 965 / npoints = 1024
+966/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 966 / npoints = 1024
+967/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 967 / npoints = 1024
+968/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 968 / npoints = 1024
+969/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 969 / npoints = 1024
+970/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 970 / npoints = 1024
+971/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 971 / npoints = 1024
+972/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 972 / npoints = 1024
+973/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 973 / npoints = 1024
+974/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 974 / npoints = 1024
+975/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 975 / npoints = 1024
+976/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 976 / npoints = 1024
+977/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 977 / npoints = 1024
+978/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 978 / npoints = 1024
+979/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 979 / npoints = 1024
+980/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 980 / npoints = 1024
+981/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 981 / npoints = 1024
+982/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 982 / npoints = 1024
+983/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 983 / npoints = 1024
+984/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 984 / npoints = 1024
+985/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 985 / npoints = 1024
+986/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 986 / npoints = 1024
+987/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 987 / npoints = 1024
+988/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 988 / npoints = 1024
+989/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 989 / npoints = 1024
+990/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 990 / npoints = 1024
+991/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 991 / npoints = 1024
+992/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 992 / npoints = 1024
+993/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 993 / npoints = 1024
+994/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 994 / npoints = 1024
+995/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 995 / npoints = 1024
+996/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 996 / npoints = 1024
+997/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 997 / npoints = 1024
+998/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 998 / npoints = 1024
+999/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 999 / npoints = 1024
+1000/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1000 / npoints = 1024
+1001/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1001 / npoints = 1024
+1002/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1002 / npoints = 1024
+1003/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1003 / npoints = 1024
+1004/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1004 / npoints = 1024
+1005/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1005 / npoints = 1024
+1006/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1006 / npoints = 1024
+1007/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1007 / npoints = 1024
+1008/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1008 / npoints = 1024
+1009/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1009 / npoints = 1024
+1010/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1010 / npoints = 1024
+1011/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1011 / npoints = 1024
+1012/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1012 / npoints = 1024
+1013/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1013 / npoints = 1024
+1014/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1014 / npoints = 1024
+1015/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1015 / npoints = 1024
+1016/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1016 / npoints = 1024
+1017/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1017 / npoints = 1024
+1018/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1018 / npoints = 1024
+1019/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1019 / npoints = 1024
+1020/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1020 / npoints = 1024
+1021/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1021 / npoints = 1024
+1022/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1022 / npoints = 1024
+1023/1024
+Checking bad values
+Draw accepted: len(unit_cube) = 1023 / npoints = 1024
+3729it [0:00:56 bound:2 nc:785 ncall:6.1e+04 eff:6.1% logz-ratio=0.17+/-0.04 dlogz:29.751>0.1]
+3888it [0:01:57 bound:7 nc:610 ncall:1.7e+05 eff:2.3% logz-ratio=0.34+/-0.04 dlogz:29.428>0.1]
+4077it [0:03:04 bound:13 nc:377 ncall:3.0e+05 eff:1.3% logz-ratio=0.55+/-0.05 dlogz:29.032>0.1]
+4264it [0:04:15 bound:19 nc:737 ncall:4.4e+05 eff:1.0% logz-ratio=0.76+/-0.05 dlogz:39.232>0.1]
+4456it [0:05:24 bound:25 nc:569 ncall:5.8e+05 eff:0.8% logz-ratio=0.99+/-0.05 dlogz:38.820>0.1]
+4613it [0:06:26 bound:30 nc:606 ncall:6.9e+05 eff:0.7% logz-ratio=1.18+/-0.05 dlogz:38.471>0.1]
+4772it [0:07:28 bound:35 nc:626 ncall:8.0e+05 eff:0.6% logz-ratio=1.40+/-0.05 dlogz:38.104>0.1]
+4958it [0:08:38 bound:41 nc:659 ncall:9.4e+05 eff:0.5% logz-ratio=1.66+/-0.06 dlogz:37.653>0.1]
+5141it [0:09:40 bound:47 nc:907 ncall:1.1e+06 eff:0.5% logz-ratio=1.96+/-0.06 dlogz:37.183>0.1]
+5332it [0:10:43 bound:53 nc:549 ncall:1.2e+06 eff:0.4% logz-ratio=2.29+/-0.06 dlogz:36.661>0.1]
+5520it [0:11:45 bound:59 nc:753 ncall:1.3e+06 eff:0.4% logz-ratio=2.66+/-0.06 dlogz:47.914>0.1]
+5709it [0:12:53 bound:65 nc:741 ncall:1.5e+06 eff:0.4% logz-ratio=3.10+/-0.07 dlogz:47.293>0.1]
+5898it [0:14:01 bound:71 nc:832 ncall:1.6e+06 eff:0.4% logz-ratio=3.59+/-0.07 dlogz:46.619>0.1]
+6089it [0:15:05 bound:77 nc:287 ncall:1.7e+06 eff:0.3% logz-ratio=4.08+/-0.07 dlogz:45.945>0.1]
+6280it [0:16:10 bound:83 nc:674 ncall:1.9e+06 eff:0.3% logz-ratio=4.58+/-0.07 dlogz:45.255>0.1]
+6469it [0:17:13 bound:89 nc:746 ncall:2.0e+06 eff:0.3% logz-ratio=5.11+/-0.08 dlogz:44.544>0.1]
+6660it [0:18:18 bound:95 nc:761 ncall:2.2e+06 eff:0.3% logz-ratio=5.66+/-0.08 dlogz:43.809>0.1]
+6847it [0:19:23 bound:101 nc:404 ncall:2.3e+06 eff:0.3% logz-ratio=6.30+/-0.08 dlogz:42.989>0.1]
+7036it [0:20:35 bound:107 nc:629 ncall:2.4e+06 eff:0.3% logz-ratio=6.98+/-0.08 dlogz:42.120>0.1]
+7226it [0:21:38 bound:113 nc:1378 ncall:2.6e+06 eff:0.3% logz-ratio=7.73+/-0.08 dlogz:41.182>0.1]
+7413it [0:22:44 bound:119 nc:983 ncall:2.7e+06 eff:0.3% logz-ratio=8.48+/-0.08 dlogz:40.256>0.1]
+7602it [0:23:52 bound:125 nc:714 ncall:2.8e+06 eff:0.3% logz-ratio=9.22+/-0.09 dlogz:39.325>0.1]
+7792it [0:24:53 bound:131 nc:598 ncall:3.0e+06 eff:0.3% logz-ratio=10.01+/-0.09 dlogz:38.354>0.1]
+7983it [0:26:01 bound:137 nc:747 ncall:3.1e+06 eff:0.3% logz-ratio=10.84+/-0.09 dlogz:37.341>0.1]
+8173it [0:27:04 bound:143 nc:798 ncall:3.2e+06 eff:0.3% logz-ratio=11.71+/-0.09 dlogz:36.279>0.1]
+8361it [0:28:10 bound:149 nc:702 ncall:3.4e+06 eff:0.2% logz-ratio=12.55+/-0.09 dlogz:35.254>0.1]
+8549it [0:29:15 bound:155 nc:945 ncall:3.5e+06 eff:0.2% logz-ratio=13.42+/-0.09 dlogz:34.207>0.1]
+8741it [0:30:19 bound:161 nc:541 ncall:3.6e+06 eff:0.2% logz-ratio=14.30+/-0.09 dlogz:34.580>0.1]
+8929it [0:31:23 bound:167 nc:760 ncall:3.8e+06 eff:0.2% logz-ratio=15.13+/-0.09 dlogz:33.935>0.1]
+9120it [0:32:26 bound:173 nc:813 ncall:3.9e+06 eff:0.2% logz-ratio=15.96+/-0.09 dlogz:32.917>0.1]
+9310it [0:33:36 bound:179 nc:553 ncall:4.0e+06 eff:0.2% logz-ratio=16.86+/-0.10 dlogz:31.840>0.1]
+9500it [0:34:44 bound:185 nc:732 ncall:4.1e+06 eff:0.2% logz-ratio=17.81+/-0.10 dlogz:33.662>0.1]
+9688it [0:35:51 bound:191 nc:1037 ncall:4.3e+06 eff:0.2% logz-ratio=18.74+/-0.10 dlogz:32.616>0.1]
+9877it [0:37:00 bound:197 nc:1047 ncall:4.4e+06 eff:0.2% logz-ratio=19.67+/-0.10 dlogz:31.500>0.1]
+10065it [0:38:08 bound:203 nc:716 ncall:4.6e+06 eff:0.2% logz-ratio=20.56+/-0.10 dlogz:30.432>0.1]
+10256it [0:39:14 bound:209 nc:1049 ncall:4.7e+06 eff:0.2% logz-ratio=21.54+/-0.10 dlogz:29.259>0.1]
+10447it [0:40:21 bound:215 nc:726 ncall:4.8e+06 eff:0.2% logz-ratio=22.48+/-0.10 dlogz:28.138>0.1]
+10635it [0:41:31 bound:221 nc:701 ncall:5.0e+06 eff:0.2% logz-ratio=23.32+/-0.10 dlogz:31.352>0.1]
+10823it [0:42:35 bound:227 nc:767 ncall:5.1e+06 eff:0.2% logz-ratio=24.16+/-0.10 dlogz:30.327>0.1]
+10982it [0:43:36 bound:232 nc:579 ncall:5.2e+06 eff:0.2% logz-ratio=24.89+/-0.10 dlogz:29.442>0.1]
+11139it [0:44:40 bound:237 nc:714 ncall:5.3e+06 eff:0.2% logz-ratio=25.59+/-0.10 dlogz:28.592>0.1]
+11324it [0:45:52 bound:243 nc:675 ncall:5.4e+06 eff:0.2% logz-ratio=26.38+/-0.11 dlogz:27.616>0.1]
+11482it [0:46:53 bound:248 nc:945 ncall:5.6e+06 eff:0.2% logz-ratio=27.09+/-0.11 dlogz:26.761>0.1]
+11639it [0:47:53 bound:253 nc:738 ncall:5.7e+06 eff:0.2% logz-ratio=27.80+/-0.11 dlogz:25.890>0.1]
+11829it [0:49:02 bound:259 nc:562 ncall:5.8e+06 eff:0.2% logz-ratio=28.64+/-0.11 dlogz:24.865>0.1]
+11988it [0:50:04 bound:264 nc:854 ncall:5.9e+06 eff:0.2% logz-ratio=29.36+/-0.11 dlogz:23.994>0.1]
+12148it [0:51:05 bound:269 nc:732 ncall:6.0e+06 eff:0.2% logz-ratio=30.10+/-0.11 dlogz:23.101>0.1]
+12301it [0:52:10 bound:274 nc:876 ncall:6.2e+06 eff:0.2% logz-ratio=30.81+/-0.11 dlogz:22.241>0.1]
+12493it [0:53:21 bound:280 nc:800 ncall:6.3e+06 eff:0.2% logz-ratio=31.70+/-0.11 dlogz:21.155>0.1]
+12651it [0:54:22 bound:285 nc:581 ncall:6.4e+06 eff:0.2% logz-ratio=32.42+/-0.11 dlogz:20.288>0.1]
+12842it [0:55:31 bound:291 nc:825 ncall:6.6e+06 eff:0.2% logz-ratio=33.22+/-0.11 dlogz:19.299>0.1]
+13032it [0:56:41 bound:297 nc:1268 ncall:6.7e+06 eff:0.2% logz-ratio=33.93+/-0.11 dlogz:18.403>0.1]
+13189it [0:57:43 bound:302 nc:635 ncall:6.8e+06 eff:0.2% logz-ratio=34.52+/-0.11 dlogz:17.662>0.1]
+13379it [0:58:52 bound:308 nc:810 ncall:7.0e+06 eff:0.2% logz-ratio=35.20+/-0.11 dlogz:16.791>0.1]
+13538it [0:59:53 bound:313 nc:1158 ncall:7.1e+06 eff:0.2% logz-ratio=35.80+/-0.11 dlogz:16.036>0.1]
+13695it [1:01:04 bound:318 nc:567 ncall:7.2e+06 eff:0.2% logz-ratio=36.36+/-0.11 dlogz:15.325>0.1]
+13851it [1:02:08 bound:323 nc:1007 ncall:7.3e+06 eff:0.2% logz-ratio=36.91+/-0.12 dlogz:15.202>0.1]
+14005it [1:03:08 bound:328 nc:404 ncall:7.4e+06 eff:0.2% logz-ratio=37.43+/-0.12 dlogz:14.532>0.1]
+14164it [1:04:18 bound:333 nc:1100 ncall:7.6e+06 eff:0.2% logz-ratio=37.96+/-0.12 dlogz:13.848>0.1]
+14323it [1:05:21 bound:338 nc:1006 ncall:7.7e+06 eff:0.2% logz-ratio=38.46+/-0.12 dlogz:13.191>0.1]
+14479it [1:06:24 bound:343 nc:722 ncall:7.8e+06 eff:0.2% logz-ratio=38.94+/-0.12 dlogz:12.616>0.1]
+14635it [1:07:35 bound:348 nc:653 ncall:7.9e+06 eff:0.2% logz-ratio=39.38+/-0.12 dlogz:12.015>0.1]
+14794it [1:08:40 bound:353 nc:640 ncall:8.1e+06 eff:0.2% logz-ratio=39.81+/-0.12 dlogz:11.890>0.1]
+14950it [1:09:51 bound:358 nc:712 ncall:8.2e+06 eff:0.2% logz-ratio=40.22+/-0.12 dlogz:11.326>0.1]
+15108it [1:11:03 bound:363 nc:933 ncall:8.3e+06 eff:0.2% logz-ratio=40.62+/-0.12 dlogz:11.637>0.1]
+15265it [1:12:14 bound:368 nc:1123 ncall:8.4e+06 eff:0.2% logz-ratio=41.00+/-0.12 dlogz:11.107>0.1]
+15423it [1:13:19 bound:373 nc:1018 ncall:8.5e+06 eff:0.2% logz-ratio=41.37+/-0.12 dlogz:10.581>0.1]
+15580it [1:14:25 bound:378 nc:864 ncall:8.7e+06 eff:0.2% logz-ratio=41.73+/-0.12 dlogz:11.535>0.1]
+15739it [1:15:32 bound:383 nc:898 ncall:8.8e+06 eff:0.2% logz-ratio=42.08+/-0.12 dlogz:11.027>0.1]
+15867it [1:16:33 bound:387 nc:681 ncall:8.9e+06 eff:0.2% logz-ratio=42.35+/-0.12 dlogz:10.635>0.1]
+16023it [1:17:46 bound:392 nc:1301 ncall:9.0e+06 eff:0.2% logz-ratio=42.65+/-0.12 dlogz:10.174>0.1]
+16180it [1:18:52 bound:397 nc:684 ncall:9.2e+06 eff:0.2% logz-ratio=42.94+/-0.12 dlogz:9.735>0.1]
+16339it [1:20:05 bound:402 nc:1254 ncall:9.3e+06 eff:0.2% logz-ratio=43.20+/-0.12 dlogz:9.315>0.1]
+16497it [1:21:18 bound:407 nc:752 ncall:9.4e+06 eff:0.2% logz-ratio=43.46+/-0.12 dlogz:8.909>0.1]
+16653it [1:22:27 bound:412 nc:1419 ncall:9.5e+06 eff:0.2% logz-ratio=43.70+/-0.12 dlogz:8.508>0.1]
+16811it [1:23:31 bound:417 nc:539 ncall:9.7e+06 eff:0.2% logz-ratio=43.95+/-0.12 dlogz:8.195>0.1]
+16965it [1:24:33 bound:422 nc:1290 ncall:9.8e+06 eff:0.2% logz-ratio=44.18+/-0.12 dlogz:7.815>0.1]
+17123it [1:25:38 bound:427 nc:614 ncall:9.9e+06 eff:0.2% logz-ratio=44.41+/-0.12 dlogz:7.433>0.1]
+17279it [1:26:44 bound:432 nc:511 ncall:1.0e+07 eff:0.2% logz-ratio=44.62+/-0.12 dlogz:7.072>0.1]
+17467it [1:27:56 bound:438 nc:771 ncall:1.0e+07 eff:0.2% logz-ratio=44.86+/-0.12 dlogz:6.911>0.1]
+17657it [1:29:06 bound:444 nc:422 ncall:1.0e+07 eff:0.2% logz-ratio=45.09+/-0.12 dlogz:6.499>0.1]
+17814it [1:30:07 bound:449 nc:918 ncall:1.0e+07 eff:0.2% logz-ratio=45.26+/-0.13 dlogz:7.548>0.1]
+18005it [1:31:18 bound:455 nc:668 ncall:1.1e+07 eff:0.2% logz-ratio=45.46+/-0.13 dlogz:7.160>0.1]
+18162it [1:32:22 bound:460 nc:1718 ncall:1.1e+07 eff:0.2% logz-ratio=45.62+/-0.13 dlogz:6.851>0.1]
+18320it [1:33:32 bound:465 nc:620 ncall:1.1e+07 eff:0.2% logz-ratio=45.77+/-0.13 dlogz:6.552>0.1]
+18448it [1:34:33 bound:469 nc:899 ncall:1.1e+07 eff:0.2% logz-ratio=45.88+/-0.13 dlogz:6.316>0.1]
+18573it [1:35:36 bound:473 nc:826 ncall:1.1e+07 eff:0.2% logz-ratio=45.98+/-0.13 dlogz:6.092>0.1]
+18732it [1:36:45 bound:478 nc:1111 ncall:1.1e+07 eff:0.2% logz-ratio=46.10+/-0.13 dlogz:5.814>0.1]
+18890it [1:38:00 bound:483 nc:751 ncall:1.1e+07 eff:0.2% logz-ratio=46.22+/-0.13 dlogz:5.545>0.1]
+19014it [1:39:00 bound:487 nc:683 ncall:1.1e+07 eff:0.2% logz-ratio=46.31+/-0.13 dlogz:5.337>0.1]
+19173it [1:40:09 bound:492 nc:712 ncall:1.2e+07 eff:0.2% logz-ratio=46.41+/-0.13 dlogz:5.076>0.1]
+19331it [1:41:24 bound:497 nc:443 ncall:1.2e+07 eff:0.2% logz-ratio=46.51+/-0.13 dlogz:4.824>0.1]
+19490it [1:42:30 bound:502 nc:633 ncall:1.2e+07 eff:0.2% logz-ratio=46.61+/-0.13 dlogz:4.842>0.1]
+19647it [1:43:33 bound:507 nc:1366 ncall:1.2e+07 eff:0.2% logz-ratio=46.70+/-0.13 dlogz:4.601>0.1]
+19800it [1:44:42 bound:512 nc:661 ncall:1.2e+07 eff:0.2% logz-ratio=46.78+/-0.13 dlogz:5.005>0.1]
+19926it [1:45:43 bound:516 nc:742 ncall:1.2e+07 eff:0.2% logz-ratio=46.85+/-0.13 dlogz:4.817>0.1]
+20053it [1:46:43 bound:520 nc:609 ncall:1.2e+07 eff:0.2% logz-ratio=46.91+/-0.13 dlogz:4.713>0.1]
+20209it [1:47:53 bound:525 nc:712 ncall:1.3e+07 eff:0.2% logz-ratio=46.99+/-0.13 dlogz:4.487>0.1]
+20368it [1:49:01 bound:530 nc:785 ncall:1.3e+07 eff:0.2% logz-ratio=47.06+/-0.13 dlogz:4.261>0.1]
+20496it [1:50:01 bound:534 nc:1278 ncall:1.3e+07 eff:0.2% logz-ratio=47.12+/-0.13 dlogz:4.082>0.1]
+20619it [1:51:05 bound:538 nc:901 ncall:1.3e+07 eff:0.2% logz-ratio=47.17+/-0.13 dlogz:3.912>0.1]
+20779it [1:52:18 bound:543 nc:949 ncall:1.3e+07 eff:0.2% logz-ratio=47.24+/-0.13 dlogz:3.884>0.1]
+20939it [1:53:32 bound:548 nc:953 ncall:1.3e+07 eff:0.2% logz-ratio=47.30+/-0.13 dlogz:3.668>0.1]
+21066it [1:54:33 bound:552 nc:660 ncall:1.3e+07 eff:0.2% logz-ratio=47.35+/-0.13 dlogz:3.501>0.1]
+21192it [1:55:35 bound:556 nc:750 ncall:1.3e+07 eff:0.2% logz-ratio=47.40+/-0.13 dlogz:3.658>0.1]
+21319it [1:56:44 bound:560 nc:842 ncall:1.4e+07 eff:0.2% logz-ratio=47.44+/-0.13 dlogz:3.494>0.1]
+21443it [1:57:50 bound:564 nc:592 ncall:1.4e+07 eff:0.2% logz-ratio=47.48+/-0.13 dlogz:3.337>0.1]
+21570it [1:58:53 bound:568 nc:1222 ncall:1.4e+07 eff:0.2% logz-ratio=47.52+/-0.13 dlogz:3.179>0.1]
+21694it [1:59:57 bound:572 nc:1027 ncall:1.4e+07 eff:0.2% logz-ratio=47.56+/-0.13 dlogz:3.027>0.1]
+21820it [2:00:59 bound:576 nc:995 ncall:1.4e+07 eff:0.2% logz-ratio=47.60+/-0.13 dlogz:2.874>0.1]
+21914it [2:02:06 bound:579 nc:955 ncall:1.4e+07 eff:0.2% logz-ratio=47.63+/-0.13 dlogz:2.762>0.1]
+22039it [2:03:11 bound:583 nc:1128 ncall:1.4e+07 eff:0.2% logz-ratio=47.66+/-0.13 dlogz:2.616>0.1]
+22194it [2:04:24 bound:588 nc:987 ncall:1.4e+07 eff:0.2% logz-ratio=47.71+/-0.13 dlogz:2.438>0.1]
+22353it [2:05:33 bound:593 nc:727 ncall:1.5e+07 eff:0.2% logz-ratio=47.75+/-0.13 dlogz:2.621>0.1]
+22510it [2:06:40 bound:598 nc:1075 ncall:1.5e+07 eff:0.2% logz-ratio=47.79+/-0.13 dlogz:3.306>0.1]
+22669it [2:07:52 bound:603 nc:1092 ncall:1.5e+07 eff:0.2% logz-ratio=47.82+/-0.13 dlogz:3.122>0.1]
+22826it [2:09:01 bound:608 nc:688 ncall:1.5e+07 eff:0.2% logz-ratio=47.86+/-0.13 dlogz:2.942>0.1]
+22984it [2:10:11 bound:613 nc:876 ncall:1.5e+07 eff:0.2% logz-ratio=47.89+/-0.13 dlogz:2.765>0.1]
+23143it [2:11:22 bound:618 nc:722 ncall:1.5e+07 eff:0.1% logz-ratio=47.92+/-0.13 dlogz:2.590>0.1]
+23300it [2:12:29 bound:623 nc:1004 ncall:1.6e+07 eff:0.1% logz-ratio=47.96+/-0.13 dlogz:2.421>0.1]
+23454it [2:13:35 bound:628 nc:1074 ncall:1.6e+07 eff:0.1% logz-ratio=47.98+/-0.13 dlogz:2.259>0.1]
+23612it [2:14:43 bound:633 nc:548 ncall:1.6e+07 eff:0.1% logz-ratio=48.01+/-0.13 dlogz:2.097>0.1]
+23767it [2:15:52 bound:638 nc:719 ncall:1.6e+07 eff:0.1% logz-ratio=48.04+/-0.13 dlogz:1.942>0.1]
+23926it [2:16:59 bound:643 nc:1226 ncall:1.6e+07 eff:0.1% logz-ratio=48.07+/-0.13 dlogz:1.789>0.1]
+24082it [2:18:03 bound:648 nc:945 ncall:1.6e+07 eff:0.1% logz-ratio=48.09+/-0.13 dlogz:1.644>0.1]
+24239it [2:19:13 bound:653 nc:1398 ncall:1.7e+07 eff:0.1% logz-ratio=48.11+/-0.13 dlogz:1.505>0.1]
+24396it [2:20:15 bound:658 nc:650 ncall:1.7e+07 eff:0.1% logz-ratio=48.14+/-0.14 dlogz:1.371>0.1]
+24556it [2:21:22 bound:663 nc:1277 ncall:1.7e+07 eff:0.1% logz-ratio=48.16+/-0.14 dlogz:1.267>0.1]
+24715it [2:22:24 bound:668 nc:810 ncall:1.7e+07 eff:0.1% logz-ratio=48.18+/-0.14 dlogz:1.162>0.1]
+24872it [2:23:30 bound:673 nc:1251 ncall:1.7e+07 eff:0.1% logz-ratio=48.19+/-0.14 dlogz:1.047>0.1]
+25060it [2:24:42 bound:679 nc:974 ncall:1.7e+07 eff:0.1% logz-ratio=48.21+/-0.14 dlogz:0.919>0.1]
+25217it [2:25:54 bound:684 nc:1102 ncall:1.8e+07 eff:0.1% logz-ratio=48.23+/-0.14 dlogz:0.821>0.1]
+25375it [2:27:01 bound:689 nc:926 ncall:1.8e+07 eff:0.1% logz-ratio=48.25+/-0.14 dlogz:0.730>0.1]
+25530it [2:28:06 bound:694 nc:763 ncall:1.8e+07 eff:0.1% logz-ratio=48.26+/-0.14 dlogz:0.648>0.1]
+25679it [2:29:06 bound:698 nc:230 ncall:1.8e+07 eff:0.1% logz-ratio=48.27+/-0.14 dlogz:0.576>0.1]
+25816it [2:30:21 bound:703 nc:992 ncall:1.8e+07 eff:0.1% logz-ratio=48.28+/-0.14 dlogz:0.515>0.1]
+25973it [2:31:29 bound:708 nc:1209 ncall:1.8e+07 eff:0.1% logz-ratio=48.29+/-0.14 dlogz:0.452>0.1]
+26128it [2:32:31 bound:713 nc:747 ncall:1.9e+07 eff:0.1% logz-ratio=48.30+/-0.14 dlogz:0.431>0.1]
+26287it [2:33:36 bound:718 nc:1192 ncall:1.9e+07 eff:0.1% logz-ratio=48.31+/-0.14 dlogz:0.467>0.1]
+26445it [2:34:44 bound:723 nc:1458 ncall:1.9e+07 eff:0.1% logz-ratio=48.32+/-0.14 dlogz:0.409>0.1]
+26571it [2:35:46 bound:727 nc:904 ncall:1.9e+07 eff:0.1% logz-ratio=48.33+/-0.14 dlogz:0.367>0.1]
+26696it [2:36:47 bound:731 nc:1012 ncall:1.9e+07 eff:0.1% logz-ratio=48.34+/-0.14 dlogz:0.330>0.1]
+26854it [2:38:01 bound:736 nc:891 ncall:1.9e+07 eff:0.1% logz-ratio=48.34+/-0.14 dlogz:0.287>0.1]
+27010it [2:39:09 bound:741 nc:778 ncall:1.9e+07 eff:0.1% logz-ratio=48.35+/-0.14 dlogz:0.249>0.1]
+27169it [2:40:13 bound:746 nc:1268 ncall:2.0e+07 eff:0.1% logz-ratio=48.36+/-0.14 dlogz:0.216>0.1]
+27326it [2:41:23 bound:751 nc:1082 ncall:2.0e+07 eff:0.1% logz-ratio=48.36+/-0.14 dlogz:0.187>0.1]
+27485it [2:42:30 bound:756 nc:1208 ncall:2.0e+07 eff:0.1% logz-ratio=48.37+/-0.14 dlogz:0.195>0.1]
+27645it [2:43:42 bound:761 nc:1456 ncall:2.0e+07 eff:0.1% logz-ratio=48.37+/-0.14 dlogz:0.169>0.1]
+27804it [2:44:53 bound:766 nc:912 ncall:2.0e+07 eff:0.1% logz-ratio=48.38+/-0.14 dlogz:0.146>0.1]
+27931it [2:45:56 bound:770 nc:1195 ncall:2.0e+07 eff:0.1% logz-ratio=48.38+/-0.14 dlogz:0.129>0.1]
+28059it [2:46:56 bound:774 nc:1209 ncall:2.1e+07 eff:0.1% logz-ratio=48.38+/-0.14 dlogz:0.115>0.1]
+28187it [2:47:59 bound:778 nc:1349 ncall:2.1e+07 eff:0.1% logz-ratio=48.38+/-0.14 dlogz:0.102>0.1]

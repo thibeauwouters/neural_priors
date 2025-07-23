@@ -40,8 +40,11 @@ for GW_event in GW_event_list:
     
     highest_bf = max(bf_bns, bf_default, bf_nsbh)
     if highest_bf == bf_bns:
-        print(f"{GW_event} is classified as BNS")
+        diff = bf_bns - max(bf_default, bf_nsbh)
+        print(f"{GW_event} is classified as BNS (diff ln BF = {diff:.2f})")
     elif highest_bf == bf_default:
-        print(f"{GW_event} is classified as default")
+        diff = bf_default - max(bf_bns, bf_nsbh)
+        print(f"{GW_event} is classified as default (diff ln BF = {diff:.2f})")
     elif highest_bf == bf_nsbh:
-        print(f"{GW_event} is classified as NSBH")
+        diff = bf_nsbh - max(bf_bns, bf_default)
+        print(f"{GW_event} is classified as NSBH (diff ln BF = {diff:.2f})")

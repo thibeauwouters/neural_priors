@@ -170,3 +170,59 @@
 	1514  -  MemoryUsage of job (MB)
 	1549416  -  ResidentSetSize of job (KB)
 ...
+006 (2529976.000.000) 2025-07-22 17:51:36 Image size of job updated: 1550848
+	1515  -  MemoryUsage of job (MB)
+	1550848  -  ResidentSetSize of job (KB)
+...
+006 (2529976.000.000) 2025-07-22 17:56:36 Image size of job updated: 1551120
+	1515  -  MemoryUsage of job (MB)
+	1551120  -  ResidentSetSize of job (KB)
+...
+006 (2529976.000.000) 2025-07-22 18:01:36 Image size of job updated: 1551744
+	1516  -  MemoryUsage of job (MB)
+	1551744  -  ResidentSetSize of job (KB)
+...
+006 (2529976.000.000) 2025-07-22 18:06:37 Image size of job updated: 1553108
+	1517  -  MemoryUsage of job (MB)
+	1553108  -  ResidentSetSize of job (KB)
+...
+006 (2529976.000.000) 2025-07-22 18:11:37 Image size of job updated: 1553520
+	1518  -  MemoryUsage of job (MB)
+	1553520  -  ResidentSetSize of job (KB)
+...
+006 (2529976.000.000) 2025-07-22 18:16:37 Image size of job updated: 1553864
+	1518  -  MemoryUsage of job (MB)
+	1553864  -  ResidentSetSize of job (KB)
+...
+006 (2529976.000.000) 2025-07-22 18:21:38 Image size of job updated: 1554176
+	1518  -  MemoryUsage of job (MB)
+	1554176  -  ResidentSetSize of job (KB)
+...
+006 (2529976.000.000) 2025-07-22 18:26:38 Image size of job updated: 1555848
+	1520  -  MemoryUsage of job (MB)
+	1555848  -  ResidentSetSize of job (KB)
+...
+006 (2529976.000.000) 2025-07-22 18:31:38 Image size of job updated: 1608496
+	1548  -  MemoryUsage of job (MB)
+	1584452  -  ResidentSetSize of job (KB)
+...
+005 (2529976.000.000) 2025-07-22 18:32:18 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 3 15:18:06, Sys 0 00:05:50  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 3 15:18:06, Sys 0 00:05:50  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.27       16        16 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :                           0 
+	   Memory (MB)          :  1548       16384     16384 
+	   TimeExecute (s)      : 14478                       
+	   TimeSlotBusy (s)     : 14478                       
+
+	Job terminated of its own accord at 2025-07-22T16:32:18Z with exit-code 1.
+...

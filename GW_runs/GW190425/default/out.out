@@ -1,0 +1,1171 @@
+interferometers
+[Interferometer(name='L1', power_spectral_density=PowerSpectralDensity(psd_file='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW190425/glitch_median_PSD_forLI_L1_srate8192.txt', asd_file='None'), minimum_frequency=20.0, maximum_frequency=2048.0, length=4.0, latitude=30.562894333333332, longitude=-90.77424038888887, elevation=-6.574, xarm_azimuth=197.7165, yarm_azimuth=287.7165, xarm_tilt=-0.0003121, yarm_tilt=-0.0006107), Interferometer(name='V1', power_spectral_density=PowerSpectralDensity(psd_file='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW190425/glitch_median_PSD_forLI_V1_srate8192.txt', asd_file='None'), minimum_frequency=20.0, maximum_frequency=2048.0, length=3.0, latitude=43.631414472222225, longitude=10.504496611111112, elevation=51.884, xarm_azimuth=70.56740000000002, yarm_azimuth=160.5674, xarm_tilt=0.0, yarm_tilt=0.0)]
+waveform_generator
+WaveformGenerator(duration=128.0, sampling_frequency=4096.0, start_time=1240215377.017147, frequency_domain_source_model=binary_neutron_star_frequency_sequence, time_domain_source_model=None, parameter_conversion=convert_to_lal_binary_neutron_star_parameters, waveform_arguments={'waveform_approximant': 'IMRPhenomXP_NRTidalv3', 'reference_frequency': 20.0, 'minimum_frequency': 20.0, 'maximum_frequency': 2048.0})
+ref_injection
+{'chirp_mass': 1.4867847675135448, 'symmetric_mass_ratio': 0.24999995594642316, 'a_1': 0.011080273335494708, 'a_2': 0.04692984939031852, 'tilt_1': 2.6219694401252394, 'tilt_2': 1.0090315132594154, 'phi_jl': 0.977223832370418, 'phi_12': 5.868535624409604, 'lambda_1': 456.3727388222372, 'lambda_2': 43.226589341633236, 'luminosity_distance': 160.68570884930463, 'phase': 5.904192752190891, 'theta_jn': 0.20643139003708647, 'psi': 0.3008124663367458, 'ra': 1.4454755957606107, 'dec': 0.07257856505111598, 'mass_ratio': 0.999160794522431, 'mass_1': 1.7085843239096237, 'mass_2': 1.7071504705861102, 'geocent_time': 1240215503.017147, 'duration': 128.0}
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+Checking bad values
+3942it [0:00:56 bound:9 nc:731 ncall:2.2e+05 eff:1.8% logz-ratio=0.31+/-0.04 dlogz:27.453>0.1]
+4382it [0:01:57 bound:23 nc:789 ncall:5.4e+05 eff:0.8% logz-ratio=0.74+/-0.05 dlogz:26.591>0.1]
+4827it [0:02:59 bound:37 nc:788 ncall:8.6e+05 eff:0.6% logz-ratio=1.23+/-0.05 dlogz:45.195>0.1]
+5237it [0:04:00 bound:50 nc:729 ncall:1.2e+06 eff:0.4% logz-ratio=1.70+/-0.06 dlogz:44.320>0.1]
+5618it [0:05:02 bound:62 nc:1132 ncall:1.5e+06 eff:0.4% logz-ratio=2.16+/-0.06 dlogz:43.490>0.1]
+6027it [0:06:04 bound:75 nc:574 ncall:1.8e+06 eff:0.3% logz-ratio=2.69+/-0.06 dlogz:42.565>0.1]
+6406it [0:07:05 bound:87 nc:538 ncall:2.1e+06 eff:0.3% logz-ratio=3.28+/-0.07 dlogz:41.604>0.1]
+6815it [0:08:08 bound:100 nc:884 ncall:2.4e+06 eff:0.3% logz-ratio=4.04+/-0.07 dlogz:40.438>0.1]
+7189it [0:09:11 bound:112 nc:1009 ncall:2.7e+06 eff:0.3% logz-ratio=4.91+/-0.08 dlogz:39.206>0.1]
+7538it [0:10:13 bound:123 nc:735 ncall:2.9e+06 eff:0.3% logz-ratio=5.82+/-0.08 dlogz:37.953>0.1]
+7913it [0:11:16 bound:135 nc:785 ncall:3.2e+06 eff:0.2% logz-ratio=7.01+/-0.09 dlogz:36.406>0.1]
+8291it [0:12:18 bound:147 nc:803 ncall:3.5e+06 eff:0.2% logz-ratio=8.36+/-0.09 dlogz:34.680>0.1]
+8669it [0:13:20 bound:159 nc:588 ncall:3.8e+06 eff:0.2% logz-ratio=9.86+/-0.09 dlogz:32.814>0.1]
+9049it [0:14:24 bound:171 nc:1072 ncall:4.1e+06 eff:0.2% logz-ratio=11.49+/-0.09 dlogz:30.811>0.1]
+9395it [0:15:27 bound:182 nc:618 ncall:4.4e+06 eff:0.2% logz-ratio=13.18+/-0.10 dlogz:28.784>0.1]
+9775it [0:16:30 bound:194 nc:558 ncall:4.7e+06 eff:0.2% logz-ratio=14.92+/-0.10 dlogz:30.705>0.1]
+10151it [0:17:32 bound:206 nc:775 ncall:5.0e+06 eff:0.2% logz-ratio=16.65+/-0.10 dlogz:29.701>0.1]
+10523it [0:18:34 bound:218 nc:917 ncall:5.2e+06 eff:0.2% logz-ratio=18.34+/-0.10 dlogz:30.679>0.1]
+10871it [0:19:38 bound:229 nc:401 ncall:5.5e+06 eff:0.2% logz-ratio=19.99+/-0.10 dlogz:28.690>0.1]
+11249it [0:20:42 bound:241 nc:642 ncall:5.8e+06 eff:0.2% logz-ratio=21.66+/-0.10 dlogz:26.644>0.1]
+11591it [0:21:42 bound:252 nc:573 ncall:6.1e+06 eff:0.2% logz-ratio=23.10+/-0.11 dlogz:24.877>0.1]
+11933it [0:22:43 bound:263 nc:1075 ncall:6.4e+06 eff:0.2% logz-ratio=24.62+/-0.11 dlogz:26.989>0.1]
+12246it [0:23:44 bound:273 nc:1058 ncall:6.6e+06 eff:0.2% logz-ratio=25.89+/-0.11 dlogz:28.477>0.1]
+12560it [0:24:45 bound:283 nc:851 ncall:6.9e+06 eff:0.2% logz-ratio=27.10+/-0.11 dlogz:26.965>0.1]
+12875it [0:25:48 bound:293 nc:569 ncall:7.2e+06 eff:0.2% logz-ratio=28.36+/-0.11 dlogz:25.395>0.1]
+13219it [0:26:52 bound:304 nc:1249 ncall:7.5e+06 eff:0.2% logz-ratio=29.71+/-0.11 dlogz:23.710>0.1]
+13533it [0:27:53 bound:314 nc:874 ncall:7.8e+06 eff:0.2% logz-ratio=30.87+/-0.11 dlogz:22.238>0.1]
+13847it [0:28:54 bound:324 nc:1110 ncall:8.1e+06 eff:0.2% logz-ratio=32.01+/-0.12 dlogz:20.794>0.1]
+14159it [0:29:55 bound:334 nc:662 ncall:8.4e+06 eff:0.2% logz-ratio=33.12+/-0.12 dlogz:19.381>0.1]
+14442it [0:30:59 bound:343 nc:1223 ncall:8.6e+06 eff:0.2% logz-ratio=34.07+/-0.12 dlogz:18.155>0.1]
+14756it [0:32:04 bound:353 nc:883 ncall:8.9e+06 eff:0.2% logz-ratio=35.06+/-0.12 dlogz:18.772>0.1]
+15070it [0:33:09 bound:363 nc:1044 ncall:9.2e+06 eff:0.2% logz-ratio=36.02+/-0.12 dlogz:17.503>0.1]
+15385it [0:34:14 bound:373 nc:581 ncall:9.6e+06 eff:0.2% logz-ratio=36.95+/-0.12 dlogz:16.269>0.1]
+15666it [0:35:17 bound:382 nc:1040 ncall:9.9e+06 eff:0.2% logz-ratio=37.76+/-0.12 dlogz:15.180>0.1]
+15946it [0:36:18 bound:391 nc:861 ncall:1.0e+07 eff:0.2% logz-ratio=38.54+/-0.12 dlogz:14.356>0.1]
+16228it [0:37:21 bound:400 nc:1320 ncall:1.0e+07 eff:0.2% logz-ratio=39.27+/-0.12 dlogz:13.354>0.1]
+16480it [0:38:24 bound:408 nc:1218 ncall:1.1e+07 eff:0.2% logz-ratio=39.88+/-0.12 dlogz:12.499>0.1]
+16762it [0:39:31 bound:417 nc:1498 ncall:1.1e+07 eff:0.2% logz-ratio=40.55+/-0.12 dlogz:12.346>0.1]
+17048it [0:40:38 bound:426 nc:1100 ncall:1.1e+07 eff:0.1% logz-ratio=41.21+/-0.13 dlogz:11.403>0.1]
+17298it [0:41:39 bound:434 nc:1455 ncall:1.2e+07 eff:0.1% logz-ratio=41.76+/-0.13 dlogz:10.612>0.1]
+17548it [0:42:43 bound:442 nc:1301 ncall:1.2e+07 eff:0.1% logz-ratio=42.28+/-0.13 dlogz:10.798>0.1]
+17800it [0:43:46 bound:450 nc:2246 ncall:1.2e+07 eff:0.1% logz-ratio=42.76+/-0.13 dlogz:10.075>0.1]
+18052it [0:44:50 bound:458 nc:1230 ncall:1.3e+07 eff:0.1% logz-ratio=43.22+/-0.13 dlogz:9.372>0.1]
+18302it [0:45:55 bound:466 nc:1232 ncall:1.3e+07 eff:0.1% logz-ratio=43.66+/-0.13 dlogz:11.821>0.1]
+18551it [0:46:56 bound:474 nc:1488 ncall:1.3e+07 eff:0.1% logz-ratio=44.05+/-0.13 dlogz:11.186>0.1]
+18803it [0:47:59 bound:482 nc:937 ncall:1.4e+07 eff:0.1% logz-ratio=44.42+/-0.13 dlogz:10.565>0.1]
+19054it [0:49:05 bound:490 nc:1027 ncall:1.4e+07 eff:0.1% logz-ratio=44.77+/-0.13 dlogz:9.972>0.1]
+19274it [0:50:06 bound:497 nc:939 ncall:1.4e+07 eff:0.1% logz-ratio=45.07+/-0.13 dlogz:9.462>0.1]
+19525it [0:51:13 bound:505 nc:1993 ncall:1.5e+07 eff:0.1% logz-ratio=45.37+/-0.13 dlogz:8.913>0.1]
+19746it [0:52:14 bound:512 nc:1047 ncall:1.5e+07 eff:0.1% logz-ratio=45.63+/-0.13 dlogz:8.439>0.1]
+19966it [0:53:16 bound:519 nc:1732 ncall:1.5e+07 eff:0.1% logz-ratio=45.87+/-0.13 dlogz:7.984>0.1]
+20187it [0:54:22 bound:526 nc:1976 ncall:1.6e+07 eff:0.1% logz-ratio=46.10+/-0.13 dlogz:7.538>0.1]
+20407it [0:55:27 bound:533 nc:1288 ncall:1.6e+07 eff:0.1% logz-ratio=46.32+/-0.13 dlogz:7.103>0.1]
+20627it [0:56:33 bound:540 nc:1848 ncall:1.6e+07 eff:0.1% logz-ratio=46.53+/-0.13 dlogz:6.677>0.1]
+20848it [0:57:40 bound:547 nc:1927 ncall:1.7e+07 eff:0.1% logz-ratio=46.73+/-0.13 dlogz:7.540>0.1]
+21064it [0:58:47 bound:554 nc:1180 ncall:1.7e+07 eff:0.1% logz-ratio=46.92+/-0.14 dlogz:7.146>0.1]
+21280it [0:59:54 bound:561 nc:1699 ncall:1.7e+07 eff:0.1% logz-ratio=47.09+/-0.14 dlogz:6.764>0.1]
+21374it [1:01:02 bound:564 nc:1129 ncall:1.8e+07 eff:0.1% logz-ratio=47.16+/-0.14 dlogz:6.601>0.1]
+21595it [1:02:07 bound:571 nc:2304 ncall:1.8e+07 eff:0.1% logz-ratio=47.32+/-0.14 dlogz:6.226>0.1]
+21815it [1:03:16 bound:578 nc:1335 ncall:1.8e+07 eff:0.1% logz-ratio=47.48+/-0.14 dlogz:5.857>0.1]
+22036it [1:04:22 bound:585 nc:1481 ncall:1.9e+07 eff:0.1% logz-ratio=47.62+/-0.14 dlogz:5.494>0.1]
+22256it [1:05:29 bound:592 nc:1682 ncall:1.9e+07 eff:0.1% logz-ratio=47.76+/-0.14 dlogz:5.143>0.1]
+22472it [1:06:39 bound:599 nc:1642 ncall:1.9e+07 eff:0.1% logz-ratio=47.89+/-0.14 dlogz:4.801>0.1]
+22662it [1:07:42 bound:605 nc:1268 ncall:2.0e+07 eff:0.1% logz-ratio=48.01+/-0.14 dlogz:4.508>0.1]
+22850it [1:08:49 bound:611 nc:1591 ncall:2.0e+07 eff:0.1% logz-ratio=48.11+/-0.14 dlogz:4.225>0.1]
+23038it [1:09:53 bound:617 nc:2006 ncall:2.0e+07 eff:0.1% logz-ratio=48.21+/-0.14 dlogz:4.581>0.1]
+23229it [1:10:54 bound:623 nc:1834 ncall:2.1e+07 eff:0.1% logz-ratio=48.30+/-0.14 dlogz:4.304>0.1]
+23416it [1:11:54 bound:629 nc:1748 ncall:2.1e+07 eff:0.1% logz-ratio=48.39+/-0.14 dlogz:4.575>0.1]
+23604it [1:12:56 bound:635 nc:1678 ncall:2.2e+07 eff:0.1% logz-ratio=48.47+/-0.14 dlogz:4.314>0.1]
+23793it [1:14:00 bound:641 nc:1786 ncall:2.2e+07 eff:0.1% logz-ratio=48.54+/-0.14 dlogz:4.903>0.1]
+23982it [1:15:02 bound:647 nc:1670 ncall:2.2e+07 eff:0.1% logz-ratio=48.61+/-0.14 dlogz:4.652>0.1]
+24173it [1:16:04 bound:653 nc:1814 ncall:2.3e+07 eff:0.1% logz-ratio=48.67+/-0.14 dlogz:4.404>0.1]
+24364it [1:17:11 bound:659 nc:2136 ncall:2.3e+07 eff:0.1% logz-ratio=48.74+/-0.14 dlogz:4.799>0.1]
+24553it [1:18:19 bound:665 nc:1753 ncall:2.3e+07 eff:0.1% logz-ratio=48.79+/-0.14 dlogz:4.560>0.1]
+24744it [1:19:24 bound:671 nc:1410 ncall:2.4e+07 eff:0.1% logz-ratio=48.85+/-0.14 dlogz:4.323>0.1]
+24935it [1:20:29 bound:677 nc:1705 ncall:2.4e+07 eff:0.1% logz-ratio=48.90+/-0.14 dlogz:4.090>0.1]
+25120it [1:21:34 bound:683 nc:1905 ncall:2.4e+07 eff:0.1% logz-ratio=48.94+/-0.14 dlogz:3.868>0.1]
+25307it [1:22:42 bound:689 nc:2680 ncall:2.5e+07 eff:0.1% logz-ratio=48.98+/-0.14 dlogz:3.648>0.1]
+25498it [1:23:51 bound:695 nc:2093 ncall:2.5e+07 eff:0.1% logz-ratio=49.02+/-0.14 dlogz:3.461>0.1]
+25686it [1:25:03 bound:701 nc:2126 ncall:2.6e+07 eff:0.1% logz-ratio=49.06+/-0.14 dlogz:3.248>0.1]
+25874it [1:26:12 bound:707 nc:1937 ncall:2.6e+07 eff:0.1% logz-ratio=49.10+/-0.14 dlogz:3.417>0.1]
+26063it [1:27:22 bound:713 nc:2439 ncall:2.6e+07 eff:0.1% logz-ratio=49.13+/-0.14 dlogz:3.209>0.1]
+26219it [1:28:26 bound:718 nc:2399 ncall:2.7e+07 eff:0.1% logz-ratio=49.15+/-0.14 dlogz:3.425>0.1]
+26407it [1:29:36 bound:724 nc:2039 ncall:2.7e+07 eff:0.1% logz-ratio=49.18+/-0.14 dlogz:3.222>0.1]
+26594it [1:30:45 bound:730 nc:4793 ncall:2.8e+07 eff:0.1% logz-ratio=49.20+/-0.14 dlogz:3.207>0.1]
+26783it [1:31:50 bound:736 nc:1111 ncall:2.8e+07 eff:0.1% logz-ratio=49.23+/-0.14 dlogz:3.008>0.1]
+26975it [1:32:57 bound:742 nc:2105 ncall:2.8e+07 eff:0.1% logz-ratio=49.25+/-0.14 dlogz:2.809>0.1]
+27163it [1:34:07 bound:748 nc:2387 ncall:2.9e+07 eff:0.1% logz-ratio=49.27+/-0.14 dlogz:2.617>0.1]
+27349it [1:35:16 bound:754 nc:2753 ncall:2.9e+07 eff:0.1% logz-ratio=49.29+/-0.14 dlogz:3.756>0.1]
+27540it [1:36:28 bound:760 nc:2690 ncall:3.0e+07 eff:0.1% logz-ratio=49.31+/-0.14 dlogz:3.555>0.1]
+27694it [1:37:29 bound:765 nc:5139 ncall:3.0e+07 eff:0.1% logz-ratio=49.33+/-0.14 dlogz:3.677>0.1]
+27882it [1:38:41 bound:771 nc:2535 ncall:3.0e+07 eff:0.1% logz-ratio=49.34+/-0.14 dlogz:3.481>0.1]
+28041it [1:39:46 bound:776 nc:2192 ncall:3.1e+07 eff:0.1% logz-ratio=49.36+/-0.14 dlogz:3.317>0.1]
+28197it [1:40:47 bound:781 nc:2241 ncall:3.1e+07 eff:0.1% logz-ratio=49.37+/-0.14 dlogz:3.158>0.1]
+28383it [1:41:57 bound:787 nc:2234 ncall:3.2e+07 eff:0.1% logz-ratio=49.39+/-0.14 dlogz:2.970>0.1]
+28573it [1:43:07 bound:793 nc:2575 ncall:3.2e+07 eff:0.1% logz-ratio=49.40+/-0.15 dlogz:2.780>0.1]
+28762it [1:44:17 bound:799 nc:2777 ncall:3.3e+07 eff:0.1% logz-ratio=49.42+/-0.15 dlogz:2.594>0.1]
+28952it [1:45:29 bound:805 nc:2497 ncall:3.3e+07 eff:0.1% logz-ratio=49.43+/-0.15 dlogz:2.410>0.1]
+29110it [1:46:31 bound:810 nc:1622 ncall:3.3e+07 eff:0.1% logz-ratio=49.45+/-0.15 dlogz:2.260>0.1]
+29264it [1:47:33 bound:815 nc:2806 ncall:3.4e+07 eff:0.1% logz-ratio=49.46+/-0.15 dlogz:2.116>0.1]
+29423it [1:48:35 bound:820 nc:1925 ncall:3.4e+07 eff:0.1% logz-ratio=49.47+/-0.15 dlogz:1.971>0.1]
+29580it [1:49:38 bound:825 nc:2548 ncall:3.4e+07 eff:0.1% logz-ratio=49.48+/-0.15 dlogz:1.831>0.1]
+29738it [1:50:42 bound:830 nc:2742 ncall:3.5e+07 eff:0.1% logz-ratio=49.49+/-0.15 dlogz:1.694>0.1]
+29890it [1:51:47 bound:835 nc:1924 ncall:3.5e+07 eff:0.1% logz-ratio=49.50+/-0.15 dlogz:1.566>0.1]
+30044it [1:52:49 bound:840 nc:2266 ncall:3.6e+07 eff:0.1% logz-ratio=49.51+/-0.15 dlogz:1.441>0.1]
+30203it [1:53:52 bound:845 nc:2439 ncall:3.6e+07 eff:0.1% logz-ratio=49.52+/-0.15 dlogz:1.613>0.1]
+30361it [1:54:56 bound:850 nc:2388 ncall:3.6e+07 eff:0.1% logz-ratio=49.53+/-0.15 dlogz:1.483>0.1]
+30518it [1:55:58 bound:855 nc:2682 ncall:3.7e+07 eff:0.1% logz-ratio=49.54+/-0.15 dlogz:1.359>0.1]
+30676it [1:57:02 bound:860 nc:1947 ncall:3.7e+07 eff:0.1% logz-ratio=49.55+/-0.15 dlogz:1.317>0.1]
+30834it [1:58:07 bound:865 nc:2335 ncall:3.8e+07 eff:0.1% logz-ratio=49.56+/-0.15 dlogz:1.200>0.1]
+30993it [1:59:10 bound:870 nc:2465 ncall:3.8e+07 eff:0.1% logz-ratio=49.57+/-0.15 dlogz:1.088>0.1]
+31150it [2:00:14 bound:875 nc:2064 ncall:3.8e+07 eff:0.1% logz-ratio=49.58+/-0.15 dlogz:0.983>0.1]
+31216it [2:01:32 bound:877 nc:2870 ncall:3.9e+07 eff:0.1% logz-ratio=49.59+/-0.15 dlogz:0.941>0.1]
+31371it [2:02:35 bound:882 nc:1981 ncall:3.9e+07 eff:0.1% logz-ratio=49.60+/-0.15 dlogz:1.036>0.1]
+31530it [2:03:39 bound:887 nc:2430 ncall:3.9e+07 eff:0.1% logz-ratio=49.60+/-0.15 dlogz:0.934>0.1]
+31686it [2:04:43 bound:892 nc:2268 ncall:4.0e+07 eff:0.1% logz-ratio=49.61+/-0.15 dlogz:1.026>0.1]
+31843it [2:05:53 bound:897 nc:2972 ncall:4.0e+07 eff:0.1% logz-ratio=49.62+/-0.15 dlogz:0.926>0.1]
+32001it [2:07:01 bound:902 nc:2345 ncall:4.1e+07 eff:0.1% logz-ratio=49.63+/-0.15 dlogz:0.831>0.1]
+32159it [2:08:11 bound:907 nc:1275 ncall:4.1e+07 eff:0.1% logz-ratio=49.64+/-0.15 dlogz:0.743>0.1]
+32316it [2:09:23 bound:912 nc:3418 ncall:4.1e+07 eff:0.1% logz-ratio=49.64+/-0.15 dlogz:1.059>0.1]
+32475it [2:10:36 bound:917 nc:1670 ncall:4.2e+07 eff:0.1% logz-ratio=49.65+/-0.15 dlogz:0.956>0.1]
+32632it [2:11:47 bound:922 nc:2662 ncall:4.2e+07 eff:0.1% logz-ratio=49.66+/-0.15 dlogz:0.861>0.1]
+32755it [2:12:47 bound:926 nc:2838 ncall:4.3e+07 eff:0.1% logz-ratio=49.66+/-0.15 dlogz:0.791>0.1]
+32914it [2:14:02 bound:931 nc:2897 ncall:4.3e+07 eff:0.1% logz-ratio=49.67+/-0.15 dlogz:0.706>0.1]
+33068it [2:15:17 bound:936 nc:3337 ncall:4.3e+07 eff:0.1% logz-ratio=49.67+/-0.15 dlogz:0.630>0.1]
+33227it [2:16:33 bound:941 nc:2563 ncall:4.4e+07 eff:0.1% logz-ratio=49.68+/-0.15 dlogz:0.558>0.1]
+33382it [2:17:44 bound:946 nc:1983 ncall:4.4e+07 eff:0.1% logz-ratio=49.68+/-0.15 dlogz:0.494>0.1]
+33538it [2:18:54 bound:951 nc:4739 ncall:4.5e+07 eff:0.1% logz-ratio=49.69+/-0.15 dlogz:0.436>0.1]
+33695it [2:20:05 bound:956 nc:2974 ncall:4.5e+07 eff:0.1% logz-ratio=49.69+/-0.15 dlogz:0.383>0.1]
+33853it [2:21:16 bound:961 nc:2902 ncall:4.6e+07 eff:0.1% logz-ratio=49.70+/-0.15 dlogz:0.335>0.1]
+34009it [2:22:26 bound:966 nc:5632 ncall:4.6e+07 eff:0.1% logz-ratio=49.70+/-0.15 dlogz:0.293>0.1]
+34167it [2:23:36 bound:971 nc:2180 ncall:4.7e+07 eff:0.1% logz-ratio=49.70+/-0.15 dlogz:0.283>0.1]
+34323it [2:24:42 bound:976 nc:2686 ncall:4.7e+07 eff:0.1% logz-ratio=49.71+/-0.15 dlogz:0.247>0.1]
+34479it [2:25:48 bound:981 nc:3053 ncall:4.7e+07 eff:0.1% logz-ratio=49.71+/-0.15 dlogz:0.215>0.1]
+34634it [2:26:54 bound:986 nc:3332 ncall:4.8e+07 eff:0.1% logz-ratio=49.71+/-0.15 dlogz:0.187>0.1]
+34792it [2:28:02 bound:991 nc:2337 ncall:4.8e+07 eff:0.1% logz-ratio=49.72+/-0.15 dlogz:0.162>0.1]
+34946it [2:29:11 bound:996 nc:2651 ncall:4.9e+07 eff:0.1% logz-ratio=49.72+/-0.15 dlogz:0.140>0.1]
+35105it [2:30:19 bound:1001 nc:2737 ncall:4.9e+07 eff:0.1% logz-ratio=49.72+/-0.15 dlogz:0.121>0.1]
+35264it [2:31:27 bound:1006 nc:2726 ncall:5.0e+07 eff:0.1% logz-ratio=49.72+/-0.15 dlogz:0.104>0.1]
+35421it [2:32:36 bound:1011 nc:2923 ncall:5.0e+07 eff:0.1% logz-ratio=49.73+/-0.15 dlogz:0.130>0.1]
+35578it [2:33:45 bound:1016 nc:3197 ncall:5.1e+07 eff:0.1% logz-ratio=49.73+/-0.15 dlogz:0.113>0.1]

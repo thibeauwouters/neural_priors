@@ -135,3 +135,26 @@
 15:32 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/nsbh/nsbh_resume.pickle
 16:32 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/nsbh/nsbh_resume.pickle
 17:33 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/nsbh/nsbh_resume.pickle
+18:31 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/nsbh/nsbh_resume.pickle
+18:32 bilby INFO    : Starting to close worker pool.
+18:32 bilby INFO    : Finished closing worker pool.
+18:32 bilby INFO    : Rejection sampling nested samples to obtain 5145 posterior samples
+18:32 bilby INFO    : Sampling time: 4:00:03.324810
+18:32 bilby INFO    : Summary of results:
+nsamples: 5145
+ln_noise_evidence: -821080.743
+ln_evidence: -820555.487 +/-  0.200
+ln_bayes_factor: 525.255 +/-  0.200
+
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/pe.py", line 547, in <module>
+    result.plot_corner(priors = True)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/utils/plotting.py", line 65, in wrapper_decorator
+    return func(*args, **kwargs)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/result.py", line 1322, in plot_corner
+    ax.plot(theta, priors[par].prob(theta), color='C2')
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/prior/dict.py", line 1477, in prob
+    return np.exp(self.ln_prob(val, **required_variables))
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/prior/dict.py", line 1443, in _ln_prob_nsbh
+    chirp_mass = required_variables['chirp_mass']
+KeyError: 'chirp_mass'
