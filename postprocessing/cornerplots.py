@@ -45,6 +45,7 @@ DEFAULT_COLOR = 'blue'
 BNS_COLOR = 'green'
 NSBH_COLOR = 'red'
 HAUKE_COLOR = 'black'
+ADRIAN_COLOR = 'orange'
 
 LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
               "mass_ratio": r"$q$",
@@ -71,7 +72,8 @@ def create_corner_plot(GW_event: str,
                        plot_all_params: bool = False,
                        plot_default: bool = False,
                        convert_lambdas: bool = True,
-                       plot_hauke: bool = True):
+                       plot_hauke: bool = True,
+                       plot_adrian: bool = True):
     """
     Create a corner plot comparing posterior samples from BNS, Default, and NSBH runs for a given GW event.
     """
@@ -266,9 +268,15 @@ def create_corner_plot(GW_event: str,
     else:
         fs = 34
         
+        
+    x = 0.85
+    y = 0.85
+    dy = 0.1
     if plot_default:
-        plt.text(0.85, 0.85, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        plt.text(0.85, y, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    y -= dy
     plt.text(0.85, 0.75, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    y -= dy
     plt.text(0.85, 0.65, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     if GW_event == "GW170817" and plot_hauke and not plot_all_params:
@@ -297,12 +305,42 @@ def create_corner_plot(GW_event: str,
         hauke_kwargs.update({'color': HAUKE_COLOR, 'hist_kwargs': {'color': HAUKE_COLOR, 'density': use_density}})
         hauke_samples = np.array([hauke_Mc, hauke_q, hauke_tc, hauke_lambda_tilde, hauke_delta_lambda_tilde]).T
         corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
+        y -= dy
         plt.text(0.85, 0.55, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        
+    if GW_event in ["GW170817", "GW190425"] and plot_adrian:
+        
+        print(f"Loading Adrian's data and adding it to the corner plot...")
+        adrian_posterior_filename = f"../data/adrian/{GW_event}/{GW_event}_result.npz"
+        adrian_data = np.load(adrian_posterior_filename)
+        adrian_Mc, adrian_q, adrian_lambda_1, adrian_lambda_2 = adrian_data['chirp_mass'], adrian_data['mass_ratio'], adrian_data['lambda_1'], adrian_data['lambda_2']
+       
+        adrian_tc = adrian_data['geocent_time']  # Use the geocent_time directly from Adrian's data
+       
+        # Convert adrian's data to lambda_tilde and delta_lambda_tilde
+        if convert_lambdas:
+            adrian_mass_1, adrian_mass_2 = chirp_mass_and_mass_ratio_to_component_masses(adrian_Mc, adrian_q)
+            adrian_lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(adrian_lambda_1, adrian_lambda_2, adrian_mass_1, adrian_mass_2)
+            adrian_delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(adrian_lambda_1, adrian_lambda_2, adrian_mass_1, adrian_mass_2)
+        else:
+            # Bit hacky for now
+            adrian_lambda_tilde = adrian_lambda_1
+            adrian_delta_lambda_tilde = adrian_lambda_2
+            
+        # Make the cornerplot:
+        adrian_kwargs = corner_kwargs_with_range.copy()
+        adrian_kwargs.update({'color': ADRIAN_COLOR, 'hist_kwargs': {'color': ADRIAN_COLOR, 'density': use_density}})
+        adrian_samples = np.array([adrian_Mc, adrian_q, adrian_tc, adrian_lambda_tilde, adrian_delta_lambda_tilde]).T
+        corner.corner(adrian_samples, labels=latex_labels, fig=fig, **adrian_kwargs)
+        y -= dy
+        plt.text(0.85, 0.55, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     os.makedirs(f'./figures/{GW_event}', exist_ok=True)
     save_name = f'./figures/{GW_event}/corner' + \
             ('_all' if plot_all_params else '') + \
             ('_default' if plot_default else '') + \
+            ('_hauke' if (plot_hauke and GW_event == "GW170817") else '') + \
+            ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
             ('_tilde' if convert_lambdas else '') + '.pdf'
             
     print(f"\nSaving corner plot to {save_name}\n")
@@ -311,29 +349,23 @@ def create_corner_plot(GW_event: str,
     
 def main():
     
-    settings_1 = {"plot_all_params": False,
-                  "plot_default": True,
-                  "convert_lambdas": True}
-    
-    settings_2 = {"plot_all_params": False,
-                  "plot_default": True,
-                  "convert_lambdas": False}
-    
-    settings_3 = {"plot_all_params": False,
-                  "plot_default": False,
-                  "convert_lambdas": False}
-    
-    settings_list = [settings_1, settings_2, settings_3]
-    
     GW_event_list = ["GW170817",
                      "GW190425",
-                     "GW230529",
-                     ]
+                    #  "GW230529",
+                    ]
     
-    for GW_event in GW_event_list:
-        print(f"Creating corner plot for {GW_event}...")
-        for settings in settings_list:
-            create_corner_plot(GW_event, **settings)
+    for plot_default in [True, False]:
+        for plot_adrian in [True, False]:
+            for plot_hauke in [True, False]:
+                for convert_lambdas in [True, False]:
+                    for GW_event in GW_event_list:
+                        settings = dict(plot_all_params=False,
+                                        plot_default=plot_default,
+                                        convert_lambdas=convert_lambdas,
+                                        plot_hauke=plot_hauke,
+                                        plot_adrian=plot_adrian)
+                        print(f"Creating corner plot for {GW_event}... and settings: {settings}")
+                        create_corner_plot(GW_event, **settings)
             
 if __name__ == "__main__":
     main()
