@@ -256,11 +256,9 @@ def create_corner_plot(GW_event: str,
 
     # Create the overlaid corner plot
     fig = corner.corner(bns_samples, labels=latex_labels, **bns_kwargs)
-    weights = np.ones(len(nsbh_samples))*len(bns_samples)/len(nsbh_samples)  
-    corner.corner(nsbh_samples, labels=latex_labels, fig=fig, weights=weights, **nsbh_kwargs)
+    corner.corner(nsbh_samples, labels=latex_labels, fig=fig, **nsbh_kwargs)
     if plot_default:
-        weights = np.ones(len(default_samples))*len(bns_samples)/len(default_samples)  
-        corner.corner(default_samples, labels=latex_labels, fig=fig, weights=weights, **default_kwargs)
+        corner.corner(default_samples, labels=latex_labels, fig=fig, **default_kwargs)
         
     # Add legend
     if plot_all_params:
@@ -268,16 +266,15 @@ def create_corner_plot(GW_event: str,
     else:
         fs = 34
         
-        
     x = 0.85
     y = 0.85
     dy = 0.1
     if plot_default:
-        plt.text(0.85, y, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        plt.text(x, y, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     y -= dy
-    plt.text(0.85, 0.75, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    plt.text(x, 0.75, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     y -= dy
-    plt.text(0.85, 0.65, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    plt.text(x, 0.65, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     if GW_event == "GW170817" and plot_hauke and not plot_all_params:
         
@@ -306,7 +303,7 @@ def create_corner_plot(GW_event: str,
         hauke_samples = np.array([hauke_Mc, hauke_q, hauke_tc, hauke_lambda_tilde, hauke_delta_lambda_tilde]).T
         corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
         y -= dy
-        plt.text(0.85, 0.55, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        plt.text(x, 0.55, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
         
     if GW_event in ["GW170817", "GW190425"] and plot_adrian:
         
@@ -333,7 +330,7 @@ def create_corner_plot(GW_event: str,
         adrian_samples = np.array([adrian_Mc, adrian_q, adrian_tc, adrian_lambda_tilde, adrian_delta_lambda_tilde]).T
         corner.corner(adrian_samples, labels=latex_labels, fig=fig, **adrian_kwargs)
         y -= dy
-        plt.text(0.85, 0.55, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        plt.text(x, 0.55, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     os.makedirs(f'./figures/{GW_event}', exist_ok=True)
     save_name = f'./figures/{GW_event}/corner' + \
