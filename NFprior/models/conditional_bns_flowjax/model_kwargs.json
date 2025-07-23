@@ -18,13 +18,13 @@
     "source_type": "bns",
     "N_samples_training": 100000,
     "m_max_BH": 5.0,
-    "num_epochs": 800,
+    "num_epochs": 1000,
     "learning_rate": 0.001,
     "max_patience": 50,
     "batch_size": 256,
     "num_bins": 10,
     "eos_samples_filename": "../data/eos/eos_samples.npz",
     "training_filename": "./models/conditional_bns_flowjax/training_data.npz",
-    "take_log_lambda": "True",
+    "take_log_lambda": "False",
     "use_flowjax": "True"
 }

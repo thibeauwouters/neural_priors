@@ -259,7 +259,7 @@ class CheckerBNS:
             def sample_fn(sample_key):
                 val = self.flow.sample(sample_key, (1,), condition=u_jax).flatten()
                 if self.nf_kwargs["take_log_lambda"] == "True":
-                    val = jnp.exp(val)
+                    val = val * 10_000  # Scale back to original Lambda_2
                 return val
 
             # Vectorize over keys
@@ -275,7 +275,7 @@ class CheckerBNS:
                 for _ in range(self.N_samples):
                     value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()
                     if self.nf_kwargs["take_log_lambda"] == "True":
-                        value = np.exp(value)
+                        value = value * 10_000  # Scale back to original Lambda_2
                     nf_samples.append(value)
                     
         nf_samples = np.array(nf_samples)
@@ -460,7 +460,7 @@ class CheckerNSBH:
                         
                 value = float(value)
                 if self.nf_kwargs["take_log_lambda"] == "True":
-                    value = np.exp(value)
+                    value = value * 10_000
                 nf_samples.append(value)
         else:
             # glasflow sampling  
@@ -469,7 +469,7 @@ class CheckerNSBH:
                 for _ in range(self.N_samples):
                     value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()[0]
                     if self.nf_kwargs["take_log_lambda"] == "True":
-                        value = np.exp(value)
+                        value = value * 10_000  # Scale back to original Lambda_2
                     nf_samples.append(value)
                     
         nf_samples = np.array(nf_samples)

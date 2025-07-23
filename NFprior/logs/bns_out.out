@@ -8,27 +8,26 @@ Reading the EOS data from ../data/eos/eos_samples.npz
 Number of good samples:  0.9949
 Saving training data to ./models/conditional_bns_flowjax/training_data.npz
 Saving training data DONE
-Taking the log of the Lambdas
 Sanity checking the ranges of the training data
-m1 ranges from 1.0007499768767238 to 3.6010514056285334
-m2 ranges from 1.0000008174735961 to 3.0942474272394827
-lambda_1 ranges from 1.0696511611150419 to 8.747418268342004
-lambda_2 ranges from 1.6027387608525072 to 8.959723106257846
+m1 ranges from 1.003655912229615 to 3.6531408656674422
+m2 ranges from 1.0000124465185898 to 3.2640290139422126
+lambda_1 ranges from 2.8378142782305416 to 5175.93805918201
+lambda_2 ranges from 4.716130868422278 to 7872.359080348796
 We are training BNS and conditional
 np.shape(self.x)
 (100000, 2)
 np.shape(self.u)
 (100000, 2)
-m1 ranges from 1.0007499768767238 to 3.6010514056285334
-m2 ranges from 1.0000008174735961 to 3.0942474272394827
-lambda_1 ranges from 1.0696511611150419 to 8.747418268342004
-lambda_2 ranges from 1.6027387608525072 to 8.959723106257846
+m1 ranges from 1.003655912229615 to 3.6531408656674422
+m2 ranges from 1.0000124465185898 to 3.2640290139422126
+lambda_1 ranges from 2.8378142782305416 to 5175.93805918201
+lambda_2 ranges from 4.716130868422278 to 7872.359080348796
 Going to start training for flowJAX . . .
 Using block_neural_autoregressive_flow for conditional >1D distribution
 Training flowJAX conditional model:
   x_data shape: (100000, 2)
   u_data shape: (100000, 2)
-Training done. Took around 15.20 minutes
+Training done. Took around 14.38 minutes
 Saving the flowJAX model to ./models/conditional_bns_flowjax/model.eqx
 Saving the model kwargs to ./models/conditional_bns_flowjax/model_kwargs.json
 DONE training!

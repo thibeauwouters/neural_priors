@@ -63,9 +63,9 @@ class NFPriorCreator:
                  m_max_BH: float = 5.0,
                  save_name: str = "",
                  conditional: bool = True,
-                 take_log_lambda: bool = True,
+                 take_log_lambda: bool = False,
                  use_flowjax: bool = True,  # Toggle between glasflow and flowJAX
-                 num_epochs: int = 800,
+                 num_epochs: int = 1_000,
                  learning_rate: float = 1e-3,
                  batch_size: int = 256,
                  scale_input: bool = False,
@@ -279,11 +279,13 @@ class NFPriorCreator:
         if self.take_log_lambda:
             # Take the log of the Lambdas
             print("Taking the log of the Lambdas")
+            
+            # FIXME: watch out for this confusing notatiton, if thisis better, then change the naming
             if self.source_type == "nsbh":
-                self.lambda_2 = np.log(self.lambda_2)
+                self.lambda_2 = self.lambda_2 / 10_000
             else:
-                self.lambda_1 = np.log(self.lambda_1)
-                self.lambda_2 = np.log(self.lambda_2)
+                self.lambda_1 = self.lambda_1 / 10_000
+                self.lambda_2 = self.lambda_2 / 10_000
         
     def train(self):
         """
