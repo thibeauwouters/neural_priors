@@ -76,9 +76,9 @@ def create_corner_plot(GW_event: str,
     
     # Load result files to investigate structure
     base_path = f"../GW_runs/{GW_event}"
-    if GW_event == "GW170817":
-        base_path = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification_gitlab/GW_runs/GW170817/"
-        print("Using base path for GW170817:", base_path)
+    # if GW_event == "GW170817":
+    #     base_path = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification_gitlab/GW_runs/GW170817/"
+    #     print("Using base path for GW170817:", base_path)
     
     bns_results_filename = os.path.join(base_path, "bns/bns_result.json")
     default_results_filename = os.path.join(base_path, "default/default_result.json")
