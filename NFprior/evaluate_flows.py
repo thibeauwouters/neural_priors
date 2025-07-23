@@ -141,24 +141,16 @@ class CheckerBNS:
             # Recreate the flow architecture to match training code
             model_type = nf_kwargs.get("model_type", "block_neural_autoregressive_flow")
             print("Loading flowJAX BNS model, model_type:", model_type)
-            if model_type == "block_neural_autoregressive_flow":
+            if model_type != "block_neural_autoregressive_flow":
+                raise ValueError(f"Unsupported model type: {model_type}. Expected 'block_neural_autoregressive_flow' only for now.")
+            else:
                 flow = block_neural_autoregressive_flow(
                     key=key,
                     base_dist=base_dist,
                     cond_dim=2,
-                    flow_layers=nf_kwargs["n_transforms"],
-                    nn_depth=nf_kwargs["n_neurons"],
-                    nn_block_dim=nf_kwargs["n_blocks_per_transform"]
-                )
-            else:
-                # Default to coupling_flow for backward compatibility
-                flow = coupling_flow(
-                    key=key,
-                    base_dist=base_dist,
-                    cond_dim=2,
-                    flow_layers=nf_kwargs["n_transforms"],
-                    nn_width=nf_kwargs["n_neurons"],
-                    nn_depth=nf_kwargs["n_blocks_per_transform"]
+                    # flow_layers=self.n_transforms, # TODO: perhaps tune this, for now, use default value
+                    nn_depth=self.nf_kwargs["nn_depth"],
+                    nn_block_dim=self.nf_kwargs["nn_block_dim"]
                 )
             
             print(f"Loading flowJAX model from {nf_path}")
@@ -256,16 +248,26 @@ class CheckerBNS:
         if use_flowjax:
             # flowJAX sampling
             key = jr.key(123)
+
             u_jax = jnp.array([[m1_value, m2_value]], dtype=jnp.float32)
-            
-            for _ in range(self.N_samples):
-                key, sample_key = jr.split(key)
-                value = self.flow.sample(sample_key, (1,), condition=u_jax).flatten() 
-                
-                value = np.array(value)
+
+            # Generate N_samples random keys
+            keys = jr.split(key, self.N_samples)
+
+            # Define a single sample function
+            @jax.jit
+            def sample_fn(sample_key):
+                val = self.flow.sample(sample_key, (1,), condition=u_jax).flatten()
                 if self.nf_kwargs["take_log_lambda"] == "True":
-                    value = np.exp(value)
-                nf_samples.append(value)
+                    val = jnp.exp(val)
+                return val
+
+            # Vectorize over keys
+            nf_samples_jax = jax.vmap(sample_fn)(keys)
+
+            # Convert to numpy
+            nf_samples = np.array(nf_samples_jax)
+        
         else:
             # glasflow sampling
             u = torch.tensor([[m1_value, m2_value]], dtype=torch.float32)
