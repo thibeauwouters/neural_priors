@@ -9,25 +9,24 @@ Number of good samples:  0.9949
 Saving training data to ./models/conditional_bns_flowjax/training_data.npz
 Saving training data DONE
 Sanity checking the ranges of the training data
-m1 ranges from 1.003655912229615 to 3.6531408656674422
-m2 ranges from 1.0000124465185898 to 3.2640290139422126
-lambda_1 ranges from 2.8378142782305416 to 5175.93805918201
-lambda_2 ranges from 4.716130868422278 to 7872.359080348796
+m1 ranges from 1.0020465766125264 to 3.6092290974144285
+m2 ranges from 1.0000024669632623 to 3.398976261908058
+lambda_1 ranges from 2.475989862099662 to 5481.308458323522
+lambda_2 ranges from 3.8757843092140196 to 7820.974416447201
 We are training BNS and conditional
 np.shape(self.x)
 (100000, 2)
 np.shape(self.u)
 (100000, 2)
-m1 ranges from 1.003655912229615 to 3.6531408656674422
-m2 ranges from 1.0000124465185898 to 3.2640290139422126
-lambda_1 ranges from 2.8378142782305416 to 5175.93805918201
-lambda_2 ranges from 4.716130868422278 to 7872.359080348796
+m1 ranges from 1.0020465766125264 to 3.6092290974144285
+m2 ranges from 1.0000024669632623 to 3.398976261908058
+lambda_1 ranges from 2.475989862099662 to 5481.308458323522
+lambda_2 ranges from 3.8757843092140196 to 7820.974416447201
+Using MinMaxScaler to scale the input data x
+The scaler will be saved with joblib to ./models/conditional_bns_flowjax/scaler.gz
+Saved sklearn scaler to ./models/conditional_bns_flowjax/scaler.gz
 Going to start training for flowJAX . . .
 Using block_neural_autoregressive_flow for conditional >1D distribution
 Training flowJAX conditional model:
   x_data shape: (100000, 2)
   u_data shape: (100000, 2)
-Training done. Took around 14.38 minutes
-Saving the flowJAX model to ./models/conditional_bns_flowjax/model.eqx
-Saving the model kwargs to ./models/conditional_bns_flowjax/model_kwargs.json
-DONE training!

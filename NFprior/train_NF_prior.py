@@ -68,7 +68,7 @@ class NFPriorCreator:
                  num_epochs: int = 1_000,
                  learning_rate: float = 1e-3,
                  batch_size: int = 256,
-                 scale_input: bool = False,
+                 scale_input: bool = True,
                  # glasflow-specific training arguments:
                  max_patience: int = 50,
                  n_transforms: int = 4,

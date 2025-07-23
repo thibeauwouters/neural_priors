@@ -316,3 +316,17 @@
 09:35 INFO    : Setting up multiproccesing pool with 32 processes
 09:35 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle does not exist.
 09:35 INFO    : Generating initial points from the prior
+10:35 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle
+11:36 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle
+12:37 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle
+12:54 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle
+12:55 INFO    : Starting to close worker pool.
+12:55 INFO    : Finished closing worker pool.
+12:55 INFO    : Rejection sampling nested samples to obtain 5512 posterior samples
+12:55 INFO    : Sampling time: 3:19:43.463570
+12:55 INFO    : Summary of results:
+nsamples: 5512
+ln_noise_evidence: -821080.743
+ln_evidence: -820559.996 +/-  0.211
+ln_bayes_factor: 520.746 +/-  0.211
+

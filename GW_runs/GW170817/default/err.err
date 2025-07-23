@@ -98,3 +98,16 @@
 09:26 bilby INFO    : Setting up multiproccesing pool with 32 processes
 09:26 bilby INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default/default_resume.pickle does not exist.
 09:26 bilby INFO    : Generating initial points from the prior
+10:26 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default/default_resume.pickle
+11:26 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default/default_resume.pickle
+12:05 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default/default_resume.pickle
+12:05 bilby INFO    : Starting to close worker pool.
+12:05 bilby INFO    : Finished closing worker pool.
+12:05 bilby INFO    : Rejection sampling nested samples to obtain 6020 posterior samples
+12:05 bilby INFO    : Sampling time: 2:39:26.920208
+12:05 bilby INFO    : Summary of results:
+nsamples: 6020
+ln_noise_evidence: -821080.743
+ln_evidence: -820558.645 +/-  0.203
+ln_bayes_factor: 522.097 +/-  0.203
+
