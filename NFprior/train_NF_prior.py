@@ -128,6 +128,11 @@ class NFPriorCreator:
         self.scale_input = scale_input
         self.num_bins = num_bins
         
+        if self.scale_input and self.take_log_lambda:
+            raise ValueError("Cannot scale input and take log of Lambdas at the same time. \
+                Please set either scale_input=False or take_log_lambda=False.\
+                Recommended to use scaling and not log transformation for training (empirically gave best results).")
+        
         # Check flowJAX availability if requested
         if self.use_flowjax and not globals().get('jax'):
             raise ImportError("flowJAX requested but JAX/flowJAX not available. Install flowJAX or set use_flowjax=False")
@@ -280,12 +285,11 @@ class NFPriorCreator:
             # Take the log of the Lambdas
             print("Taking the log of the Lambdas")
             
-            # FIXME: watch out for this confusing notatiton, if thisis better, then change the naming
             if self.source_type == "nsbh":
-                self.lambda_2 = self.lambda_2 / 10_000
+                self.lambda_2 = np.log(self.lambda_2)
             else:
-                self.lambda_1 = self.lambda_1 / 10_000
-                self.lambda_2 = self.lambda_2 / 10_000
+                self.lambda_1 = np.log(self.lambda_1)
+                self.lambda_2 = np.log(self.lambda_2)
         
     def train(self):
         """
