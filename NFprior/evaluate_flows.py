@@ -15,6 +15,14 @@ from scipy.stats import gaussian_kde
 
 from glasflow.flows import RealNVP
 
+### flowjax imports
+import jax
+import jax.numpy as jnp
+import jax.random as jr
+from flowjax.flows import coupling_flow, masked_autoregressive_flow, block_neural_autoregressive_flow
+from flowjax.distributions import Normal
+import equinox as eqx
+
 params = {"axes.grid": True,
         "text.usetex" : False,
         "font.family" : "serif",
@@ -109,29 +117,68 @@ class CheckerBNS:
         Load the NF model and EOS data for the BNS case.
         
         Returns:
-            flow (RealNVP): The loaded normalizing flow model.
+            flow: The loaded normalizing flow model (glasflow or flowJAX).
             nf_kwargs (dict): The configuration parameters for the NF.
             masses_EOS (np.ndarray): Masses from the EOS samples.
             Lambdas_EOS (np.ndarray): Corresponding Lambdas from the EOS samples.
         """
-        nf_path = os.path.join(self.path, "model.pt")
         nf_kwargs_path = os.path.join(self.path, "model_kwargs.json")
         
         with open(nf_kwargs_path, "r") as f:
             nf_kwargs = json.load(f)
         self.nf_kwargs = nf_kwargs
         
-        flow = RealNVP(
-                n_inputs=2,
-                n_conditional_inputs=2,
-                n_transforms=self.nf_kwargs["n_transforms"],
-                n_neurons=self.nf_kwargs["n_neurons"],
-                batch_norm_between_transforms=True)
+        # Check if this is a flowJAX model
+        use_flowjax = nf_kwargs.get("use_flowjax", "False") == "True"
         
-        print(f"Loading in the NF from {nf_path}")
-        flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
-        flow.eval()
-        flow.compile()
+        if use_flowjax:
+            nf_path = os.path.join(self.path, "model.eqx")
+            
+            # Create base distribution and flow structure
+            base_dist = Normal(jnp.zeros(2))
+            key = jr.key(42)
+            
+            # Recreate the flow architecture to match training code
+            model_type = nf_kwargs.get("model_type", "block_neural_autoregressive_flow")
+            print("Loading flowJAX BNS model, model_type:", model_type)
+            if model_type == "block_neural_autoregressive_flow":
+                flow = block_neural_autoregressive_flow(
+                    key=key,
+                    base_dist=base_dist,
+                    cond_dim=2,
+                    flow_layers=nf_kwargs["n_transforms"],
+                    nn_depth=nf_kwargs["n_neurons"],
+                    nn_block_dim=nf_kwargs["n_blocks_per_transform"]
+                )
+            else:
+                # Default to coupling_flow for backward compatibility
+                flow = coupling_flow(
+                    key=key,
+                    base_dist=base_dist,
+                    cond_dim=2,
+                    flow_layers=nf_kwargs["n_transforms"],
+                    nn_width=nf_kwargs["n_neurons"],
+                    nn_depth=nf_kwargs["n_blocks_per_transform"]
+                )
+            
+            print(f"Loading flowJAX model from {nf_path}")
+            flow = eqx.tree_deserialise_leaves(nf_path, flow)
+            
+        else:
+            print("Loading glasflow BNS model")
+            nf_path = os.path.join(self.path, "model.pt")
+            
+            flow = RealNVP(
+                    n_inputs=2,
+                    n_conditional_inputs=2,
+                    n_transforms=nf_kwargs["n_transforms"],
+                    n_neurons=nf_kwargs["n_neurons"],
+                    batch_norm_between_transforms=True)
+            
+            print(f"Loading glasflow model from {nf_path}")
+            flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
+            flow.eval()
+            flow.compile()
         
         # Load the EOS posterior samples from jester from which we have created the training data
         eos_samples_filename = nf_kwargs["eos_samples_filename"]
@@ -203,15 +250,32 @@ class CheckerBNS:
         training_samples = np.array([lambda_1_train, lambda_2_train]).T
             
         # Condition on those masses to sample from the conditional NF
-        u = torch.tensor([[m1_value, m2_value]], dtype=torch.float32)
         nf_samples = []
+        use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
         
-        with torch.no_grad():
+        if use_flowjax:
+            # flowJAX sampling
+            key = jr.key(123)
+            u_jax = jnp.array([[m1_value, m2_value]], dtype=jnp.float32)
+            
             for _ in range(self.N_samples):
-                value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()
+                key, sample_key = jr.split(key)
+                value = self.flow.sample(sample_key, (1,), condition=u_jax).flatten() 
+                
+                value = np.array(value)
                 if self.nf_kwargs["take_log_lambda"] == "True":
                     value = np.exp(value)
                 nf_samples.append(value)
+        else:
+            # glasflow sampling
+            u = torch.tensor([[m1_value, m2_value]], dtype=torch.float32)
+            with torch.no_grad():
+                for _ in range(self.N_samples):
+                    value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()
+                    if self.nf_kwargs["take_log_lambda"] == "True":
+                        value = np.exp(value)
+                    nf_samples.append(value)
+                    
         nf_samples = np.array(nf_samples)
         
         print("np.shape(training_samples)")
@@ -276,30 +340,58 @@ class CheckerNSBH:
         Load the NF model and EOS data for the NSBH case.
         
         Returns:
-            flow (MaskedAffineAutoregressiveFlow): The loaded normalizing flow model.
+            flow: The loaded normalizing flow model (glasflow or flowJAX).
             nf_kwargs (dict): The configuration parameters for the NF.
             masses_EOS (np.ndarray): Masses from the EOS samples.
             Lambdas_EOS (np.ndarray): Corresponding Lambdas from the EOS samples.
         """
-        from glasflow.flows.autoregressive import MaskedAffineAutoregressiveFlow
-        
-        nf_path = os.path.join(self.path, "model.pt")
         nf_kwargs_path = os.path.join(self.path, "model_kwargs.json")
         
         with open(nf_kwargs_path, "r") as f:
             nf_kwargs = json.load(f)
         
-        flow = MaskedAffineAutoregressiveFlow(
-            n_inputs=1,  # fixed for NSBH case
-            n_conditional_inputs=1,  # fixed for NSBH case
-            n_transforms=nf_kwargs["n_transforms"],
-            n_neurons=nf_kwargs["n_neurons"],
-            n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"]
-        )
-        print(f"Loading in the NF from {nf_path}")
-        flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
-        flow.eval()
-        flow.compile()
+        # Check if this is a flowJAX model
+        use_flowjax = nf_kwargs.get("use_flowjax", "False") == "True"
+        
+        if use_flowjax:
+            print("Loading flowJAX NSBH model")
+            nf_path = os.path.join(self.path, "model.eqx")
+            
+            # Create base distribution and flow structure for 1D
+            base_dist = Normal(jnp.zeros(1))
+            key = jr.key(42)
+            
+            # Recreate the flow architecture
+            flow = masked_autoregressive_flow(
+                key=key,
+                base_dist=base_dist,
+                cond_dim=1,
+                flow_layers=nf_kwargs["n_transforms"],
+                nn_width=nf_kwargs["n_neurons"],
+                nn_depth=nf_kwargs["n_blocks_per_transform"]
+            )
+            
+            print(f"Loading flowJAX NSBH model from {nf_path}")
+            flow = eqx.tree_deserialise_leaves(nf_path, flow)
+            
+        else:
+            print("Loading glasflow NSBH model")
+            from glasflow.flows.autoregressive import MaskedAffineAutoregressiveFlow
+            
+            nf_path = os.path.join(self.path, "model.pt")
+            
+            flow = MaskedAffineAutoregressiveFlow(
+                n_inputs=1,  # fixed for NSBH case
+                n_conditional_inputs=1,  # fixed for NSBH case
+                n_transforms=nf_kwargs["n_transforms"],
+                n_neurons=nf_kwargs["n_neurons"],
+                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"]
+            )
+            print(f"Loading glasflow NSBH model from {nf_path}")
+            flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
+            flow.eval()
+            flow.compile()
+        
         print(f"NSBH model loaded successfully")
         
         # Load the EOS posterior samples from jester from which we have created the training data
@@ -344,14 +436,40 @@ class CheckerNSBH:
             lambda_2_train[counter] = lambda_2_value
             counter += 1
         # Generate samples from the conditional NF
-        u = torch.tensor([[m2_value]], dtype=torch.float32)  # Conditional input
         nf_samples = []
-        with torch.no_grad():
+        use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
+        
+        if use_flowjax:
+            # flowJAX sampling
+            key = jr.key(123)
+            u_jax = jnp.array([[m2_value]], dtype=jnp.float32)
+            
             for _ in range(self.N_samples):
-                value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()[0]
+                key, sample_key = jr.split(key)
+                try:
+                    # Try different context parameter names
+                    value = self.flow.sample(sample_key, (1,), context=u_jax).flatten()[0]
+                except:
+                    try:
+                        value = self.flow.sample(sample_key, (1,), conditional=u_jax).flatten()[0]
+                    except:
+                        # Fallback - sample without conditioning
+                        value = self.flow.sample(sample_key, (1,)).flatten()[0]
+                        
+                value = float(value)
                 if self.nf_kwargs["take_log_lambda"] == "True":
                     value = np.exp(value)
                 nf_samples.append(value)
+        else:
+            # glasflow sampling  
+            u = torch.tensor([[m2_value]], dtype=torch.float32)  # Conditional input
+            with torch.no_grad():
+                for _ in range(self.N_samples):
+                    value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()[0]
+                    if self.nf_kwargs["take_log_lambda"] == "True":
+                        value = np.exp(value)
+                    nf_samples.append(value)
+                    
         nf_samples = np.array(nf_samples)
         
         # Compare the marginal distributions
@@ -382,7 +500,7 @@ class CheckerNSBH:
 
     
 def main():
-    bns_checker = CheckerBNS("./models/conditional_bns/", N_samples=10_000, N_masses=5)
+    bns_checker = CheckerBNS("./models/conditional_bns_flowjax/", N_samples=10_000, N_masses=5)
     print("\n" + "="*50)
     print("Testing BNS conditional model")
     print("="*50)

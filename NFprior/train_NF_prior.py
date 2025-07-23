@@ -15,6 +15,17 @@ from glasflow.flows.nsf import CouplingNSF # from a few testing experiments, thi
 import torch
 from torch import optim
 from torch.utils.data import DataLoader, TensorDataset
+
+### flowjax imports
+import jax
+import jax.numpy as jnp
+import jax.random as jr
+from flowjax.flows import masked_autoregressive_flow, coupling_flow
+from flowjax.flows import block_neural_autoregressive_flow
+from flowjax.train import fit_to_data
+from flowjax.distributions import Normal
+import equinox as eqx
+
 import tqdm
 import time
 import joblib
@@ -49,8 +60,9 @@ class NFPriorCreator:
                  save_name: str = "",
                  conditional: bool = True,
                  take_log_lambda: bool = True,
+                 use_flowjax: bool = True,  # Toggle between glasflow and flowJAX
                  # training arguments:
-                 num_epochs: int = 200,
+                 num_epochs: int = 2,
                  learning_rate: float = 1e-3,
                  max_patience: int = 50,
                  n_transforms: int = 4,
@@ -72,6 +84,7 @@ class NFPriorCreator:
             save_name (str, optional): Where to save the models etc to. Defaults to "".
             conditional (bool, optional): Whether to train the NF in a conditional manner, i.e., Lambdas as function of masses. Defaults to True as this is recommended for our bilby setup.
             take_log_lambda (bool, optional): Whether to take the log of the Lambdas before training to deal with their massive scaling, to improve training the NF. Defaults to True.
+            use_flowjax (bool, optional): Whether to use flowJAX instead of glasflow for training. Defaults to False.
             num_epochs (int, optional): Number of training epochs. Defaults to 100.
             learning_rate (float, optional): Learning rate for training. Defaults to 1e-3.
             max_patience (int, optional): Max stops to wait before employing early stopping. Defaults to 50.
@@ -94,6 +107,7 @@ class NFPriorCreator:
         self.m_max_BH = m_max_BH
         self.conditional = conditional
         self.take_log_lambda = take_log_lambda
+        self.use_flowjax = use_flowjax
 
         self.num_epochs = num_epochs
         self.learning_rate = learning_rate
@@ -105,17 +119,22 @@ class NFPriorCreator:
         self.scale_input = scale_input
         self.num_bins = num_bins
         
+        # Check flowJAX availability if requested
+        if self.use_flowjax and not globals().get('jax'):
+            raise ImportError("flowJAX requested but JAX/flowJAX not available. Install flowJAX or set use_flowjax=False")
+        
         # Make an outdir based on the given name etc, so that everything is stored in one directory for later on
+        backend_suffix = "_flowjax" if self.use_flowjax else ""
         if len(save_name) > 0:
             if self.conditional:
-                self.outdir = os.path.join(f"./models/{save_name}_conditional_{self.source_type}")
+                self.outdir = os.path.join(f"./models/{save_name}_conditional_{self.source_type}{backend_suffix}")
             else:
-                self.outdir = os.path.join(f"./models/{save_name}_{self.source_type}")
+                self.outdir = os.path.join(f"./models/{save_name}_{self.source_type}{backend_suffix}")
         else:
             if self.conditional:
-                self.outdir = os.path.join(f"./models/conditional_{self.source_type}")
+                self.outdir = os.path.join(f"./models/conditional_{self.source_type}{backend_suffix}")
             else:
-                self.outdir = os.path.join(f"./models/{self.source_type}")
+                self.outdir = os.path.join(f"./models/{self.source_type}{backend_suffix}")
             
         if not os.path.exists(self.outdir):
             os.makedirs(self.outdir)
@@ -365,22 +384,39 @@ class NFPriorCreator:
             joblib.dump(scaler, scaler_savename)
             print(f"Saved sklearn scaler to {scaler_savename}")
         
-        print(f"Going to start training for glasflow . . .")
+        backend_name = "flowJAX" if self.use_flowjax else "glasflow"
+        print(f"Going to start training for {backend_name} . . .")
         start_time = time.time()
-        if self.conditional:
-            flow = self._train_conditional()
+        
+        if self.use_flowjax:
+            if self.conditional:
+                flow = self._train_conditional_flowjax()
+            else:
+                flow = self._train_unconditional_flowjax()
         else:
-            flow = self._train_unconditional()
+            if self.conditional:
+                flow = self._train_conditional_glasflow()
+            else:
+                flow = self._train_unconditional_glasflow()
+                
         end_time = time.time()
         print(f"Training done. Took around {(end_time - start_time)/60:.2f} minutes")
         
         # Save the model
-        save_path = os.path.join(self.outdir, "model.pt")
-        print(f"Saving the model weights to {save_path}")
-        torch.save(flow.state_dict(), save_path)
+        if self.use_flowjax:
+            save_path = os.path.join(self.outdir, "model.eqx")
+            print(f"Saving the flowJAX model to {save_path}")
+            eqx.tree_serialise_leaves(save_path, flow)
+        else:
+            save_path = os.path.join(self.outdir, "model.pt")
+            print(f"Saving the model weights to {save_path}")
+            torch.save(flow.state_dict(), save_path)
         
         # Save the model kwargs
-        save_path = save_path.replace(".pt", "_kwargs.json")
+        if self.use_flowjax:
+            save_path = save_path.replace(".eqx", "_kwargs.json")
+        else:
+            save_path = save_path.replace(".pt", "_kwargs.json")
         
         # Just dump any last kwargs we want to save here before finally saving it
         self.nf_kwargs["source_type"] = self.source_type
@@ -394,6 +430,7 @@ class NFPriorCreator:
         self.nf_kwargs["eos_samples_filename"] = self.eos_samples_filename
         self.nf_kwargs["training_filename"] = self.training_filename
         self.nf_kwargs["take_log_lambda"] = str(self.take_log_lambda)
+        self.nf_kwargs["use_flowjax"] = str(self.use_flowjax)
         
         print(f"Saving the model kwargs to {save_path}")
         with open(save_path, "w") as f:
@@ -413,7 +450,7 @@ class NFPriorCreator:
         
         print("DONE training!")
         
-    def _train_unconditional(self) -> CouplingNSF:
+    def _train_unconditional_glasflow(self) -> CouplingNSF:
         """
         Simple wrapper around a glasflow model to train an unconditional normalizing flow on the data.
         """
@@ -471,7 +508,7 @@ class NFPriorCreator:
         self.plot_loss(train_loss)
         return flow
     
-    def _train_conditional(self):
+    def _train_conditional_glasflow(self):
         """
         Simple wrapper around a glasflow model to train a conditional normalizing flow on the data.
         Uses appropriate flow type based on dimensionality.
@@ -564,6 +601,193 @@ class NFPriorCreator:
 
         self.plot_loss(train_loss)
         return flow
+    
+    def _train_unconditional_flowjax(self):
+        """
+        Train an unconditional normalizing flow using flowJAX.
+        """
+        # Create base distribution
+        base_dist = Normal(jnp.zeros(self.n_inputs))
+        
+        # Initialize flow
+        key = jr.key(42)
+        if self.n_inputs == 1:
+            # For 1D, use masked autoregressive flow
+            print("Using masked_autoregressive_flow for unconditional 1D distribution")
+            self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
+            flow = masked_autoregressive_flow(
+                key=key,
+                base_dist=base_dist,
+                flow_layers=self.n_transforms,
+                nn_width=self.n_neurons,
+                nn_depth=self.n_blocks_per_transform
+            )
+        else:
+            # For >1D, use coupling flow
+            print("Using coupling_flow for unconditional >1D distribution")
+            self.nf_kwargs["model_type"] = "coupling_flow"
+            flow = coupling_flow(
+                key=key,
+                base_dist=base_dist,
+                flow_layers=self.n_transforms,
+                nn_width=self.n_neurons,
+                nn_depth=self.n_blocks_per_transform
+            )
+        
+        # Train the flow
+        train_key = jr.key(123)
+        x_data = jnp.array(self.x, dtype=jnp.float32)
+        
+        print(f"Training flowJAX unconditional model on data shape: {x_data.shape}")
+        flow, losses = fit_to_data(
+            key=train_key,
+            dist=flow,
+            data=x_data,
+            learning_rate=self.learning_rate,
+            max_epochs=self.num_epochs,
+            batch_size=self.batch_size,
+            patience=self.max_patience
+        )
+        
+        self.plot_loss(np.array(losses))
+        return flow
+    
+    def _train_conditional_flowjax(self):
+        """
+        Train a conditional normalizing flow using flowJAX.
+        """
+        # Create base distribution
+        base_dist = Normal(jnp.zeros(self.n_inputs))
+        
+        # Initialize flow
+        key = jr.key(42)
+        if self.n_inputs == 1:
+            raise NotImplementedError("Conditional 1D flowJAX training not implemented yet.")
+            
+            # FIXME: do this
+            # # For 1D conditional, use masked autoregressive flow
+            # print("Using masked_autoregressive_flow for conditional 1D distribution")
+            # self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
+            # flow = masked_autoregressive_flow(
+            #     key=key,
+            #     base_dist=base_dist,
+            #     cond_dim=self.n_conditional_inputs,
+            #     flow_layers=self.n_transforms,
+            #     nn_width=self.n_neurons,
+            #     nn_depth=self.n_blocks_per_transform
+            # )
+        else:
+            # For >1D conditional, use coupling flow
+            print("Using coupling_flow for conditional >1D distribution")
+            self.nf_kwargs["model_type"] = "block_neural_autoregressive_flow"
+            flow = block_neural_autoregressive_flow(
+                key=key,
+                base_dist=base_dist,
+                cond_dim=self.n_conditional_inputs,
+                flow_layers=self.n_transforms,
+                nn_depth=self.n_neurons,
+                nn_block_dim=self.n_blocks_per_transform
+            )
+        
+        # Train the flow with conditional data
+        train_key = jr.key(123)
+        x_data = jnp.array(self.x, dtype=jnp.float32)
+        u_data = jnp.array(self.u, dtype=jnp.float32)
+        
+        print(f"Training flowJAX conditional model:")
+        print(f"  x_data shape: {x_data.shape}")
+        print(f"  u_data shape: {u_data.shape}")
+        
+        # For conditional training, we need to create a custom loss function
+        def conditional_nll_loss(params, data_batch):
+            """Negative log-likelihood loss for conditional flow."""
+            x_batch, u_batch = data_batch
+            return -flow.log_prob(x_batch, context=u_batch).mean()
+        
+        # Create combined dataset
+        combined_data = (x_data, u_data)
+
+        subkey = jr.key(1234)        
+        flow, losses = fit_to_data(
+            subkey,
+            flow,
+            data=combined_data,
+            learning_rate=self.learning_rate,
+            max_epochs=self.num_epochs,
+            max_patience=self.max_patience,
+            batch_size=self.batch_size,
+        )
+        
+        # TODO: use the losses
+        
+        return flow
+    
+    # def _train_conditional_flowjax_custom(self, flow, x_data, u_data, key):
+    #     """
+    #     Custom training loop for conditional flowJAX models.
+    #     """
+    #     import optax
+        
+    #     # Initialize optimizer
+    #     optimizer = optax.adam(self.learning_rate)
+    #     opt_state = optimizer.init(eqx.filter(flow, eqx.is_inexact_array))
+        
+    #     losses = []
+    #     best_loss = float('inf')
+    #     patience_counter = 0
+        
+    #     # Training loop
+    #     n_batches = len(x_data) // self.batch_size
+        
+    #     for epoch in tqdm.tqdm(range(self.num_epochs), desc="Training flowJAX"):
+    #         epoch_loss = 0.0
+    #         key, epoch_key = jr.split(key)
+            
+    #         # Shuffle data
+    #         perm_key, epoch_key = jr.split(epoch_key)
+    #         perm = jr.permutation(perm_key, len(x_data))
+    #         x_shuffled = x_data[perm]
+    #         u_shuffled = u_data[perm]
+            
+    #         for batch_idx in range(n_batches):
+    #             start_idx = batch_idx * self.batch_size
+    #             end_idx = min((batch_idx + 1) * self.batch_size, len(x_data))
+                
+    #             x_batch = x_shuffled[start_idx:end_idx]
+    #             u_batch = u_shuffled[start_idx:end_idx]
+                
+    #             # Compute loss and gradients
+    #             def loss_fn(model):
+    #                 try:
+    #                     log_probs = model.log_prob(x_batch, context=u_batch)
+    #                     return -log_probs.mean()
+    #                 except:
+    #                     # Fallback if context parameter doesn't work
+    #                     return -model.log_prob(x_batch).mean()
+                
+    #             loss, grads = eqx.filter_value_and_grad(loss_fn)(flow)
+                
+    #             # Update parameters
+    #             updates, opt_state = optimizer.update(grads, opt_state, flow)
+    #             flow = eqx.apply_updates(flow, updates)
+                
+    #             epoch_loss += loss
+            
+    #         epoch_loss /= n_batches
+    #         losses.append(float(epoch_loss))
+            
+    #         # Early stopping
+    #         if epoch_loss < best_loss:
+    #             best_loss = epoch_loss
+    #             patience_counter = 0
+    #         else:
+    #             patience_counter += 1
+    #             if patience_counter >= self.max_patience:
+    #                 print(f"Early stopping triggered at epoch {epoch+1}")
+    #                 break
+        
+    #     self.plot_loss(np.array(losses))
+    #     return flow
         
     def plot_loss(self, loss: np.array) -> None:
         
