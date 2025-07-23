@@ -8,6 +8,9 @@ import corner
 from bilby.core.prior.dict import NFConditionalPrior
 from bilby.core.prior import ConditionalPriorDict
 
+from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
+from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
+
 params = {"axes.grid": True,
         "text.usetex" : False,
         "font.family" : "serif",
@@ -316,6 +319,49 @@ def test_corner_plot_new_implementation():
     
     # Save the figure
     output_path = "./figures/bns_conditional_prior_cornerplot.pdf"
+    print(f"Saving corner plot to {output_path}")
+    plt.savefig(output_path, bbox_inches="tight")
+    plt.close()
+    
+    # Create it in tilde space as well, first, the NF samples, take them from above and transform them
+    
+    chirp_mass = samples_og[:, 0]
+    mass_ratio = samples_og[:, 1]
+    
+    m1, m2 = chirp_mass_and_mass_ratio_to_component_masses(chirp_mass, mass_ratio)
+    
+    lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(samples_og[:, 3], samples_og[:, 4], m1, m2)
+    delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(samples_og[:, 3], samples_og[:, 4], m1, m2)
+    
+    samples_tilde = np.array([m1, m2, lambda_tilde, delta_lambda_tilde]).T
+    ranges = [[np.percentile(col, 0.5), np.percentile(col, 99.5)] for col in samples_tilde.T]
+    labels = [r"$m_1$ [M$_\odot$]", r"$m_2$ [M$_\odot$]", r"$\tilde{\Lambda}$", r"$\delta \tilde{\Lambda}$"]
+    corner_kwargs = default_corner_kwargs.copy()
+    corner_kwargs["hist_kwargs"] = {"color": "blue", "density": True}
+    fig_tilde = corner.corner(
+        samples_tilde, 
+        range=ranges,
+        labels=labels,
+        **corner_kwargs
+    )
+    
+    corner_kwargs["color"] = "red"
+    corner_kwargs["hist_kwargs"] = {"color": "red", "density": True}
+    
+    training_data = np.load(bns_training_data_path)
+    m1, m2, lambda_1, lambda_2, = training_data["m1"], training_data["m2"], training_data["lambda_1"], training_data["lambda_2"]
+    
+    lambda_tilde_training = lambda_1_lambda_2_to_lambda_tilde(lambda_1, lambda_2, m1, m2)
+    delta_lambda_tilde_training = lambda_1_lambda_2_to_delta_lambda_tilde(lambda_1, lambda_2, m1, m2)
+    
+    samples_training = np.array([m1, m2, lambda_tilde_training, delta_lambda_tilde_training]).T
+    corner.corner(samples_training, 
+                   labels=[r"$m_1$ [M$_\odot$]", r"$m_2$ [M$_\odot$]", r"$\tilde{\Lambda}$", r"$\delta \tilde{\Lambda}$"],
+                   fig=fig_tilde,
+                   **corner_kwargs)
+    
+    # Save the figure
+    output_path = "./figures/bns_conditional_prior_cornerplot_tilde.pdf"
     print(f"Saving corner plot to {output_path}")
     plt.savefig(output_path, bbox_inches="tight")
     plt.close()

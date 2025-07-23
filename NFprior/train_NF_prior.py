@@ -54,9 +54,9 @@ class NFPriorCreator:
                  learning_rate: float = 1e-3,
                  max_patience: int = 50,
                  n_transforms: int = 4,
-                 n_neurons: int = 64,
+                 n_neurons: int = 128,
                  batch_size: int = 256,
-                 n_blocks_per_transform: int = 2,
+                 n_blocks_per_transform: int = 4,
                  scale_input: bool = False,
                  num_bins: int = 10  # For autoregressive flows (1D case)
                  ):
