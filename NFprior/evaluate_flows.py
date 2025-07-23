@@ -10,6 +10,7 @@ import corner
 import json
 import copy
 import torch
+import joblib
 from scipy.special import kl_div
 from scipy.stats import gaussian_kde
 
@@ -110,7 +111,7 @@ class CheckerBNS:
         self.N_masses = N_masses
         
         # Load the model and data
-        self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS = self.load_model_and_data()
+        self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS, self.scaler = self.load_model_and_data()
     
     def load_model_and_data(self):
         """
@@ -121,6 +122,7 @@ class CheckerBNS:
             nf_kwargs (dict): The configuration parameters for the NF.
             masses_EOS (np.ndarray): Masses from the EOS samples.
             Lambdas_EOS (np.ndarray): Corresponding Lambdas from the EOS samples.
+            scaler: The MinMaxScaler used during training (None if not used).
         """
         nf_kwargs_path = os.path.join(self.path, "model_kwargs.json")
         
@@ -178,7 +180,16 @@ class CheckerBNS:
         data = np.load(eos_samples_filename)
         masses_EOS, Lambdas_EOS = data["masses_EOS"], data["Lambdas_EOS"]
         
-        return flow, nf_kwargs, masses_EOS, Lambdas_EOS
+        # Load the scaler if it exists
+        scaler_path = os.path.join(self.path, "scaler.gz")
+        scaler = None
+        if os.path.exists(scaler_path):
+            print(f"Loading scaler from {scaler_path}")
+            scaler = joblib.load(scaler_path)
+        else:
+            print("No scaler found - assuming input was not scaled during training")
+        
+        return flow, nf_kwargs, masses_EOS, Lambdas_EOS, scaler
 
     def check_conditional_bns_model(self):
         """
@@ -279,6 +290,11 @@ class CheckerBNS:
                     nf_samples.append(value)
                     
         nf_samples = np.array(nf_samples)
+        
+        # Apply inverse scaling if scaler was used during training
+        if self.scaler is not None:
+            print("Applying inverse scaling to NF samples")
+            nf_samples = self.scaler.inverse_transform(nf_samples)
         
         print("np.shape(training_samples)")
         print(np.shape(training_samples))
