@@ -76,6 +76,10 @@ def create_corner_plot(GW_event: str,
     
     # Load result files to investigate structure
     base_path = f"../GW_runs/{GW_event}"
+    if GW_event == "GW170817":
+        base_path = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification_gitlab/GW_runs/GW170817/"
+        print("Using base path for GW170817:", base_path)
+    
     bns_results_filename = os.path.join(base_path, "bns/bns_result.json")
     default_results_filename = os.path.join(base_path, "default/default_result.json")
     nsbh_results_filename = os.path.join(base_path, "nsbh/nsbh_result.json")
@@ -240,25 +244,45 @@ def create_corner_plot(GW_event: str,
     # Create corner plot with three overlaid distributions
     corner_kwargs_with_range = default_corner_kwargs.copy()
     # corner_kwargs_with_range['range'] = ranges
+    use_density = True
 
     # Create three different corner kwargs with different colors
     default_kwargs = corner_kwargs_with_range.copy()
-    default_kwargs.update({'color': DEFAULT_COLOR, 'alpha': 0.7, 'hist_kwargs': {'alpha': 0.7, 'color': DEFAULT_COLOR, 'density': True}})
+    default_kwargs.update({'color': DEFAULT_COLOR, 'hist_kwargs': {'color': DEFAULT_COLOR, 'density': use_density}})
 
     bns_kwargs = corner_kwargs_with_range.copy()  
-    bns_kwargs.update({'color': BNS_COLOR, 'alpha': 0.7, 'hist_kwargs': {'alpha': 0.7, 'color': BNS_COLOR, 'density': True}})
+    bns_kwargs.update({'color': BNS_COLOR, 'hist_kwargs': {'color': BNS_COLOR, 'density': use_density}})
 
     nsbh_kwargs = corner_kwargs_with_range.copy()
-    nsbh_kwargs.update({'color': NSBH_COLOR, 'alpha': 0.7, 'hist_kwargs': {'alpha': 0.7, 'color': NSBH_COLOR, 'density': True}})
+    nsbh_kwargs.update({'color': NSBH_COLOR, 'hist_kwargs': {'color': NSBH_COLOR, 'density': use_density}})
 
     print("latex_labels")
     print(latex_labels)
 
+    # # Concatenate all samples to create a dummy cornerplot
+    # if plot_default:
+    #     dummy_samples = np.concatenate([default_samples, bns_samples, nsbh_samples], axis=0)
+    # else:
+    #     dummy_samples = np.concatenate([bns_samples, nsbh_samples], axis=0)
+        
+    # # Create a dummy corner plot to set the figure size, make sure this plot is not visible
+    # dummy_corner_kwargs = corner_kwargs_with_range.copy()
+    # dummy_corner_kwargs["plot_density"] = False
+    # dummy_corner_kwargs["fill_contours"] = False
+    # dummy_corner_kwargs["contourf_kwargs"] = {"alpha": 0.0}
+    # dummy_corner_kwargs["contour_kwargs"] = {"alpha": 0.0}
+    # dummy_corner_kwargs["hist_kwargs"] = {"alpha": 0.0, "density": use_density, "color": "white"}
+    
+    # # Finally, add dummy samples to scale appropriately
+    # fig = corner.corner(dummy_samples, labels=latex_labels, **dummy_corner_kwargs)
+    
     # Create the overlaid corner plot
     fig = corner.corner(bns_samples, labels=latex_labels, **bns_kwargs)
-    corner.corner(nsbh_samples, labels=latex_labels, fig=fig, **nsbh_kwargs)
+    weights = np.ones(len(nsbh_samples))*len(bns_samples)/len(nsbh_samples)  
+    corner.corner(nsbh_samples, labels=latex_labels, fig=fig, weights=weights, **nsbh_kwargs)
     if plot_default:
-        corner.corner(default_samples, labels=latex_labels, fig=fig, **default_kwargs)
+        weights = np.ones(len(default_samples))*len(bns_samples)/len(default_samples)  
+        corner.corner(default_samples, labels=latex_labels, fig=fig, weights=weights, **default_kwargs)
 
     # Add legend
     if plot_all_params:
@@ -278,17 +302,17 @@ def create_corner_plot(GW_event: str,
     plt.close()
     
 def main():
-    GW_event_list = ["GW190425",
-                     "GW230529",
-                    #  "GW170817"
+    GW_event_list = ["GW170817"
+                    #  "GW190425",
+                    #  "GW230529",
                      ]
     
     for GW_event in GW_event_list:
         print(f"Creating corner plot for {GW_event}...")
         create_corner_plot(GW_event,
                            plot_all_params=False,
-                           plot_default=False,
-                           convert_lambdas=False)
-        
+                           plot_default=True,
+                           convert_lambdas=True)
+            
 if __name__ == "__main__":
     main()
