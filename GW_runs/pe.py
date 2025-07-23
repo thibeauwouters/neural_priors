@@ -8,19 +8,12 @@ os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["MKL_DYNAMIC"] = "FALSE"
 os.environ["OMP_NUM_THREADS"] = "1"
 
-# TODO: remove this, does not work
-# # This is to suppress warnings from the bilby library about masked frequencies (coming in GW170817)
-# import warnings
-# warnings.filterwarnings("ignore", message=".*masked frequencies.*")
-# warnings.filterwarnings("ignore", message=".*Masking >3 elements.*")
-
 import sys
 import bilby 
 import numpy as np
 from bilby.core.prior.analytical import Uniform, Sine, Cosine, DeltaFunction
-from bilby.gw.prior import UniformComovingVolume
+from bilby.gw.prior import UniformComovingVolume, AlignedSpin
 from bilby.core.prior.dict import NFConditionalPrior
-# Imports moved inline where needed
 import argparse
 import json
 import pickle
@@ -28,7 +21,6 @@ import matplotlib.pyplot as plt
 from bilby.core.utils import logger
 import warnings
 import signal
-import time
 from contextlib import contextmanager
 warnings.filterwarnings("ignore", "Wswiglal-redir-stdio")
 
@@ -71,6 +63,10 @@ parser.add_argument('--prior-name',
                     type = str,
                     default = 'bns',
                     help = "Output directory for the run")
+parser.add_argument('--waveform-model',
+                    type = str,
+                    default = 'IMRPhenomXP_NRTidalv3',
+                    help = "Waveform model to be used for the run")
 parser.add_argument('--relative-binning-delta', 
                     type = float,
                     default = 1e-2,
@@ -149,11 +145,17 @@ def detect_environment():
 
 cwd = detect_environment()
 from LikelihoodRB import RelBinning
-full_outdir = os.path.join(cwd, args.label, args.prior_name)
+if args.waveform_model == 'IMRPhenomD_NRTidalv2':
+    full_outdir = os.path.join(cwd, "PhenomD_NRTv2", args.label, args.prior_name)
+    reference_parameters_filename = os.path.join(cwd, "PhenomD_NRTv2", args.label, "reference_parameters.json")
+    prior_filename = os.path.join(cwd, "PhenomD_NRTv2", args.label, "prior.prior")
+else:
+    full_outdir = os.path.join(cwd, args.label, args.prior_name)
+    reference_parameters_filename = os.path.join(cwd, args.label, "reference_parameters.json")
+    prior_filename = os.path.join(cwd, args.label, "prior.prior")
+    
 bilby.core.utils.setup_logger(outdir=full_outdir, label=args.label)
-
-# Get reference parameters filename
-reference_parameters_filename = os.path.join(cwd, args.label, "reference_parameters.json")
+logger.info(f"We set full_outdir to {full_outdir}")
 
 # If a dry run, then make sure we always get pased the relative binning
 if args.dry_run:
@@ -203,7 +205,7 @@ reference_parameters['duration'] = duration
 
 # Other fixed kwargs
 # TODO: do we want fmin and fmax to be set here from the per-event config?
-approximant = "IMRPhenomXP_NRTidalv3"
+approximant = args.waveform_model
 sampling_frequency = 2*2048.0
 reference_frequency = 20.0
 
@@ -245,12 +247,12 @@ safe_globals = {
     'Uniform': Uniform,
     'Sine': Sine, 
     'Cosine': Cosine,
-    'UniformComovingVolume': UniformComovingVolume
+    'UniformComovingVolume': UniformComovingVolume,
+    'AlignedSpin': AlignedSpin
 }
 
 if not args.load_data_generation:
     
-    prior_filename = os.path.join(cwd, args.label, "prior.prior")
     logger.info(f"Loading priors from {prior_filename}")
     
     ### PRIORS
@@ -267,7 +269,6 @@ if not args.load_data_generation:
                 "UniformComovingVolume", "bilby.gw.prior.UniformComovingVolume"
             ) for line in prior_lines
         ]
-
 
         # Evaluate the prior lines in a safe namespace
         prior_dict = {}

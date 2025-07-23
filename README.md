@@ -1,5 +1,9 @@
 # eos_source_classification
 
+## Bilby code
+
+We adapted the bilby source code for this project, the branch used can be found [here](https://github.com/ThibeauWouters/bilby/tree/eos_source_classification). 
+
 ## data
 
 Some datasets (GWF files, EOSs) used in the inferences and training.
@@ -18,7 +22,8 @@ Maximum likelihood parameters for relative binning are taken from other PE sampl
 
 Data to store training scripts and models for the NF priors.
 
-
 ## GW_runs
 
 Gravitational wave runs, without ROQ. 
+
+- `final_results`: This directory stores copies of the GW runs, and these samples will be accessed by the postprocessing scripts. Use `copy_results.py` there to create a new backup (e.g. after some reruns with new priors are done etc). 

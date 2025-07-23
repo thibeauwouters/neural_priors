@@ -75,7 +75,7 @@ def create_corner_plot(GW_event: str,
     """
     
     # Load result files to investigate structure
-    base_path = f"../GW_runs/{GW_event}"
+    base_path = f"../GW_runs/final_results/{GW_event}"
     
     bns_results_filename = os.path.join(base_path, "bns/bns_result.json")
     default_results_filename = os.path.join(base_path, "default/default_result.json")
@@ -195,10 +195,12 @@ def create_corner_plot(GW_event: str,
     default_samples = np.array(default_data).T  
     nsbh_samples = np.array(nsbh_data).T
     
-    # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
-    if 'delta_lambda_tilde' in params_to_plot:
-        delta_lambda_tilde_index = labels.index('delta_lambda_tilde')
-        bns_samples = bns_samples[bns_samples[:, delta_lambda_tilde_index] > 0]
+    
+    # TODO: need to make sure that this is masked automatically in the PE
+    # # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
+    # if 'delta_lambda_tilde' in params_to_plot:
+    #     delta_lambda_tilde_index = labels.index('delta_lambda_tilde')
+    #     bns_samples = bns_samples[bns_samples[:, delta_lambda_tilde_index] > 0]
     
     # Create range dictionary to handle constant parameters
     ranges = []
