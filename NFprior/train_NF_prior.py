@@ -65,19 +65,19 @@ class NFPriorCreator:
                  conditional: bool = True,
                  take_log_lambda: bool = True,
                  use_flowjax: bool = True,  # Toggle between glasflow and flowJAX
-                 num_epochs: int = 200,
+                 num_epochs: int = 800,
                  learning_rate: float = 1e-3,
                  batch_size: int = 256,
+                 scale_input: bool = False,
                  # glasflow-specific training arguments:
                  max_patience: int = 50,
                  n_transforms: int = 4,
                  n_neurons: int = 128,
                  n_blocks_per_transform: int = 4,
+                 num_bins: int = 10,
                  # glasflow-specific training arguments:
                  nn_depth: int = 5,
-                 nn_block_dim: int = 8,
-                 scale_input: bool = False,
-                 num_bins: int = 10  # For autoregressive flows (1D case)
+                 nn_block_dim: int = 8
                  ):
         """
         Initialize the NFPriorCreator class with the necessary parameters.
