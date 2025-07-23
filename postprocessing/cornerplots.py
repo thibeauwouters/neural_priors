@@ -351,7 +351,7 @@ def main():
     
     GW_event_list = ["GW170817",
                      "GW190425",
-                    #  "GW230529",
+                     "GW230529",
                     ]
     
     for plot_default in [True, False]:
