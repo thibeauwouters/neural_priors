@@ -30,3 +30,7 @@ Using block_neural_autoregressive_flow for conditional >1D distribution
 Training flowJAX conditional model:
   x_data shape: (100000, 2)
   u_data shape: (100000, 2)
+Training done. Took around 19.48 minutes
+Saving the flowJAX model to ./models/conditional_bns_flowjax/model.eqx
+Saving the model kwargs to ./models/conditional_bns_flowjax/model_kwargs.json
+DONE training!
