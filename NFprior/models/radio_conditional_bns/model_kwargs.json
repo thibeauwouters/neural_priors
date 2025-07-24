@@ -23,8 +23,8 @@
     "max_patience": 50,
     "batch_size": 256,
     "num_bins": 10,
-    "eos_samples_filename": "../data/eos/eos_samples.npz",
-    "training_filename": "./models/conditional_bns/training_data.npz",
+    "eos_samples_filename": "../data/eos/radio/eos_samples.npz",
+    "training_filename": "./models/radio_conditional_bns/training_data.npz",
     "take_log_lambda": "False",
     "use_flowjax": "False"
 }
