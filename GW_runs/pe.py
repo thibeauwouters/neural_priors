@@ -97,6 +97,10 @@ parser.add_argument('--n-pool',
                     type = int,
                     default = 64,
                     help = "How many cores to use for the sampling.")
+parser.add_argument('--eos-samples-name',
+                    type = str,
+                    default = "radio",
+                    help = "Name of the EOS posterior dataset, must match the NF name. Used to construct the path to the NF model data.") # TODO: does it have to be relative?
 
 args = parser.parse_args()
 
@@ -283,6 +287,11 @@ if not args.load_data_generation:
         
     else:
         logger.info(f"Sampling with an NF prior, with name {args.prior_name}")
+        # Path to NF model
+        nf_model_path = os.path.join(cwd, f"../NFprior/models/{args.eos_samples_name}_conditional_{args.prior_name}/model.pt")
+        nf_model_path = os.path.abspath(nf_model_path)
+        logger.info(f"Using NF model path: {nf_model_path}")
+            
         if args.prior_name == "bns":
             
             # Execute prior file
@@ -293,9 +302,6 @@ if not args.load_data_generation:
             
             # Use ConditionalPriorDict for BNS conditional prior approach
             priors = bilby.core.prior.ConditionalPriorDict()
-            
-            # Path to NF model
-            nf_model_path = os.path.join(cwd, '../NFprior/models/conditional_bns/model.pt')
             
             # Add all non-lambda priors from the prior file
             lambda_params = ['lambda_1', 'lambda_2']
@@ -342,9 +348,6 @@ if not args.load_data_generation:
             
             # Use ConditionalPriorDict for NSBH
             priors = bilby.core.prior.ConditionalPriorDict()
-            
-            # Path to NSBH NF model
-            nf_model_path = os.path.join(cwd, '../NFprior/models/conditional_nsbh/model.pt')
             
             # Add all non-lambda priors from the prior file
             # For NSBH, we exclude lambda_1 (BH has no tidal deformability) and lambda_2 (will be conditional)

@@ -52,3 +52,8 @@ Initializing a glasflow model for conditional training with kwargs:
     n_neurons: 128
 Using RealNVP for >1D conditional distribution
 Initialized flow: RealNVP
+Saving the training loss plot to ./models/radio_chiEFT_conditional_bns/training_loss.pdf
+Training done. Took around 35.24 minutes
+Saving the model weights to ./models/radio_chiEFT_conditional_bns/model.pt
+Saving the model kwargs to ./models/radio_chiEFT_conditional_bns/model_kwargs.json
+DONE training!

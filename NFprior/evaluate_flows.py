@@ -107,6 +107,7 @@ class CheckerBNS:
             N_masses (int): Number of mass pairs to sample from the training data.
         """
         self.path = path
+        self.figures_outdir = os.path.join(self.path, "figures", "check")
         self.N_samples = N_samples
         self.N_masses = N_masses
         
@@ -304,7 +305,7 @@ class CheckerBNS:
         
         my_range = [[lambda_1_lower, lambda_1_upper], [lambda_2_lower, lambda_2_upper]]
         
-        name = f"./figures/check_bns/m1_{m1_value:.2f}_m2_{m2_value:.2f}.pdf"
+        name = os.path.join(self.figures_outdir, f"m1_{m1_value:.2f}_m2_{m2_value:.2f}.pdf")
         print(f"Saving cornerplot to {name}")
         make_cornerplot(training_samples, nf_samples, name, my_range=my_range)
         
@@ -340,6 +341,8 @@ class CheckerNSBH:
             N_masses (int): Number of mass pairs to sample from the training data.
         """
         self.path = path
+        self.figures_outdir = os.path.join(self.path, "figures", "check")
+        
         self.N_samples = N_samples
         self.N_masses = N_masses
         
@@ -515,23 +518,21 @@ class CheckerNSBH:
         plt.grid(True, alpha=0.3)
         
         # Save the plot
-        name = f"./figures/check_nsbh/m2_{m2_value:.2f}.pdf"
-        os.makedirs("./figures/check_nsbh", exist_ok=True)
+        name = os.path.join(self.figures_outdir, f"m2_{m2_value:.2f}.pdf")
         plt.savefig(name, bbox_inches="tight")
         plt.close()
         
         # TODO: KL divergence calculation
 
-
-    
 def main():
-    # bns_checker = CheckerBNS("./models/conditional_bns_flowjax/", N_samples=10_000, N_masses=5)
-    # print("\n" + "="*50)
-    # print("Testing BNS conditional model")
-    # print("="*50)
-    # bns_checker.check_conditional_bns_model()
+    # FIXME: save the plots in the flow directory
+    bns_checker = CheckerBNS("./models/radio_chiEFT_conditional_bns/", N_samples=10_000, N_masses=5)
+    print("\n" + "="*50)
+    print("Testing BNS conditional model")
+    print("="*50)
+    bns_checker.check_conditional_bns_model()
     
-    nsbh_checker = CheckerNSBH("./models/conditional_nsbh/", N_samples=10_000, N_masses=5)
+    nsbh_checker = CheckerNSBH("./models/radio_conditional_nsbh/", N_samples=10_000, N_masses=5)
     print("\n" + "="*50)
     print("Testing NSBH conditional model")
     print("="*50)

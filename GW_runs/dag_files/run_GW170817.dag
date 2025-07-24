@@ -1,6 +1,4 @@
 JOB run_a /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_a label="GW170817" prior_name="bns" seed="123"
+VARS run_a label="GW170817" prior_name="bns" eos_samples_name="radio_chiEFT" seed="123"
 JOB run_b /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_b label="GW170817" prior_name="nsbh" seed="123"
-JOB run_c /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_c label="GW170817" prior_name="default" seed="123"
+VARS run_b label="GW170817" prior_name="nsbh" eos_samples_name="radio_chiEFT" seed="123"
