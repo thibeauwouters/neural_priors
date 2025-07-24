@@ -1,30 +1,49 @@
 torch: CUDA is available. Number of devices: 1
 torch: Current CUDA device: 0
 JAX: devices available: [CudaDevice(id=0)]
-source_type is set by user to bns
-Everything for this model will be saved to ./models/conditional_bns
-No EOS samples filename was provided, so defaulted to: ../data/eos/eos_samples.npz
-Reading the EOS data from ../data/eos/eos_samples.npz
-Number of good samples:  0.9949
-Saving training data to ./models/conditional_bns/training_data.npz
+Starting training with the following parameters:
+    - eos_samples_name: radio_chiEFT
+    - source_type: bns
+    - N_samples_training: 100000
+    - N_samples_plot: 10000
+    - m_max_BH: 5.0
+    - conditional: True
+    - take_log_lambda: False
+    - use_flowjax: False
+    - scale_input: True
+    - num_epochs: 250
+    - learning_rate: 0.001
+    - batch_size: 256
+    - max_patience: 50
+    - n_transforms: 4
+    - n_neurons: 128
+    - n_blocks_per_transform: 4
+    - num_bins: 10
+    - nn_depth: 5
+    - nn_block_dim: 8
+Training data will be loaded from: ../data/eos/radio_chiEFT/eos_samples.npz
+Everything for this model will be saved to ./models/radio_chiEFT_conditional_bns
+Reading the EOS data from ../data/eos/radio_chiEFT/eos_samples.npz
+Number of good samples:  0.9995
+Saving training data to ./models/radio_chiEFT_conditional_bns/training_data.npz
 Saving training data DONE
 Sanity checking the ranges of the training data
-m1 ranges from 1.0020875033648124 to 3.5684280970516844
-m2 ranges from 1.0000042003663774 to 3.1513473752168024
-lambda_1 ranges from 2.572110088668347 to 5283.179400442837
-lambda_2 ranges from 4.629487641822543 to 7561.084757648256
+m1 ranges from 1.0022667446060467 to 3.3191836026067834
+m2 ranges from 1.000006157308466 to 3.1718785266518004
+lambda_1 ranges from 3.0698275877690198 to 5330.998607868596
+lambda_2 ranges from 4.157485063830443 to 8103.921150868437
 We are training BNS and conditional
 np.shape(self.x)
 (100000, 2)
 np.shape(self.u)
 (100000, 2)
-m1 ranges from 1.0020875033648124 to 3.5684280970516844
-m2 ranges from 1.0000042003663774 to 3.1513473752168024
-lambda_1 ranges from 2.572110088668347 to 5283.179400442837
-lambda_2 ranges from 4.629487641822543 to 7561.084757648256
+m1 ranges from 1.0022667446060467 to 3.3191836026067834
+m2 ranges from 1.000006157308466 to 3.1718785266518004
+lambda_1 ranges from 3.0698275877690198 to 5330.998607868596
+lambda_2 ranges from 4.157485063830443 to 8103.921150868437
 Using MinMaxScaler to scale the input data x
-The scaler will be saved with joblib to ./models/conditional_bns/scaler.gz
-Saved sklearn scaler to ./models/conditional_bns/scaler.gz
+The scaler will be saved with joblib to ./models/radio_chiEFT_conditional_bns/scaler.gz
+Saved sklearn scaler to ./models/radio_chiEFT_conditional_bns/scaler.gz
 Going to start training for glasflow . . .
 Initializing a glasflow model for conditional training with kwargs:
     n_inputs: 2
@@ -33,8 +52,3 @@ Initializing a glasflow model for conditional training with kwargs:
     n_neurons: 128
 Using RealNVP for >1D conditional distribution
 Initialized flow: RealNVP
-Saving the training loss plot to ./models/conditional_bns/training_loss.pdf
-Training done. Took around 33.67 minutes
-Saving the model weights to ./models/conditional_bns/model.pt
-Saving the model kwargs to ./models/conditional_bns/model_kwargs.json
-DONE training!

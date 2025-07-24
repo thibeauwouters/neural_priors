@@ -4,14 +4,14 @@ This might be joint prior or conditional prior, we will have to check which work
 """
 
 import os
-import sys
+import argparse
 import numpy as np
 import json
 
 ### glasflow imports
 from glasflow.flows import RealNVP
-from glasflow.flows.autoregressive import MaskedPiecewiseRationalQuadraticAutoregressiveFlow, MaskedAffineAutoregressiveFlow
-from glasflow.flows.nsf import CouplingNSF # from a few testing experiments, this is the best trade-off between working code and performance
+from glasflow.flows.autoregressive import MaskedAffineAutoregressiveFlow
+from glasflow.flows.nsf import CouplingNSF
 import torch
 from torch import optim
 from torch.utils.data import DataLoader, TensorDataset
@@ -49,6 +49,101 @@ print(f"JAX: devices available: {jax_devices}")
 
 # Get the device as well:
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+parser = argparse.ArgumentParser(description="Train a normalizing flow prior on EOS samples.")
+parser.add_argument("--eos-samples-name", 
+                    type=str, 
+                    default="radio", 
+                    help="EOS samples name (default: radio)")
+parser.add_argument("--source-type", 
+                    type=str, 
+                    default="bns", 
+                    choices=["bns", "nsbh"], 
+                    help="Type of source to model")
+parser.add_argument("--N-samples-training", 
+                    type=int, 
+                    default=100_000, 
+                    help="Number of training samples")
+parser.add_argument("--N-samples-plot", 
+                    type=int, 
+                    default=10_000, 
+                    help="Number of samples for plotting")
+parser.add_argument("--m-max-BH", 
+                    type=float, 
+                    default=5.0, 
+                    help="Maximum BH mass for NSBH sources")
+parser.add_argument("--conditional", 
+                    action="store_true", 
+                    help="Use conditional NF training")
+parser.add_argument("--no-conditional", 
+                    dest="conditional", 
+                    action="store_false", 
+                    help="Disable conditional NF training")
+
+parser.set_defaults(conditional=True)
+parser.add_argument("--take-log-lambda", 
+                    action="store_true", 
+                    help="Take log of Lambda before training")
+parser.add_argument("--no-take-log-lambda", 
+                    dest="take_log_lambda", 
+                    action="store_false")
+parser.set_defaults(take_log_lambda=False)
+parser.add_argument("--use-flowjax", 
+                    action="store_true", 
+                    help="Use flowJAX instead of glasflow")
+parser.add_argument("--no-use-flowjax", 
+                    dest="use_flowjax", 
+                    action="store_false")
+parser.set_defaults(use_flowjax=False)
+parser.add_argument("--scale-input", 
+                    action="store_true", 
+                    help="Scale input before NF training")
+parser.add_argument("--no-scale-input", 
+                    dest="scale_input", 
+                    action="store_false")
+parser.set_defaults(scale_input=True)
+parser.add_argument("--num-epochs", 
+                    type=int, 
+                    default=250, 
+                    help="Number of training epochs")
+parser.add_argument("--learning-rate", 
+                    type=float, 
+                    default=1e-3, 
+                    help="Learning rate")
+parser.add_argument("--batch-size", 
+                    type=int, 
+                    default=256, 
+                    help="Batch size")
+parser.add_argument("--max-patience", 
+                    type=int, 
+                    default=50, 
+                    help="Max patience for early stopping")
+parser.add_argument("--n-transforms", 
+                    type=int, 
+                    default=4, 
+                    help="Number of NF transforms")
+parser.add_argument("--n-neurons", 
+                    type=int, 
+                    default=128, 
+                    help="Number of neurons per layer")
+parser.add_argument("--n-blocks-per-transform", 
+                    type=int, 
+                    default=4, 
+                    help="Number of blocks per transform")
+parser.add_argument("--num-bins", 
+                    type=int, 
+                    default=10, 
+                    help="Number of bins for spline flows")
+parser.add_argument("--nn-depth", 
+                    type=int, 
+                    default=5, 
+                    help="Depth of flowJAX network")
+parser.add_argument("--nn-block-dim", 
+                    type=int, 
+                    default=8, 
+                    help="Block dimension of flowJAX network")
+
     
 class NFPriorCreator:
     """
@@ -56,21 +151,20 @@ class NFPriorCreator:
     """
     
     def __init__(self,
-                 eos_samples_filename: str = None,
+                 eos_samples_name: str = "radio",
                  source_type: str = "bns",
                  N_samples_training: int = 100_000,
                  N_samples_plot: int = 10_000,
                  m_max_BH: float = 5.0,
-                 save_name: str = "",
                  conditional: bool = True,
                  take_log_lambda: bool = False,
-                 use_flowjax: bool = False,  # Toggle between glasflow and flowJAX
+                 use_flowjax: bool = False,
                  num_epochs: int = 250,
                  learning_rate: float = 1e-3,
+                 max_patience: int = 50,
                  batch_size: int = 256,
                  scale_input: bool = True,
                  # glasflow-specific training arguments:
-                 max_patience: int = 50,
                  n_transforms: int = 4,
                  n_neurons: int = 128,
                  n_blocks_per_transform: int = 4,
@@ -83,7 +177,7 @@ class NFPriorCreator:
         Initialize the NFPriorCreator class with the necessary parameters.
 
         Args:
-            eos_samples_filename (str, optional): Filename where we load the EOS samples from, which will be converted into the training data for the NF for binary systems. Defaults to None.
+            eos_samples_name (str, optional): Name of the run from which we load the EOS samples from, which will be converted into the training data for the NF for binary systems. Defaults to `radio`, which only uses the radio timing constraints on MTOV.
             source_type (str, optional): Which kind of source to model: `bns` or `nsbh`. Defaults to "bns".
             N_samples_training (int, optional): Number of training samples to create.. Defaults to 100_000.
             N_samples_plot (int, optional): Number of samples to create the plots. Defaults to 10_000.
@@ -104,10 +198,20 @@ class NFPriorCreator:
         Raises:
             ValueError: If source type is not one of the supported types, i.e., "bns" or "nsbh".
         """
-        self.eos_samples_filename = eos_samples_filename
+        
+        self.eos_samples_name = eos_samples_name
+        self.eos_samples_filename = f"../data/eos/{self.eos_samples_name}/eos_samples.npz"
+        
+        if not os.path.exists(self.eos_samples_filename):
+            # Show all subdirs in 
+            available_subdirs = os.listdir("../data/eos/")
+            raise ValueError(f"File {self.eos_samples_filename} does not exist. Please check the path or the `eos_samples_name` argument. Available subdirs: {available_subdirs}.")
+        print(f"Training data will be loaded from: {self.eos_samples_filename}")
+        
         SUPPORTED_SOURCE_TYPES = ["bns", "nsbh"]
         if source_type not in SUPPORTED_SOURCE_TYPES:
-            raise ValueError(f"source_type must be one of {SUPPORTED_SOURCE_TYPES}, got {source_type} instead. Defaulting to `bns`")
+            raise ValueError(f"source_type must be one of {SUPPORTED_SOURCE_TYPES}, got {source_type} instead.")
+        
         self.source_type = source_type
         self.N_samples_training = N_samples_training
         self.N_samples_plot = N_samples_plot
@@ -139,16 +243,11 @@ class NFPriorCreator:
         
         # Make an outdir based on the given name etc, so that everything is stored in one directory for later on
         backend_suffix = "_flowjax" if self.use_flowjax else ""
-        if len(save_name) > 0:
-            if self.conditional:
-                self.outdir = os.path.join(f"./models/{save_name}_conditional_{self.source_type}{backend_suffix}")
-            else:
-                self.outdir = os.path.join(f"./models/{save_name}_{self.source_type}{backend_suffix}")
+        
+        if self.conditional:
+            self.outdir = os.path.join(f"./models/{self.eos_samples_name}_conditional_{self.source_type}{backend_suffix}")
         else:
-            if self.conditional:
-                self.outdir = os.path.join(f"./models/conditional_{self.source_type}{backend_suffix}")
-            else:
-                self.outdir = os.path.join(f"./models/{self.source_type}{backend_suffix}")
+            self.outdir = os.path.join(f"./models/{self.eos_samples_name}_{self.source_type}{backend_suffix}")
             
         if not os.path.exists(self.outdir):
             os.makedirs(self.outdir)
@@ -160,11 +259,6 @@ class NFPriorCreator:
         """
         Load in the EOS samples from the file and clean them. This returns the masses, radii and Lambdas of the EOS samples.
         """
-        if self.eos_samples_filename is None:
-            # By default, we use the one from an EOS inference on only the radio timing (which ensures MTOV > 2)
-            self.eos_samples_filename = "../data/eos/eos_samples.npz"
-            print(f"No EOS samples filename was provided, so defaulted to: {self.eos_samples_filename}")
-            
         if not os.path.exists(self.eos_samples_filename):
             raise ValueError(f"File {self.eos_samples_filename} does not exist.")
         
@@ -397,7 +491,6 @@ class NFPriorCreator:
             
             # Save the scaler
             scaler_savename = os.path.join(self.outdir, "scaler.gz")
-            print(f"The scaler will be saved with joblib to {scaler_savename}")
             joblib.dump(scaler, scaler_savename)
             print(f"Saved sklearn scaler to {scaler_savename}")
         
@@ -453,18 +546,6 @@ class NFPriorCreator:
         with open(save_path, "w") as f:
             json.dump(self.nf_kwargs, f, indent=4)
             
-        # FIXME: deprecate this?
-        # # Eval the flow and generate samples for visualizations
-        # flow.eval()
-        # with torch.no_grad():
-        #     nf_samples_np = flow.sample(self.N_samples_plot)
-        # nf_samples_np = nf_samples_np.cpu().numpy()
-        
-        # # Dump the NF samples -- this is mainly for ease of plotting stuff later on
-        # nf_samples_save_path = os.path.join(self.outdir, "nf_samples.npz")
-        # np.savez(nf_samples_save_path,
-        #          nf_samples = nf_samples_np)
-        
         print("DONE training!")
         
     def _train_unconditional_glasflow(self) -> CouplingNSF:
@@ -592,11 +673,6 @@ class NFPriorCreator:
                 optimizer.zero_grad()
                 loss = -flow.log_prob(x, conditional=u).mean()
                 
-                # TODO: is this fixed now?
-                # print("Debug flow loss")
-                # print(loss)
-                # print(loss.requires_grad)  # Should be True
-
                 loss.backward()
                 optimizer.step()
 
@@ -623,51 +699,55 @@ class NFPriorCreator:
         """
         Train an unconditional normalizing flow using flowJAX.
         """
-        # Create base distribution
-        base_dist = Normal(jnp.zeros(self.n_inputs))
         
-        # Initialize flow
-        key = jr.key(42)
-        if self.n_inputs == 1:
-            # For 1D, use masked autoregressive flow
-            print("Using masked_autoregressive_flow for unconditional 1D distribution")
-            self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
-            flow = masked_autoregressive_flow(
-                key=key,
-                base_dist=base_dist,
-                flow_layers=self.n_transforms,
-                nn_width=self.n_neurons,
-                nn_depth=self.n_blocks_per_transform
-            )
-        else:
-            # For >1D, use coupling flow
-            print("Using coupling_flow for unconditional >1D distribution")
-            self.nf_kwargs["model_type"] = "coupling_flow"
-            flow = coupling_flow(
-                key=key,
-                base_dist=base_dist,
-                flow_layers=self.n_transforms,
-                nn_width=self.n_neurons,
-                nn_depth=self.n_blocks_per_transform
-            )
+        raise NotImplementedError("Unconditional flowJAX training not implemented yet.")
+    
+    # TODO: clean up this code and train it
+    #     # Create base distribution
+    #     base_dist = Normal(jnp.zeros(self.n_inputs))
         
-        # Train the flow
-        train_key = jr.key(123)
-        x_data = jnp.array(self.x, dtype=jnp.float32)
+    #     # Initialize flow
+    #     key = jr.key(42)
+    #     if self.n_inputs == 1:
+    #         # For 1D, use masked autoregressive flow
+    #         print("Using masked_autoregressive_flow for unconditional 1D distribution")
+    #         self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
+    #         flow = masked_autoregressive_flow(
+    #             key=key,
+    #             base_dist=base_dist,
+    #             flow_layers=self.n_transforms,
+    #             nn_width=self.n_neurons,
+    #             nn_depth=self.n_blocks_per_transform
+    #         )
+    #     else:
+    #         # For >1D, use coupling flow
+    #         print("Using coupling_flow for unconditional >1D distribution")
+    #         self.nf_kwargs["model_type"] = "coupling_flow"
+    #         flow = coupling_flow(
+    #             key=key,
+    #             base_dist=base_dist,
+    #             flow_layers=self.n_transforms,
+    #             nn_width=self.n_neurons,
+    #             nn_depth=self.n_blocks_per_transform
+    #         )
         
-        print(f"Training flowJAX unconditional model on data shape: {x_data.shape}")
-        flow, losses = fit_to_data(
-            key=train_key,
-            dist=flow,
-            data=x_data,
-            learning_rate=self.learning_rate,
-            max_epochs=self.num_epochs,
-            batch_size=self.batch_size,
-            patience=self.max_patience
-        )
+    #     # Train the flow
+    #     train_key = jr.key(123)
+    #     x_data = jnp.array(self.x, dtype=jnp.float32)
         
-        self.plot_loss(np.array(losses))
-        return flow
+    #     print(f"Training flowJAX unconditional model on data shape: {x_data.shape}")
+    #     flow, losses = fit_to_data(
+    #         key=train_key,
+    #         dist=flow,
+    #         data=x_data,
+    #         learning_rate=self.learning_rate,
+    #         max_epochs=self.num_epochs,
+    #         batch_size=self.batch_size,
+    #         patience=self.max_patience
+    #     )
+        
+    #     self.plot_loss(np.array(losses))
+    #     return flow
     
     def _train_conditional_flowjax(self):
         """
@@ -681,7 +761,7 @@ class NFPriorCreator:
         if self.n_inputs == 1:
             raise NotImplementedError("Conditional 1D flowJAX training not implemented yet.")
             
-            # FIXME: do this
+            # TODO: clean up
             # # For 1D conditional, use masked autoregressive flow
             # print("Using masked_autoregressive_flow for conditional 1D distribution")
             # self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
@@ -715,16 +795,9 @@ class NFPriorCreator:
         print(f"  x_data shape: {x_data.shape}")
         print(f"  u_data shape: {u_data.shape}")
         
-        # For conditional training, we need to create a custom loss function
-        def conditional_nll_loss(params, data_batch):
-            """Negative log-likelihood loss for conditional flow."""
-            x_batch, u_batch = data_batch
-            return -flow.log_prob(x_batch, context=u_batch).mean()
-        
         # Create combined dataset
         combined_data = (x_data, u_data)
 
-        subkey = jr.key(1234)        
         flow, losses = fit_to_data(
             train_key,
             flow,
@@ -735,77 +808,10 @@ class NFPriorCreator:
             batch_size=self.batch_size,
         )
         
-        # TODO: use the losses
+        # TODO: use the losses for diagnosis later on!
         
         return flow
     
-    # def _train_conditional_flowjax_custom(self, flow, x_data, u_data, key):
-    #     """
-    #     Custom training loop for conditional flowJAX models.
-    #     """
-    #     import optax
-        
-    #     # Initialize optimizer
-    #     optimizer = optax.adam(self.learning_rate)
-    #     opt_state = optimizer.init(eqx.filter(flow, eqx.is_inexact_array))
-        
-    #     losses = []
-    #     best_loss = float('inf')
-    #     patience_counter = 0
-        
-    #     # Training loop
-    #     n_batches = len(x_data) // self.batch_size
-        
-    #     for epoch in tqdm.tqdm(range(self.num_epochs), desc="Training flowJAX"):
-    #         epoch_loss = 0.0
-    #         key, epoch_key = jr.split(key)
-            
-    #         # Shuffle data
-    #         perm_key, epoch_key = jr.split(epoch_key)
-    #         perm = jr.permutation(perm_key, len(x_data))
-    #         x_shuffled = x_data[perm]
-    #         u_shuffled = u_data[perm]
-            
-    #         for batch_idx in range(n_batches):
-    #             start_idx = batch_idx * self.batch_size
-    #             end_idx = min((batch_idx + 1) * self.batch_size, len(x_data))
-                
-    #             x_batch = x_shuffled[start_idx:end_idx]
-    #             u_batch = u_shuffled[start_idx:end_idx]
-                
-    #             # Compute loss and gradients
-    #             def loss_fn(model):
-    #                 try:
-    #                     log_probs = model.log_prob(x_batch, context=u_batch)
-    #                     return -log_probs.mean()
-    #                 except:
-    #                     # Fallback if context parameter doesn't work
-    #                     return -model.log_prob(x_batch).mean()
-                
-    #             loss, grads = eqx.filter_value_and_grad(loss_fn)(flow)
-                
-    #             # Update parameters
-    #             updates, opt_state = optimizer.update(grads, opt_state, flow)
-    #             flow = eqx.apply_updates(flow, updates)
-                
-    #             epoch_loss += loss
-            
-    #         epoch_loss /= n_batches
-    #         losses.append(float(epoch_loss))
-            
-    #         # Early stopping
-    #         if epoch_loss < best_loss:
-    #             best_loss = epoch_loss
-    #             patience_counter = 0
-    #         else:
-    #             patience_counter += 1
-    #             if patience_counter >= self.max_patience:
-    #                 print(f"Early stopping triggered at epoch {epoch+1}")
-    #                 break
-        
-    #     self.plot_loss(np.array(losses))
-    #     return flow
-        
     def plot_loss(self, loss: np.array) -> None:
         
         # Make a plot of the loss trajectory
@@ -814,21 +820,23 @@ class NFPriorCreator:
         plt.xlabel("Epoch")
         plt.ylabel("Loss")
         plt.title("Training Loss Trajectory")
-        plt.yscale("log")
         save_path = os.path.join(self.outdir, "training_loss.pdf")
         print(f"Saving the training loss plot to {save_path}")
+        plt.savefig(save_path, bbox_inches="tight")
+        try:
+            plt.yscale("log")
+        except Exception as e:
+            print(f"Issue using log scaling in loss plot: {e}")
         plt.savefig(save_path, bbox_inches="tight")
         plt.close()
             
 def main():
-    if len(sys.argv) > 1:
-        source_type = sys.argv[1]
-        print(f"source_type is set by user to {source_type}")
-    else:
-        source_type = "bns" # Default value
-        print(f"source_type is set to the default value of {source_type}")
+    args = parser.parse_args()
     
-    trainer = NFPriorCreator(source_type=source_type)
+    print(f"Starting training with the following parameters:")
+    for key, value in vars(args).items():
+        print(f"    - {key}: {value}")
+    trainer = NFPriorCreator(**vars(args))
     trainer.create_data()
     trainer.train()
     
