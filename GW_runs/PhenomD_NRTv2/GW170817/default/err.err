@@ -1,105 +1,103 @@
-09:34 bilby INFO    : You are running on the Nikhef cluster, setting paths accordingly.
-09:34 bilby INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default
-09:34 bilby INFO    : Using geocent_time from reference parameters: 1187008882.43
-09:34 bilby INFO    : Showing the reference parameters for GW170817
-09:34 bilby INFO    : chirp_mass: 1.1975896
-09:34 bilby INFO    : symmetric_mass_ratio: 0.2461001
-09:34 bilby INFO    : chi_1: 0.01890608
-09:34 bilby INFO    : chi_2: 0.04888488
-09:34 bilby INFO    : lambda_1: 791.04366468
-09:34 bilby INFO    : lambda_2: 891.04366468
-09:34 bilby INFO    : luminosity_distance: 40.06331818
-09:34 bilby INFO    : phase: 5.88649652
-09:34 bilby INFO    : theta_jn: 1.93095421
-09:34 bilby INFO    : psi: 1.59687217
-09:34 bilby INFO    : ra: 3.39736826
-09:34 bilby INFO    : dec: -0.34000186
-09:34 bilby INFO    : mass_ratio: 0.7779384106788951
-09:34 bilby INFO    : mass_1: 1.5621553813557303
-09:34 bilby INFO    : mass_2: 1.2152606746053602
-09:34 bilby INFO    : Geocent time is 1187008882.43 and duration is 128.0
-09:34 bilby INFO    : Using waveform: IMRPhenomD_NRTidalv2
-09:34 bilby INFO    : Relative binning delta 0.01
-09:34 bilby INFO    : Waveform generator initiated with
+18:16 bilby INFO    : You are running on the Nikhef cluster, setting paths accordingly.
+18:16 bilby INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default
+18:16 bilby INFO    : Using geocent_time from reference parameters: 1187008882.43
+18:16 bilby INFO    : Showing the reference parameters for GW170817
+18:16 bilby INFO    : chirp_mass: 1.1975896
+18:16 bilby INFO    : symmetric_mass_ratio: 0.2461001
+18:16 bilby INFO    : chi_1: 0.01890608
+18:16 bilby INFO    : chi_2: 0.04888488
+18:16 bilby INFO    : lambda_1: 791.04366468
+18:16 bilby INFO    : lambda_2: 891.04366468
+18:16 bilby INFO    : luminosity_distance: 40.06331818
+18:16 bilby INFO    : phase: 5.88649652
+18:16 bilby INFO    : theta_jn: 1.93095421
+18:16 bilby INFO    : psi: 1.59687217
+18:16 bilby INFO    : ra: 3.39736826
+18:16 bilby INFO    : dec: -0.34000186
+18:16 bilby INFO    : mass_ratio: 0.7779384106788951
+18:16 bilby INFO    : mass_1: 1.5621553813557303
+18:16 bilby INFO    : mass_2: 1.2152606746053602
+18:16 bilby INFO    : Geocent time is 1187008882.43 and duration is 128.0
+18:16 bilby INFO    : Using waveform: IMRPhenomD_NRTidalv2
+18:16 bilby INFO    : Relative binning delta 0.01
+18:16 bilby INFO    : Waveform generator initiated with
   frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
   time_domain_source_model: None
   parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
-09:34 bilby INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
-09:34 bilby INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/prior.prior
-09:34 bilby INFO    : Using the default priors
-09:34 bilby INFO    : Using priors with 13 parameters: ['chirp_mass', 'mass_ratio', 'luminosity_distance', 'geocent_time', 'chi_1', 'chi_2', 'dec', 'ra', 'theta_jn', 'psi', 'phase', 'lambda_1', 'lambda_2']
-09:34 bilby INFO    : Not loading a previous data generation. Running through data generation steps now
-09:34 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
-09:34 bilby INFO    : Successfully loaded H1:LOSC-STRAIN.
-09:34 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW170817/L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf
-09:35 bilby INFO    : Successfully loaded L1:LOSC-STRAIN.
-09:35 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf
-09:35 bilby INFO    : Successfully loaded V1:LOSC-STRAIN.
-09:35 bilby INFO    : Priors loaded:
-09:35 bilby INFO    : Waveform generator initiated with
+18:16 bilby INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+18:16 bilby INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/prior.prior
+18:16 bilby INFO    : Using the default priors
+18:16 bilby INFO    : Using priors with 13 parameters: ['chirp_mass', 'mass_ratio', 'luminosity_distance', 'geocent_time', 'chi_1', 'chi_2', 'dec', 'ra', 'theta_jn', 'psi', 'phase', 'lambda_1', 'lambda_2']
+18:16 bilby INFO    : Not loading a previous data generation. Running through data generation steps now
+18:16 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
+18:16 bilby INFO    : Successfully loaded H1:LOSC-STRAIN.
+18:16 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW170817/L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf
+18:17 bilby INFO    : Successfully loaded L1:LOSC-STRAIN.
+18:17 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf
+18:17 bilby INFO    : Successfully loaded V1:LOSC-STRAIN.
+18:17 bilby INFO    : Priors loaded:
+18:17 bilby INFO    : Waveform generator initiated with
   frequency_domain_source_model: bilby.gw.source.binary_neutron_star_frequency_sequence
   time_domain_source_model: None
   parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
-09:35 bilby INFO    : Going to construct bins with:
-09:35 bilby INFO    :   - delta: 0.01
-09:35 bilby INFO    :   - minimum_bin_threshold: 1000
-09:35 bilby INFO    : Percentage error on chirp mass 0.10856306033005803 and mass_ratio 0.0
-09:35 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1962894600800453 0.7779384106788951
-09:35 bilby INFO    : Maximum frequency for reference strain is: 1746.78125. Note this will become maximum frequency of the analysis. 223588
-09:35 bilby INFO    : Length of the original frequency array 262145
-09:35 bilby INFO    : Rerunning the binning algorithm with new and old bins:1381, 1000
-09:35 bilby INFO    : Rerunning the binning algorithm with new and old bins:1551, 1381
-09:35 bilby INFO    : Rerunning the binning algorithm with new and old bins:1631, 1551
-09:35 bilby INFO    : Rerunning the binning algorithm with new and old bins:1658, 1631
-09:35 bilby INFO    : Rerunning the binning algorithm with new and old bins:1665, 1658
-09:35 bilby INFO    : Observed errors: 0.0036701186164066466
-09:35 bilby INFO    : Expected errors: 0.01
-09:35 bilby INFO    : Terminating the bisection algorithm. The number of bins made: 1665
-09:35 bilby INFO    : Using bisection method to create the grid
-09:35 bilby INFO    : [  20.          21.6875      22.53125   ... 1719.796875
+18:17 bilby INFO    : Going to construct bins with:
+18:17 bilby INFO    :   - delta: 0.01
+18:17 bilby INFO    :   - minimum_bin_threshold: 1000
+18:17 bilby INFO    : Percentage error on chirp mass 0.10856306033005803 and mass_ratio 0.0
+18:17 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1962894600800453 0.7779384106788951
+18:17 bilby INFO    : Maximum frequency for reference strain is: 1746.78125. Note this will become maximum frequency of the analysis. 223588
+18:17 bilby INFO    : Length of the original frequency array 262145
+18:17 bilby INFO    : Rerunning the binning algorithm with new and old bins:1381, 1000
+18:17 bilby INFO    : Rerunning the binning algorithm with new and old bins:1551, 1381
+18:17 bilby INFO    : Rerunning the binning algorithm with new and old bins:1631, 1551
+18:17 bilby INFO    : Rerunning the binning algorithm with new and old bins:1658, 1631
+18:17 bilby INFO    : Rerunning the binning algorithm with new and old bins:1665, 1658
+18:17 bilby INFO    : Observed errors: 0.0036701186164066466
+18:17 bilby INFO    : Expected errors: 0.01
+18:17 bilby INFO    : Terminating the bisection algorithm. The number of bins made: 1665
+18:17 bilby INFO    : Using bisection method to create the grid
+18:17 bilby INFO    : [  20.          21.6875      22.53125   ... 1719.796875
  1733.2890625 1746.78125  ]
-09:35 bilby INFO    : Make sure ref parameters are correct {'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'chi_1': 0.01890608, 'chi_2': 0.04888488, 'lambda_1': 791.04366468, 'lambda_2': 891.04366468, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
-09:35 bilby INFO    : Starting up the sampler now . . .
-09:35 bilby INFO    : Running for label 'default', output will be saved to '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default'
-09:35 bilby INFO    : Using lal version 7.6.1
-09:35 bilby INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
-09:35 bilby INFO    : Using lalsimulation version 6.1.0
-09:35 bilby INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
-09:35 bilby INFO    : Analysis priors:
-09:35 bilby INFO    : chirp_mass=Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
-09:35 bilby INFO    : mass_ratio=Uniform(minimum=0.125, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
-09:35 bilby INFO    : luminosity_distance=bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
-09:35 bilby INFO    : geocent_time=Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
-09:35 bilby INFO    : chi_1=bilby.gw.prior.AlignedSpin(a_prior=Uniform(minimum=0, maximum=0.05, name=None, latex_label=None, unit=None, boundary=None), z_prior=Uniform(minimum=-1, maximum=1, name=None, latex_label=None, unit=None, boundary=None), name='chi_1', latex_label='$\\chi_1$', unit=None, boundary=None, minimum=-0.05, maximum=0.05, num_interp=100000)
-09:35 bilby INFO    : chi_2=bilby.gw.prior.AlignedSpin(a_prior=Uniform(minimum=0, maximum=0.05, name=None, latex_label=None, unit=None, boundary=None), z_prior=Uniform(minimum=-1, maximum=1, name=None, latex_label=None, unit=None, boundary=None), name='chi_2', latex_label='$\\chi_2$', unit=None, boundary=None, minimum=-0.05, maximum=0.05, num_interp=100000)
-09:35 bilby INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
-09:35 bilby INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
-09:35 bilby INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
-09:35 bilby INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
-09:35 bilby INFO    : phase=Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
-09:35 bilby INFO    : lambda_1=Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
-09:35 bilby INFO    : lambda_2=Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
-09:35 bilby INFO    : Analysis likelihood class: <class 'LikelihoodRB.RelBinning'>
-09:35 bilby INFO    : Analysis likelihood noise evidence: -821080.7425499499
-09:35 bilby INFO    : Single likelihood evaluation took 3.230e-03 s
-09:35 bilby INFO    : Using sampler Dynesty with kwargs {'nlive': 1024, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'npdim': None, 'rstate': None, 'queue_size': 32, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'gradient': None, 'grad_args': None, 'grad_kwargs': None, 'compute_jac': False, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'fmove': 0.9, 'max_move': 100, 'update_func': None, 'ncdim': None, 'blob': False, 'save_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'n_effective': None, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x14b0c8d56aa0>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
-09:35 bilby INFO    : Checkpoint every check_point_delta_t = 3600s
-09:35 bilby INFO    : Using dynesty version 2.1.5
-09:35 bilby INFO    : Using the bilby-implemented acceptance-walk sampling with an average of 60 accepted steps per MCMC and maximum length 5000
-09:35 bilby INFO    : Setting up multiproccesing pool with 32 processes
-09:35 bilby INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle does not exist.
-09:35 bilby INFO    : Generating initial points from the prior
-10:35 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle
-11:36 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle
-12:37 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle
-12:54 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle
-12:55 bilby INFO    : Starting to close worker pool.
-12:55 bilby INFO    : Finished closing worker pool.
-12:55 bilby INFO    : Rejection sampling nested samples to obtain 5512 posterior samples
-12:55 bilby INFO    : Sampling time: 3:19:43.463570
-12:55 bilby INFO    : Summary of results:
-nsamples: 5512
+18:17 bilby INFO    : Make sure ref parameters are correct {'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'chi_1': 0.01890608, 'chi_2': 0.04888488, 'lambda_1': 791.04366468, 'lambda_2': 891.04366468, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
+18:17 bilby INFO    : Starting up the sampler now . . .
+18:17 bilby INFO    : Running for label 'default', output will be saved to '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default'
+18:17 bilby INFO    : Using lal version 7.6.1
+18:17 bilby INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+18:17 bilby INFO    : Using lalsimulation version 6.1.0
+18:17 bilby INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+18:17 bilby INFO    : Analysis priors:
+18:17 bilby INFO    : chirp_mass=Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
+18:17 bilby INFO    : mass_ratio=Uniform(minimum=0.125, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
+18:17 bilby INFO    : luminosity_distance=bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
+18:17 bilby INFO    : geocent_time=Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+18:17 bilby INFO    : chi_1=bilby.gw.prior.AlignedSpin(a_prior=Uniform(minimum=0, maximum=0.05, name=None, latex_label=None, unit=None, boundary=None), z_prior=Uniform(minimum=-1, maximum=1, name=None, latex_label=None, unit=None, boundary=None), name='chi_1', latex_label='$\\chi_1$', unit=None, boundary=None, minimum=-0.05, maximum=0.05, num_interp=100000)
+18:17 bilby INFO    : chi_2=bilby.gw.prior.AlignedSpin(a_prior=Uniform(minimum=0, maximum=0.05, name=None, latex_label=None, unit=None, boundary=None), z_prior=Uniform(minimum=-1, maximum=1, name=None, latex_label=None, unit=None, boundary=None), name='chi_2', latex_label='$\\chi_2$', unit=None, boundary=None, minimum=-0.05, maximum=0.05, num_interp=100000)
+18:17 bilby INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+18:17 bilby INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+18:17 bilby INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+18:17 bilby INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+18:17 bilby INFO    : phase=Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+18:17 bilby INFO    : lambda_1=Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
+18:17 bilby INFO    : lambda_2=Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
+18:17 bilby INFO    : Analysis likelihood class: <class 'LikelihoodRB.RelBinning'>
+18:17 bilby INFO    : Analysis likelihood noise evidence: -821080.7425499499
+18:17 bilby INFO    : Single likelihood evaluation took 2.586e-03 s
+18:17 bilby INFO    : Using sampler Dynesty with kwargs {'nlive': 1024, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'npdim': None, 'rstate': None, 'queue_size': 64, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'gradient': None, 'grad_args': None, 'grad_kwargs': None, 'compute_jac': False, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'fmove': 0.9, 'max_move': 100, 'update_func': None, 'ncdim': None, 'blob': False, 'save_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'n_effective': None, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x1486ab212a40>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
+18:17 bilby INFO    : Checkpoint every check_point_delta_t = 3600s
+18:17 bilby INFO    : Using dynesty version 2.1.5
+18:17 bilby INFO    : Using the bilby-implemented acceptance-walk sampling with an average of 60 accepted steps per MCMC and maximum length 5000
+18:17 bilby INFO    : Setting up multiproccesing pool with 64 processes
+18:17 bilby INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle does not exist.
+18:17 bilby INFO    : Generating initial points from the prior
+18:17 bilby INFO    : Generating initial points from the prior DONE
+19:10 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/PhenomD_NRTv2/GW170817/default/default_resume.pickle
+19:11 bilby INFO    : Starting to close worker pool.
+19:11 bilby INFO    : Finished closing worker pool.
+19:11 bilby INFO    : Rejection sampling nested samples to obtain 5290 posterior samples
+19:11 bilby INFO    : Sampling time: 0:53:36.186459
+19:11 bilby INFO    : Summary of results:
+nsamples: 5290
 ln_noise_evidence: -821080.743
-ln_evidence: -820559.996 +/-  0.211
-ln_bayes_factor: 520.746 +/-  0.211
+ln_evidence: -820559.568 +/-  0.205
+ln_bayes_factor: 521.174 +/-  0.205
 

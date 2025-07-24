@@ -4,1378 +4,219 @@ waveform_generator
 WaveformGenerator(duration=128.0, sampling_frequency=4096.0, start_time=1187008756.43, frequency_domain_source_model=binary_neutron_star_frequency_sequence, time_domain_source_model=None, parameter_conversion=convert_to_lal_binary_neutron_star_parameters, waveform_arguments={'waveform_approximant': 'IMRPhenomD_NRTidalv2', 'reference_frequency': 20.0, 'minimum_frequency': 20.0, 'maximum_frequency': 2048.0})
 ref_injection
 {'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'chi_1': 0.01890608, 'chi_2': 0.04888488, 'lambda_1': 791.04366468, 'lambda_2': 891.04366468, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-Checking bad values
-2731it [0:00:23 bound:0 nc:  3 ncall:1.4e+04 eff:19.0% logz-ratio=-10.32+/-0.06 dlogz:111.129>0.1]
-3745it [0:01:23 bound:0 nc: 86 ncall:3.7e+04 eff:10.1% logz-ratio=-3.23+/-0.07 dlogz:111.803>0.1]
-3828it [0:02:39 bound:2 nc:867 ncall:6.7e+04 eff:5.7% logz-ratio=-2.59+/-0.07 dlogz:111.084>0.1]
-3891it [0:03:55 bound:4 nc:899 ncall:1.3e+05 eff:3.1% logz-ratio=-2.12+/-0.07 dlogz:119.463>0.1]
-3955it [0:05:09 bound:6 nc:769 ncall:1.9e+05 eff:2.1% logz-ratio=-1.62+/-0.07 dlogz:118.900>0.1]
-4016it [0:06:24 bound:8 nc:973 ncall:2.5e+05 eff:1.6% logz-ratio=-1.14+/-0.07 dlogz:118.359>0.1]
-4080it [0:07:37 bound:10 nc:1068 ncall:3.0e+05 eff:1.3% logz-ratio=-0.66+/-0.07 dlogz:117.818>0.1]
-4143it [0:08:57 bound:12 nc:541 ncall:3.6e+05 eff:1.1% logz-ratio=-0.19+/-0.07 dlogz:117.286>0.1]
-4205it [0:10:13 bound:14 nc:975 ncall:4.2e+05 eff:1.0% logz-ratio=0.28+/-0.07 dlogz:116.755>0.1]
-4267it [0:11:28 bound:16 nc:956 ncall:4.9e+05 eff:0.9% logz-ratio=0.73+/-0.07 dlogz:116.239>0.1]
-4328it [0:12:41 bound:18 nc:886 ncall:5.4e+05 eff:0.8% logz-ratio=1.23+/-0.07 dlogz:115.687>0.1]
-4391it [0:13:56 bound:20 nc:1172 ncall:6.0e+05 eff:0.7% logz-ratio=1.79+/-0.07 dlogz:115.791>0.1]
-4453it [0:15:07 bound:22 nc:999 ncall:6.6e+05 eff:0.7% logz-ratio=2.32+/-0.07 dlogz:115.208>0.1]
-4517it [0:16:28 bound:24 nc:1048 ncall:7.1e+05 eff:0.6% logz-ratio=2.82+/-0.07 dlogz:114.641>0.1]
-4580it [0:17:48 bound:26 nc:1011 ncall:7.8e+05 eff:0.6% logz-ratio=3.30+/-0.07 dlogz:115.887>0.1]
-4642it [0:19:11 bound:28 nc:682 ncall:8.4e+05 eff:0.6% logz-ratio=3.81+/-0.07 dlogz:115.323>0.1]
-4706it [0:20:31 bound:30 nc:1072 ncall:9.0e+05 eff:0.5% logz-ratio=4.33+/-0.07 dlogz:195.342>0.1]
-4770it [0:21:47 bound:32 nc:1297 ncall:9.6e+05 eff:0.5% logz-ratio=4.83+/-0.07 dlogz:293.317>0.1]
-4833it [0:23:08 bound:34 nc:583 ncall:1.0e+06 eff:0.5% logz-ratio=5.30+/-0.07 dlogz:292.788>0.1]
-4896it [0:24:25 bound:36 nc:1130 ncall:1.1e+06 eff:0.5% logz-ratio=5.80+/-0.07 dlogz:292.225>0.1]
-4959it [0:25:47 bound:38 nc:951 ncall:1.1e+06 eff:0.4% logz-ratio=6.35+/-0.08 dlogz:291.618>0.1]
-5023it [0:27:03 bound:40 nc:917 ncall:1.2e+06 eff:0.4% logz-ratio=6.93+/-0.08 dlogz:290.969>0.1]
-5085it [0:28:24 bound:42 nc:1314 ncall:1.3e+06 eff:0.4% logz-ratio=7.49+/-0.08 dlogz:290.354>0.1]
-5148it [0:29:47 bound:44 nc:944 ncall:1.3e+06 eff:0.4% logz-ratio=8.06+/-0.08 dlogz:289.720>0.1]
-5211it [0:31:06 bound:46 nc:739 ncall:1.4e+06 eff:0.4% logz-ratio=8.64+/-0.08 dlogz:289.076>0.1]
-5273it [0:32:27 bound:48 nc:851 ncall:1.5e+06 eff:0.4% logz-ratio=9.23+/-0.08 dlogz:288.429>0.1]
-5336it [0:33:48 bound:50 nc:1045 ncall:1.5e+06 eff:0.3% logz-ratio=9.87+/-0.08 dlogz:287.729>0.1]
-5400it [0:35:08 bound:52 nc:1023 ncall:1.6e+06 eff:0.3% logz-ratio=10.53+/-0.08 dlogz:287.012>0.1]
-5464it [0:36:33 bound:54 nc:968 ncall:1.7e+06 eff:0.3% logz-ratio=11.19+/-0.08 dlogz:286.284>0.1]
-5526it [0:37:53 bound:56 nc:2184 ncall:1.7e+06 eff:0.3% logz-ratio=11.83+/-0.08 dlogz:285.579>0.1]
-5590it [0:39:12 bound:58 nc:914 ncall:1.8e+06 eff:0.3% logz-ratio=12.45+/-0.08 dlogz:284.903>0.1]
-5654it [0:40:32 bound:60 nc:883 ncall:1.8e+06 eff:0.3% logz-ratio=13.21+/-0.08 dlogz:284.079>0.1]
-5718it [0:41:54 bound:62 nc:1227 ncall:1.9e+06 eff:0.3% logz-ratio=13.98+/-0.08 dlogz:283.251>0.1]
-5780it [0:43:14 bound:64 nc:822 ncall:2.0e+06 eff:0.3% logz-ratio=14.78+/-0.08 dlogz:282.390>0.1]
-5842it [0:44:33 bound:66 nc:1017 ncall:2.0e+06 eff:0.3% logz-ratio=15.65+/-0.08 dlogz:281.463>0.1]
-5905it [0:45:50 bound:68 nc:1001 ncall:2.1e+06 eff:0.3% logz-ratio=16.45+/-0.08 dlogz:280.597>0.1]
-5968it [0:47:11 bound:70 nc:1042 ncall:2.2e+06 eff:0.3% logz-ratio=17.28+/-0.08 dlogz:279.704>0.1]
-6031it [0:48:30 bound:72 nc:1136 ncall:2.2e+06 eff:0.3% logz-ratio=18.05+/-0.08 dlogz:278.869>0.1]
-6094it [0:49:50 bound:74 nc:1260 ncall:2.3e+06 eff:0.3% logz-ratio=18.85+/-0.09 dlogz:278.011>0.1]
-6154it [0:51:06 bound:76 nc:1082 ncall:2.4e+06 eff:0.3% logz-ratio=19.64+/-0.09 dlogz:277.164>0.1]
-6217it [0:52:24 bound:78 nc:881 ncall:2.4e+06 eff:0.3% logz-ratio=20.50+/-0.09 dlogz:276.248>0.1]
-6279it [0:53:43 bound:80 nc:370 ncall:2.5e+06 eff:0.3% logz-ratio=21.38+/-0.09 dlogz:275.302>0.1]
-6342it [0:55:03 bound:82 nc:840 ncall:2.5e+06 eff:0.3% logz-ratio=22.33+/-0.09 dlogz:274.298>0.1]
-6406it [0:56:22 bound:84 nc:1208 ncall:2.6e+06 eff:0.2% logz-ratio=23.41+/-0.09 dlogz:273.148>0.1]
-6469it [0:57:46 bound:86 nc:965 ncall:2.7e+06 eff:0.2% logz-ratio=24.48+/-0.09 dlogz:272.023>0.1]
-6532it [0:59:06 bound:88 nc:799 ncall:2.7e+06 eff:0.2% logz-ratio=25.60+/-0.09 dlogz:270.841>0.1]
-6596it [1:00:15 bound:90 nc:835 ncall:2.8e+06 eff:0.2% logz-ratio=26.61+/-0.09 dlogz:269.762>0.1]
-6628it [1:01:16 bound:91 nc:941 ncall:2.8e+06 eff:0.2% logz-ratio=27.12+/-0.09 dlogz:269.219>0.1]
-6691it [1:02:34 bound:93 nc:945 ncall:2.9e+06 eff:0.2% logz-ratio=28.11+/-0.09 dlogz:268.172>0.1]
-6754it [1:03:54 bound:95 nc:1134 ncall:2.9e+06 eff:0.2% logz-ratio=29.35+/-0.09 dlogz:266.874>0.1]
-6817it [1:05:16 bound:97 nc:908 ncall:3.0e+06 eff:0.2% logz-ratio=30.64+/-0.09 dlogz:265.522>0.1]
-6881it [1:06:30 bound:99 nc:688 ncall:3.1e+06 eff:0.2% logz-ratio=31.93+/-0.09 dlogz:264.173>0.1]
-6944it [1:07:48 bound:101 nc:1066 ncall:3.1e+06 eff:0.2% logz-ratio=33.11+/-0.09 dlogz:262.929>0.1]
-7008it [1:09:10 bound:103 nc:1282 ncall:3.2e+06 eff:0.2% logz-ratio=34.46+/-0.09 dlogz:261.519>0.1]
-7072it [1:10:23 bound:105 nc:871 ncall:3.3e+06 eff:0.2% logz-ratio=35.85+/-0.09 dlogz:260.063>0.1]
-7134it [1:11:51 bound:107 nc:1288 ncall:3.3e+06 eff:0.2% logz-ratio=37.44+/-0.09 dlogz:258.421>0.1]
-7198it [1:13:10 bound:109 nc:925 ncall:3.4e+06 eff:0.2% logz-ratio=38.88+/-0.09 dlogz:256.911>0.1]
-7262it [1:14:29 bound:111 nc:1051 ncall:3.4e+06 eff:0.2% logz-ratio=40.30+/-0.09 dlogz:255.439>0.1]
-7325it [1:15:50 bound:113 nc:1103 ncall:3.5e+06 eff:0.2% logz-ratio=41.93+/-0.10 dlogz:253.740>0.1]
-7387it [1:17:08 bound:115 nc:939 ncall:3.6e+06 eff:0.2% logz-ratio=43.47+/-0.10 dlogz:252.145>0.1]
-7450it [1:18:25 bound:117 nc:1102 ncall:3.6e+06 eff:0.2% logz-ratio=45.02+/-0.10 dlogz:250.526>0.1]
-7514it [1:19:46 bound:119 nc:865 ncall:3.7e+06 eff:0.2% logz-ratio=46.38+/-0.10 dlogz:249.111>0.1]
-7578it [1:21:06 bound:121 nc:996 ncall:3.7e+06 eff:0.2% logz-ratio=47.98+/-0.10 dlogz:247.444>0.1]
-7641it [1:22:22 bound:123 nc:1016 ncall:3.8e+06 eff:0.2% logz-ratio=49.37+/-0.10 dlogz:251.282>0.1]
-7702it [1:23:44 bound:125 nc:485 ncall:3.9e+06 eff:0.2% logz-ratio=50.88+/-0.10 dlogz:269.053>0.1]
-7764it [1:25:09 bound:127 nc:952 ncall:3.9e+06 eff:0.2% logz-ratio=52.57+/-0.10 dlogz:267.304>0.1]
-7827it [1:26:27 bound:129 nc:820 ncall:4.0e+06 eff:0.2% logz-ratio=54.20+/-0.10 dlogz:265.610>0.1]
-7890it [1:27:51 bound:131 nc:947 ncall:4.1e+06 eff:0.2% logz-ratio=55.75+/-0.10 dlogz:263.997>0.1]
-7953it [1:29:07 bound:133 nc:773 ncall:4.1e+06 eff:0.2% logz-ratio=57.46+/-0.10 dlogz:262.222>0.1]
-8015it [1:30:27 bound:135 nc:946 ncall:4.2e+06 eff:0.2% logz-ratio=59.01+/-0.10 dlogz:260.612>0.1]
-8079it [1:31:45 bound:137 nc:951 ncall:4.2e+06 eff:0.2% logz-ratio=60.96+/-0.10 dlogz:258.605>0.1]
-8141it [1:33:12 bound:139 nc:1703 ncall:4.3e+06 eff:0.2% logz-ratio=62.95+/-0.10 dlogz:256.553>0.1]
-8204it [1:34:33 bound:141 nc:935 ncall:4.4e+06 eff:0.2% logz-ratio=64.69+/-0.10 dlogz:254.748>0.1]
-8268it [1:35:55 bound:143 nc:1196 ncall:4.4e+06 eff:0.2% logz-ratio=66.26+/-0.10 dlogz:253.117>0.1]
-8331it [1:37:16 bound:145 nc:1094 ncall:4.5e+06 eff:0.2% logz-ratio=67.81+/-0.10 dlogz:251.503>0.1]
-8391it [1:38:36 bound:147 nc:808 ncall:4.6e+06 eff:0.2% logz-ratio=69.66+/-0.10 dlogz:249.604>0.1]
-8450it [1:39:52 bound:149 nc:978 ncall:4.6e+06 eff:0.2% logz-ratio=71.40+/-0.10 dlogz:247.800>0.1]
-8512it [1:41:12 bound:151 nc:1106 ncall:4.7e+06 eff:0.2% logz-ratio=72.96+/-0.10 dlogz:246.177>0.1]
-8575it [1:42:34 bound:153 nc:1067 ncall:4.7e+06 eff:0.2% logz-ratio=74.77+/-0.10 dlogz:244.312>0.1]
-8638it [1:43:55 bound:155 nc:1118 ncall:4.8e+06 eff:0.2% logz-ratio=76.42+/-0.10 dlogz:242.598>0.1]
-8701it [1:45:22 bound:157 nc:1006 ncall:4.9e+06 eff:0.2% logz-ratio=78.19+/-0.10 dlogz:240.768>0.1]
-8763it [1:46:43 bound:159 nc:1085 ncall:4.9e+06 eff:0.2% logz-ratio=79.96+/-0.10 dlogz:238.937>0.1]
-8826it [1:48:04 bound:161 nc:741 ncall:5.0e+06 eff:0.2% logz-ratio=81.91+/-0.10 dlogz:236.924>0.1]
-8886it [1:49:23 bound:163 nc:978 ncall:5.0e+06 eff:0.2% logz-ratio=84.00+/-0.10 dlogz:234.780>0.1]
-8949it [1:50:43 bound:165 nc:916 ncall:5.1e+06 eff:0.2% logz-ratio=86.08+/-0.10 dlogz:232.635>0.1]
-9012it [1:52:02 bound:167 nc:322 ncall:5.2e+06 eff:0.2% logz-ratio=87.88+/-0.10 dlogz:268.133>0.1]
-9075it [1:53:21 bound:169 nc:700 ncall:5.2e+06 eff:0.2% logz-ratio=89.65+/-0.10 dlogz:266.305>0.1]
-9139it [1:54:51 bound:171 nc:793 ncall:5.3e+06 eff:0.2% logz-ratio=91.65+/-0.11 dlogz:264.247>0.1]
-9201it [1:56:13 bound:173 nc:847 ncall:5.4e+06 eff:0.2% logz-ratio=93.61+/-0.11 dlogz:262.221>0.1]
-9264it [1:57:26 bound:175 nc:631 ncall:5.4e+06 eff:0.2% logz-ratio=95.51+/-0.11 dlogz:260.257>0.1]
-9327it [1:58:48 bound:177 nc:886 ncall:5.5e+06 eff:0.2% logz-ratio=97.29+/-0.11 dlogz:258.416>0.1]
-9389it [2:00:08 bound:179 nc:949 ncall:5.5e+06 eff:0.2% logz-ratio=99.71+/-0.11 dlogz:287.023>0.1]
-9450it [2:01:27 bound:181 nc:1023 ncall:5.6e+06 eff:0.2% logz-ratio=101.70+/-0.11 dlogz:284.963>0.1]
-9482it [2:02:27 bound:182 nc:913 ncall:5.6e+06 eff:0.2% logz-ratio=102.61+/-0.11 dlogz:284.017>0.1]
-9545it [2:03:42 bound:184 nc:630 ncall:5.7e+06 eff:0.2% logz-ratio=104.49+/-0.11 dlogz:282.081>0.1]
-9607it [2:05:03 bound:186 nc:1085 ncall:5.8e+06 eff:0.2% logz-ratio=106.79+/-0.11 dlogz:279.721>0.1]
-9669it [2:06:25 bound:188 nc:1223 ncall:5.8e+06 eff:0.2% logz-ratio=108.76+/-0.11 dlogz:277.685>0.1]
-9733it [2:07:45 bound:190 nc:1143 ncall:5.9e+06 eff:0.2% logz-ratio=110.64+/-0.11 dlogz:275.745>0.1]
-9797it [2:09:09 bound:192 nc:1058 ncall:6.0e+06 eff:0.2% logz-ratio=112.53+/-0.11 dlogz:273.794>0.1]
-9859it [2:10:26 bound:194 nc:975 ncall:6.0e+06 eff:0.2% logz-ratio=114.38+/-0.11 dlogz:271.879>0.1]
-9922it [2:11:45 bound:196 nc:992 ncall:6.1e+06 eff:0.2% logz-ratio=116.30+/-0.11 dlogz:269.904>0.1]
-9984it [2:13:12 bound:198 nc:2414 ncall:6.1e+06 eff:0.2% logz-ratio=118.44+/-0.11 dlogz:267.702>0.1]
-10048it [2:14:35 bound:200 nc:930 ncall:6.2e+06 eff:0.2% logz-ratio=120.37+/-0.11 dlogz:265.715>0.1]
-10111it [2:15:57 bound:202 nc:1201 ncall:6.3e+06 eff:0.2% logz-ratio=122.82+/-0.11 dlogz:284.404>0.1]
-10174it [2:17:15 bound:204 nc:727 ncall:6.3e+06 eff:0.2% logz-ratio=125.35+/-0.11 dlogz:281.809>0.1]
-10238it [2:18:38 bound:206 nc:1097 ncall:6.4e+06 eff:0.2% logz-ratio=127.73+/-0.11 dlogz:279.369>0.1]
-10301it [2:20:06 bound:208 nc:1143 ncall:6.5e+06 eff:0.2% logz-ratio=129.70+/-0.11 dlogz:277.340>0.1]
-10364it [2:21:26 bound:210 nc:532 ncall:6.5e+06 eff:0.2% logz-ratio=132.12+/-0.11 dlogz:274.851>0.1]
-10427it [2:22:52 bound:212 nc:801 ncall:6.6e+06 eff:0.2% logz-ratio=134.49+/-0.11 dlogz:272.417>0.1]
-10490it [2:24:19 bound:214 nc:641 ncall:6.6e+06 eff:0.2% logz-ratio=136.38+/-0.11 dlogz:270.468>0.1]
-10554it [2:25:40 bound:216 nc:1250 ncall:6.7e+06 eff:0.2% logz-ratio=138.37+/-0.11 dlogz:268.413>0.1]
-10618it [2:27:07 bound:218 nc:689 ncall:6.8e+06 eff:0.2% logz-ratio=140.61+/-0.11 dlogz:266.108>0.1]
-10682it [2:28:24 bound:220 nc:1211 ncall:6.8e+06 eff:0.2% logz-ratio=142.72+/-0.11 dlogz:263.949>0.1]
-10746it [2:29:45 bound:222 nc:708 ncall:6.9e+06 eff:0.2% logz-ratio=145.07+/-0.11 dlogz:261.526>0.1]
-10809it [2:31:01 bound:224 nc:935 ncall:6.9e+06 eff:0.2% logz-ratio=147.43+/-0.11 dlogz:259.114>0.1]
-10873it [2:32:21 bound:226 nc:830 ncall:7.0e+06 eff:0.2% logz-ratio=149.55+/-0.11 dlogz:256.919>0.1]
-10936it [2:33:39 bound:228 nc:1148 ncall:7.1e+06 eff:0.2% logz-ratio=151.46+/-0.11 dlogz:254.952>0.1]
-11000it [2:35:01 bound:230 nc:1291 ncall:7.1e+06 eff:0.2% logz-ratio=153.84+/-0.11 dlogz:252.515>0.1]
-11063it [2:36:26 bound:232 nc:1196 ncall:7.2e+06 eff:0.2% logz-ratio=156.11+/-0.11 dlogz:250.185>0.1]
-11126it [2:37:48 bound:234 nc:917 ncall:7.2e+06 eff:0.2% logz-ratio=158.45+/-0.11 dlogz:247.787>0.1]
-11189it [2:39:06 bound:236 nc:1247 ncall:7.3e+06 eff:0.2% logz-ratio=160.83+/-0.11 dlogz:245.339>0.1]
-11251it [2:40:35 bound:238 nc:653 ncall:7.4e+06 eff:0.2% logz-ratio=163.16+/-0.12 dlogz:242.942>0.1]
-11315it [2:41:52 bound:240 nc:1097 ncall:7.4e+06 eff:0.2% logz-ratio=165.68+/-0.12 dlogz:240.373>0.1]
-11379it [2:43:16 bound:242 nc:938 ncall:7.5e+06 eff:0.2% logz-ratio=168.62+/-0.12 dlogz:246.215>0.1]
-11442it [2:44:35 bound:244 nc:898 ncall:7.5e+06 eff:0.2% logz-ratio=171.40+/-0.12 dlogz:243.367>0.1]
-11506it [2:45:57 bound:246 nc:845 ncall:7.6e+06 eff:0.2% logz-ratio=173.95+/-0.12 dlogz:240.747>0.1]
-11570it [2:47:27 bound:248 nc:1229 ncall:7.7e+06 eff:0.2% logz-ratio=176.76+/-0.12 dlogz:268.055>0.1]
-11634it [2:48:49 bound:250 nc:638 ncall:7.7e+06 eff:0.2% logz-ratio=179.10+/-0.12 dlogz:265.644>0.1]
-11697it [2:50:03 bound:252 nc:878 ncall:7.8e+06 eff:0.2% logz-ratio=181.63+/-0.12 dlogz:263.059>0.1]
-11761it [2:51:24 bound:254 nc:918 ncall:7.8e+06 eff:0.1% logz-ratio=183.93+/-0.12 dlogz:260.680>0.1]
-11825it [2:52:47 bound:256 nc:894 ncall:7.9e+06 eff:0.1% logz-ratio=186.30+/-0.12 dlogz:258.255>0.1]
-11889it [2:54:11 bound:258 nc:563 ncall:8.0e+06 eff:0.1% logz-ratio=188.33+/-0.12 dlogz:256.155>0.1]
-11951it [2:55:36 bound:260 nc:869 ncall:8.0e+06 eff:0.1% logz-ratio=190.44+/-0.12 dlogz:253.985>0.1]
-12014it [2:57:03 bound:262 nc:1100 ncall:8.1e+06 eff:0.1% logz-ratio=192.79+/-0.12 dlogz:251.587>0.1]
-12077it [2:58:27 bound:264 nc:733 ncall:8.2e+06 eff:0.1% logz-ratio=195.54+/-0.12 dlogz:248.779>0.1]
-12141it [2:59:43 bound:266 nc:760 ncall:8.2e+06 eff:0.1% logz-ratio=198.09+/-0.12 dlogz:246.162>0.1]
-12205it [3:00:54 bound:268 nc:980 ncall:8.3e+06 eff:0.1% logz-ratio=201.03+/-0.12 dlogz:264.646>0.1]
-12269it [3:02:02 bound:270 nc:861 ncall:8.3e+06 eff:0.1% logz-ratio=203.45+/-0.12 dlogz:262.150>0.1]
-12304it [3:03:03 bound:271 nc:997 ncall:8.4e+06 eff:0.1% logz-ratio=204.67+/-0.12 dlogz:260.904>0.1]
-12363it [3:04:22 bound:273 nc:649 ncall:8.4e+06 eff:0.1% logz-ratio=207.27+/-0.12 dlogz:258.255>0.1]
-12426it [3:05:44 bound:275 nc:952 ncall:8.5e+06 eff:0.1% logz-ratio=210.06+/-0.12 dlogz:255.394>0.1]
-12490it [3:07:03 bound:277 nc:967 ncall:8.5e+06 eff:0.1% logz-ratio=212.58+/-0.12 dlogz:252.811>0.1]
-12553it [3:08:23 bound:279 nc:1254 ncall:8.6e+06 eff:0.1% logz-ratio=215.81+/-0.12 dlogz:251.635>0.1]
-12616it [3:09:40 bound:281 nc:1059 ncall:8.7e+06 eff:0.1% logz-ratio=218.28+/-0.12 dlogz:249.097>0.1]
-12680it [3:11:13 bound:283 nc:707 ncall:8.7e+06 eff:0.1% logz-ratio=220.98+/-0.12 dlogz:246.347>0.1]
-12743it [3:12:33 bound:285 nc:923 ncall:8.8e+06 eff:0.1% logz-ratio=223.37+/-0.12 dlogz:243.879>0.1]
-12807it [3:13:51 bound:287 nc:1203 ncall:8.8e+06 eff:0.1% logz-ratio=226.45+/-0.12 dlogz:240.755>0.1]
-12870it [3:15:13 bound:289 nc:1004 ncall:8.9e+06 eff:0.1% logz-ratio=228.86+/-0.12 dlogz:238.264>0.1]
-12934it [3:16:39 bound:291 nc:1105 ncall:9.0e+06 eff:0.1% logz-ratio=231.40+/-0.12 dlogz:235.670>0.1]
-12998it [3:17:55 bound:293 nc:909 ncall:9.0e+06 eff:0.1% logz-ratio=233.75+/-0.12 dlogz:233.245>0.1]
-13060it [3:19:23 bound:295 nc:545 ncall:9.1e+06 eff:0.1% logz-ratio=235.83+/-0.12 dlogz:231.113>0.1]
-13124it [3:20:44 bound:297 nc:1034 ncall:9.1e+06 eff:0.1% logz-ratio=238.49+/-0.12 dlogz:228.398>0.1]
-13187it [3:22:01 bound:299 nc:1055 ncall:9.2e+06 eff:0.1% logz-ratio=241.10+/-0.12 dlogz:225.724>0.1]
-13251it [3:23:22 bound:301 nc:930 ncall:9.3e+06 eff:0.1% logz-ratio=243.45+/-0.12 dlogz:223.305>0.1]
-13315it [3:24:39 bound:303 nc:1085 ncall:9.3e+06 eff:0.1% logz-ratio=245.94+/-0.12 dlogz:220.750>0.1]
-13378it [3:25:52 bound:305 nc:434 ncall:9.4e+06 eff:0.1% logz-ratio=248.54+/-0.12 dlogz:218.093>0.1]
-13440it [3:27:07 bound:307 nc:1150 ncall:9.4e+06 eff:0.1% logz-ratio=252.02+/-0.13 dlogz:214.567>0.1]
-13498it [3:28:25 bound:309 nc:825 ncall:9.5e+06 eff:0.1% logz-ratio=254.58+/-0.12 dlogz:211.935>0.1]
-13562it [3:29:49 bound:311 nc:868 ncall:9.6e+06 eff:0.1% logz-ratio=257.11+/-0.12 dlogz:209.344>0.1]
-13624it [3:31:09 bound:313 nc:1425 ncall:9.6e+06 eff:0.1% logz-ratio=259.69+/-0.13 dlogz:206.708>0.1]
-13687it [3:32:32 bound:315 nc:925 ncall:9.7e+06 eff:0.1% logz-ratio=262.82+/-0.13 dlogz:203.521>0.1]
-13749it [3:33:49 bound:317 nc:567 ncall:9.7e+06 eff:0.1% logz-ratio=265.95+/-0.13 dlogz:200.321>0.1]
-13813it [3:35:04 bound:319 nc:1013 ncall:9.8e+06 eff:0.1% logz-ratio=268.54+/-0.13 dlogz:229.129>0.1]
-13876it [3:36:13 bound:321 nc:1205 ncall:9.9e+06 eff:0.1% logz-ratio=271.17+/-0.13 dlogz:226.442>0.1]
-13940it [3:37:33 bound:323 nc:1468 ncall:9.9e+06 eff:0.1% logz-ratio=273.78+/-0.13 dlogz:223.770>0.1]
-14003it [3:38:48 bound:325 nc:884 ncall:1.0e+07 eff:0.1% logz-ratio=276.41+/-0.13 dlogz:221.077>0.1]
-14067it [3:40:09 bound:327 nc:1097 ncall:1.0e+07 eff:0.1% logz-ratio=279.38+/-0.13 dlogz:218.045>0.1]
-14129it [3:41:33 bound:329 nc:1391 ncall:1.0e+07 eff:0.1% logz-ratio=281.94+/-0.13 dlogz:215.426>0.1]
-14191it [3:42:53 bound:331 nc:1123 ncall:1.0e+07 eff:0.1% logz-ratio=284.77+/-0.13 dlogz:212.557>0.1]
-14255it [3:44:09 bound:333 nc:848 ncall:1.0e+07 eff:0.1% logz-ratio=287.45+/-0.13 dlogz:209.785>0.1]
-14317it [3:45:26 bound:335 nc:895 ncall:1.0e+07 eff:0.1% logz-ratio=289.75+/-0.13 dlogz:207.421>0.1]
-14381it [3:46:43 bound:337 nc:1229 ncall:1.0e+07 eff:0.1% logz-ratio=292.43+/-0.13 dlogz:204.688>0.1]
-14442it [3:48:00 bound:339 nc:916 ncall:1.0e+07 eff:0.1% logz-ratio=295.00+/-0.13 dlogz:202.060>0.1]
-14506it [3:49:16 bound:341 nc:923 ncall:1.0e+07 eff:0.1% logz-ratio=297.89+/-0.13 dlogz:199.109>0.1]
-14569it [3:50:36 bound:343 nc:908 ncall:1.0e+07 eff:0.1% logz-ratio=300.28+/-0.13 dlogz:196.646>0.1]
-14631it [3:51:54 bound:345 nc:1850 ncall:1.1e+07 eff:0.1% logz-ratio=302.70+/-0.13 dlogz:194.186>0.1]
-14693it [3:53:26 bound:347 nc:901 ncall:1.1e+07 eff:0.1% logz-ratio=305.64+/-0.13 dlogz:191.167>0.1]
-14755it [3:54:45 bound:349 nc:1033 ncall:1.1e+07 eff:0.1% logz-ratio=308.35+/-0.13 dlogz:188.404>0.1]
-14817it [3:56:01 bound:351 nc:415 ncall:1.1e+07 eff:0.1% logz-ratio=310.75+/-0.13 dlogz:185.942>0.1]
-14881it [3:57:12 bound:353 nc:982 ncall:1.1e+07 eff:0.1% logz-ratio=313.09+/-0.13 dlogz:183.529>0.1]
-14945it [3:58:30 bound:355 nc:809 ncall:1.1e+07 eff:0.1% logz-ratio=315.00+/-0.13 dlogz:181.559>0.1]
-15008it [3:59:39 bound:357 nc:834 ncall:1.1e+07 eff:0.1% logz-ratio=317.37+/-0.13 dlogz:179.128>0.1]
-15072it [4:00:53 bound:359 nc:594 ncall:1.1e+07 eff:0.1% logz-ratio=320.27+/-0.13 dlogz:176.180>0.1]
-15134it [4:01:54 bound:361 nc:899 ncall:1.1e+07 eff:0.1% logz-ratio=322.83+/-0.13 dlogz:173.547>0.1]
-15197it [4:03:16 bound:363 nc:1222 ncall:1.1e+07 eff:0.1% logz-ratio=325.58+/-0.13 dlogz:170.736>0.1]
-15229it [4:04:18 bound:364 nc:702 ncall:1.1e+07 eff:0.1% logz-ratio=326.69+/-0.13 dlogz:169.591>0.1]
-15293it [4:05:31 bound:366 nc:905 ncall:1.1e+07 eff:0.1% logz-ratio=328.73+/-0.13 dlogz:167.484>0.1]
-15357it [4:06:50 bound:368 nc:713 ncall:1.1e+07 eff:0.1% logz-ratio=331.02+/-0.13 dlogz:165.147>0.1]
-15420it [4:08:04 bound:370 nc:647 ncall:1.1e+07 eff:0.1% logz-ratio=333.25+/-0.13 dlogz:162.847>0.1]
-15484it [4:09:20 bound:372 nc:865 ncall:1.1e+07 eff:0.1% logz-ratio=335.47+/-0.13 dlogz:160.568>0.1]
-15548it [4:10:36 bound:374 nc:844 ncall:1.1e+07 eff:0.1% logz-ratio=337.75+/-0.13 dlogz:158.225>0.1]
-15611it [4:11:51 bound:376 nc:1657 ncall:1.1e+07 eff:0.1% logz-ratio=339.74+/-0.13 dlogz:156.160>0.1]
-15673it [4:13:15 bound:378 nc:1012 ncall:1.1e+07 eff:0.1% logz-ratio=341.88+/-0.13 dlogz:153.978>0.1]
-15737it [4:14:36 bound:380 nc:1047 ncall:1.2e+07 eff:0.1% logz-ratio=344.32+/-0.13 dlogz:151.467>0.1]
-15801it [4:15:51 bound:382 nc:838 ncall:1.2e+07 eff:0.1% logz-ratio=346.39+/-0.13 dlogz:149.332>0.1]
-15863it [4:17:11 bound:384 nc:840 ncall:1.2e+07 eff:0.1% logz-ratio=348.31+/-0.13 dlogz:147.345>0.1]
-15927it [4:18:29 bound:386 nc:1133 ncall:1.2e+07 eff:0.1% logz-ratio=350.07+/-0.13 dlogz:145.521>0.1]
-15991it [4:19:43 bound:388 nc:1189 ncall:1.2e+07 eff:0.1% logz-ratio=351.94+/-0.13 dlogz:143.601>0.1]
-16052it [4:21:00 bound:390 nc:1018 ncall:1.2e+07 eff:0.1% logz-ratio=354.24+/-0.13 dlogz:141.235>0.1]
-16116it [4:22:19 bound:392 nc:1020 ncall:1.2e+07 eff:0.1% logz-ratio=356.47+/-0.13 dlogz:138.952>0.1]
-16180it [4:23:39 bound:394 nc:830 ncall:1.2e+07 eff:0.1% logz-ratio=358.82+/-0.13 dlogz:136.537>0.1]
-16243it [4:25:04 bound:396 nc:1063 ncall:1.2e+07 eff:0.1% logz-ratio=360.76+/-0.13 dlogz:134.537>0.1]
-16305it [4:26:18 bound:398 nc:981 ncall:1.2e+07 eff:0.1% logz-ratio=362.91+/-0.13 dlogz:132.326>0.1]
-16369it [4:27:38 bound:400 nc:769 ncall:1.2e+07 eff:0.1% logz-ratio=364.96+/-0.13 dlogz:130.208>0.1]
-16432it [4:28:49 bound:402 nc:670 ncall:1.2e+07 eff:0.1% logz-ratio=366.93+/-0.13 dlogz:128.174>0.1]
-16495it [4:30:10 bound:404 nc:1335 ncall:1.2e+07 eff:0.1% logz-ratio=368.88+/-0.13 dlogz:126.164>0.1]
-16559it [4:31:37 bound:406 nc:1106 ncall:1.2e+07 eff:0.1% logz-ratio=370.82+/-0.13 dlogz:124.161>0.1]
-16622it [4:32:58 bound:408 nc:812 ncall:1.2e+07 eff:0.1% logz-ratio=373.17+/-0.14 dlogz:121.758>0.1]
-16685it [4:34:24 bound:410 nc:1140 ncall:1.2e+07 eff:0.1% logz-ratio=375.41+/-0.14 dlogz:119.449>0.1]
-16749it [4:35:47 bound:412 nc:775 ncall:1.2e+07 eff:0.1% logz-ratio=377.51+/-0.14 dlogz:117.288>0.1]
-16813it [4:37:10 bound:414 nc:1163 ncall:1.3e+07 eff:0.1% logz-ratio=379.57+/-0.14 dlogz:115.171>0.1]
-16876it [4:38:35 bound:416 nc:569 ncall:1.3e+07 eff:0.1% logz-ratio=381.56+/-0.14 dlogz:113.108>0.1]
-16940it [4:39:51 bound:418 nc:1093 ncall:1.3e+07 eff:0.1% logz-ratio=383.42+/-0.14 dlogz:111.191>0.1]
-17004it [4:41:10 bound:420 nc:964 ncall:1.3e+07 eff:0.1% logz-ratio=385.27+/-0.14 dlogz:109.272>0.1]
-17068it [4:42:31 bound:422 nc:937 ncall:1.3e+07 eff:0.1% logz-ratio=386.93+/-0.14 dlogz:107.551>0.1]
-17130it [4:43:52 bound:424 nc:1792 ncall:1.3e+07 eff:0.1% logz-ratio=388.87+/-0.14 dlogz:106.031>0.1]
-17194it [4:45:12 bound:426 nc:738 ncall:1.3e+07 eff:0.1% logz-ratio=390.95+/-0.14 dlogz:103.890>0.1]
-17258it [4:46:29 bound:428 nc:771 ncall:1.3e+07 eff:0.1% logz-ratio=392.65+/-0.14 dlogz:102.118>0.1]
-17321it [4:47:49 bound:430 nc:1279 ncall:1.3e+07 eff:0.1% logz-ratio=394.46+/-0.14 dlogz:100.255>0.1]
-17385it [4:49:10 bound:432 nc:653 ncall:1.3e+07 eff:0.1% logz-ratio=396.56+/-0.14 dlogz:98.096>0.1]
-17448it [4:50:22 bound:434 nc:810 ncall:1.3e+07 eff:0.1% logz-ratio=398.28+/-0.14 dlogz:96.299>0.1]
-17509it [4:51:38 bound:436 nc:956 ncall:1.3e+07 eff:0.1% logz-ratio=399.90+/-0.14 dlogz:94.629>0.1]
-17572it [4:53:07 bound:438 nc:873 ncall:1.3e+07 eff:0.1% logz-ratio=401.81+/-0.14 dlogz:94.394>0.1]
-17636it [4:54:28 bound:440 nc:1228 ncall:1.3e+07 eff:0.1% logz-ratio=403.44+/-0.14 dlogz:92.699>0.1]
-17699it [4:55:51 bound:442 nc:737 ncall:1.3e+07 eff:0.1% logz-ratio=404.84+/-0.14 dlogz:91.238>0.1]
-17761it [4:57:14 bound:444 nc:1067 ncall:1.3e+07 eff:0.1% logz-ratio=406.60+/-0.14 dlogz:89.421>0.1]
-17825it [4:58:36 bound:446 nc:901 ncall:1.4e+07 eff:0.1% logz-ratio=408.05+/-0.14 dlogz:87.899>0.1]
-17887it [5:00:01 bound:448 nc:1165 ncall:1.4e+07 eff:0.1% logz-ratio=409.51+/-0.14 dlogz:86.380>0.1]
-17951it [5:01:29 bound:450 nc:1005 ncall:1.4e+07 eff:0.1% logz-ratio=411.17+/-0.14 dlogz:84.663>0.1]
-18015it [5:02:31 bound:452 nc:1124 ncall:1.4e+07 eff:0.1% logz-ratio=412.89+/-0.14 dlogz:85.413>0.1]
-18079it [5:03:51 bound:454 nc:874 ncall:1.4e+07 eff:0.1% logz-ratio=414.67+/-0.14 dlogz:83.571>0.1]
-18111it [5:05:00 bound:455 nc:934 ncall:1.4e+07 eff:0.1% logz-ratio=415.51+/-0.14 dlogz:82.704>0.1]
-18175it [5:06:17 bound:457 nc:1126 ncall:1.4e+07 eff:0.1% logz-ratio=417.12+/-0.14 dlogz:81.023>0.1]
-18235it [5:07:57 bound:459 nc:1256 ncall:1.4e+07 eff:0.1% logz-ratio=418.69+/-0.14 dlogz:80.418>0.1]
-18299it [5:09:17 bound:461 nc:986 ncall:1.4e+07 eff:0.1% logz-ratio=420.29+/-0.14 dlogz:78.758>0.1]
-18360it [5:10:38 bound:463 nc:1465 ncall:1.4e+07 eff:0.1% logz-ratio=421.76+/-0.14 dlogz:77.228>0.1]
-18421it [5:12:08 bound:465 nc:1037 ncall:1.4e+07 eff:0.1% logz-ratio=423.16+/-0.14 dlogz:76.457>0.1]
-18482it [5:13:39 bound:467 nc:715 ncall:1.4e+07 eff:0.1% logz-ratio=424.62+/-0.14 dlogz:74.935>0.1]
-18545it [5:14:59 bound:469 nc:850 ncall:1.4e+07 eff:0.1% logz-ratio=426.00+/-0.14 dlogz:73.497>0.1]
-18607it [5:16:21 bound:471 nc:1345 ncall:1.4e+07 eff:0.1% logz-ratio=427.41+/-0.14 dlogz:79.113>0.1]
-18669it [5:17:42 bound:473 nc:1472 ncall:1.4e+07 eff:0.1% logz-ratio=428.84+/-0.14 dlogz:77.634>0.1]
-18733it [5:19:14 bound:475 nc:977 ncall:1.4e+07 eff:0.1% logz-ratio=430.33+/-0.14 dlogz:76.073>0.1]
-18795it [5:20:40 bound:477 nc:655 ncall:1.4e+07 eff:0.1% logz-ratio=431.73+/-0.14 dlogz:74.611>0.1]
-18858it [5:22:10 bound:479 nc:613 ncall:1.5e+07 eff:0.1% logz-ratio=433.06+/-0.14 dlogz:73.223>0.1]
-18919it [5:23:41 bound:481 nc:773 ncall:1.5e+07 eff:0.1% logz-ratio=434.18+/-0.14 dlogz:75.028>0.1]
-18983it [5:25:04 bound:483 nc:1295 ncall:1.5e+07 eff:0.1% logz-ratio=435.37+/-0.14 dlogz:73.774>0.1]
-19047it [5:26:35 bound:485 nc:1005 ncall:1.5e+07 eff:0.1% logz-ratio=436.68+/-0.14 dlogz:77.355>0.1]
-19111it [5:28:04 bound:487 nc:1071 ncall:1.5e+07 eff:0.1% logz-ratio=437.91+/-0.14 dlogz:76.064>0.1]
-19173it [5:29:30 bound:489 nc:1230 ncall:1.5e+07 eff:0.1% logz-ratio=439.03+/-0.14 dlogz:74.890>0.1]
-19237it [5:30:52 bound:491 nc:1124 ncall:1.5e+07 eff:0.1% logz-ratio=440.34+/-0.14 dlogz:73.512>0.1]
-19299it [5:32:19 bound:493 nc:726 ncall:1.5e+07 eff:0.1% logz-ratio=441.67+/-0.14 dlogz:72.128>0.1]
-19362it [5:33:38 bound:495 nc:814 ncall:1.5e+07 eff:0.1% logz-ratio=442.95+/-0.14 dlogz:70.779>0.1]
-19425it [5:34:58 bound:497 nc:740 ncall:1.5e+07 eff:0.1% logz-ratio=444.08+/-0.14 dlogz:69.583>0.1]
-19488it [5:36:21 bound:499 nc:786 ncall:1.5e+07 eff:0.1% logz-ratio=445.22+/-0.14 dlogz:68.387>0.1]
-19550it [5:37:46 bound:501 nc:846 ncall:1.5e+07 eff:0.1% logz-ratio=446.33+/-0.14 dlogz:67.218>0.1]
-19612it [5:39:12 bound:503 nc:718 ncall:1.5e+07 eff:0.1% logz-ratio=447.43+/-0.14 dlogz:66.053>0.1]
-19676it [5:40:33 bound:505 nc:916 ncall:1.5e+07 eff:0.1% logz-ratio=448.54+/-0.14 dlogz:64.877>0.1]
-19738it [5:42:00 bound:507 nc:2436 ncall:1.5e+07 eff:0.1% logz-ratio=449.61+/-0.14 dlogz:63.752>0.1]
-19801it [5:43:26 bound:509 nc:900 ncall:1.5e+07 eff:0.1% logz-ratio=450.52+/-0.14 dlogz:62.772>0.1]
-19865it [5:44:56 bound:511 nc:1312 ncall:1.6e+07 eff:0.1% logz-ratio=451.54+/-0.14 dlogz:61.693>0.1]
-19927it [5:46:30 bound:513 nc:798 ncall:1.6e+07 eff:0.1% logz-ratio=452.55+/-0.14 dlogz:60.625>0.1]
-19989it [5:47:59 bound:515 nc:893 ncall:1.6e+07 eff:0.1% logz-ratio=453.51+/-0.14 dlogz:59.604>0.1]
-20053it [5:49:22 bound:517 nc:441 ncall:1.6e+07 eff:0.1% logz-ratio=454.45+/-0.14 dlogz:58.602>0.1]
-20117it [5:50:50 bound:519 nc:1022 ncall:1.6e+07 eff:0.1% logz-ratio=455.40+/-0.14 dlogz:57.584>0.1]
-20181it [5:52:11 bound:521 nc:1285 ncall:1.6e+07 eff:0.1% logz-ratio=456.44+/-0.14 dlogz:57.070>0.1]
-20243it [5:53:38 bound:523 nc:940 ncall:1.6e+07 eff:0.1% logz-ratio=457.47+/-0.14 dlogz:55.978>0.1]
-20307it [5:55:05 bound:525 nc:790 ncall:1.6e+07 eff:0.1% logz-ratio=458.46+/-0.14 dlogz:54.919>0.1]
-20371it [5:56:42 bound:527 nc:1249 ncall:1.6e+07 eff:0.1% logz-ratio=459.50+/-0.15 dlogz:53.820>0.1]
-20433it [5:58:07 bound:529 nc:1235 ncall:1.6e+07 eff:0.1% logz-ratio=460.55+/-0.15 dlogz:52.706>0.1]
-20495it [5:59:36 bound:531 nc:2175 ncall:1.6e+07 eff:0.1% logz-ratio=461.49+/-0.15 dlogz:51.704>0.1]
-20559it [6:01:03 bound:533 nc:1121 ncall:1.6e+07 eff:0.1% logz-ratio=462.46+/-0.15 dlogz:50.668>0.1]
-20621it [6:02:26 bound:535 nc:1028 ncall:1.6e+07 eff:0.1% logz-ratio=463.27+/-0.15 dlogz:49.801>0.1]
-20685it [6:03:28 bound:537 nc:923 ncall:1.6e+07 eff:0.1% logz-ratio=464.08+/-0.15 dlogz:48.926>0.1]
-20745it [6:04:47 bound:538 nc:1336 ncall:1.6e+07 eff:0.1% logz-ratio=464.92+/-0.15 dlogz:48.033>0.1]
-20781it [6:06:11 bound:540 nc:727 ncall:1.6e+07 eff:0.1% logz-ratio=465.43+/-0.15 dlogz:47.488>0.1]
-20845it [6:07:37 bound:542 nc:1079 ncall:1.7e+07 eff:0.1% logz-ratio=466.30+/-0.15 dlogz:57.294>0.1]
-20909it [6:09:06 bound:544 nc:1431 ncall:1.7e+07 eff:0.1% logz-ratio=467.20+/-0.15 dlogz:56.332>0.1]
-20972it [6:10:36 bound:546 nc:981 ncall:1.7e+07 eff:0.1% logz-ratio=468.14+/-0.15 dlogz:55.336>0.1]
-21035it [6:12:16 bound:548 nc:1246 ncall:1.7e+07 eff:0.1% logz-ratio=469.00+/-0.15 dlogz:54.406>0.1]
-21098it [6:13:50 bound:550 nc:1413 ncall:1.7e+07 eff:0.1% logz-ratio=469.82+/-0.15 dlogz:53.524>0.1]
-21161it [6:15:14 bound:552 nc:750 ncall:1.7e+07 eff:0.1% logz-ratio=470.65+/-0.15 dlogz:52.638>0.1]
-21221it [6:16:38 bound:554 nc:1251 ncall:1.7e+07 eff:0.1% logz-ratio=471.40+/-0.15 dlogz:51.823>0.1]
-21285it [6:18:02 bound:556 nc:990 ncall:1.7e+07 eff:0.1% logz-ratio=472.18+/-0.15 dlogz:50.982>0.1]
-21348it [6:19:31 bound:558 nc:931 ncall:1.7e+07 eff:0.1% logz-ratio=472.92+/-0.15 dlogz:50.177>0.1]
-21412it [6:21:03 bound:560 nc:1113 ncall:1.7e+07 eff:0.1% logz-ratio=473.68+/-0.15 dlogz:52.925>0.1]
-21475it [6:22:37 bound:562 nc:849 ncall:1.7e+07 eff:0.1% logz-ratio=474.44+/-0.15 dlogz:52.109>0.1]
-21538it [6:24:12 bound:564 nc:1238 ncall:1.7e+07 eff:0.1% logz-ratio=475.25+/-0.15 dlogz:51.236>0.1]
-21599it [6:25:51 bound:566 nc:1416 ncall:1.7e+07 eff:0.1% logz-ratio=475.96+/-0.15 dlogz:50.463>0.1]
-21662it [6:27:25 bound:568 nc:1182 ncall:1.7e+07 eff:0.1% logz-ratio=476.67+/-0.15 dlogz:49.698>0.1]
-21723it [6:28:56 bound:570 nc:1100 ncall:1.7e+07 eff:0.1% logz-ratio=477.40+/-0.15 dlogz:48.906>0.1]
-21784it [6:30:21 bound:572 nc:600 ncall:1.8e+07 eff:0.1% logz-ratio=478.07+/-0.15 dlogz:48.175>0.1]
-21847it [6:31:55 bound:574 nc:956 ncall:1.8e+07 eff:0.1% logz-ratio=478.74+/-0.15 dlogz:47.438>0.1]
-21910it [6:33:35 bound:576 nc:1039 ncall:1.8e+07 eff:0.1% logz-ratio=479.38+/-0.15 dlogz:46.742>0.1]
-21974it [6:35:13 bound:578 nc:919 ncall:1.8e+07 eff:0.1% logz-ratio=479.98+/-0.15 dlogz:46.076>0.1]
-22037it [6:36:54 bound:580 nc:625 ncall:1.8e+07 eff:0.1% logz-ratio=480.58+/-0.15 dlogz:45.419>0.1]
-22100it [6:38:27 bound:582 nc:914 ncall:1.8e+07 eff:0.1% logz-ratio=481.19+/-0.15 dlogz:44.742>0.1]
-22164it [6:39:59 bound:584 nc:1071 ncall:1.8e+07 eff:0.1% logz-ratio=481.81+/-0.15 dlogz:44.062>0.1]
-22227it [6:41:29 bound:586 nc:2150 ncall:1.8e+07 eff:0.1% logz-ratio=482.44+/-0.15 dlogz:43.375>0.1]
-22291it [6:43:09 bound:588 nc:785 ncall:1.8e+07 eff:0.1% logz-ratio=483.12+/-0.15 dlogz:42.624>0.1]
-22355it [6:44:33 bound:590 nc:976 ncall:1.8e+07 eff:0.1% logz-ratio=483.74+/-0.15 dlogz:41.943>0.1]
-22419it [6:46:01 bound:592 nc:1201 ncall:1.8e+07 eff:0.1% logz-ratio=484.30+/-0.15 dlogz:41.326>0.1]
-22483it [6:47:34 bound:594 nc:540 ncall:1.8e+07 eff:0.1% logz-ratio=484.87+/-0.15 dlogz:40.688>0.1]
-22546it [6:49:12 bound:596 nc:879 ncall:1.8e+07 eff:0.1% logz-ratio=485.47+/-0.15 dlogz:40.029>0.1]
-22609it [6:50:44 bound:598 nc:1198 ncall:1.8e+07 eff:0.1% logz-ratio=486.03+/-0.15 dlogz:39.402>0.1]
-22669it [6:52:17 bound:600 nc:2584 ncall:1.9e+07 eff:0.1% logz-ratio=486.56+/-0.15 dlogz:38.816>0.1]
-22733it [6:53:51 bound:602 nc:842 ncall:1.9e+07 eff:0.1% logz-ratio=487.13+/-0.15 dlogz:38.182>0.1]
-22797it [6:55:33 bound:604 nc:1763 ncall:1.9e+07 eff:0.1% logz-ratio=487.70+/-0.15 dlogz:37.554>0.1]
-22861it [6:57:17 bound:606 nc:913 ncall:1.9e+07 eff:0.1% logz-ratio=488.23+/-0.15 dlogz:36.957>0.1]
-22924it [6:58:56 bound:608 nc:1185 ncall:1.9e+07 eff:0.1% logz-ratio=488.78+/-0.15 dlogz:36.346>0.1]
-22986it [7:00:34 bound:610 nc:1160 ncall:1.9e+07 eff:0.1% logz-ratio=489.29+/-0.15 dlogz:37.028>0.1]
-23049it [7:02:09 bound:612 nc:1354 ncall:1.9e+07 eff:0.1% logz-ratio=489.78+/-0.15 dlogz:36.474>0.1]
-23113it [7:03:27 bound:614 nc:1000 ncall:1.9e+07 eff:0.1% logz-ratio=490.29+/-0.15 dlogz:35.902>0.1]
-23177it [7:04:51 bound:616 nc:985 ncall:1.9e+07 eff:0.1% logz-ratio=490.79+/-0.15 dlogz:35.338>0.1]
-23207it [7:06:18 bound:617 nc:1295 ncall:1.9e+07 eff:0.1% logz-ratio=491.04+/-0.15 dlogz:35.064>0.1]
-23271it [7:07:56 bound:619 nc:1090 ncall:1.9e+07 eff:0.1% logz-ratio=491.58+/-0.15 dlogz:34.465>0.1]
-23335it [7:09:37 bound:621 nc:1419 ncall:1.9e+07 eff:0.1% logz-ratio=492.08+/-0.15 dlogz:33.898>0.1]
-23398it [7:11:22 bound:623 nc:1053 ncall:1.9e+07 eff:0.1% logz-ratio=492.55+/-0.15 dlogz:33.369>0.1]
-23461it [7:12:59 bound:625 nc:1449 ncall:1.9e+07 eff:0.1% logz-ratio=493.01+/-0.15 dlogz:32.848>0.1]
-23521it [7:14:38 bound:627 nc:814 ncall:1.9e+07 eff:0.1% logz-ratio=493.44+/-0.15 dlogz:32.360>0.1]
-23584it [7:16:19 bound:629 nc:1622 ncall:2.0e+07 eff:0.1% logz-ratio=493.90+/-0.15 dlogz:31.832>0.1]
-23647it [7:17:56 bound:631 nc:1110 ncall:2.0e+07 eff:0.1% logz-ratio=494.36+/-0.15 dlogz:31.317>0.1]
-23710it [7:19:42 bound:633 nc:1068 ncall:2.0e+07 eff:0.1% logz-ratio=494.80+/-0.15 dlogz:30.810>0.1]
-23774it [7:21:31 bound:635 nc:1185 ncall:2.0e+07 eff:0.1% logz-ratio=495.28+/-0.15 dlogz:30.273>0.1]
-23836it [7:23:12 bound:637 nc:803 ncall:2.0e+07 eff:0.1% logz-ratio=495.74+/-0.15 dlogz:29.752>0.1]
-23898it [7:24:49 bound:639 nc:1342 ncall:2.0e+07 eff:0.1% logz-ratio=496.18+/-0.15 dlogz:29.251>0.1]
-23961it [7:26:33 bound:641 nc:1007 ncall:2.0e+07 eff:0.1% logz-ratio=496.59+/-0.15 dlogz:28.779>0.1]
-24023it [7:28:13 bound:643 nc:1475 ncall:2.0e+07 eff:0.1% logz-ratio=497.00+/-0.15 dlogz:28.307>0.1]
-24084it [7:29:59 bound:645 nc:1211 ncall:2.0e+07 eff:0.1% logz-ratio=497.43+/-0.15 dlogz:27.815>0.1]
-24147it [7:31:43 bound:647 nc:953 ncall:2.0e+07 eff:0.1% logz-ratio=497.84+/-0.15 dlogz:27.345>0.1]
-24209it [7:33:25 bound:649 nc:1247 ncall:2.0e+07 eff:0.1% logz-ratio=498.24+/-0.15 dlogz:26.882>0.1]
-24273it [7:35:01 bound:651 nc:1412 ncall:2.0e+07 eff:0.1% logz-ratio=498.66+/-0.15 dlogz:26.404>0.1]
-24337it [7:36:40 bound:653 nc:1534 ncall:2.0e+07 eff:0.1% logz-ratio=499.07+/-0.15 dlogz:25.924>0.1]
-24400it [7:38:12 bound:655 nc:947 ncall:2.1e+07 eff:0.1% logz-ratio=499.46+/-0.15 dlogz:25.744>0.1]
-24464it [7:39:47 bound:657 nc:894 ncall:2.1e+07 eff:0.1% logz-ratio=499.84+/-0.15 dlogz:25.303>0.1]
-24525it [7:41:31 bound:659 nc:1008 ncall:2.1e+07 eff:0.1% logz-ratio=500.20+/-0.16 dlogz:24.882>0.1]
-24588it [7:43:20 bound:661 nc:1103 ncall:2.1e+07 eff:0.1% logz-ratio=500.57+/-0.16 dlogz:26.888>0.1]
-24650it [7:45:08 bound:663 nc:2832 ncall:2.1e+07 eff:0.1% logz-ratio=500.91+/-0.16 dlogz:26.487>0.1]
-24713it [7:46:47 bound:665 nc:994 ncall:2.1e+07 eff:0.1% logz-ratio=501.26+/-0.16 dlogz:26.074>0.1]
-24775it [7:48:27 bound:667 nc:1507 ncall:2.1e+07 eff:0.1% logz-ratio=501.59+/-0.16 dlogz:25.675>0.1]
-24837it [7:50:17 bound:669 nc:1086 ncall:2.1e+07 eff:0.1% logz-ratio=501.91+/-0.16 dlogz:25.296>0.1]
-24869it [7:51:21 bound:670 nc:1303 ncall:2.1e+07 eff:0.1% logz-ratio=502.07+/-0.16 dlogz:25.104>0.1]
-24930it [7:53:07 bound:672 nc:1127 ncall:2.1e+07 eff:0.1% logz-ratio=502.37+/-0.16 dlogz:24.744>0.1]
-24962it [7:54:15 bound:673 nc:1548 ncall:2.1e+07 eff:0.1% logz-ratio=502.53+/-0.16 dlogz:24.561>0.1]
-24993it [7:55:19 bound:674 nc:1062 ncall:2.1e+07 eff:0.1% logz-ratio=502.67+/-0.16 dlogz:24.387>0.1]
-25055it [7:57:15 bound:676 nc:1364 ncall:2.1e+07 eff:0.1% logz-ratio=502.97+/-0.16 dlogz:24.024>0.1]
-25119it [7:59:06 bound:678 nc:1616 ncall:2.1e+07 eff:0.1% logz-ratio=503.29+/-0.16 dlogz:23.640>0.1]
-25181it [8:00:59 bound:680 nc:1410 ncall:2.2e+07 eff:0.1% logz-ratio=503.60+/-0.16 dlogz:23.275>0.1]
-25245it [8:02:46 bound:682 nc:1280 ncall:2.2e+07 eff:0.1% logz-ratio=503.92+/-0.16 dlogz:22.886>0.1]
-25309it [8:04:21 bound:684 nc:1008 ncall:2.2e+07 eff:0.1% logz-ratio=504.24+/-0.16 dlogz:22.513>0.1]
-25373it [8:06:04 bound:686 nc:1454 ncall:2.2e+07 eff:0.1% logz-ratio=504.55+/-0.16 dlogz:22.137>0.1]
-25405it [8:07:51 bound:687 nc:1413 ncall:2.2e+07 eff:0.1% logz-ratio=504.71+/-0.16 dlogz:21.949>0.1]
+3812it [0:00:42 bound:2 nc:1006 ncall:4.0e+04 eff:9.6% logz-ratio=-3.26+/-0.07 dlogz:144.295>0.1]
+4056it [0:01:51 bound:6 nc:1021 ncall:2.7e+05 eff:1.5% logz-ratio=-1.48+/-0.07 dlogz:142.276>0.1]
+4303it [0:02:59 bound:10 nc:794 ncall:5.1e+05 eff:0.8% logz-ratio=0.42+/-0.07 dlogz:140.141>0.1]
+4552it [0:04:07 bound:14 nc:953 ncall:7.3e+05 eff:0.6% logz-ratio=2.51+/-0.07 dlogz:313.438>0.1]
+4803it [0:05:20 bound:18 nc:987 ncall:9.8e+05 eff:0.5% logz-ratio=4.67+/-0.07 dlogz:311.029>0.1]
+5052it [0:06:38 bound:22 nc:988 ncall:1.2e+06 eff:0.4% logz-ratio=6.86+/-0.08 dlogz:308.595>0.1]
+5299it [0:07:55 bound:26 nc:981 ncall:1.5e+06 eff:0.4% logz-ratio=9.17+/-0.08 dlogz:306.049>0.1]
+5547it [0:09:12 bound:30 nc:1245 ncall:1.7e+06 eff:0.3% logz-ratio=11.55+/-0.08 dlogz:303.431>0.1]
+5794it [0:10:31 bound:34 nc:903 ncall:2.0e+06 eff:0.3% logz-ratio=14.33+/-0.08 dlogz:300.405>0.1]
+6042it [0:11:52 bound:38 nc:1293 ncall:2.3e+06 eff:0.3% logz-ratio=17.76+/-0.09 dlogz:296.741>0.1]
+6291it [0:13:09 bound:42 nc:806 ncall:2.5e+06 eff:0.3% logz-ratio=21.27+/-0.09 dlogz:292.982>0.1]
+6535it [0:14:28 bound:46 nc:801 ncall:2.8e+06 eff:0.2% logz-ratio=25.17+/-0.09 dlogz:288.856>0.1]
+6722it [0:15:28 bound:49 nc:886 ncall:2.9e+06 eff:0.2% logz-ratio=28.46+/-0.09 dlogz:285.371>0.1]
+6966it [0:16:47 bound:53 nc:925 ncall:3.2e+06 eff:0.2% logz-ratio=33.34+/-0.09 dlogz:280.260>0.1]
+7215it [0:18:06 bound:57 nc:1365 ncall:3.4e+06 eff:0.2% logz-ratio=38.78+/-0.09 dlogz:279.324>0.1]
+7463it [0:19:22 bound:61 nc:816 ncall:3.7e+06 eff:0.2% logz-ratio=44.12+/-0.10 dlogz:295.847>0.1]
+7713it [0:20:40 bound:65 nc:754 ncall:3.9e+06 eff:0.2% logz-ratio=50.30+/-0.10 dlogz:289.434>0.1]
+7899it [0:21:41 bound:68 nc:1114 ncall:4.1e+06 eff:0.2% logz-ratio=54.88+/-0.10 dlogz:284.672>0.1]
+8143it [0:23:01 bound:72 nc:1156 ncall:4.4e+06 eff:0.2% logz-ratio=61.32+/-0.10 dlogz:277.994>0.1]
+8331it [0:24:02 bound:75 nc:881 ncall:4.5e+06 eff:0.2% logz-ratio=66.40+/-0.10 dlogz:272.727>0.1]
+8514it [0:25:04 bound:78 nc:985 ncall:4.7e+06 eff:0.2% logz-ratio=71.56+/-0.10 dlogz:297.058>0.1]
+8759it [0:26:23 bound:82 nc:643 ncall:5.0e+06 eff:0.2% logz-ratio=78.51+/-0.10 dlogz:289.873>0.1]
+9010it [0:27:42 bound:86 nc:930 ncall:5.2e+06 eff:0.2% logz-ratio=85.64+/-0.10 dlogz:285.779>0.1]
+9190it [0:28:45 bound:89 nc:1375 ncall:5.4e+06 eff:0.2% logz-ratio=90.70+/-0.10 dlogz:280.539>0.1]
+9376it [0:29:46 bound:92 nc:1168 ncall:5.6e+06 eff:0.2% logz-ratio=96.26+/-0.11 dlogz:274.808>0.1]
+9565it [0:30:54 bound:95 nc:1204 ncall:5.8e+06 eff:0.2% logz-ratio=102.15+/-0.11 dlogz:277.021>0.1]
+9752it [0:31:55 bound:98 nc:1179 ncall:6.0e+06 eff:0.2% logz-ratio=108.70+/-0.11 dlogz:270.284>0.1]
+10004it [0:33:15 bound:102 nc:1056 ncall:6.2e+06 eff:0.2% logz-ratio=117.35+/-0.11 dlogz:261.396>0.1]
+10191it [0:34:19 bound:105 nc:723 ncall:6.4e+06 eff:0.2% logz-ratio=124.02+/-0.11 dlogz:306.038>0.1]
+10442it [0:35:39 bound:109 nc:1086 ncall:6.6e+06 eff:0.2% logz-ratio=133.37+/-0.11 dlogz:296.446>0.1]
+10629it [0:36:44 bound:112 nc:842 ncall:6.8e+06 eff:0.2% logz-ratio=139.34+/-0.11 dlogz:290.291>0.1]
+10815it [0:37:44 bound:115 nc:1070 ncall:7.0e+06 eff:0.2% logz-ratio=146.31+/-0.11 dlogz:283.139>0.1]
+11000it [0:38:46 bound:118 nc:625 ncall:7.2e+06 eff:0.2% logz-ratio=153.73+/-0.11 dlogz:275.543>0.1]
+11188it [0:39:49 bound:121 nc:1011 ncall:7.4e+06 eff:0.2% logz-ratio=160.00+/-0.11 dlogz:269.091>0.1]
+11374it [0:40:51 bound:124 nc:1212 ncall:7.6e+06 eff:0.2% logz-ratio=167.32+/-0.12 dlogz:261.589>0.1]
+11560it [0:41:52 bound:127 nc:1086 ncall:7.7e+06 eff:0.1% logz-ratio=174.99+/-0.12 dlogz:294.672>0.1]
+11743it [0:42:55 bound:130 nc:1033 ncall:7.9e+06 eff:0.1% logz-ratio=182.87+/-0.12 dlogz:286.616>0.1]
+11930it [0:43:59 bound:133 nc:955 ncall:8.1e+06 eff:0.1% logz-ratio=190.29+/-0.12 dlogz:279.018>0.1]
+12118it [0:45:00 bound:136 nc:958 ncall:8.3e+06 eff:0.1% logz-ratio=197.80+/-0.12 dlogz:271.324>0.1]
+12309it [0:46:05 bound:139 nc:979 ncall:8.5e+06 eff:0.1% logz-ratio=204.61+/-0.12 dlogz:264.316>0.1]
+12555it [0:47:25 bound:143 nc:731 ncall:8.7e+06 eff:0.1% logz-ratio=215.02+/-0.12 dlogz:253.681>0.1]
+12805it [0:48:43 bound:147 nc:616 ncall:9.0e+06 eff:0.1% logz-ratio=225.70+/-0.12 dlogz:249.077>0.1]
+12990it [0:49:45 bound:150 nc:634 ncall:9.1e+06 eff:0.1% logz-ratio=233.11+/-0.12 dlogz:241.496>0.1]
+13177it [0:50:47 bound:153 nc:1054 ncall:9.3e+06 eff:0.1% logz-ratio=241.40+/-0.12 dlogz:247.916>0.1]
+13426it [0:52:05 bound:157 nc:746 ncall:9.5e+06 eff:0.1% logz-ratio=251.89+/-0.12 dlogz:237.187>0.1]
+13678it [0:53:22 bound:161 nc:792 ncall:9.8e+06 eff:0.1% logz-ratio=261.90+/-0.13 dlogz:226.929>0.1]
+13924it [0:54:38 bound:165 nc:674 ncall:1.0e+07 eff:0.1% logz-ratio=270.77+/-0.13 dlogz:217.808>0.1]
+14175it [0:55:55 bound:169 nc:804 ncall:1.0e+07 eff:0.1% logz-ratio=281.33+/-0.13 dlogz:207.021>0.1]
+14420it [0:57:14 bound:173 nc:1261 ncall:1.0e+07 eff:0.1% logz-ratio=290.79+/-0.13 dlogz:205.023>0.1]
+14666it [0:58:30 bound:177 nc:869 ncall:1.1e+07 eff:0.1% logz-ratio=300.42+/-0.13 dlogz:196.244>0.1]
+14914it [0:59:48 bound:181 nc:988 ncall:1.1e+07 eff:0.1% logz-ratio=310.68+/-0.13 dlogz:185.742>0.1]
+15098it [1:01:01 bound:184 nc:949 ncall:1.1e+07 eff:0.1% logz-ratio=317.63+/-0.13 dlogz:178.606>0.1]
+15345it [1:02:19 bound:188 nc:710 ncall:1.1e+07 eff:0.1% logz-ratio=326.90+/-0.13 dlogz:169.095>0.1]
+15534it [1:03:19 bound:191 nc:1175 ncall:1.2e+07 eff:0.1% logz-ratio=333.72+/-0.13 dlogz:162.093>0.1]
+15784it [1:04:35 bound:195 nc:771 ncall:1.2e+07 eff:0.1% logz-ratio=342.03+/-0.13 dlogz:153.851>0.1]
+16034it [1:05:52 bound:199 nc:1230 ncall:1.2e+07 eff:0.1% logz-ratio=350.29+/-0.13 dlogz:145.363>0.1]
+16222it [1:06:52 bound:202 nc:971 ncall:1.2e+07 eff:0.1% logz-ratio=356.34+/-0.13 dlogz:139.120>0.1]
+16473it [1:08:12 bound:206 nc:882 ncall:1.2e+07 eff:0.1% logz-ratio=364.48+/-0.13 dlogz:132.164>0.1]
+16722it [1:09:32 bound:210 nc:1032 ncall:1.3e+07 eff:0.1% logz-ratio=373.20+/-0.14 dlogz:123.197>0.1]
+16974it [1:10:49 bound:214 nc:792 ncall:1.3e+07 eff:0.1% logz-ratio=381.41+/-0.14 dlogz:117.336>0.1]
+17225it [1:12:05 bound:218 nc:1277 ncall:1.3e+07 eff:0.1% logz-ratio=387.46+/-0.14 dlogz:111.199>0.1]
+17412it [1:13:08 bound:221 nc:1055 ncall:1.3e+07 eff:0.1% logz-ratio=392.39+/-0.14 dlogz:106.097>0.1]
+17597it [1:14:10 bound:224 nc:514 ncall:1.3e+07 eff:0.1% logz-ratio=398.05+/-0.14 dlogz:100.247>0.1]
+17785it [1:15:10 bound:227 nc:911 ncall:1.4e+07 eff:0.1% logz-ratio=403.34+/-0.14 dlogz:98.558>0.1]
+17974it [1:16:11 bound:230 nc:527 ncall:1.4e+07 eff:0.1% logz-ratio=407.82+/-0.14 dlogz:93.880>0.1]
+18220it [1:17:31 bound:234 nc:815 ncall:1.4e+07 eff:0.1% logz-ratio=413.82+/-0.14 dlogz:87.651>0.1]
+18406it [1:18:34 bound:237 nc:852 ncall:1.4e+07 eff:0.1% logz-ratio=418.10+/-0.14 dlogz:90.165>0.1]
+18652it [1:19:55 bound:241 nc:1372 ncall:1.4e+07 eff:0.1% logz-ratio=423.88+/-0.14 dlogz:84.140>0.1]
+18837it [1:20:55 bound:244 nc:1354 ncall:1.5e+07 eff:0.1% logz-ratio=428.10+/-0.14 dlogz:79.734>0.1]
+19024it [1:21:58 bound:247 nc:864 ncall:1.5e+07 eff:0.1% logz-ratio=432.11+/-0.14 dlogz:76.216>0.1]
+19213it [1:23:01 bound:250 nc:894 ncall:1.5e+07 eff:0.1% logz-ratio=436.20+/-0.14 dlogz:71.941>0.1]
+19401it [1:24:01 bound:253 nc:1393 ncall:1.5e+07 eff:0.1% logz-ratio=439.71+/-0.14 dlogz:77.249>0.1]
+19587it [1:25:05 bound:256 nc:560 ncall:1.5e+07 eff:0.1% logz-ratio=443.24+/-0.14 dlogz:73.544>0.1]
+19772it [1:26:12 bound:259 nc:895 ncall:1.6e+07 eff:0.1% logz-ratio=446.86+/-0.14 dlogz:69.745>0.1]
+19957it [1:27:16 bound:262 nc:1181 ncall:1.6e+07 eff:0.1% logz-ratio=449.81+/-0.14 dlogz:66.614>0.1]
+20142it [1:28:20 bound:265 nc:1188 ncall:1.6e+07 eff:0.1% logz-ratio=453.04+/-0.14 dlogz:63.201>0.1]
+20325it [1:29:26 bound:268 nc:1570 ncall:1.6e+07 eff:0.1% logz-ratio=455.92+/-0.15 dlogz:60.148>0.1]
+20513it [1:30:28 bound:271 nc:1185 ncall:1.6e+07 eff:0.1% logz-ratio=458.74+/-0.15 dlogz:57.136>0.1]
+20699it [1:31:34 bound:274 nc:1203 ncall:1.6e+07 eff:0.1% logz-ratio=461.44+/-0.15 dlogz:54.254>0.1]
+20885it [1:32:38 bound:277 nc:1059 ncall:1.7e+07 eff:0.1% logz-ratio=463.90+/-0.15 dlogz:51.608>0.1]
+21074it [1:33:41 bound:280 nc:626 ncall:1.7e+07 eff:0.1% logz-ratio=466.22+/-0.15 dlogz:49.104>0.1]
+21261it [1:34:48 bound:283 nc:1222 ncall:1.7e+07 eff:0.1% logz-ratio=468.60+/-0.15 dlogz:46.785>0.1]
+21450it [1:35:54 bound:286 nc:1260 ncall:1.7e+07 eff:0.1% logz-ratio=470.98+/-0.15 dlogz:44.224>0.1]
+21633it [1:37:02 bound:289 nc:2335 ncall:1.7e+07 eff:0.1% logz-ratio=473.24+/-0.15 dlogz:41.789>0.1]
+21823it [1:38:13 bound:292 nc:1376 ncall:1.8e+07 eff:0.1% logz-ratio=475.48+/-0.15 dlogz:45.383>0.1]
+22011it [1:39:18 bound:295 nc:860 ncall:1.8e+07 eff:0.1% logz-ratio=477.42+/-0.15 dlogz:43.255>0.1]
+22201it [1:40:26 bound:298 nc:504 ncall:1.8e+07 eff:0.1% logz-ratio=479.46+/-0.15 dlogz:41.034>0.1]
+22390it [1:41:36 bound:301 nc:945 ncall:1.8e+07 eff:0.1% logz-ratio=481.35+/-0.15 dlogz:38.962>0.1]
+22576it [1:42:47 bound:304 nc:900 ncall:1.8e+07 eff:0.1% logz-ratio=482.99+/-0.15 dlogz:37.135>0.1]
+22765it [1:43:55 bound:307 nc:1029 ncall:1.9e+07 eff:0.1% logz-ratio=484.72+/-0.15 dlogz:35.225>0.1]
+22949it [1:45:05 bound:310 nc:1201 ncall:1.9e+07 eff:0.1% logz-ratio=486.38+/-0.15 dlogz:33.378>0.1]
+23135it [1:46:17 bound:313 nc:1366 ncall:1.9e+07 eff:0.1% logz-ratio=488.15+/-0.15 dlogz:31.427>0.1]
+23320it [1:47:31 bound:316 nc:1405 ncall:1.9e+07 eff:0.1% logz-ratio=489.74+/-0.15 dlogz:32.935>0.1]
+23505it [1:48:45 bound:319 nc:1682 ncall:2.0e+07 eff:0.1% logz-ratio=491.24+/-0.15 dlogz:31.261>0.1]
+23694it [1:49:58 bound:322 nc:1302 ncall:2.0e+07 eff:0.1% logz-ratio=492.64+/-0.15 dlogz:29.667>0.1]
+23879it [1:51:11 bound:325 nc:1295 ncall:2.0e+07 eff:0.1% logz-ratio=493.97+/-0.15 dlogz:30.630>0.1]
+24064it [1:52:24 bound:328 nc:862 ncall:2.0e+07 eff:0.1% logz-ratio=495.25+/-0.15 dlogz:31.364>0.1]
+24248it [1:53:39 bound:331 nc:1119 ncall:2.0e+07 eff:0.1% logz-ratio=496.47+/-0.15 dlogz:29.966>0.1]
+24436it [1:54:53 bound:334 nc:1175 ncall:2.1e+07 eff:0.1% logz-ratio=497.56+/-0.15 dlogz:30.875>0.1]
+24620it [1:56:10 bound:337 nc:1254 ncall:2.1e+07 eff:0.1% logz-ratio=498.62+/-0.16 dlogz:29.637>0.1]
+24805it [1:57:29 bound:340 nc:1777 ncall:2.1e+07 eff:0.1% logz-ratio=499.67+/-0.16 dlogz:28.404>0.1]
+24993it [1:58:47 bound:343 nc:1455 ncall:2.1e+07 eff:0.1% logz-ratio=500.71+/-0.16 dlogz:27.186>0.1]
+25179it [2:00:12 bound:346 nc:1576 ncall:2.2e+07 eff:0.1% logz-ratio=501.74+/-0.16 dlogz:25.970>0.1]
+25301it [2:01:31 bound:348 nc:1223 ncall:2.2e+07 eff:0.1% logz-ratio=502.43+/-0.16 dlogz:25.167>0.1]
+25489it [2:02:57 bound:351 nc:1637 ncall:2.2e+07 eff:0.1% logz-ratio=503.39+/-0.16 dlogz:24.545>0.1]
+25675it [2:04:16 bound:354 nc:2721 ncall:2.2e+07 eff:0.1% logz-ratio=504.32+/-0.16 dlogz:23.437>0.1]
+25861it [2:05:44 bound:357 nc:1406 ncall:2.3e+07 eff:0.1% logz-ratio=505.25+/-0.16 dlogz:22.921>0.1]
+26047it [2:07:08 bound:360 nc:1445 ncall:2.3e+07 eff:0.1% logz-ratio=506.15+/-0.16 dlogz:21.841>0.1]
+26234it [2:08:31 bound:363 nc:1574 ncall:2.3e+07 eff:0.1% logz-ratio=507.01+/-0.16 dlogz:21.699>0.1]
+26424it [2:09:53 bound:366 nc:1330 ncall:2.3e+07 eff:0.1% logz-ratio=507.89+/-0.16 dlogz:20.639>0.1]
+26607it [2:11:19 bound:369 nc:1425 ncall:2.4e+07 eff:0.1% logz-ratio=508.68+/-0.16 dlogz:19.671>0.1]
+26794it [2:12:49 bound:372 nc:1040 ncall:2.4e+07 eff:0.1% logz-ratio=509.40+/-0.16 dlogz:18.765>0.1]
+26918it [2:13:53 bound:374 nc:1410 ncall:2.4e+07 eff:0.1% logz-ratio=509.85+/-0.16 dlogz:18.196>0.1]
+27041it [2:14:53 bound:376 nc:3015 ncall:2.4e+07 eff:0.1% logz-ratio=510.30+/-0.16 dlogz:17.627>0.1]
+27227it [2:16:22 bound:379 nc:1315 ncall:2.5e+07 eff:0.1% logz-ratio=510.97+/-0.16 dlogz:16.776>0.1]
+27348it [2:17:30 bound:381 nc:1683 ncall:2.5e+07 eff:0.1% logz-ratio=511.39+/-0.16 dlogz:16.234>0.1]
+27473it [2:18:30 bound:383 nc:1496 ncall:2.5e+07 eff:0.1% logz-ratio=511.80+/-0.16 dlogz:15.705>0.1]
+27658it [2:20:03 bound:386 nc:1745 ncall:2.5e+07 eff:0.1% logz-ratio=512.38+/-0.16 dlogz:14.944>0.1]
+27782it [2:21:04 bound:388 nc:3307 ncall:2.5e+07 eff:0.1% logz-ratio=512.75+/-0.16 dlogz:15.420>0.1]
+27904it [2:22:05 bound:390 nc:1220 ncall:2.6e+07 eff:0.1% logz-ratio=513.13+/-0.16 dlogz:14.928>0.1]
+28029it [2:23:05 bound:392 nc:1455 ncall:2.6e+07 eff:0.1% logz-ratio=513.49+/-0.16 dlogz:14.440>0.1]
+28152it [2:24:09 bound:394 nc:2286 ncall:2.6e+07 eff:0.1% logz-ratio=513.84+/-0.16 dlogz:13.975>0.1]
+28279it [2:25:12 bound:396 nc:1463 ncall:2.6e+07 eff:0.1% logz-ratio=514.18+/-0.16 dlogz:13.507>0.1]
+28468it [2:26:39 bound:399 nc:1313 ncall:2.7e+07 eff:0.1% logz-ratio=514.67+/-0.16 dlogz:12.829>0.1]
+28593it [2:27:39 bound:401 nc:1525 ncall:2.7e+07 eff:0.1% logz-ratio=515.00+/-0.16 dlogz:12.379>0.1]
+28720it [2:28:40 bound:403 nc:1890 ncall:2.7e+07 eff:0.1% logz-ratio=515.33+/-0.16 dlogz:11.930>0.1]
+28843it [2:29:42 bound:405 nc:1383 ncall:2.7e+07 eff:0.1% logz-ratio=515.62+/-0.16 dlogz:11.512>0.1]
+28965it [2:30:44 bound:407 nc:1998 ncall:2.7e+07 eff:0.1% logz-ratio=515.93+/-0.16 dlogz:11.089>0.1]
+29090it [2:31:44 bound:409 nc:1790 ncall:2.8e+07 eff:0.1% logz-ratio=516.23+/-0.17 dlogz:11.001>0.1]
+29217it [2:32:47 bound:411 nc:2038 ncall:2.8e+07 eff:0.1% logz-ratio=516.52+/-0.17 dlogz:10.586>0.1]
+29342it [2:33:48 bound:413 nc:1491 ncall:2.8e+07 eff:0.1% logz-ratio=516.79+/-0.17 dlogz:10.188>0.1]
+29466it [2:34:50 bound:415 nc:1845 ncall:2.8e+07 eff:0.1% logz-ratio=517.07+/-0.17 dlogz:9.796>0.1]
+29590it [2:35:51 bound:417 nc:1727 ncall:2.8e+07 eff:0.1% logz-ratio=517.34+/-0.17 dlogz:9.401>0.1]
+29714it [2:36:52 bound:419 nc:1497 ncall:2.9e+07 eff:0.1% logz-ratio=517.61+/-0.17 dlogz:9.433>0.1]
+29837it [2:37:55 bound:421 nc:1803 ncall:2.9e+07 eff:0.1% logz-ratio=517.87+/-0.17 dlogz:9.178>0.1]
+29957it [2:38:57 bound:423 nc:3549 ncall:2.9e+07 eff:0.1% logz-ratio=518.11+/-0.17 dlogz:9.787>0.1]
+30079it [2:40:00 bound:425 nc:1892 ncall:2.9e+07 eff:0.1% logz-ratio=518.34+/-0.17 dlogz:9.431>0.1]
+30200it [2:41:01 bound:427 nc:1889 ncall:2.9e+07 eff:0.1% logz-ratio=518.58+/-0.17 dlogz:9.075>0.1]
+30326it [2:42:08 bound:429 nc:1736 ncall:3.0e+07 eff:0.1% logz-ratio=518.82+/-0.17 dlogz:8.713>0.1]
+30448it [2:43:11 bound:431 nc:2116 ncall:3.0e+07 eff:0.1% logz-ratio=519.04+/-0.17 dlogz:8.376>0.1]
+30575it [2:44:16 bound:433 nc:1670 ncall:3.0e+07 eff:0.1% logz-ratio=519.25+/-0.17 dlogz:8.038>0.1]
+30702it [2:45:17 bound:435 nc:1774 ncall:3.0e+07 eff:0.1% logz-ratio=519.45+/-0.17 dlogz:7.715>0.1]
+30828it [2:46:23 bound:437 nc:1889 ncall:3.0e+07 eff:0.1% logz-ratio=519.65+/-0.17 dlogz:7.398>0.1]
+30948it [2:47:27 bound:439 nc:1577 ncall:3.1e+07 eff:0.1% logz-ratio=519.82+/-0.17 dlogz:7.311>0.1]
+31069it [2:48:32 bound:441 nc:1784 ncall:3.1e+07 eff:0.1% logz-ratio=519.99+/-0.17 dlogz:7.022>0.1]
+31192it [2:49:39 bound:443 nc:1749 ncall:3.1e+07 eff:0.1% logz-ratio=520.16+/-0.17 dlogz:6.735>0.1]
+31313it [2:50:44 bound:445 nc:1572 ncall:3.1e+07 eff:0.1% logz-ratio=520.31+/-0.17 dlogz:6.463>0.1]
+31437it [2:51:49 bound:447 nc:1963 ncall:3.2e+07 eff:0.1% logz-ratio=520.46+/-0.17 dlogz:6.192>0.1]
+31559it [2:52:57 bound:449 nc:1254 ncall:3.2e+07 eff:0.1% logz-ratio=520.61+/-0.17 dlogz:5.931>0.1]
+31684it [2:54:06 bound:451 nc:1172 ncall:3.2e+07 eff:0.1% logz-ratio=520.74+/-0.17 dlogz:5.672>0.1]
+31809it [2:55:10 bound:453 nc:1758 ncall:3.2e+07 eff:0.1% logz-ratio=520.87+/-0.17 dlogz:5.422>0.1]
+31934it [2:56:13 bound:455 nc:1483 ncall:3.2e+07 eff:0.1% logz-ratio=520.99+/-0.17 dlogz:5.181>0.1]
+32058it [2:57:18 bound:457 nc:1692 ncall:3.3e+07 eff:0.1% logz-ratio=521.11+/-0.17 dlogz:5.299>0.1]
+32183it [2:58:25 bound:459 nc:1555 ncall:3.3e+07 eff:0.1% logz-ratio=521.22+/-0.17 dlogz:5.065>0.1]
+32306it [2:59:30 bound:461 nc:2001 ncall:3.3e+07 eff:0.1% logz-ratio=521.33+/-0.17 dlogz:4.840>0.1]
+32431it [3:00:38 bound:463 nc:2105 ncall:3.3e+07 eff:0.1% logz-ratio=521.43+/-0.17 dlogz:4.903>0.1]
+32518it [3:01:42 bound:464 nc:1459 ncall:3.3e+07 eff:0.1% logz-ratio=521.50+/-0.17 dlogz:4.752>0.1]
+32618it [3:02:46 bound:466 nc:1324 ncall:3.4e+07 eff:0.1% logz-ratio=521.57+/-0.17 dlogz:4.582>0.1]
+32742it [3:03:53 bound:468 nc:1139 ncall:3.4e+07 eff:0.1% logz-ratio=521.66+/-0.17 dlogz:4.377>0.1]
+32869it [3:05:00 bound:470 nc:1611 ncall:3.4e+07 eff:0.1% logz-ratio=521.74+/-0.17 dlogz:4.469>0.1]
+32994it [3:06:09 bound:472 nc:2431 ncall:3.4e+07 eff:0.1% logz-ratio=521.82+/-0.17 dlogz:4.270>0.1]
+33120it [3:07:15 bound:474 nc:1561 ncall:3.4e+07 eff:0.1% logz-ratio=521.90+/-0.17 dlogz:4.075>0.1]
+33246it [3:08:23 bound:476 nc:1316 ncall:3.5e+07 eff:0.1% logz-ratio=521.97+/-0.17 dlogz:3.885>0.1]
+33366it [3:09:31 bound:478 nc:1517 ncall:3.5e+07 eff:0.1% logz-ratio=522.03+/-0.17 dlogz:3.706>0.1]
+33489it [3:10:39 bound:480 nc:1894 ncall:3.5e+07 eff:0.1% logz-ratio=522.10+/-0.17 dlogz:3.526>0.1]
+33612it [3:11:50 bound:482 nc:2124 ncall:3.5e+07 eff:0.1% logz-ratio=522.16+/-0.17 dlogz:3.350>0.1]
+33738it [3:13:00 bound:484 nc:2220 ncall:3.6e+07 eff:0.1% logz-ratio=522.22+/-0.17 dlogz:3.246>0.1]
+33863it [3:14:08 bound:486 nc:1878 ncall:3.6e+07 eff:0.1% logz-ratio=522.28+/-0.17 dlogz:3.075>0.1]
+33988it [3:15:20 bound:488 nc:1723 ncall:3.6e+07 eff:0.1% logz-ratio=522.33+/-0.17 dlogz:2.909>0.1]
+34115it [3:16:30 bound:490 nc:2246 ncall:3.6e+07 eff:0.1% logz-ratio=522.38+/-0.17 dlogz:2.744>0.1]
+34239it [3:17:43 bound:492 nc:1775 ncall:3.6e+07 eff:0.1% logz-ratio=522.43+/-0.17 dlogz:2.588>0.1]
+34364it [3:18:54 bound:494 nc:2064 ncall:3.7e+07 eff:0.1% logz-ratio=522.47+/-0.17 dlogz:2.435>0.1]
+34489it [3:20:07 bound:496 nc:1830 ncall:3.7e+07 eff:0.1% logz-ratio=522.51+/-0.17 dlogz:2.287>0.1]
+34616it [3:21:20 bound:498 nc:1430 ncall:3.7e+07 eff:0.1% logz-ratio=522.55+/-0.17 dlogz:2.141>0.1]
+34739it [3:22:32 bound:500 nc:1367 ncall:3.7e+07 eff:0.1% logz-ratio=522.59+/-0.17 dlogz:2.005>0.1]
+34866it [3:23:45 bound:502 nc:1656 ncall:3.8e+07 eff:0.1% logz-ratio=522.62+/-0.17 dlogz:1.869>0.1]
+34994it [3:24:57 bound:504 nc:1943 ncall:3.8e+07 eff:0.1% logz-ratio=522.66+/-0.17 dlogz:1.737>0.1]
+35119it [3:26:10 bound:506 nc:1858 ncall:3.8e+07 eff:0.1% logz-ratio=522.69+/-0.17 dlogz:1.804>0.1]
+35241it [3:27:23 bound:508 nc:1874 ncall:3.8e+07 eff:0.1% logz-ratio=522.72+/-0.17 dlogz:1.682>0.1]
+35364it [3:28:35 bound:510 nc:3887 ncall:3.9e+07 eff:0.1% logz-ratio=522.74+/-0.17 dlogz:1.563>0.1]
+35487it [3:29:46 bound:512 nc:1963 ncall:3.9e+07 eff:0.1% logz-ratio=522.77+/-0.17 dlogz:1.450>0.1]
+35612it [3:31:00 bound:514 nc:1719 ncall:3.9e+07 eff:0.1% logz-ratio=522.79+/-0.17 dlogz:1.339>0.1]
+35735it [3:32:13 bound:516 nc:1819 ncall:3.9e+07 eff:0.1% logz-ratio=522.82+/-0.17 dlogz:1.672>0.1]
+35858it [3:33:28 bound:518 nc:1922 ncall:4.0e+07 eff:0.1% logz-ratio=522.84+/-0.17 dlogz:1.558>0.1]
+35984it [3:34:45 bound:520 nc:1448 ncall:4.0e+07 eff:0.1% logz-ratio=522.86+/-0.17 dlogz:1.446>0.1]
+36111it [3:35:58 bound:522 nc:2146 ncall:4.0e+07 eff:0.1% logz-ratio=522.88+/-0.17 dlogz:1.338>0.1]
+36234it [3:37:12 bound:524 nc:1692 ncall:4.0e+07 eff:0.1% logz-ratio=522.90+/-0.17 dlogz:1.239>0.1]
+36358it [3:38:26 bound:526 nc:2116 ncall:4.0e+07 eff:0.1% logz-ratio=522.91+/-0.17 dlogz:1.143>0.1]
+36481it [3:39:42 bound:528 nc:1954 ncall:4.1e+07 eff:0.1% logz-ratio=522.93+/-0.17 dlogz:1.053>0.1]
+36606it [3:40:58 bound:530 nc:1537 ncall:4.1e+07 eff:0.1% logz-ratio=522.94+/-0.17 dlogz:0.966>0.1]
+36727it [3:42:18 bound:532 nc:2125 ncall:4.1e+07 eff:0.1% logz-ratio=522.96+/-0.17 dlogz:0.887>0.1]
+36848it [3:43:32 bound:534 nc:1732 ncall:4.1e+07 eff:0.1% logz-ratio=522.97+/-0.17 dlogz:0.812>0.1]
+36972it [3:44:49 bound:536 nc:1409 ncall:4.2e+07 eff:0.1% logz-ratio=522.98+/-0.17 dlogz:0.740>0.1]
+37096it [3:46:05 bound:538 nc:1671 ncall:4.2e+07 eff:0.1% logz-ratio=522.99+/-0.17 dlogz:0.673>0.1]
+37219it [3:47:18 bound:540 nc:1179 ncall:4.2e+07 eff:0.1% logz-ratio=523.00+/-0.17 dlogz:0.612>0.1]
+37343it [3:48:31 bound:542 nc:1564 ncall:4.2e+07 eff:0.1% logz-ratio=523.01+/-0.17 dlogz:0.554>0.1]
+37470it [3:49:48 bound:544 nc:1498 ncall:4.3e+07 eff:0.1% logz-ratio=523.02+/-0.17 dlogz:0.591>0.1]
+37592it [3:51:04 bound:546 nc:1814 ncall:4.3e+07 eff:0.1% logz-ratio=523.03+/-0.17 dlogz:0.536>0.1]
+37719it [3:52:17 bound:548 nc:1218 ncall:4.3e+07 eff:0.1% logz-ratio=523.04+/-0.17 dlogz:0.484>0.1]
+37843it [3:53:34 bound:550 nc:1889 ncall:4.3e+07 eff:0.1% logz-ratio=523.04+/-0.17 dlogz:0.436>0.1]
+37967it [3:54:47 bound:552 nc:2500 ncall:4.4e+07 eff:0.1% logz-ratio=523.05+/-0.17 dlogz:0.393>0.1]
+38090it [3:56:03 bound:554 nc:1627 ncall:4.4e+07 eff:0.1% logz-ratio=523.06+/-0.17 dlogz:0.354>0.1]
+38214it [3:57:18 bound:556 nc:1864 ncall:4.4e+07 eff:0.1% logz-ratio=523.06+/-0.17 dlogz:0.318>0.1]
+38340it [3:58:34 bound:558 nc:1647 ncall:4.4e+07 eff:0.1% logz-ratio=523.07+/-0.17 dlogz:0.284>0.1]
+38465it [3:59:50 bound:560 nc:1776 ncall:4.5e+07 eff:0.1% logz-ratio=523.07+/-0.17 dlogz:0.304>0.1]
+38587it [4:01:10 bound:562 nc:4182 ncall:4.5e+07 eff:0.1% logz-ratio=523.08+/-0.17 dlogz:0.273>0.1]
+38668it [4:02:22 bound:563 nc:1520 ncall:4.5e+07 eff:0.1% logz-ratio=523.08+/-0.17 dlogz:0.254>0.1]
+38774it [4:03:37 bound:565 nc:1609 ncall:4.5e+07 eff:0.1% logz-ratio=523.08+/-0.17 dlogz:0.231>0.1]
+38901it [4:04:53 bound:567 nc:2219 ncall:4.5e+07 eff:0.1% logz-ratio=523.09+/-0.18 dlogz:0.211>0.1]
+39027it [4:06:12 bound:569 nc:1658 ncall:4.6e+07 eff:0.1% logz-ratio=523.09+/-0.18 dlogz:0.189>0.1]
+39154it [4:07:32 bound:571 nc:2419 ncall:4.6e+07 eff:0.1% logz-ratio=523.09+/-0.18 dlogz:0.168>0.1]
+39280it [4:08:54 bound:573 nc:1683 ncall:4.6e+07 eff:0.1% logz-ratio=523.10+/-0.18 dlogz:0.149>0.1]
+39405it [4:10:14 bound:575 nc:2126 ncall:4.6e+07 eff:0.1% logz-ratio=523.10+/-0.18 dlogz:0.133>0.1]
+39531it [4:11:37 bound:577 nc:2245 ncall:4.7e+07 eff:0.1% logz-ratio=523.10+/-0.18 dlogz:0.118>0.1]
+39654it [4:12:57 bound:579 nc:1407 ncall:4.7e+07 eff:0.1% logz-ratio=523.10+/-0.18 dlogz:0.118>0.1]
+39782it [4:14:19 bound:581 nc:1805 ncall:4.7e+07 eff:0.1% logz-ratio=523.11+/-0.18 dlogz:0.104>0.1]
