@@ -107,7 +107,9 @@ class CheckerBNS:
             N_masses (int): Number of mass pairs to sample from the training data.
         """
         self.path = path
-        self.figures_outdir = os.path.join(self.path, "figures", "check")
+        self.figures_outdir = os.path.join(self.path, "figures")
+        os.makedirs(self.figures_outdir, exist_ok=True)
+        
         self.N_samples = N_samples
         self.N_masses = N_masses
         
@@ -341,7 +343,8 @@ class CheckerNSBH:
             N_masses (int): Number of mass pairs to sample from the training data.
         """
         self.path = path
-        self.figures_outdir = os.path.join(self.path, "figures", "check")
+        self.figures_outdir = os.path.join(self.path, "figures")
+        os.makedirs(self.figures_outdir, exist_ok=True)
         
         self.N_samples = N_samples
         self.N_masses = N_masses
@@ -525,14 +528,13 @@ class CheckerNSBH:
         # TODO: KL divergence calculation
 
 def main():
-    # FIXME: save the plots in the flow directory
-    bns_checker = CheckerBNS("./models/radio_chiEFT_conditional_bns/", N_samples=10_000, N_masses=5)
-    print("\n" + "="*50)
-    print("Testing BNS conditional model")
-    print("="*50)
-    bns_checker.check_conditional_bns_model()
+    # bns_checker = CheckerBNS("./models/radio_chiEFT_conditional_bns/", N_samples=10_000, N_masses=5)
+    # print("\n" + "="*50)
+    # print("Testing BNS conditional model")
+    # print("="*50)
+    # bns_checker.check_conditional_bns_model()
     
-    nsbh_checker = CheckerNSBH("./models/radio_conditional_nsbh/", N_samples=10_000, N_masses=5)
+    nsbh_checker = CheckerNSBH("./models/radio_chiEFT_conditional_nsbh/", N_samples=10_000, N_masses=5)
     print("\n" + "="*50)
     print("Testing NSBH conditional model")
     print("="*50)
