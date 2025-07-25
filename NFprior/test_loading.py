@@ -57,7 +57,7 @@ nsbh_model_dir = "./models/conditional_nsbh/"
 nsbh_glasflow_filename = os.path.join(nsbh_model_dir, "model.pt")
 nsbh_training_data_path = os.path.join(nsbh_model_dir, "training_data.npz")
 
-def test_bns_conditional_prior():
+def test_test_loading_prior():
     """Test the new NFConditionalPrior implementation with shared state coordination for BNS"""
     
     print("Testing BNS NFConditionalPrior with shared state coordination...")
@@ -332,7 +332,7 @@ def test_corner_plot_new_implementation():
     )
     
     # Save the figure
-    output_path = "./figures/bns_conditional_prior_cornerplot.pdf"
+    output_path = "./figures/test_loading_prior_cornerplot.pdf"
     print(f"Saving corner plot to {output_path}")
     plt.savefig(output_path, bbox_inches="tight")
     plt.close()
@@ -375,7 +375,7 @@ def test_corner_plot_new_implementation():
                    **corner_kwargs)
     
     # Save the figure
-    output_path = "./figures/bns_conditional_prior_cornerplot_tilde.pdf"
+    output_path = "./figures/test_loading_prior_cornerplot_tilde.pdf"
     print(f"Saving corner plot to {output_path}")
     plt.savefig(output_path, bbox_inches="tight")
     plt.close()
@@ -406,7 +406,7 @@ def test_corner_plot_new_implementation():
     )
     
     # Save the figure
-    output_path = "./figures/bns_conditional_prior_cornerplot_rescaling.pdf"
+    output_path = "./figures/test_loading_prior_cornerplot_rescaling.pdf"
     print(f"Saving corner plot to {output_path}")
     plt.savefig(output_path, bbox_inches="tight")
     plt.close()
@@ -438,7 +438,7 @@ def test_corner_plot_new_implementation():
         **default_corner_kwargs)
     
     # Save the figure
-    output_path = "./figures/bns_conditional_prior_cornerplot_comparison.pdf"
+    output_path = "./figures/test_loading_prior_cornerplot_comparison.pdf"
     print(f"Saving corner plot to {output_path}")
     plt.savefig(output_path, bbox_inches="tight")
     plt.close()
@@ -528,7 +528,7 @@ def main():
     
     # Test the new implementation
     try:
-        test_bns_conditional_prior()
+        test_test_loading_prior()
         print("\n✓ Basic functionality test passed!")
     except Exception as e:
         print(f"\n✗ Basic functionality test failed: {e}")

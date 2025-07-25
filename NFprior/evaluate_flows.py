@@ -92,7 +92,11 @@ def make_cornerplot(chains_1: np.array,
     plt.savefig(name, bbox_inches = "tight")
     plt.close()
     
-class CheckerBNS:
+class Checker:
+    """
+    Base class for both BNS and NSBH specific checkers.
+    Just to unify data loading and initialization.
+    """
     
     def __init__(self,
                  path: str,
@@ -104,7 +108,7 @@ class CheckerBNS:
         Args:
             path (str): Path to the directory where the model is stored.
             N_samples (int): Number of samples to generate for comparison for a single mass pair.
-            N_masses (int): Number of mass pairs to sample from the training data.
+            N_masses (int): Number of mass pairs to sample from the training data, for the conditioning part of conditional flows.
         """
         self.path = path
         self.figures_outdir = os.path.join(self.path, "figures")
@@ -113,7 +117,30 @@ class CheckerBNS:
         self.N_samples = N_samples
         self.N_masses = N_masses
         
-        # Load the model and data
+    def load_training_data(self):
+        """
+        Load training data from the model directory.
+        """
+        training_data_path = os.path.join(self.path, "training_data.npz")
+        if os.path.exists(training_data_path):
+            print(f"Loading training data from {training_data_path}")
+            return np.load(training_data_path)
+        else:
+            print(f"No training data found at {training_data_path}")
+            return None
+    
+class CheckerBNS(Checker):
+    
+    def __init__(self, path: str, N_samples: int = 10_000, N_masses: int = 5):
+        """
+        Initialize the checker for the BNS conditional model.
+        
+        Args:
+            path (str): Path to the directory where the model is stored.
+            N_samples (int): Number of samples to generate for comparison for a single mass pair.
+            N_masses (int): Number of mass pairs to sample from the training data, for the conditioning part of conditional flows.
+        """
+        super().__init__(path, N_samples, N_masses)
         self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS, self.scaler = self.load_model_and_data()
     
     def load_model_and_data(self):
@@ -230,9 +257,18 @@ class CheckerBNS:
             m1_value (float): Mass 1 value to condition on.
             m2_value (float): Mass 2 value to condition on.
         """
-        # Load the Lambdas from the training data by sampling
-        lambda_1_train = np.zeros(self.N_samples)
-        lambda_2_train = np.zeros(self.N_samples)
+        # Check if we're using tilde parameterization
+        use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+        
+        # Load the training samples based on parameterization
+        if use_tilde:
+            # For tilde parameterization, we need to create lambda_tilde and delta_lambda_tilde
+            lambda_tilde_train = np.zeros(self.N_samples)
+            delta_lambda_tilde_train = np.zeros(self.N_samples)
+        else:
+            # For component parameterization, use lambda_1 and lambda_2
+            lambda_1_train = np.zeros(self.N_samples)
+            lambda_2_train = np.zeros(self.N_samples)
         
         counter = 0
         
@@ -249,21 +285,45 @@ class CheckerBNS:
             if lambda_1_value < 0.0 or lambda_2_value < 0.0:
                 continue
             else:
-                lambda_1_train[counter] = lambda_1_value
-                lambda_2_train[counter] = lambda_2_value
+                if use_tilde:
+                    # Convert to tilde parameters
+                    from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
+                    lambda_tilde_value = lambda_1_lambda_2_to_lambda_tilde(lambda_1_value, lambda_2_value, m1_value, m2_value)
+                    delta_lambda_tilde_value = lambda_1_lambda_2_to_delta_lambda_tilde(lambda_1_value, lambda_2_value, m1_value, m2_value)
+                    
+                    lambda_tilde_train[counter] = lambda_tilde_value
+                    delta_lambda_tilde_train[counter] = delta_lambda_tilde_value
+                else:
+                    lambda_1_train[counter] = lambda_1_value
+                    lambda_2_train[counter] = lambda_2_value
                 counter += 1
-                
-        training_samples = np.array([lambda_1_train, lambda_2_train]).T
+        
+        # Create training samples array based on parameterization        
+        if use_tilde:
+            training_samples = np.array([lambda_tilde_train, delta_lambda_tilde_train]).T
+        else:
+            training_samples = np.array([lambda_1_train, lambda_2_train]).T
             
         # Condition on those masses to sample from the conditional NF
         nf_samples = []
         use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
         
+        # Prepare conditioning variables based on parameterization
+        if use_tilde:
+            # For tilde parameterization, condition on Mc and q
+            from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
+            mc_cond = component_masses_to_chirp_mass(m1_value, m2_value)
+            q_cond = component_masses_to_mass_ratio(m1_value, m2_value)
+            conditioning_vars = [mc_cond, q_cond]
+        else:
+            # For component parameterization, condition on m1 and m2
+            conditioning_vars = [m1_value, m2_value]
+        
         if use_flowjax:
             # flowJAX sampling
             key = jr.key(123)
 
-            u_jax = jnp.array([[m1_value, m2_value]], dtype=jnp.float32)
+            u_jax = jnp.array([conditioning_vars], dtype=jnp.float32)
 
             # Generate N_samples random keys
             keys = jr.split(key, self.N_samples)
@@ -284,7 +344,7 @@ class CheckerBNS:
         
         else:
             # glasflow sampling
-            u = torch.tensor([[m1_value, m2_value]], dtype=torch.float32)
+            u = torch.tensor([conditioning_vars], dtype=torch.float32)
             with torch.no_grad():
                 for _ in range(self.N_samples):
                     value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()
@@ -298,18 +358,24 @@ class CheckerBNS:
         if self.scaler is not None:
             nf_samples = self.scaler.inverse_transform(nf_samples)
         
-        # Print the ranges: 
-        lambda_1_nf, lambda_2_nf = nf_samples[:, 0], nf_samples[:, 1]
+        # Determine range from data, use quantiles
+        param_1_nf, param_2_nf = nf_samples[:, 0], nf_samples[:, 1]
         
-        # Determine range from data but ensure positive, use quantiles
-        lambda_1_lower, lambda_1_upper = np.quantile(lambda_1_nf, [0.01, 0.99])
-        lambda_2_lower, lambda_2_upper = np.quantile(lambda_2_nf, [0.01, 0.99])
+        param_1_lower, param_1_upper = np.quantile(param_1_nf, [0.01, 0.99])
+        param_2_lower, param_2_upper = np.quantile(param_2_nf, [0.01, 0.99])
         
-        my_range = [[lambda_1_lower, lambda_1_upper], [lambda_2_lower, lambda_2_upper]]
+        my_range = [[param_1_lower, param_1_upper], [param_2_lower, param_2_upper]]
         
-        name = os.path.join(self.figures_outdir, f"m1_{m1_value:.2f}_m2_{m2_value:.2f}.pdf")
+        # Create parameter labels based on use_tilde setting
+        if use_tilde:
+            labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
+            name = os.path.join(self.figures_outdir, f"Mc_{conditioning_vars[0]:.2f}_q_{conditioning_vars[1]:.2f}.pdf")
+        else:
+            labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
+            name = os.path.join(self.figures_outdir, f"m1_{m1_value:.2f}_m2_{m2_value:.2f}.pdf")
+        
         print(f"Saving cornerplot to {name}")
-        make_cornerplot(training_samples, nf_samples, name, my_range=my_range)
+        make_cornerplot(training_samples, nf_samples, name, my_range=my_range, labels=labels)
         
         # # Compute the KL divergence
         # all_samples = np.concatenate([training_samples.flatten(), nf_samples.flatten()])
@@ -328,7 +394,7 @@ class CheckerBNS:
         # print("kl")        
         # print(kl)        
 
-class CheckerNSBH:
+class CheckerNSBH(Checker):
     """
     Checker for the NSBH conditional model.
     """
@@ -342,12 +408,7 @@ class CheckerNSBH:
             N_samples (int): Number of samples to generate for comparison for a single mass pair.
             N_masses (int): Number of mass pairs to sample from the training data.
         """
-        self.path = path
-        self.figures_outdir = os.path.join(self.path, "figures")
-        os.makedirs(self.figures_outdir, exist_ok=True)
-        
-        self.N_samples = N_samples
-        self.N_masses = N_masses
+        super().__init__(path, N_samples, N_masses)
         
         # Load the model and data
         self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS, self.scaler = self.load_model_and_data()
@@ -527,18 +588,307 @@ class CheckerNSBH:
         
         # TODO: KL divergence calculation
 
+class CheckerUnconditional(Checker):
+    """
+    Checker for unconditional models (both BNS and NSBH).
+    """
+    
+    def __init__(self, path: str, N_samples: int = 10_000):
+        """
+        Initialize the checker for unconditional models.
+        
+        Args:
+            path (str): Path to the directory where the model is stored.
+            N_samples (int): Number of samples to generate for comparison.
+        """
+        super().__init__(path, N_samples, N_masses=0)  # N_masses not used for unconditional
+        self.flow, self.nf_kwargs, self.scaler = self.load_model_and_data()
+        self.training_data = self.load_training_data()
+        
+    def load_model_and_data(self):
+        """
+        Load the unconditional NF model.
+        
+        Returns:
+            flow: The loaded normalizing flow model.
+            nf_kwargs (dict): The configuration parameters for the NF.
+            scaler: The MinMaxScaler used during training (None if not used).
+        """
+        nf_kwargs_path = os.path.join(self.path, "model_kwargs.json")
+        
+        with open(nf_kwargs_path, "r") as f:
+            nf_kwargs = json.load(f)
+        
+        # Check if this is a flowJAX model
+        use_flowjax = nf_kwargs.get("use_flowjax", "False") == "True"
+        n_inputs = nf_kwargs["n_inputs"]
+        
+        if use_flowjax:
+            print(f"Loading flowJAX unconditional model with {n_inputs} inputs")
+            nf_path = os.path.join(self.path, "model.eqx")
+            
+            # Create base distribution
+            base_dist = Normal(jnp.zeros(n_inputs))
+            key = jr.key(42)
+            
+            # Choose flow type based on dimensionality and model type
+            model_type = nf_kwargs.get("model_type", "coupling_flow")
+            if model_type == "coupling_flow":
+                flow = coupling_flow(
+                    key=key,
+                    base_dist=base_dist,
+                    flow_layers=nf_kwargs["n_transforms"],
+                    nn_width=nf_kwargs["n_neurons"],
+                    nn_depth=nf_kwargs["n_blocks_per_transform"]
+                )
+            elif model_type == "masked_autoregressive_flow":
+                flow = masked_autoregressive_flow(
+                    key=key,
+                    base_dist=base_dist,
+                    flow_layers=nf_kwargs["n_transforms"],
+                    nn_width=nf_kwargs["n_neurons"],
+                    nn_depth=nf_kwargs["n_blocks_per_transform"]
+                )
+            else:
+                raise ValueError(f"Unsupported flowJAX model type: {model_type}")
+            
+            print(f"Loading flowJAX model from {nf_path}")
+            flow = eqx.tree_deserialise_leaves(nf_path, flow)
+            
+        else:
+            print(f"Loading glasflow unconditional model with {n_inputs} inputs")
+            nf_path = os.path.join(self.path, "model.pt")
+            
+            # Initialize glasflow model based on n_inputs
+            from glasflow.flows.nsf import CouplingNSF
+            flow = CouplingNSF(
+                n_inputs=n_inputs,
+                n_transforms=nf_kwargs["n_transforms"],
+                n_neurons=nf_kwargs["n_neurons"],
+                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"]
+            )
+            
+            print(f"Loading glasflow model from {nf_path}")
+            flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
+            flow.eval()
+            flow.compile()
+        
+        # Load the scaler if it exists
+        scaler_path = os.path.join(self.path, "scaler.gz")
+        scaler = None
+        if os.path.exists(scaler_path):
+            print(f"Loading scaler from {scaler_path}")
+            scaler = joblib.load(scaler_path)
+        else:
+            print("No scaler found - assuming input was not scaled during training")
+        
+        return flow, nf_kwargs, scaler
+    
+    def check_unconditional_model(self):
+        """
+        Check the unconditional model by comparing training data with NF samples.
+        """
+        if self.training_data is None:
+            print("No training data available for comparison")
+            return
+        
+        # Generate samples from the NF
+        nf_samples = self.generate_nf_samples()
+        
+        # Get training samples in the same format
+        training_samples = self.get_training_samples()
+        
+        # Create parameter labels based on use_tilde setting
+        use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+        parameter_names = self.nf_kwargs.get("names", [])
+        
+        labels = self.get_parameter_labels(use_tilde, parameter_names)
+        
+        # Determine range from combined data
+        all_data = np.concatenate([training_samples, nf_samples], axis=0)
+        ranges = []
+        for i in range(all_data.shape[1]):
+            lower, upper = np.quantile(all_data[:, i], [0.01, 0.99])
+            ranges.append([lower, upper])
+        
+        # Create corner plot
+        name = os.path.join(self.figures_outdir, "unconditional_comparison.pdf")
+        print(f"Saving unconditional model comparison to {name}")
+        
+        self.make_cornerplot_with_labels(training_samples, nf_samples, name, 
+                                       my_range=ranges, labels=labels)
+    
+    def get_parameter_labels(self, use_tilde, parameter_names):
+        """Get parameter labels based on tilde setting and parameter names."""
+        if use_tilde:
+            if len(parameter_names) == 4:  # BNS case: Mc, q, lambda_tilde, delta_lambda_tilde
+                return [r"$M_c$ [$M_{\odot}$]", r"$q$", r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
+            elif len(parameter_names) == 2:  # NSBH case: m2, lambda_2
+                return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]
+        else:
+            if len(parameter_names) == 4:  # BNS case: m1, m2, lambda_1, lambda_2
+                return [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]", r"$\Lambda_1$", r"$\Lambda_2$"]
+            elif len(parameter_names) == 2:  # NSBH case: m2, lambda_2
+                return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]
+        
+        # Fallback to parameter names if available
+        return parameter_names if parameter_names else None
+    
+    def make_cornerplot_with_labels(self, chains_1: np.array, chains_2: np.array,
+                                  name: str, my_range: list = None, 
+                                  truths: list = None, labels: list = None):
+        """
+        Create corner plot with parameter labels.
+        """
+        # The training data:
+        corner_kwargs = copy.deepcopy(default_corner_kwargs)
+        hist_1d_kwargs = {"density": True, "color": "blue"}
+        corner_kwargs["color"] = "blue"
+        corner_kwargs["hist_kwargs"] = hist_1d_kwargs
+        fig = corner.corner(chains_1, range=my_range, truths=truths, 
+                          labels=labels, **corner_kwargs)
+
+        # The data from the normalizing flow
+        corner_kwargs["color"] = "red"
+        hist_1d_kwargs = {"density": True, "color": "red"}
+        corner_kwargs["hist_kwargs"] = hist_1d_kwargs
+        corner.corner(chains_2, truths=truths, range=my_range, 
+                     fig=fig, labels=labels, **corner_kwargs)
+
+        # Make a textbox
+        if my_range is None or len(my_range) <= 2:
+            fs = 14
+        else:
+            fs = 24
+        plt.text(0.75, 0.75, "Training data", fontsize=fs, color="blue", 
+                transform=plt.gcf().transFigure)
+        plt.text(0.75, 0.65, "Normalizing flow", fontsize=fs, color="red", 
+                transform=plt.gcf().transFigure)
+
+        plt.savefig(name, bbox_inches="tight")
+        plt.close()
+    
+    def generate_nf_samples(self):
+        """
+        Generate samples from the NF model.
+        """
+        nf_samples = []
+        use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
+        
+        if use_flowjax:
+            # flowJAX sampling
+            key = jr.key(123)
+            keys = jr.split(key, self.N_samples)
+            
+            @jax.jit
+            def sample_fn(sample_key):
+                return self.flow.sample(sample_key, (1,)).flatten()
+            
+            # Vectorize over keys
+            nf_samples_jax = jax.vmap(sample_fn)(keys)
+            nf_samples = np.array(nf_samples_jax)
+        else:
+            # glasflow sampling
+            with torch.no_grad():
+                for _ in range(self.N_samples):
+                    value = self.flow.sample(1).cpu().numpy().flatten()
+                    nf_samples.append(value)
+            nf_samples = np.array(nf_samples)
+        
+        # Apply inverse scaling if scaler was used during training
+        if self.scaler is not None:
+            nf_samples = self.scaler.inverse_transform(nf_samples)
+        
+        # Apply inverse log transform if log was taken during training
+        if self.nf_kwargs.get("take_log_lambda", "False") == "True":
+            # Only apply to lambda parameters (last 1 or 2 columns)
+            use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+            source_type = self.nf_kwargs.get("source_type", "bns")
+            
+            if source_type == "bns":
+                if use_tilde:
+                    # lambda_tilde, delta_lambda_tilde are last 2 columns
+                    nf_samples[:, -2:] = np.exp(nf_samples[:, -2:])
+                else:
+                    # lambda_1, lambda_2 are last 2 columns
+                    nf_samples[:, -2:] = np.exp(nf_samples[:, -2:])
+            elif source_type == "nsbh":
+                # lambda_2 is last column
+                nf_samples[:, -1] = np.exp(nf_samples[:, -1])
+        
+        return nf_samples
+    
+    def get_training_samples(self):
+        """
+        Get training samples in the same format as NF samples.
+        """
+        use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+        source_type = self.nf_kwargs.get("source_type", "bns")
+        
+        if use_tilde:
+            if source_type == "bns":
+                # Use Mc, q, lambda_tilde, delta_lambda_tilde
+                if "chirp_mass" in self.training_data and "mass_ratio" in self.training_data:
+                    mc = self.training_data["chirp_mass"]
+                    q = self.training_data["mass_ratio"]
+                else:
+                    # Convert from component masses
+                    from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
+                    mc = component_masses_to_chirp_mass(self.training_data["m1"], self.training_data["m2"])
+                    q = component_masses_to_mass_ratio(self.training_data["m1"], self.training_data["m2"])
+                
+                lambda_tilde = self.training_data["lambda_tilde"]
+                delta_lambda_tilde = self.training_data["delta_lambda_tilde"]
+                
+                return np.column_stack([mc, q, lambda_tilde, delta_lambda_tilde])
+            else:  # NSBH
+                # For NSBH unconditional with tilde, use all 4 parameters
+                if "chirp_mass" in self.training_data:
+                    mc = self.training_data["chirp_mass"]
+                    q = self.training_data["mass_ratio"]
+                    lambda_tilde = self.training_data["lambda_tilde"]
+                    delta_lambda_tilde = self.training_data["delta_lambda_tilde"]
+                    return np.column_stack([mc, q, lambda_tilde, delta_lambda_tilde])
+                else:
+                    # Fallback to m2, lambda_2
+                    m2 = self.training_data["m2"]
+                    lambda_2 = self.training_data["lambda_2"]
+                    return np.column_stack([m2, lambda_2])
+        else:
+            if source_type == "bns":
+                # Use m1, m2, lambda_1, lambda_2
+                m1 = self.training_data["m1"]
+                m2 = self.training_data["m2"]
+                lambda_1 = self.training_data["lambda_1"]
+                lambda_2 = self.training_data["lambda_2"]
+                return np.column_stack([m1, m2, lambda_1, lambda_2])
+            else:  # NSBH
+                # Use m2, lambda_2 (concatenated NS data)
+                m2 = self.training_data["m2"]
+                lambda_2 = self.training_data["lambda_2"]
+                return np.column_stack([m2, lambda_2])
+
 def main():
+    # Example usage for BNS conditional model
     # bns_checker = CheckerBNS("./models/radio_chiEFT_conditional_bns/", N_samples=10_000, N_masses=5)
     # print("\n" + "="*50)
     # print("Testing BNS conditional model")
     # print("="*50)
     # bns_checker.check_conditional_bns_model()
     
-    nsbh_checker = CheckerNSBH("./models/radio_chiEFT_conditional_nsbh/", N_samples=10_000, N_masses=5)
+    # Example usage for NSBH conditional model
+    # nsbh_checker = CheckerNSBH("./models/radio_chiEFT_conditional_nsbh/", N_samples=10_000, N_masses=5)
+    # print("\n" + "="*50)
+    # print("Testing NSBH conditional model")
+    # print("="*50)
+    # nsbh_checker.check_conditional_nsbh_model()
+    
+    # Example usage for unconditional models (both BNS and NSBH)
+    unconditional_checker = CheckerUnconditional("./models/GW170817/radio_bns/", N_samples=10_000)
     print("\n" + "="*50)
-    print("Testing NSBH conditional model")
+    print("Testing unconditional model")
     print("="*50)
-    nsbh_checker.check_conditional_nsbh_model()
+    unconditional_checker.check_unconditional_model()
     
 if __name__ == "__main__":
     main()
