@@ -1,6 +1,6 @@
 Universe = vanilla
 Executable = /data/gravwav/twouters/miniconda3/envs/eos_source_classification/bin/python
-arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py --source-type nsbh --eos-samples-name radio_chiEFT"
+arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py --source-type nsbh --eos-samples-name radio_chiEFT_NICER"
 getenv = true
 Log = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/logs/nsbh_log.log
 Error = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/logs/nsbh_err.err
