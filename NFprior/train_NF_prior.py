@@ -3,6 +3,8 @@ Train a normalizing flow to approximate a distribution on masses and Lambdas to 
 This might be joint prior or conditional prior, we will have to check which works best later on. 
 """
 
+# FIXME: global NF (i.e., not per event) seems broken
+
 import os
 import argparse
 import numpy as np
@@ -107,6 +109,7 @@ parser.add_argument("--no-include-dL",
 parser.set_defaults(include_dL=True)
 parser.add_argument("--N-samples-training", 
                     type=int, 
+                    default=100_000, 
                     help="Number of training samples")
 parser.add_argument("--N-samples-plot", 
                     type=int, 
