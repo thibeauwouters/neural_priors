@@ -2,7 +2,7 @@ torch: CUDA is available. Number of devices: 1
 torch: Current CUDA device: 0
 JAX: devices available: [CudaDevice(id=0)]
 Starting training with the following parameters:
-    - eos_samples_name: radio_chiEFT
+    - eos_samples_name: radio_chiEFT_NICER
     - source_type: nsbh
     - N_samples_training: 100000
     - N_samples_plot: 10000
@@ -21,27 +21,26 @@ Starting training with the following parameters:
     - num_bins: 10
     - nn_depth: 5
     - nn_block_dim: 8
-Training data will be loaded from: ../data/eos/radio_chiEFT/eos_samples.npz
-Created output directory ./models/radio_chiEFT_conditional_nsbh
-Everything for this model will be saved to ./models/radio_chiEFT_conditional_nsbh
-Reading the EOS data from ../data/eos/radio_chiEFT/eos_samples.npz
-Number of good samples:  0.9995
-Saving training data to ./models/radio_chiEFT_conditional_nsbh/training_data.npz
+Training data will be loaded from: ../data/eos/radio_chiEFT_NICER/eos_samples.npz
+Created output directory ./models/radio_chiEFT_NICER_conditional_nsbh
+Everything for this model will be saved to ./models/radio_chiEFT_NICER_conditional_nsbh
+Reading the EOS data from ../data/eos/radio_chiEFT_NICER/eos_samples.npz
+Number of good samples:  1.0
+Saving training data to ./models/radio_chiEFT_NICER_conditional_nsbh/training_data.npz
 Saving training data DONE
 NSBH mode: concatenating all neutron star data for single NS modeling
 Sanity checking the ranges of the training data
-m2 (concatenated) ranges from 1.000000194674626 to 3.348053843809245
-lambda_2 (concatenated) ranges from 2.62156827880227 to 8033.59470004238
+m2 (concatenated) ranges from 1.0000037431798676 to 3.305792910453291
+lambda_2 (concatenated) ranges from 2.5451214620725766 to 7480.822055286668
 We are training NSBH and conditional - using concatenated NS data
 np.shape(self.x)
 (200000, 1)
 np.shape(self.u)
 (200000, 1)
-m2 (concatenated) ranges from 1.000000194674626 to 3.348053843809245
-lambda_2 (concatenated) ranges from 2.62156827880227 to 8033.59470004238
+m2 (concatenated) ranges from 1.0000037431798676 to 3.305792910453291
+lambda_2 (concatenated) ranges from 2.5451214620725766 to 7480.822055286668
 Using MinMaxScaler to scale the input data x
-The scaler will be saved with joblib to ./models/radio_chiEFT_conditional_nsbh/scaler.gz
-Saved sklearn scaler to ./models/radio_chiEFT_conditional_nsbh/scaler.gz
+Saved sklearn scaler to ./models/radio_chiEFT_NICER_conditional_nsbh/scaler.gz
 Going to start training for glasflow . . .
 Initializing a glasflow model for conditional training with kwargs:
     n_inputs: 1
@@ -50,8 +49,9 @@ Initializing a glasflow model for conditional training with kwargs:
     n_neurons: 128
 Using MaskedAffineAutoregressiveFlow for 1D conditional distribution
 Initialized flow: MaskedAffineAutoregressiveFlow
-Saving the training loss plot to ./models/radio_chiEFT_conditional_nsbh/training_loss.pdf
-Training done. Took around 48.21 minutes
-Saving the model weights to ./models/radio_chiEFT_conditional_nsbh/model.pt
-Saving the model kwargs to ./models/radio_chiEFT_conditional_nsbh/model_kwargs.json
+Early stopping triggered at epoch 236
+Saving the training loss plot to ./models/radio_chiEFT_NICER_conditional_nsbh/training_loss.pdf
+Training done. Took around 45.82 minutes
+Saving the model weights to ./models/radio_chiEFT_NICER_conditional_nsbh/model.pt
+Saving the model kwargs to ./models/radio_chiEFT_NICER_conditional_nsbh/model_kwargs.json
 DONE training!
