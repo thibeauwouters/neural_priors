@@ -8,6 +8,18 @@ import argparse
 import numpy as np
 import json
 
+### bilby imports
+import bilby 
+from bilby.core.prior.analytical import Uniform, Sine, Cosine
+from bilby.gw.prior import UniformComovingVolume, AlignedSpin
+
+from bilby.gw.conversion import (
+    luminosity_distance_to_redshift,
+    chirp_mass_and_mass_ratio_to_component_masses,
+    lambda_1_lambda_2_to_lambda_tilde,
+    lambda_1_lambda_2_to_delta_lambda_tilde
+)
+
 ### glasflow imports
 from glasflow.flows import RealNVP
 from glasflow.flows.autoregressive import MaskedAffineAutoregressiveFlow
@@ -61,6 +73,20 @@ parser.add_argument("--source-type",
                     default="bns", 
                     choices=["bns", "nsbh"], 
                     help="Type of source to model")
+parser.add_argument("--event-name", 
+                    type=str, 
+                    default="", 
+                    help="The name of the GW event for which to train the NF prior. This will load in the priors and use them for creating specific training data.")
+parser.add_argument("--conditional", 
+                    action="store_true", 
+                    help="Use conditional NF training")
+parser.add_argument("--use-tilde", 
+                    action="store_true", 
+                    help="Use tilde parameterization (Mc, q, lambda_tilde, delta_lambda_tilde) instead of (m1, m2, lambda_1, lambda_2)")
+parser.add_argument("--no-use-tilde", 
+                    dest="use_tilde", 
+                    action="store_false")
+parser.set_defaults(use_tilde=False)
 parser.add_argument("--N-samples-training", 
                     type=int, 
                     default=100_000, 
@@ -73,9 +99,6 @@ parser.add_argument("--m-max-BH",
                     type=float, 
                     default=5.0, 
                     help="Maximum BH mass for NSBH sources")
-parser.add_argument("--conditional", 
-                    action="store_true", 
-                    help="Use conditional NF training")
 parser.add_argument("--no-conditional", 
                     dest="conditional", 
                     action="store_false", 
@@ -153,10 +176,12 @@ class NFPriorCreator:
     def __init__(self,
                  eos_samples_name: str = "radio",
                  source_type: str = "bns",
+                 event_name: str = "",
+                 use_tilde: bool = False,
+                 conditional: bool = True,
                  N_samples_training: int = 100_000,
                  N_samples_plot: int = 10_000,
                  m_max_BH: float = 5.0,
-                 conditional: bool = True,
                  take_log_lambda: bool = False,
                  use_flowjax: bool = False,
                  num_epochs: int = 250,
@@ -179,6 +204,7 @@ class NFPriorCreator:
         Args:
             eos_samples_name (str, optional): Name of the run from which we load the EOS samples from, which will be converted into the training data for the NF for binary systems. Defaults to `radio`, which only uses the radio timing constraints on MTOV.
             source_type (str, optional): Which kind of source to model: `bns` or `nsbh`. Defaults to "bns".
+            event_name (str, optional): The name of the GW event for which to train the NF prior. This will load in the priors and use them for creating specific training data. Defaults to "".
             N_samples_training (int, optional): Number of training samples to create.. Defaults to 100_000.
             N_samples_plot (int, optional): Number of samples to create the plots. Defaults to 10_000.
             m_max_BH (float, optional): If generating NSBH training data with an NF that is not conditioned on the masses, this is up to which the masses are taken. Defaults to 5.0.
@@ -186,6 +212,7 @@ class NFPriorCreator:
             conditional (bool, optional): Whether to train the NF in a conditional manner, i.e., Lambdas as function of masses. Defaults to True as this is recommended for our bilby setup.
             take_log_lambda (bool, optional): Whether to take the log of the Lambdas before training to deal with their massive scaling, to improve training the NF. Defaults to True.
             use_flowjax (bool, optional): Whether to use flowJAX instead of glasflow for training. Defaults to False.
+            use_tilde (bool, optional): Whether to use tilde parameterization (Mc, q, lambda_tilde, delta_lambda_tilde) instead of (m1, m2, lambda_1, lambda_2). Defaults to False.
             num_epochs (int, optional): Number of training epochs. Defaults to 100.
             learning_rate (float, optional): Learning rate for training. Defaults to 1e-3.
             max_patience (int, optional): Max stops to wait before employing early stopping. Defaults to 50.
@@ -213,12 +240,25 @@ class NFPriorCreator:
             raise ValueError(f"source_type must be one of {SUPPORTED_SOURCE_TYPES}, got {source_type} instead.")
         
         self.source_type = source_type
+        
+        if len(event_name) > 0:
+            # An event name was given, check if we have the PE ready for that event
+            base_GW_events_dir = "../GW_runs/"
+            all_GW_events = os.listdir(base_GW_events_dir)
+            all_GW_events = [ev for ev in all_GW_events if ev.startswith("GW")]
+            
+            if not event_name in all_GW_events:
+                raise ValueError(f"Event {event_name} not found in {base_GW_events_dir}. Available events: {all_GW_events}.")
+            
+        self.event_name = event_name
+        print(f"Training a normalizing flow for {self.source_type} sources with event name set to {self.event_name}")
         self.N_samples_training = N_samples_training
         self.N_samples_plot = N_samples_plot
         self.m_max_BH = m_max_BH
         self.conditional = conditional
         self.take_log_lambda = take_log_lambda
         self.use_flowjax = use_flowjax
+        self.use_tilde = use_tilde
 
         self.num_epochs = num_epochs
         self.learning_rate = learning_rate
@@ -237,6 +277,10 @@ class NFPriorCreator:
                 Please set either scale_input=False or take_log_lambda=False.\
                 Recommended to use scaling and not log transformation for training (empirically gave best results).")
         
+        if self.use_tilde and self.source_type == "nsbh" and self.conditional:
+            raise ValueError("Combination of use_tilde=True, source_type='nsbh', and conditional=True is not supported. \
+                Please use component parameterization for NSBH conditional training or switch to unconditional training.")
+        
         # Check flowJAX availability if requested
         if self.use_flowjax and not globals().get('jax'):
             raise ImportError("flowJAX requested but JAX/flowJAX not available. Install flowJAX or set use_flowjax=False")
@@ -244,16 +288,26 @@ class NFPriorCreator:
         # Make an outdir based on the given name etc, so that everything is stored in one directory for later on
         backend_suffix = "_flowjax" if self.use_flowjax else ""
         
-        if self.conditional:
-            self.outdir = os.path.join(f"./models/{self.eos_samples_name}_conditional_{self.source_type}{backend_suffix}")
+        if self.event_name:
+            # If an event name was given, we save the model in a specific directory for that event
+            base_dir = f"./models/{self.event_name}/"
         else:
-            self.outdir = os.path.join(f"./models/{self.eos_samples_name}_{self.source_type}{backend_suffix}")
+            # If no event name was given, we save the model in a general directory for the source type
+            base_dir = f"./models/{self.source_type}/"
+            
+        if not os.path.exists(base_dir):
+            os.makedirs(base_dir)
+            print(f"Created base directory {base_dir}")
+        
+        if self.conditional:
+            self.outdir = os.path.join(f"./{base_dir}{self.eos_samples_name}_conditional_{self.source_type}{backend_suffix}")
+        else:
+            self.outdir = os.path.join(f"./{base_dir}{self.eos_samples_name}_{self.source_type}{backend_suffix}")
             
         if not os.path.exists(self.outdir):
             os.makedirs(self.outdir)
             print(f"Created output directory {self.outdir}")
         print(f"Everything for this model will be saved to {self.outdir}")
-    
     
     def load_eos_samples_from_file(self) -> tuple[np.array, np.array, np.array]:
         """
@@ -297,10 +351,139 @@ class NFPriorCreator:
         Lambdas_EOS = Lambdas_EOS[good_idx]
         
         return masses_EOS, radii_EOS, Lambdas_EOS
-        
+    
     def create_data(self):
         """
+        Switch to the correct data generation method.
+        In case no event name was specified, this means we generate m1, m2 data from [1, MTOV] Msun from the EOS data.
+        In case an event name was specified, we load in the priors, and generate m1, m2 (source-frame) training data from the priors.
+        """
+        
+        if self.event_name:
+            print(f"Creating training data for event {self.event_name} using the priors")
+            self.create_data_from_priors()
+        else:
+            print("Creating training data from EOS samples")
+            self.create_data_uniform()
+            
+    def create_data_from_priors(self):
+        """
+        Generate an NF prior that is trained specifically on masses generated from the priors of the event.
+        """
+        
+        # Locate the prior file for the event
+        prior_file = os.path.join("../GW_runs", self.event_name, "prior.prior")
+        prior_file = os.path.abspath(prior_file)
+        
+        # The first three lines, by design, have the Mc, q and dL priors. Use them to instantiate Bilby prior
+        safe_globals = {
+            '__builtins__': {
+                'abs': abs, 'min': min, 'max': max, 'round': round,
+                'int': int, 'float': float, 'str': str, 'bool': bool,
+            },
+            'np': np,
+            'bilby': bilby,
+            'Uniform': Uniform,
+            'Sine': Sine, 
+            'Cosine': Cosine,
+            'UniformComovingVolume': UniformComovingVolume,
+            'AlignedSpin': AlignedSpin
+        }
+        
+        print(f"Loading priors from bilby prior filename: {prior_file}")
+        with open(prior_file, "r") as f:
+            prior_lines = f.readlines()[:3]
+            
+        # Replace 'UniformComovingVolume' with full path
+        modified_lines = [
+            line.replace(
+                "UniformComovingVolume", "bilby.gw.prior.UniformComovingVolume"
+            ) for line in prior_lines
+        ]
+
+        # Evaluate the prior lines in a safe namespace
+        prior_dict = {}
+        exec("".join(modified_lines), safe_globals, prior_dict)
+
+        # Now we can create the Bilby prior
+        prior = bilby.core.prior.PriorDict(prior_dict)
+        print(f"Loaded priors: {prior}")
+        
+        # Sample parameters:
+        print(f"Sampling {self.N_samples_training} parameters from the prior and converting to source frame component masses")
+        samples = prior.sample(self.N_samples_training)
+        chirp_mass = samples["chirp_mass"]
+        mass_ratio = samples["mass_ratio"]
+        luminosity_distance = samples["luminosity_distance"]
+        z = luminosity_distance_to_redshift(luminosity_distance)
+        mc_source = chirp_mass / (1 + z)
+        m1_source, m2_source = chirp_mass_and_mass_ratio_to_component_masses(mc_source, mass_ratio)
+        print(f"Sampling {self.N_samples_training} parameters DONE")
+        
+        # Now get Lambdas from the EOS samples
+        masses_EOS, _, Lambdas_EOS = self.load_eos_samples_from_file()
+        
+        Lambda1_list = np.zeros_like(m1_source)
+        Lambda2_list = np.zeros_like(m2_source)
+        for i, (m1, m2) in enumerate(zip(m1_source, m2_source)):
+            # We might have to do a few tries to get a good sample, so we set a flag
+            good_sample = False
+            
+            # Choose an EOS index
+            while not good_sample:
+                # Choose a posterior sample EOS MRL curve
+                idx = np.random.randint(0, len(masses_EOS))
+                m, l = masses_EOS[idx], Lambdas_EOS[idx]
+                
+                # Generate Lambdas:
+                lambda_1 = np.interp(m1, m, l)
+                lambda_2 = np.interp(m2, m, l)
+                
+                if lambda_1 < 0.0 or lambda_2 < 0.0:
+                    # If we got a negative Lambda, try again
+                    print(f"Negative lambda for m1={m1}, m2={m2}, lambda_1={lambda_1}, lambda_2={lambda_2}. Trying again.")
+                    continue
+                
+                if lambda_1 > lambda_2:
+                    # If we got unphysical lambda12 pair, try again
+                    print(f"Wrong lambda order for m1={m1}, m2={m2}, lambda_1={lambda_1}, lambda_2={lambda_2}. Trying again.")
+                    continue
+                
+                # If we got here, we have a good sample
+                good_sample = True
+            
+            Lambda1_list[i] = lambda_1
+            Lambda2_list[i] = lambda_2
+        
+        # For numerical stability, we turn zero into a very small number with np.clip:
+        Lambda1_list = np.clip(Lambda1_list, a_min=1e-4, a_max=None)
+        Lambda2_list = np.clip(Lambda2_list, a_min=1e-4, a_max=None)
+        
+        # Also get lambda_tilde, delta_lambda_tilde for the training data
+        lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(Lambda1_list, Lambda2_list, m1_source, m2_source)
+        delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(Lambda1_list, Lambda2_list, m1_source, m2_source)
+                
+        full_save_path = os.path.join(self.outdir, f"training_data.npz")
+        self.training_filename = full_save_path
+        print(f"Saving training data to {full_save_path}")
+        np.savez(full_save_path, 
+                 m1=np.array(m1_source),
+                 m2=np.array(m2_source),
+                 lambda_1=np.array(Lambda1_list),
+                 lambda_2=np.array(Lambda2_list),
+                 # Also add the bilby stuff here just to be complete
+                 chirp_mass=np.array(chirp_mass),
+                 mass_ratio=np.array(mass_ratio),
+                 luminosity_distance=np.array(luminosity_distance),
+                 redshift=np.array(z),
+                 lambda_tilde=np.array(lambda_tilde),
+                 delta_lambda_tilde=np.array(delta_lambda_tilde)
+                 )
+        
+    def create_data_uniform(self):
+        """
         Create the dataset from the EOS to neutron star systems: m1, m2, Lambda1, Lambda2.
+        Masses are sampled uniformly between 1.0 and MTOV for each EOS sample, therefore, such a prior can be used for any GW event.
         Always generates NS-NS pairs - the BNS vs NSBH distinction is handled in load_training_data().
         """
         
@@ -335,6 +518,10 @@ class NFPriorCreator:
         # For numerical stability, we turn zero into a very small number with np.clip:
         Lambda1_list = np.clip(Lambda1_list, a_min=1e-4, a_max=None)
         Lambda2_list = np.clip(Lambda2_list, a_min=1e-4, a_max=None)
+        
+        # Also get lambda_tilde, delta_lambda_tilde for the training data
+        lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(Lambda1_list, Lambda2_list, m1_list, m2_list)
+        delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(Lambda1_list, Lambda2_list, m1_list, m2_list)
                 
         full_save_path = os.path.join(self.outdir, f"training_data.npz")
         self.training_filename = full_save_path
@@ -343,12 +530,21 @@ class NFPriorCreator:
                  m1=np.array(m1_list),
                  m2=np.array(m2_list),
                  lambda_1=np.array(Lambda1_list),
-                 lambda_2=np.array(Lambda2_list))
+                 lambda_2=np.array(Lambda2_list),
+                 lambda_tilde=np.array(lambda_tilde),
+                 delta_lambda_tilde=np.array(delta_lambda_tilde)
+        )
         print(f"Saving training data DONE")
         
     def load_training_data(self, training_filename: str):
         """
         Loads in the preprocessed training data before feeding it into the NF for training.
+        Creates parameterization-agnostic training arrays that the training methods can use.
+        
+        The training methods use generic arrays:
+        - train_mass_1, train_mass_2: Can be (m1, m2) or (Mc, q) depending on use_tilde
+        - train_lambda_1, train_lambda_2: Can be (lambda_1, lambda_2) or (lambda_tilde, delta_lambda_tilde) depending on use_tilde
+        
         For NSBH systems, concatenates all NS data into single arrays for p(Lambda|m) modeling.
         """
         data = np.load(training_filename)
@@ -363,27 +559,56 @@ class NFPriorCreator:
         self.lambda_1_raw = lambda_1_raw
         self.lambda_2_raw = lambda_2_raw
         
+        if self.use_tilde:
+            # Use tilde parameterization
+            print("Using tilde parameterization for training")
+            
+            # Load or calculate chirp mass and mass ratio
+            if "chirp_mass" in data and "mass_ratio" in data:
+                train_mass_1 = data["chirp_mass"]
+                train_mass_2 = data["mass_ratio"]
+            else:
+                from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
+                train_mass_1 = component_masses_to_chirp_mass(m1_raw, m2_raw)
+                train_mass_2 = component_masses_to_mass_ratio(m1_raw, m2_raw)
+            
+            # Load or calculate tilde parameters
+            if "lambda_tilde" in data and "delta_lambda_tilde" in data:
+                train_lambda_1 = data["lambda_tilde"]
+                train_lambda_2 = data["delta_lambda_tilde"]
+            else:
+                train_lambda_1 = lambda_1_lambda_2_to_lambda_tilde(lambda_1_raw, lambda_2_raw, m1_raw, m2_raw)
+                train_lambda_2 = lambda_1_lambda_2_to_delta_lambda_tilde(lambda_1_raw, lambda_2_raw, m1_raw, m2_raw)
+            
+        else:
+            # Use component parameterization
+            print("Using component parameterization for training")
+            train_mass_1 = m1_raw
+            train_mass_2 = m2_raw
+            train_lambda_1 = lambda_1_raw
+            train_lambda_2 = lambda_2_raw
+        
         if self.source_type == "nsbh":
             # For NSBH: create concatenated arrays for single NS modeling
             print("NSBH mode: concatenating all neutron star data for single NS modeling")
-            self.m2 = np.concatenate([m1_raw, m2_raw])
-            self.lambda_2 = np.concatenate([lambda_1_raw, lambda_2_raw])
+            self.train_mass_2 = np.concatenate([train_mass_1, train_mass_2])
+            self.train_lambda_2 = np.concatenate([train_lambda_1, train_lambda_2])
         else:
-            # For BNS: use original arrays
-            self.m1 = m1_raw
-            self.m2 = m2_raw
-            self.lambda_1 = lambda_1_raw
-            self.lambda_2 = lambda_2_raw
+            # For BNS: use arrays as-is
+            self.train_mass_1 = train_mass_1
+            self.train_mass_2 = train_mass_2
+            self.train_lambda_1 = train_lambda_1
+            self.train_lambda_2 = train_lambda_2
         
         if self.take_log_lambda:
-            # Take the log of the Lambdas
-            print("Taking the log of the Lambdas")
+            # Take the log of the Lambda parameters
+            print("Taking the log of the Lambda parameters")
             
             if self.source_type == "nsbh":
-                self.lambda_2 = np.log(self.lambda_2)
+                self.train_lambda_2 = np.log(np.abs(self.train_lambda_2) + 1e-6)
             else:
-                self.lambda_1 = np.log(self.lambda_1)
-                self.lambda_2 = np.log(self.lambda_2)
+                self.train_lambda_1 = np.log(np.abs(self.train_lambda_1) + 1e-6)
+                self.train_lambda_2 = np.log(np.abs(self.train_lambda_2) + 1e-6)
         
     def train(self):
         """
@@ -397,13 +622,13 @@ class NFPriorCreator:
         print("Sanity checking the ranges of the training data")
         
         if self.source_type == "nsbh":
-            print(f"m2 (concatenated) ranges from {np.min(self.m2)} to {np.max(self.m2)}")
-            print(f"lambda_2 (concatenated) ranges from {np.min(self.lambda_2)} to {np.max(self.lambda_2)}")
+            print(f"train_mass_2 (concatenated) ranges from {np.min(self.train_mass_2)} to {np.max(self.train_mass_2)}")
+            print(f"train_lambda_2 (concatenated) ranges from {np.min(self.train_lambda_2)} to {np.max(self.train_lambda_2)}")
         else:
-            print(f"m1 ranges from {np.min(self.m1)} to {np.max(self.m1)}")
-            print(f"m2 ranges from {np.min(self.m2)} to {np.max(self.m2)}")
-            print(f"lambda_1 ranges from {np.min(self.lambda_1)} to {np.max(self.lambda_1)}")
-            print(f"lambda_2 ranges from {np.min(self.lambda_2)} to {np.max(self.lambda_2)}")
+            print(f"train_mass_1 ranges from {np.min(self.train_mass_1)} to {np.max(self.train_mass_1)}")
+            print(f"train_mass_2 ranges from {np.min(self.train_mass_2)} to {np.max(self.train_mass_2)}")
+            print(f"train_lambda_1 ranges from {np.min(self.train_lambda_1)} to {np.max(self.train_lambda_1)}")
+            print(f"train_lambda_2 ranges from {np.min(self.train_lambda_2)} to {np.max(self.train_lambda_2)}")
         
         # Start storing kwargs here to dump later on
         self.nf_kwargs = {"n_transforms": self.n_transforms,
@@ -413,33 +638,43 @@ class NFPriorCreator:
                           "nn_block_dim": self.nn_block_dim
                           }
         
-        # Build depending on source and conditional
+        # Build depending on source and conditional using training arrays
         if self.source_type == "bns" and self.conditional:
             print(f"We are training BNS and conditional")
-            self.x = np.array([self.lambda_1, self.lambda_2]).T
-            self.u = np.array([self.m1, self.m2]).T
+            self.x = np.array([self.train_lambda_1, self.train_lambda_2]).T
+            self.u = np.array([self.train_mass_1, self.train_mass_2]).T
             
             self.n_inputs = 2
             self.n_conditional_inputs = 2
             
-            self.nf_kwargs["names"] = ["lambda_1", "lambda_2"]
-            self.nf_kwargs["names_conditional"] = ["m_1", "m_2"]
+            # Set names based on parameterization
+            if self.use_tilde:
+                self.nf_kwargs["names"] = ["lambda_tilde", "delta_lambda_tilde"]
+                self.nf_kwargs["names_conditional"] = ["chirp_mass", "mass_ratio"]
+            else:
+                self.nf_kwargs["names"] = ["lambda_1", "lambda_2"]
+                self.nf_kwargs["names_conditional"] = ["m_1", "m_2"]
             
         elif self.source_type == "bns" and not self.conditional:
             print(f"We are training BNS and not conditional")
-            self.x = np.array([self.m1, self.m2, self.lambda_1, self.lambda_2]).T
+            self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
             self.u = None
             
             self.n_inputs = 4
             self.n_conditional_inputs = None
             
-            self.nf_kwargs["names"] = ["m_1", "m_2", "lambda_1", "lambda_2"]
+            # Set names based on parameterization
+            if self.use_tilde:
+                self.nf_kwargs["names"] = ["chirp_mass", "mass_ratio", "lambda_tilde", "delta_lambda_tilde"]
+            else:
+                self.nf_kwargs["names"] = ["m_1", "m_2", "lambda_1", "lambda_2"]
             self.nf_kwargs["names_conditional"] = []
             
         elif self.source_type == "nsbh" and self.conditional:
+            # Note: use_tilde=True with NSBH conditional is not supported (validation check above)
             print(f"We are training NSBH and conditional - using concatenated NS data")
-            self.x = self.lambda_2.reshape(-1, 1)  # Shape: (2*N_samples, 1)
-            self.u = self.m2.reshape(-1, 1)       # Shape: (2*N_samples, 1)
+            self.x = self.train_lambda_2.reshape(-1, 1)  # Shape: (2*N_samples, 1)
+            self.u = self.train_mass_2.reshape(-1, 1)    # Shape: (2*N_samples, 1)
             
             self.n_inputs = 1
             self.n_conditional_inputs = 1
@@ -448,15 +683,23 @@ class NFPriorCreator:
             self.nf_kwargs["names_conditional"] = ["m_2"]
             
         elif self.source_type == "nsbh" and not self.conditional:
-            print(f"We are training NSBH and not conditional - using concatenated NS data")
+            print(f"We are training NSBH and not conditional")
             
-            self.x = np.array([self.m2, self.lambda_2]).T
+            if self.use_tilde:
+                # For tilde parameterization, use all 4 parameters: Mc, q, lambda_tilde, delta_lambda_tilde
+                print("Using all 4 tilde parameters for NSBH unconditional training")
+                self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
+                self.n_inputs = 4
+                self.nf_kwargs["names"] = ["chirp_mass", "mass_ratio", "lambda_tilde", "delta_lambda_tilde"]
+            else:
+                # For component parameterization, use concatenated NS data
+                print("Using concatenated NS data for NSBH unconditional training")
+                self.x = np.array([self.train_mass_2, self.train_lambda_2]).T
+                self.n_inputs = 2
+                self.nf_kwargs["names"] = ["m2", "lambda_2"]
+            
             self.u = None
-            
-            self.n_inputs = 2
             self.n_conditional_inputs = None
-            
-            self.nf_kwargs["names"] = ["m2", "lambda_2"]
             self.nf_kwargs["names_conditional"] = []
             
         else:
@@ -474,15 +717,15 @@ class NFPriorCreator:
             print("np.shape(self.u)")
             print(np.shape(self.u))
             
-        # Print something about ranges:
+        # Print something about ranges using training arrays:
         if self.source_type == "nsbh":
-            print(f"m2 (concatenated) ranges from {np.min(self.m2)} to {np.max(self.m2)}")
-            print(f"lambda_2 (concatenated) ranges from {np.min(self.lambda_2)} to {np.max(self.lambda_2)}")
+            print(f"train_mass_2 (concatenated) ranges from {np.min(self.train_mass_2)} to {np.max(self.train_mass_2)}")
+            print(f"train_lambda_2 (concatenated) ranges from {np.min(self.train_lambda_2)} to {np.max(self.train_lambda_2)}")
         else:
-            print(f"m1 ranges from {np.min(self.m1)} to {np.max(self.m1)}")
-            print(f"m2 ranges from {np.min(self.m2)} to {np.max(self.m2)}")
-            print(f"lambda_1 ranges from {np.min(self.lambda_1)} to {np.max(self.lambda_1)}")
-            print(f"lambda_2 ranges from {np.min(self.lambda_2)} to {np.max(self.lambda_2)}")
+            print(f"train_mass_1 ranges from {np.min(self.train_mass_1)} to {np.max(self.train_mass_1)}")
+            print(f"train_mass_2 ranges from {np.min(self.train_mass_2)} to {np.max(self.train_mass_2)}")
+            print(f"train_lambda_1 ranges from {np.min(self.train_lambda_1)} to {np.max(self.train_lambda_1)}")
+            print(f"train_lambda_2 ranges from {np.min(self.train_lambda_2)} to {np.max(self.train_lambda_2)}")
            
         if self.scale_input:
             print(f"Using MinMaxScaler to scale the input data x")
@@ -541,6 +784,7 @@ class NFPriorCreator:
         self.nf_kwargs["training_filename"] = self.training_filename
         self.nf_kwargs["take_log_lambda"] = str(self.take_log_lambda)
         self.nf_kwargs["use_flowjax"] = str(self.use_flowjax)
+        self.nf_kwargs["use_tilde"] = str(self.use_tilde)
         
         print(f"Saving the model kwargs to {save_path}")
         with open(save_path, "w") as f:
@@ -603,7 +847,7 @@ class NFPriorCreator:
                     print(f"Early stopping triggered at epoch {epoch+1}")
                     break
 
-        self.plot_loss(train_loss)
+        self.plot_loss(np.array(train_loss))
         return flow
     
     def _train_conditional_glasflow(self):
@@ -692,7 +936,7 @@ class NFPriorCreator:
                     print(f"Early stopping triggered at epoch {epoch+1}")
                     break
 
-        self.plot_loss(train_loss)
+        self.plot_loss(np.array(train_loss))
         return flow
     
     def _train_unconditional_flowjax(self):
@@ -822,11 +1066,8 @@ class NFPriorCreator:
         plt.title("Training Loss Trajectory")
         save_path = os.path.join(self.outdir, "training_loss.pdf")
         print(f"Saving the training loss plot to {save_path}")
-        plt.savefig(save_path, bbox_inches="tight")
-        try:
+        if all(loss > 0.0):
             plt.yscale("log")
-        except Exception as e:
-            print(f"Issue using log scaling in loss plot: {e}")
         plt.savefig(save_path, bbox_inches="tight")
         plt.close()
             

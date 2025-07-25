@@ -1,0 +1,31 @@
+{
+    "n_transforms": 4,
+    "n_neurons": 128,
+    "n_blocks_per_transform": 4,
+    "nn_depth": 5,
+    "nn_block_dim": 8,
+    "names": [
+        "lambda_tilde",
+        "delta_lambda_tilde"
+    ],
+    "names_conditional": [
+        "chirp_mass",
+        "mass_ratio"
+    ],
+    "n_inputs": 2,
+    "n_conditional_inputs": 2,
+    "model_type": "RealNVP",
+    "source_type": "bns",
+    "N_samples_training": 10000,
+    "m_max_BH": 5.0,
+    "num_epochs": 250,
+    "learning_rate": 0.001,
+    "max_patience": 50,
+    "batch_size": 256,
+    "num_bins": 10,
+    "eos_samples_filename": "../data/eos/radio/eos_samples.npz",
+    "training_filename": "././models/GW170817/radio_conditional_bns/training_data.npz",
+    "take_log_lambda": "False",
+    "use_flowjax": "False",
+    "use_tilde": "True"
+}
