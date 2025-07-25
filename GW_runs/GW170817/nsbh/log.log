@@ -177,3 +177,77 @@
 000 (2558029.000.000) 2025-07-25 22:11:54 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
     DAG Node: run_b
 ...
+001 (2558029.000.000) 2025-07-25 22:12:57 Job executing on host: <145.107.4.163:9618?addrs=145.107.4.163-9618+[2a07-8500-120-e070--a3]-9618&alias=wn-pijl-002.nikhef.nl&noUDP&sock=startd_4326_daca>
+	SlotName: slot1_5@wn-pijl-002.nikhef.nl
+	AvailableGPUs = {  }
+	CondorScratchDir = "/scratch/condor_execute/dir_1600855"
+	Cpus = 64
+	Disk = 16790353
+	GPUs = 0
+	Memory = 16384
+...
+006 (2558029.000.000) 2025-07-25 22:13:11 Image size of job updated: 540104
+	528  -  MemoryUsage of job (MB)
+	540104  -  ResidentSetSize of job (KB)
+...
+006 (2558029.000.000) 2025-07-25 22:13:22 Image size of job updated: 623320
+	528  -  MemoryUsage of job (MB)
+	540104  -  ResidentSetSize of job (KB)
+...
+004 (2558029.000.000) 2025-07-25 22:13:23 Job was evicted.
+	(0) CPU times
+		Usr 0 00:00:21, Sys 0 00:00:11  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0       64        64 
+	   Disk (KB)            :    17500 16777216  16790353 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      528    16384     16384 
+	   TimeExecute (s)      :       25                    
+	   TimeSlotBusy (s)     :       25                    
+...
+009 (2558029.000.000) 2025-07-25 22:13:23 Job was aborted.
+	removed because <OtherJobRemoveRequirements = DAGManJobId =?= 2558027> fired when job (2558027.0) was removed
+...
+000 (2558035.000.000) 2025-07-25 22:14:28 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_b
+...
+001 (2558035.000.000) 2025-07-25 22:14:56 Job executing on host: <145.107.4.163:9618?addrs=145.107.4.163-9618+[2a07-8500-120-e070--a3]-9618&alias=wn-pijl-002.nikhef.nl&noUDP&sock=startd_4326_daca>
+	SlotName: slot1_5@wn-pijl-002.nikhef.nl
+	AvailableGPUs = {  }
+	CondorScratchDir = "/scratch/condor_execute/dir_1602380"
+	Cpus = 64
+	Disk = 16790353
+	GPUs = 0
+	Memory = 16384
+...
+006 (2558035.000.000) 2025-07-25 22:15:10 Image size of job updated: 838072
+	819  -  MemoryUsage of job (MB)
+	838072  -  ResidentSetSize of job (KB)
+...
+006 (2558035.000.000) 2025-07-25 22:15:55 Image size of job updated: 1586192
+	819  -  MemoryUsage of job (MB)
+	838072  -  ResidentSetSize of job (KB)
+...
+005 (2558035.000.000) 2025-07-25 22:15:55 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:58, Sys 0 00:00:19  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:58, Sys 0 00:00:19  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.44       64        64 
+	   Disk (KB)            : 17500    16777216  16790353 
+	   GPUs                 :                           0 
+	   Memory (MB)          :   819       16384     16384 
+	   TimeExecute (s)      :    59                       
+	   TimeSlotBusy (s)     :    59                       
+
+	Job terminated of its own accord at 2025-07-25T20:15:55Z with exit-code 0.
+...

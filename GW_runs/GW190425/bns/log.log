@@ -81,3 +81,77 @@
 000 (2558031.000.000) 2025-07-25 22:12:04 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
     DAG Node: run_c
 ...
+001 (2558031.000.000) 2025-07-25 22:13:00 Job executing on host: <145.107.4.166:9618?addrs=145.107.4.166-9618+[2a07-8500-120-e070--a6]-9618&alias=wn-pijl-005.nikhef.nl&noUDP&sock=startd_4117_7f7f>
+	SlotName: slot1_6@wn-pijl-005.nikhef.nl
+	AvailableGPUs = {  }
+	CondorScratchDir = "/scratch/condor_execute/dir_145179"
+	Cpus = 64
+	Disk = 16790366
+	GPUs = 0
+	Memory = 16384
+...
+006 (2558031.000.000) 2025-07-25 22:13:14 Image size of job updated: 650748
+	636  -  MemoryUsage of job (MB)
+	650748  -  ResidentSetSize of job (KB)
+...
+006 (2558031.000.000) 2025-07-25 22:13:21 Image size of job updated: 1366576
+	636  -  MemoryUsage of job (MB)
+	650748  -  ResidentSetSize of job (KB)
+...
+004 (2558031.000.000) 2025-07-25 22:13:21 Job was evicted.
+	(0) CPU times
+		Usr 0 00:00:17, Sys 0 00:00:08  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.90       64        64 
+	   Disk (KB)            : 17500    16777216  16790366 
+	   GPUs                 :                           0 
+	   Memory (MB)          :   636       16384     16384 
+	   TimeExecute (s)      :    21                       
+	   TimeSlotBusy (s)     :    21                       
+...
+009 (2558031.000.000) 2025-07-25 22:13:21 Job was aborted.
+	via condor_rm (by user twouters)
+...
+000 (2558037.000.000) 2025-07-25 22:14:39 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_c
+...
+001 (2558037.000.000) 2025-07-25 22:14:59 Job executing on host: <145.107.4.166:9618?addrs=145.107.4.166-9618+[2a07-8500-120-e070--a6]-9618&alias=wn-pijl-005.nikhef.nl&noUDP&sock=startd_4117_7f7f>
+	SlotName: slot1_6@wn-pijl-005.nikhef.nl
+	AvailableGPUs = {  }
+	CondorScratchDir = "/scratch/condor_execute/dir_146863"
+	Cpus = 64
+	Disk = 16790366
+	GPUs = 0
+	Memory = 16384
+...
+006 (2558037.000.000) 2025-07-25 22:15:13 Image size of job updated: 1066672
+	1042  -  MemoryUsage of job (MB)
+	1066672  -  ResidentSetSize of job (KB)
+...
+006 (2558037.000.000) 2025-07-25 22:16:06 Image size of job updated: 1690820
+	1044  -  MemoryUsage of job (MB)
+	1068720  -  ResidentSetSize of job (KB)
+...
+005 (2558037.000.000) 2025-07-25 22:16:06 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:01:04, Sys 0 00:00:17  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:01:04, Sys 0 00:00:17  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.13       64        64 
+	   Disk (KB)            : 17500    16777216  16790366 
+	   GPUs                 :                           0 
+	   Memory (MB)          :  1044       16384     16384 
+	   TimeExecute (s)      :    67                       
+	   TimeSlotBusy (s)     :    67                       
+
+	Job terminated of its own accord at 2025-07-25T20:16:06Z with exit-code 0.
+...
