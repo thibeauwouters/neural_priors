@@ -622,6 +622,12 @@ class NFPriorCreator:
         if self.source_type == "nsbh":
             # For NSBH: create concatenated arrays for single NS modeling
             print("NSBH mode: concatenating all neutron star data for single NS modeling")
+            # Store original arrays for unconditional training
+            self.train_mass_1 = train_mass_1
+            self.train_mass_2_original = train_mass_2
+            self.train_lambda_1 = train_lambda_1
+            self.train_lambda_2_original = train_lambda_2
+            # Create concatenated arrays for conditional training
             self.train_mass_2 = np.concatenate([train_mass_1, train_mass_2])
             self.train_lambda_2 = np.concatenate([train_lambda_1, train_lambda_2])
         else:
@@ -734,7 +740,7 @@ class NFPriorCreator:
             if not self.use_component_masses:
                 # For chirp mass/mass ratio parameterization, use all 4 parameters
                 print("Using all 4 parameters (Mc, q, lambda) for NSBH unconditional training")
-                self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
+                self.x = np.array([self.train_mass_1, self.train_mass_2_original, self.train_lambda_1, self.train_lambda_2_original]).T
                 self.n_inputs = 4
                 
                 mass_names = ["chirp_mass", "mass_ratio"]
