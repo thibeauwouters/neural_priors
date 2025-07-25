@@ -9,13 +9,13 @@ from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lamb
 from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
 
 params = {"axes.grid": True,
-        "text.usetex" : False,
+        "text.usetex" : True,
         "font.family" : "serif",
         "ytick.color" : "black",
         "xtick.color" : "black",
         "axes.labelcolor" : "black",
         "axes.edgecolor" : "black",
-        # "font.serif" : ["Computer Modern Serif"],
+        "font.serif" : ["Computer Modern Serif"],
         "xtick.labelsize": 16,
         "ytick.labelsize": 16,
         "axes.labelsize": 16,
@@ -73,14 +73,17 @@ def create_corner_plot(GW_event: str,
                        plot_default: bool = False,
                        convert_lambdas: bool = True,
                        plot_hauke: bool = True,
-                       plot_adrian: bool = True):
+                       plot_adrian: bool = True,
+                       prevent_bns_leakage: bool = True,
+                       use_PhenomD_NRTv2_path: bool = False):
     """
     Create a corner plot comparing posterior samples from BNS, Default, and NSBH runs for a given GW event.
     """
     
-    # Load result files to investigate structure
-    base_path = f"../GW_runs/final_results/{GW_event}"
+    # if use_PhenomD_NRTv2_path: # TODO: implement this
     
+    # Load result files
+    base_path = f"../GW_runs/final_results/{GW_event}"
     bns_results_filename = os.path.join(base_path, "bns/bns_result.json")
     default_results_filename = os.path.join(base_path, "default/default_result.json")
     nsbh_results_filename = os.path.join(base_path, "nsbh/nsbh_result.json")
@@ -200,11 +203,10 @@ def create_corner_plot(GW_event: str,
     nsbh_samples = np.array(nsbh_data).T
     
     
-    # TODO: need to make sure that this is masked automatically in the PE
-    # # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
-    # if 'delta_lambda_tilde' in params_to_plot:
-    #     delta_lambda_tilde_index = labels.index('delta_lambda_tilde')
-    #     bns_samples = bns_samples[bns_samples[:, delta_lambda_tilde_index] > 0]
+    # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
+    if 'delta_lambda_tilde' in params_to_plot and prevent_bns_leakage:
+        delta_lambda_tilde_index = labels.index('delta_lambda_tilde')
+        bns_samples = bns_samples[bns_samples[:, delta_lambda_tilde_index] > 0]
     
     # Create range dictionary to handle constant parameters
     ranges = []
@@ -272,9 +274,9 @@ def create_corner_plot(GW_event: str,
     if plot_default:
         plt.text(x, y, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     y -= dy
-    plt.text(x, 0.75, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    plt.text(x, y, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     y -= dy
-    plt.text(x, 0.65, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    plt.text(x, y, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     if GW_event == "GW170817" and plot_hauke and not plot_all_params:
         
@@ -303,7 +305,7 @@ def create_corner_plot(GW_event: str,
         hauke_samples = np.array([hauke_Mc, hauke_q, hauke_tc, hauke_lambda_tilde, hauke_delta_lambda_tilde]).T
         corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
         y -= dy
-        plt.text(x, 0.55, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        plt.text(x, y, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
         
     if GW_event in ["GW170817", "GW190425"] and plot_adrian:
         
@@ -330,7 +332,7 @@ def create_corner_plot(GW_event: str,
         adrian_samples = np.array([adrian_Mc, adrian_q, adrian_tc, adrian_lambda_tilde, adrian_delta_lambda_tilde]).T
         corner.corner(adrian_samples, labels=latex_labels, fig=fig, **adrian_kwargs)
         y -= dy
-        plt.text(x, 0.55, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        plt.text(x, y, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     os.makedirs(f'./figures/{GW_event}', exist_ok=True)
     save_name = f'./figures/{GW_event}/corner' + \
@@ -360,7 +362,10 @@ def main():
                                         plot_default=plot_default,
                                         convert_lambdas=convert_lambdas,
                                         plot_hauke=plot_hauke,
-                                        plot_adrian=plot_adrian)
+                                        plot_adrian=plot_adrian,
+                                        prevent_bns_leakage=False,
+                                        use_PhenomD_NRTv2_path=True,
+                                        )
                         print(f"Creating corner plot for {GW_event}... and settings: {settings}")
                         create_corner_plot(GW_event, **settings)
             
