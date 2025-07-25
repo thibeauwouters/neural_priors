@@ -12,7 +12,7 @@ with open(output_filename, "w") as f:
     f.write("Classification Summary of GW Events:\n\n")
     
 for GW_event in GW_event_list:
-    base_path = f"../GW_runs/{GW_event}"
+    base_path = f"../GW_runs/final_results/{GW_event}"
     
     bns_results_filename = os.path.join(base_path, "bns/bns_result.json")
     default_results_filename = os.path.join(base_path, "default/default_result.json")
@@ -24,6 +24,7 @@ for GW_event in GW_event_list:
             bns_result = json.load(f)
             bf_bns = bns_result["log_bayes_factor"]
     except FileNotFoundError:
+        print(f"File not found: {bns_results_filename}. Setting its Bayes factor to 0.0.")
         bf_bns = 0.0
     
     try:
@@ -31,6 +32,7 @@ for GW_event in GW_event_list:
             default_result = json.load(f)
             bf_default = default_result["log_bayes_factor"]
     except FileNotFoundError:
+        print(f"File not found: {default_results_filename}. Setting its Bayes factor to 0.0.")
         bf_default = 0.0
         
     try:
@@ -38,6 +40,7 @@ for GW_event in GW_event_list:
             nsbh_result = json.load(f)
             bf_nsbh = nsbh_result["log_bayes_factor"]
     except FileNotFoundError:
+        print(f"File not found: {nsbh_results_filename}. Setting its Bayes factor to 0.0.")
         bf_nsbh = 0.0
     
     # Print the Bayes factors
