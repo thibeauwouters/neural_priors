@@ -1,0 +1,1 @@
+python train_NF_prior.py --source-type nsbh --event-name GW170817 --N-samples-training 1_000

@@ -738,14 +738,25 @@ class NFPriorCreator:
             print(f"We are training NSBH and not conditional")
             
             if not self.use_component_masses:
-                # For chirp mass/mass ratio parameterization, use all 4 parameters
-                print("Using all 4 parameters (Mc, q, lambda) for NSBH unconditional training")
-                self.x = np.array([self.train_mass_1, self.train_mass_2_original, self.train_lambda_1, self.train_lambda_2_original]).T
-                self.n_inputs = 4
-                
-                mass_names = ["chirp_mass", "mass_ratio"]
-                lambda_names = ["lambda_tilde", "delta_lambda_tilde"] if self.use_tilde else ["lambda_1", "lambda_2"]
-                self.nf_kwargs["names"] = mass_names + lambda_names
+                # For chirp mass/mass ratio parameterization
+                if self.include_dL:
+                    # Use 4 parameters: Mc, q, dL, lambda_2 (only NS has lambda)
+                    print("Using 4 parameters (Mc, q, dL, lambda_2) for NSBH unconditional training")
+                    self.x = np.array([self.train_mass_1, self.train_mass_2_original, self.train_dL, self.train_lambda_2_original]).T
+                    self.n_inputs = 4
+                    
+                    mass_names = ["chirp_mass", "mass_ratio"]
+                    lambda_name = "lambda_tilde" if self.use_tilde else "lambda_2"
+                    self.nf_kwargs["names"] = mass_names + ["luminosity_distance"] + [lambda_name]
+                else:
+                    # Use 3 parameters: Mc, q, lambda_2 (only NS has lambda)
+                    print("Using 3 parameters (Mc, q, lambda_2) for NSBH unconditional training")
+                    self.x = np.array([self.train_mass_1, self.train_mass_2_original, self.train_lambda_2_original]).T
+                    self.n_inputs = 3
+                    
+                    mass_names = ["chirp_mass", "mass_ratio"]
+                    lambda_name = "lambda_tilde" if self.use_tilde else "lambda_2"
+                    self.nf_kwargs["names"] = mass_names + [lambda_name]
             else:
                 # For component mass parameterization, use concatenated NS data
                 print("Using concatenated NS data for NSBH unconditional training")

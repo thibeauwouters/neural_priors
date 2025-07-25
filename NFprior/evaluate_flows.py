@@ -747,19 +747,27 @@ class CheckerUnconditional(Checker):
         
         # Handle 4D models
         if len(parameter_names) == 4:
-            # Mass labels
-            if use_component_masses:
-                mass_labels = [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]"]
-            else:
-                mass_labels = [r"$M_c$ [$M_{\odot}$]", r"$q$"]
+            source_type = self.nf_kwargs.get("source_type", "bns")
+            include_dL = self.nf_kwargs.get("include_dL", "False") == "True"
             
-            # Lambda labels
-            if use_tilde:
-                lambda_labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
+            if source_type == "nsbh" and not use_component_masses and include_dL:
+                # NSBH case: Mc, q, dL, lambda_2 (only NS has lambda)
+                return [r"$M_c$ [$M_{\odot}$]", r"$q$", r"$d_L$ [Mpc]", r"$\Lambda_2$"]
             else:
-                lambda_labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
-            
-            return mass_labels + lambda_labels
+                # BNS case: standard 4D
+                # Mass labels
+                if use_component_masses:
+                    mass_labels = [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]"]
+                else:
+                    mass_labels = [r"$M_c$ [$M_{\odot}$]", r"$q$"]
+                
+                # Lambda labels
+                if use_tilde:
+                    lambda_labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
+                else:
+                    lambda_labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
+                
+                return mass_labels + lambda_labels
         
         # Handle 5D models with dL
         elif len(parameter_names) == 5:
@@ -776,6 +784,19 @@ class CheckerUnconditional(Checker):
                 lambda_labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
             
             return mass_labels + [r"$d_L$ [Mpc]"] + lambda_labels
+        
+        # Handle 3D NSBH case (Mc, q, lambda_2)
+        elif len(parameter_names) == 3:
+            source_type = self.nf_kwargs.get("source_type", "bns")
+            if source_type == "nsbh":
+                # NSBH case: Mc, q, lambda_2 (only NS has lambda)
+                if use_component_masses:
+                    return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]  # 2D case, shouldn't be 3
+                else:
+                    return [r"$M_c$ [$M_{\odot}$]", r"$q$", r"$\Lambda_2$"]
+            else:
+                # Fallback for other 3D cases
+                return parameter_names if parameter_names else None
         
         # Handle 2D NSBH case
         elif len(parameter_names) == 2:
@@ -1061,8 +1082,17 @@ class CheckerUnconditional(Checker):
                 return np.column_stack(mass_params + lambda_params)
         else:  # NSBH
             if not use_component_masses:
-                # For NSBH with chirp mass parameterization, use all 4 parameters
-                return np.column_stack(mass_params + lambda_params)
+                # For NSBH with chirp mass parameterization
+                if include_dL:
+                    # Use 4 parameters: Mc, q, dL, lambda_2 (only NS has lambda)
+                    if "luminosity_distance" in self.training_data:
+                        dL = self.training_data["luminosity_distance"]
+                        return np.column_stack(mass_params + [dL] + [lambda_2])  # Only lambda_2 for NSBH
+                    else:
+                        raise ValueError("include_dL=True but no luminosity_distance found in training data")
+                else:
+                    # Use 3 parameters: Mc, q, lambda_2 (only NS has lambda)
+                    return np.column_stack(mass_params + [lambda_2])  # Only lambda_2 for NSBH
             else:
                 # For NSBH with component masses, use m2, lambda_2 (concatenated NS data)
                 m2 = self.training_data["m2"]
@@ -1088,7 +1118,7 @@ def main():
     # nsbh_checker.check_conditional_nsbh_model()
     
     # Example usage for unconditional models (both BNS and NSBH)
-    unconditional_checker = CheckerUnconditional("./models/GW170817/radio_bns/", N_samples=10_000)
+    unconditional_checker = CheckerUnconditional("./models/GW170817/radio_nsbh/", N_samples=10_000)
     print("\n" + "="*50)
     print("Testing unconditional model")
     print("="*50)
