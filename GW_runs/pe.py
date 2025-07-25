@@ -316,6 +316,10 @@ else:
     for name in nf_dist.names:
         prior_dict[name] = NFPrior(dist=nf_dist, name=name)
         
+    if args.prior_name == "nsbh":
+        # Put lambda_1 = 0.0
+        prior_dict["lambda_1"] = DeltaFunction(0.0, name='lambda_1', latex_label='$\Lambda_1$')
+        
     priors = bilby.core.prior.PriorDict(prior_dict)
         
 logger.info("Going to show priors in priors:")
