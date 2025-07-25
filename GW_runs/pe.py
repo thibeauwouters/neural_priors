@@ -240,6 +240,7 @@ for ifo in ifos:
     ifo.minimum_frequency=minimum_frequency
     ifo.maximum_frequency=0.5*sampling_frequency
 
+# TODO: this needs to be moved to a common utils file, so that we can use it in the NF prior training script as well
 # This is to easily and flexibly import the necessary classes below, also for NFs
 safe_globals = {
     '__builtins__': {
