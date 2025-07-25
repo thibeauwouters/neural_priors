@@ -109,7 +109,7 @@ parser.add_argument("--no-include-dL",
 parser.set_defaults(include_dL=True)
 parser.add_argument("--N-samples-training", 
                     type=int, 
-                    default=100_000, 
+                    default=50_000, 
                     help="Number of training samples")
 parser.add_argument("--N-samples-plot", 
                     type=int, 
@@ -150,7 +150,7 @@ parser.add_argument("--learning-rate",
                     help="Learning rate")
 parser.add_argument("--batch-size", 
                     type=int, 
-                    default=256, 
+                    default=1024, 
                     help="Batch size")
 parser.add_argument("--max-patience", 
                     type=int, 
@@ -203,7 +203,7 @@ class NFPriorCreator:
                  num_epochs: int = 500,
                  learning_rate: float = 1e-3,
                  max_patience: int = 50,
-                 batch_size: int = 256,
+                 batch_size: int = 1024,
                  scale_input: bool = True,
                  # glasflow-specific training arguments:
                  n_transforms: int = 4,
