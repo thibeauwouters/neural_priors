@@ -842,6 +842,8 @@ class NFPriorCreator:
         
         # Initialize the flow model
         self.nf_kwargs["model_type"] = "CouplingNSF"
+        
+        # FIXME: num bins not passed
         flow = CouplingNSF(n_inputs=self.n_inputs,
                            n_transforms=self.n_transforms,
                            n_neurons=self.n_neurons,
