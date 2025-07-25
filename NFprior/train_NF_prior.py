@@ -107,7 +107,6 @@ parser.add_argument("--no-include-dL",
 parser.set_defaults(include_dL=True)
 parser.add_argument("--N-samples-training", 
                     type=int, 
-                    default=20_000, 
                     help="Number of training samples")
 parser.add_argument("--N-samples-plot", 
                     type=int, 
@@ -198,7 +197,7 @@ class NFPriorCreator:
                  m_max_BH: float = 5.0,
                  take_log_lambda: bool = False,
                  use_flowjax: bool = False,
-                 num_epochs: int = 250,
+                 num_epochs: int = 500,
                  learning_rate: float = 1e-3,
                  max_patience: int = 50,
                  batch_size: int = 256,
