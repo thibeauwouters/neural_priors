@@ -87,6 +87,13 @@ parser.add_argument("--no-use-tilde",
                     dest="use_tilde", 
                     action="store_false")
 parser.set_defaults(use_tilde=False)
+parser.add_argument("--include-dL", 
+                    action="store_true", 
+                    help="Include luminosity distance in unconditional tilde models for 5D training")
+parser.add_argument("--no-include-dL", 
+                    dest="include_dL", 
+                    action="store_false")
+parser.set_defaults(include_dL=False)
 parser.add_argument("--N-samples-training", 
                     type=int, 
                     default=100_000, 
@@ -179,6 +186,7 @@ class NFPriorCreator:
                  event_name: str = "",
                  use_tilde: bool = False,
                  conditional: bool = True,
+                 include_dL: bool = False,
                  N_samples_training: int = 100_000,
                  N_samples_plot: int = 10_000,
                  m_max_BH: float = 5.0,
@@ -259,6 +267,7 @@ class NFPriorCreator:
         self.take_log_lambda = take_log_lambda
         self.use_flowjax = use_flowjax
         self.use_tilde = use_tilde
+        self.include_dL = include_dL
 
         self.num_epochs = num_epochs
         self.learning_rate = learning_rate
@@ -280,6 +289,9 @@ class NFPriorCreator:
         if self.use_tilde and self.source_type == "nsbh" and self.conditional:
             raise ValueError("Combination of use_tilde=True, source_type='nsbh', and conditional=True is not supported. \
                 Please use component parameterization for NSBH conditional training or switch to unconditional training.")
+        
+        if self.include_dL and self.conditional:
+            raise ValueError("include_dL=True is only supported for unconditional models. Set conditional=False to use dL.")
         
         # Check flowJAX availability if requested
         if self.use_flowjax and not globals().get('jax'):
@@ -580,6 +592,13 @@ class NFPriorCreator:
                 train_lambda_1 = lambda_1_lambda_2_to_lambda_tilde(lambda_1_raw, lambda_2_raw, m1_raw, m2_raw)
                 train_lambda_2 = lambda_1_lambda_2_to_delta_lambda_tilde(lambda_1_raw, lambda_2_raw, m1_raw, m2_raw)
             
+            # Handle luminosity distance if requested
+            if self.include_dL:
+                if "luminosity_distance" in data:
+                    self.train_dL = data["luminosity_distance"]
+                else:
+                    raise ValueError("include_dL=True but no luminosity_distance found in training data")
+            
         else:
             # Use component parameterization
             print("Using component parameterization for training")
@@ -587,6 +606,13 @@ class NFPriorCreator:
             train_mass_2 = m2_raw
             train_lambda_1 = lambda_1_raw
             train_lambda_2 = lambda_2_raw
+            
+            # Handle luminosity distance if requested
+            if self.include_dL:
+                if "luminosity_distance" in data:
+                    self.train_dL = data["luminosity_distance"]
+                else:
+                    raise ValueError("include_dL=True but no luminosity_distance found in training data")
         
         if self.source_type == "nsbh":
             # For NSBH: create concatenated arrays for single NS modeling
@@ -657,17 +683,33 @@ class NFPriorCreator:
             
         elif self.source_type == "bns" and not self.conditional:
             print(f"We are training BNS and not conditional")
-            self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
-            self.u = None
             
-            self.n_inputs = 4
-            self.n_conditional_inputs = None
-            
-            # Set names based on parameterization
-            if self.use_tilde:
-                self.nf_kwargs["names"] = ["chirp_mass", "mass_ratio", "lambda_tilde", "delta_lambda_tilde"]
+            if self.include_dL:
+                # 5D model with luminosity distance
+                if self.use_tilde:
+                    # 5D model: Mc, q, dL, lambda_tilde, delta_lambda_tilde
+                    print("Including luminosity distance in 5D tilde model")
+                    self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_dL, self.train_lambda_1, self.train_lambda_2]).T
+                    self.nf_kwargs["names"] = ["chirp_mass", "mass_ratio", "luminosity_distance", "lambda_tilde", "delta_lambda_tilde"]
+                else:
+                    # 5D model: m1, m2, dL, lambda_1, lambda_2
+                    print("Including luminosity distance in 5D component model")
+                    self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_dL, self.train_lambda_1, self.train_lambda_2]).T
+                    self.nf_kwargs["names"] = ["m_1", "m_2", "luminosity_distance", "lambda_1", "lambda_2"]
+                self.n_inputs = 5
             else:
-                self.nf_kwargs["names"] = ["m_1", "m_2", "lambda_1", "lambda_2"]
+                # 4D model
+                self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
+                self.n_inputs = 4
+                
+                # Set names based on parameterization
+                if self.use_tilde:
+                    self.nf_kwargs["names"] = ["chirp_mass", "mass_ratio", "lambda_tilde", "delta_lambda_tilde"]
+                else:
+                    self.nf_kwargs["names"] = ["m_1", "m_2", "lambda_1", "lambda_2"]
+            
+            self.u = None
+            self.n_conditional_inputs = None
             self.nf_kwargs["names_conditional"] = []
             
         elif self.source_type == "nsbh" and self.conditional:
@@ -717,16 +759,6 @@ class NFPriorCreator:
             print("np.shape(self.u)")
             print(np.shape(self.u))
             
-        # Print something about ranges using training arrays:
-        if self.source_type == "nsbh":
-            print(f"train_mass_2 (concatenated) ranges from {np.min(self.train_mass_2)} to {np.max(self.train_mass_2)}")
-            print(f"train_lambda_2 (concatenated) ranges from {np.min(self.train_lambda_2)} to {np.max(self.train_lambda_2)}")
-        else:
-            print(f"train_mass_1 ranges from {np.min(self.train_mass_1)} to {np.max(self.train_mass_1)}")
-            print(f"train_mass_2 ranges from {np.min(self.train_mass_2)} to {np.max(self.train_mass_2)}")
-            print(f"train_lambda_1 ranges from {np.min(self.train_lambda_1)} to {np.max(self.train_lambda_1)}")
-            print(f"train_lambda_2 ranges from {np.min(self.train_lambda_2)} to {np.max(self.train_lambda_2)}")
-           
         if self.scale_input:
             print(f"Using MinMaxScaler to scale the input data x")
             scaler = MinMaxScaler()
@@ -785,6 +817,7 @@ class NFPriorCreator:
         self.nf_kwargs["take_log_lambda"] = str(self.take_log_lambda)
         self.nf_kwargs["use_flowjax"] = str(self.use_flowjax)
         self.nf_kwargs["use_tilde"] = str(self.use_tilde)
+        self.nf_kwargs["include_dL"] = str(self.include_dL)
         
         print(f"Saving the model kwargs to {save_path}")
         with open(save_path, "w") as f:

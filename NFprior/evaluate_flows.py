@@ -12,7 +12,7 @@ import copy
 import torch
 import joblib
 from scipy.special import kl_div
-from scipy.stats import gaussian_kde
+from scipy.stats import gaussian_kde, chisquare
 
 from glasflow.flows import RealNVP
 
@@ -717,6 +717,25 @@ class CheckerUnconditional(Checker):
         
         self.make_cornerplot_with_labels(training_samples, nf_samples, name, 
                                        my_range=ranges, labels=labels)
+        
+        # Run uniformity test for use_tilde models
+        use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+        if use_tilde:
+            print("\nRunning marginal uniformity test for Mc, q distribution...")
+            uniformity_result = self.test_marginal_uniformity()
+            if uniformity_result:
+                print("Uniformity test completed successfully")
+                
+        # For non use_tilde models, check if lambda_1 < lambda_2 for all generated samples
+        else:
+            print("\nChecking if lambda_1 < lambda_2 for all generated samples...")
+            
+            print(np.min(nf_samples[:, -2]), np.max(nf_samples[:, -2]))
+            print(np.min(nf_samples[:, -1]), np.max(nf_samples[:, -1]))
+            
+            ok_samples = nf_samples[:, -2] < nf_samples[:, -1]
+            percentage_ok = np.sum(ok_samples) / len(ok_samples) * 100
+            print(f"Percentage of samples with lambda_1 < lambda_2: {percentage_ok:.2f}%")
     
     def get_parameter_labels(self, use_tilde, parameter_names):
         """Get parameter labels based on tilde setting and parameter names."""
@@ -730,6 +749,13 @@ class CheckerUnconditional(Checker):
                 return [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]", r"$\Lambda_1$", r"$\Lambda_2$"]
             elif len(parameter_names) == 2:  # NSBH case: m2, lambda_2
                 return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]
+        
+        # Special case for 5D models with dL
+        if len(parameter_names) == 5:
+            if use_tilde:
+                return [r"$M_c$ [$M_{\odot}$]", r"$q$", r"$d_L$ [Mpc]", r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
+            else:
+                return [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]", r"$d_L$ [Mpc]", r"$\Lambda_1$", r"$\Lambda_2$"]
         
         # Fallback to parameter names if available
         return parameter_names if parameter_names else None
@@ -818,6 +844,150 @@ class CheckerUnconditional(Checker):
         
         return nf_samples
     
+    def test_marginal_uniformity(self, N_test_samples: int = 5_000, n_bins: int = 20):
+        """
+        Test whether samples from the marginal Mc, q distribution are uniform.
+        This is only applicable for unconditional use_tilde parameterization where the first 
+        two parameters are Mc (chirp mass) and q (mass ratio).
+        
+        Args:
+            N_test_samples (int): Number of samples to generate for the test.
+            n_bins (int): Number of bins per dimension for the 2D histogram.
+            
+        Returns:
+            dict: Test results including chi2 statistic and p-value.
+        """
+        # Check if this is a use_tilde model
+        use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+        if not use_tilde:
+            print("Uniformity test only applicable for use_tilde=True models")
+            return None
+            
+        print(f"Testing marginal uniformity of Mc, q distribution with {N_test_samples} samples")
+        
+        # Generate samples from the unconditional NF
+        nf_samples = self.generate_nf_samples_for_test(N_test_samples)
+        
+        print("nf_samples.shape")
+        print(nf_samples.shape)
+        
+        # Extract Mc and q samples (first two columns for use_tilde models)
+        mc_samples = nf_samples[:, 0]
+        q_samples = nf_samples[:, 1]
+        
+        print(np.min(mc_samples), np.max(mc_samples))
+        print(np.min(q_samples), np.max(q_samples))
+        
+        # Normalize to [0, 1] range for uniformity test
+        mc_min, mc_max = mc_samples.min(), mc_samples.max()
+        q_min, q_max = q_samples.min(), q_samples.max()
+        
+        mc_normalized = (mc_samples - mc_min) / (mc_max - mc_min)
+        q_normalized = (q_samples - q_min) / (q_max - q_min)
+        
+        # Create 2D histogram
+        H, _, _ = np.histogram2d(mc_normalized, q_normalized, 
+                               bins=(n_bins, n_bins), range=[[0, 1], [0, 1]])
+        
+        # Flatten histogram for chi-square test
+        observed = H.flatten()
+        expected = np.full_like(observed, fill_value=np.mean(observed))  # For uniform distribution
+        
+        # Perform chi-square test
+        chi2_stat, p_value = chisquare(observed, expected)
+        
+        result = {
+            'chi2_statistic': chi2_stat,
+            'p_value': p_value,
+            'n_samples': N_test_samples,
+            'n_bins': n_bins,
+            'degrees_of_freedom': len(observed) - 1,
+            'is_uniform': p_value > 0.05  # Common significance level
+        }
+        
+        print(f"Uniformity Test Results:")
+        print(f"  Chi2 statistic: {chi2_stat:.4f}")
+        print(f"  p-value: {p_value:.4f}")
+        print(f"  Degrees of freedom: {result['degrees_of_freedom']}")
+        print(f"  Is uniform (p > 0.05): {result['is_uniform']}")
+        
+        # Save a visualization of the 2D histogram
+        _, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        
+        # Plot the 2D histogram
+        im = ax1.imshow(H.T, origin='lower', extent=[0, 1, 0, 1], cmap='Blues')
+        ax1.set_xlabel('Normalized Mc')
+        ax1.set_ylabel('Normalized q')
+        ax1.set_title(f'2D Histogram (p-value: {p_value:.4f})')
+        plt.colorbar(im, ax=ax1)
+        
+        # Plot marginal distributions
+        ax2.hist(mc_normalized, bins=n_bins, alpha=0.7, label='Mc marginal', density=True)
+        ax2.hist(q_normalized, bins=n_bins, alpha=0.7, label='q marginal', density=True)
+        ax2.axhline(y=1.0, color='red', linestyle='--', label='Uniform (density=1)')
+        ax2.set_xlabel('Normalized parameter value')
+        ax2.set_ylabel('Density')
+        ax2.set_title('Marginal Distributions')
+        ax2.legend()
+        
+        plt.tight_layout()
+        name = os.path.join(self.figures_outdir, "marginal_uniformity_test.pdf")
+        plt.savefig(name, bbox_inches="tight")
+        plt.close()
+        print(f"Uniformity test visualization saved to {name}")
+        
+        return result
+    
+    def generate_nf_samples_for_test(self, N_test_samples: int):
+        """
+        Generate samples from the NF model for testing purposes.
+        """
+        nf_samples = []
+        use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
+        
+        if use_flowjax:
+            # flowJAX sampling
+            key = jr.key(456)  # Different seed for test
+            keys = jr.split(key, N_test_samples)
+            
+            @jax.jit
+            def sample_fn(sample_key):
+                return self.flow.sample(sample_key, (1,)).flatten()
+            
+            # Vectorize over keys
+            nf_samples_jax = jax.vmap(sample_fn)(keys)
+            nf_samples = np.array(nf_samples_jax)
+        else:
+            # glasflow sampling
+            with torch.no_grad():
+                for _ in range(N_test_samples):
+                    value = self.flow.sample(1).cpu().numpy().flatten()
+                    nf_samples.append(value)
+            nf_samples = np.array(nf_samples)
+        
+        # Apply inverse scaling if scaler was used during training
+        if self.scaler is not None:
+            nf_samples = self.scaler.inverse_transform(nf_samples)
+        
+        # Apply inverse log transform if log was taken during training
+        if self.nf_kwargs.get("take_log_lambda", "False") == "True":
+            # Only apply to lambda parameters (last 1 or 2 columns)
+            use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+            source_type = self.nf_kwargs.get("source_type", "bns")
+            
+            if source_type == "bns":
+                if use_tilde:
+                    # lambda_tilde, delta_lambda_tilde are last 2 columns
+                    nf_samples[:, -2:] = np.exp(nf_samples[:, -2:])
+                else:
+                    # lambda_1, lambda_2 are last 2 columns
+                    nf_samples[:, -2:] = np.exp(nf_samples[:, -2:])
+            elif source_type == "nsbh":
+                # lambda_2 is last column
+                nf_samples[:, -1] = np.exp(nf_samples[:, -1])
+        
+        return nf_samples
+    
     def get_training_samples(self):
         """
         Get training samples in the same format as NF samples.
@@ -827,7 +997,7 @@ class CheckerUnconditional(Checker):
         
         if use_tilde:
             if source_type == "bns":
-                # Use Mc, q, lambda_tilde, delta_lambda_tilde
+                # Get Mc, q, lambda_tilde, delta_lambda_tilde
                 if "chirp_mass" in self.training_data and "mass_ratio" in self.training_data:
                     mc = self.training_data["chirp_mass"]
                     q = self.training_data["mass_ratio"]
@@ -840,7 +1010,17 @@ class CheckerUnconditional(Checker):
                 lambda_tilde = self.training_data["lambda_tilde"]
                 delta_lambda_tilde = self.training_data["delta_lambda_tilde"]
                 
-                return np.column_stack([mc, q, lambda_tilde, delta_lambda_tilde])
+                # Check if we need to include luminosity distance for 5D model
+                include_dL = self.nf_kwargs.get("include_dL", "False") == "True"
+                if include_dL:
+                    if "luminosity_distance" in self.training_data:
+                        dL = self.training_data["luminosity_distance"]
+                        return np.column_stack([mc, q, dL, lambda_tilde, delta_lambda_tilde])
+                    else:
+                        raise ValueError("include_dL=True but no luminosity_distance found in training data")
+                else:
+                    # 4D model: Mc, q, lambda_tilde, delta_lambda_tilde
+                    return np.column_stack([mc, q, lambda_tilde, delta_lambda_tilde])
             else:  # NSBH
                 # For NSBH unconditional with tilde, use all 4 parameters
                 if "chirp_mass" in self.training_data:
@@ -856,12 +1036,23 @@ class CheckerUnconditional(Checker):
                     return np.column_stack([m2, lambda_2])
         else:
             if source_type == "bns":
-                # Use m1, m2, lambda_1, lambda_2
+                # Use m1, m2, lambda_1, lambda_2 (and optionally dL)
                 m1 = self.training_data["m1"]
                 m2 = self.training_data["m2"]
                 lambda_1 = self.training_data["lambda_1"]
                 lambda_2 = self.training_data["lambda_2"]
-                return np.column_stack([m1, m2, lambda_1, lambda_2])
+                
+                # Check if we need to include luminosity distance for 5D model
+                include_dL = self.nf_kwargs.get("include_dL", "False") == "True"
+                if include_dL:
+                    if "luminosity_distance" in self.training_data:
+                        dL = self.training_data["luminosity_distance"]
+                        return np.column_stack([m1, m2, dL, lambda_1, lambda_2])
+                    else:
+                        raise ValueError("include_dL=True but no luminosity_distance found in training data")
+                else:
+                    # 4D model: m1, m2, lambda_1, lambda_2
+                    return np.column_stack([m1, m2, lambda_1, lambda_2])
             else:  # NSBH
                 # Use m2, lambda_2 (concatenated NS data)
                 m2 = self.training_data["m2"]

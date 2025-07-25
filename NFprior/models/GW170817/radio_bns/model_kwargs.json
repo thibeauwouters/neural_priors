@@ -1,17 +1,18 @@
 {
     "n_transforms": 4,
-    "n_neurons": 128,
+    "n_neurons": 64,
     "n_blocks_per_transform": 4,
     "nn_depth": 5,
     "nn_block_dim": 8,
     "names": [
-        "chirp_mass",
-        "mass_ratio",
-        "lambda_tilde",
-        "delta_lambda_tilde"
+        "m_1",
+        "m_2",
+        "luminosity_distance",
+        "lambda_1",
+        "lambda_2"
     ],
     "names_conditional": [],
-    "n_inputs": 4,
+    "n_inputs": 5,
     "n_conditional_inputs": null,
     "model_type": "CouplingNSF",
     "source_type": "bns",
@@ -26,5 +27,6 @@
     "training_filename": "././models/GW170817/radio_bns/training_data.npz",
     "take_log_lambda": "False",
     "use_flowjax": "False",
-    "use_tilde": "True"
+    "use_tilde": "False",
+    "include_dL": "True"
 }
