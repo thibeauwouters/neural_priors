@@ -82,11 +82,18 @@ parser.add_argument("--conditional",
                     help="Use conditional NF training")
 parser.add_argument("--use-tilde", 
                     action="store_true", 
-                    help="Use tilde parameterization (Mc, q, lambda_tilde, delta_lambda_tilde) instead of (m1, m2, lambda_1, lambda_2)")
+                    help="Use tilde parameterization for lambdas (lambda_tilde, delta_lambda_tilde) instead of (lambda_1, lambda_2)")
 parser.add_argument("--no-use-tilde", 
                     dest="use_tilde", 
                     action="store_false")
 parser.set_defaults(use_tilde=False)
+parser.add_argument("--use-component-masses", 
+                    action="store_true", 
+                    help="Use component masses (m1, m2) instead of (Mc, q)")
+parser.add_argument("--no-use-component-masses", 
+                    dest="use_component_masses", 
+                    action="store_false")
+parser.set_defaults(use_component_masses=False)
 parser.add_argument("--include-dL", 
                     action="store_true", 
                     help="Include luminosity distance in unconditional tilde models for 5D training")
@@ -185,6 +192,7 @@ class NFPriorCreator:
                  source_type: str = "bns",
                  event_name: str = "",
                  use_tilde: bool = False,
+                 use_component_masses: bool = True,
                  conditional: bool = True,
                  include_dL: bool = False,
                  N_samples_training: int = 100_000,
@@ -220,7 +228,8 @@ class NFPriorCreator:
             conditional (bool, optional): Whether to train the NF in a conditional manner, i.e., Lambdas as function of masses. Defaults to True as this is recommended for our bilby setup.
             take_log_lambda (bool, optional): Whether to take the log of the Lambdas before training to deal with their massive scaling, to improve training the NF. Defaults to True.
             use_flowjax (bool, optional): Whether to use flowJAX instead of glasflow for training. Defaults to False.
-            use_tilde (bool, optional): Whether to use tilde parameterization (Mc, q, lambda_tilde, delta_lambda_tilde) instead of (m1, m2, lambda_1, lambda_2). Defaults to False.
+            use_tilde (bool, optional): Whether to use tilde parameterization for lambdas (lambda_tilde, delta_lambda_tilde) instead of (lambda_1, lambda_2). Defaults to False.
+            use_component_masses (bool, optional): Whether to use component masses (m1, m2) instead of (Mc, q). Defaults to True.
             num_epochs (int, optional): Number of training epochs. Defaults to 100.
             learning_rate (float, optional): Learning rate for training. Defaults to 1e-3.
             max_patience (int, optional): Max stops to wait before employing early stopping. Defaults to 50.
@@ -267,6 +276,7 @@ class NFPriorCreator:
         self.take_log_lambda = take_log_lambda
         self.use_flowjax = use_flowjax
         self.use_tilde = use_tilde
+        self.use_component_masses = use_component_masses
         self.include_dL = include_dL
 
         self.num_epochs = num_epochs
@@ -286,9 +296,9 @@ class NFPriorCreator:
                 Please set either scale_input=False or take_log_lambda=False.\
                 Recommended to use scaling and not log transformation for training (empirically gave best results).")
         
-        if self.use_tilde and self.source_type == "nsbh" and self.conditional:
-            raise ValueError("Combination of use_tilde=True, source_type='nsbh', and conditional=True is not supported. \
-                Please use component parameterization for NSBH conditional training or switch to unconditional training.")
+        if not self.use_component_masses and self.source_type == "nsbh" and self.conditional:
+            raise ValueError("Combination of use_component_masses=False, source_type='nsbh', and conditional=True is not supported. \
+                Please use component masses for NSBH conditional training or switch to unconditional training.")
         
         if self.include_dL and self.conditional:
             raise ValueError("include_dL=True is only supported for unconditional models. Set conditional=False to use dL.")
@@ -554,7 +564,7 @@ class NFPriorCreator:
         Creates parameterization-agnostic training arrays that the training methods can use.
         
         The training methods use generic arrays:
-        - train_mass_1, train_mass_2: Can be (m1, m2) or (Mc, q) depending on use_tilde
+        - train_mass_1, train_mass_2: Can be (m1, m2) or (Mc, q) depending on use_component_masses
         - train_lambda_1, train_lambda_2: Can be (lambda_1, lambda_2) or (lambda_tilde, delta_lambda_tilde) depending on use_tilde
         
         For NSBH systems, concatenates all NS data into single arrays for p(Lambda|m) modeling.
@@ -571,10 +581,13 @@ class NFPriorCreator:
         self.lambda_1_raw = lambda_1_raw
         self.lambda_2_raw = lambda_2_raw
         
-        if self.use_tilde:
-            # Use tilde parameterization
-            print("Using tilde parameterization for training")
-            
+        # Handle mass parameterization
+        if self.use_component_masses:
+            print("Using component masses (m1, m2) for training")
+            train_mass_1 = m1_raw
+            train_mass_2 = m2_raw
+        else:
+            print("Using chirp mass and mass ratio (Mc, q) for training")
             # Load or calculate chirp mass and mass ratio
             if "chirp_mass" in data and "mass_ratio" in data:
                 train_mass_1 = data["chirp_mass"]
@@ -583,7 +596,10 @@ class NFPriorCreator:
                 from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
                 train_mass_1 = component_masses_to_chirp_mass(m1_raw, m2_raw)
                 train_mass_2 = component_masses_to_mass_ratio(m1_raw, m2_raw)
-            
+        
+        # Handle lambda parameterization
+        if self.use_tilde:
+            print("Using tilde parameterization for lambdas (lambda_tilde, delta_lambda_tilde)")
             # Load or calculate tilde parameters
             if "lambda_tilde" in data and "delta_lambda_tilde" in data:
                 train_lambda_1 = data["lambda_tilde"]
@@ -591,28 +607,17 @@ class NFPriorCreator:
             else:
                 train_lambda_1 = lambda_1_lambda_2_to_lambda_tilde(lambda_1_raw, lambda_2_raw, m1_raw, m2_raw)
                 train_lambda_2 = lambda_1_lambda_2_to_delta_lambda_tilde(lambda_1_raw, lambda_2_raw, m1_raw, m2_raw)
-            
-            # Handle luminosity distance if requested
-            if self.include_dL:
-                if "luminosity_distance" in data:
-                    self.train_dL = data["luminosity_distance"]
-                else:
-                    raise ValueError("include_dL=True but no luminosity_distance found in training data")
-            
         else:
-            # Use component parameterization
-            print("Using component parameterization for training")
-            train_mass_1 = m1_raw
-            train_mass_2 = m2_raw
+            print("Using component parameterization for lambdas (lambda_1, lambda_2)")
             train_lambda_1 = lambda_1_raw
             train_lambda_2 = lambda_2_raw
-            
-            # Handle luminosity distance if requested
-            if self.include_dL:
-                if "luminosity_distance" in data:
-                    self.train_dL = data["luminosity_distance"]
-                else:
-                    raise ValueError("include_dL=True but no luminosity_distance found in training data")
+        
+        # Handle luminosity distance if requested
+        if self.include_dL:
+            if "luminosity_distance" in data:
+                self.train_dL = data["luminosity_distance"]
+            else:
+                raise ValueError("include_dL=True but no luminosity_distance found in training data")
         
         if self.source_type == "nsbh":
             # For NSBH: create concatenated arrays for single NS modeling
@@ -676,37 +681,36 @@ class NFPriorCreator:
             # Set names based on parameterization
             if self.use_tilde:
                 self.nf_kwargs["names"] = ["lambda_tilde", "delta_lambda_tilde"]
-                self.nf_kwargs["names_conditional"] = ["chirp_mass", "mass_ratio"]
             else:
                 self.nf_kwargs["names"] = ["lambda_1", "lambda_2"]
+            
+            if self.use_component_masses:
                 self.nf_kwargs["names_conditional"] = ["m_1", "m_2"]
+            else:
+                self.nf_kwargs["names_conditional"] = ["chirp_mass", "mass_ratio"]
             
         elif self.source_type == "bns" and not self.conditional:
             print(f"We are training BNS and not conditional")
             
             if self.include_dL:
                 # 5D model with luminosity distance
-                if self.use_tilde:
-                    # 5D model: Mc, q, dL, lambda_tilde, delta_lambda_tilde
-                    print("Including luminosity distance in 5D tilde model")
-                    self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_dL, self.train_lambda_1, self.train_lambda_2]).T
-                    self.nf_kwargs["names"] = ["chirp_mass", "mass_ratio", "luminosity_distance", "lambda_tilde", "delta_lambda_tilde"]
-                else:
-                    # 5D model: m1, m2, dL, lambda_1, lambda_2
-                    print("Including luminosity distance in 5D component model")
-                    self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_dL, self.train_lambda_1, self.train_lambda_2]).T
-                    self.nf_kwargs["names"] = ["m_1", "m_2", "luminosity_distance", "lambda_1", "lambda_2"]
+                print("Including luminosity distance in 5D model")
+                self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_dL, self.train_lambda_1, self.train_lambda_2]).T
                 self.n_inputs = 5
+                
+                # Set names based on parameterization
+                mass_names = ["m_1", "m_2"] if self.use_component_masses else ["chirp_mass", "mass_ratio"]
+                lambda_names = ["lambda_tilde", "delta_lambda_tilde"] if self.use_tilde else ["lambda_1", "lambda_2"]
+                self.nf_kwargs["names"] = mass_names + ["luminosity_distance"] + lambda_names
             else:
                 # 4D model
                 self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
                 self.n_inputs = 4
                 
                 # Set names based on parameterization
-                if self.use_tilde:
-                    self.nf_kwargs["names"] = ["chirp_mass", "mass_ratio", "lambda_tilde", "delta_lambda_tilde"]
-                else:
-                    self.nf_kwargs["names"] = ["m_1", "m_2", "lambda_1", "lambda_2"]
+                mass_names = ["m_1", "m_2"] if self.use_component_masses else ["chirp_mass", "mass_ratio"]
+                lambda_names = ["lambda_tilde", "delta_lambda_tilde"] if self.use_tilde else ["lambda_1", "lambda_2"]
+                self.nf_kwargs["names"] = mass_names + lambda_names
             
             self.u = None
             self.n_conditional_inputs = None
@@ -727,18 +731,23 @@ class NFPriorCreator:
         elif self.source_type == "nsbh" and not self.conditional:
             print(f"We are training NSBH and not conditional")
             
-            if self.use_tilde:
-                # For tilde parameterization, use all 4 parameters: Mc, q, lambda_tilde, delta_lambda_tilde
-                print("Using all 4 tilde parameters for NSBH unconditional training")
+            if not self.use_component_masses:
+                # For chirp mass/mass ratio parameterization, use all 4 parameters
+                print("Using all 4 parameters (Mc, q, lambda) for NSBH unconditional training")
                 self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
                 self.n_inputs = 4
-                self.nf_kwargs["names"] = ["chirp_mass", "mass_ratio", "lambda_tilde", "delta_lambda_tilde"]
+                
+                mass_names = ["chirp_mass", "mass_ratio"]
+                lambda_names = ["lambda_tilde", "delta_lambda_tilde"] if self.use_tilde else ["lambda_1", "lambda_2"]
+                self.nf_kwargs["names"] = mass_names + lambda_names
             else:
-                # For component parameterization, use concatenated NS data
+                # For component mass parameterization, use concatenated NS data
                 print("Using concatenated NS data for NSBH unconditional training")
                 self.x = np.array([self.train_mass_2, self.train_lambda_2]).T
                 self.n_inputs = 2
-                self.nf_kwargs["names"] = ["m2", "lambda_2"]
+                
+                lambda_name = "lambda_tilde" if self.use_tilde else "lambda_2"
+                self.nf_kwargs["names"] = ["m2", lambda_name]
             
             self.u = None
             self.n_conditional_inputs = None
@@ -817,6 +826,7 @@ class NFPriorCreator:
         self.nf_kwargs["take_log_lambda"] = str(self.take_log_lambda)
         self.nf_kwargs["use_flowjax"] = str(self.use_flowjax)
         self.nf_kwargs["use_tilde"] = str(self.use_tilde)
+        self.nf_kwargs["use_component_masses"] = str(self.use_component_masses)
         self.nf_kwargs["include_dL"] = str(self.include_dL)
         
         print(f"Saving the model kwargs to {save_path}")

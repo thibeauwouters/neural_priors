@@ -257,8 +257,9 @@ class CheckerBNS(Checker):
             m1_value (float): Mass 1 value to condition on.
             m2_value (float): Mass 2 value to condition on.
         """
-        # Check if we're using tilde parameterization
+        # Check parameterization flags
         use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
         
         # Load the training samples based on parameterization
         if use_tilde:
@@ -308,16 +309,16 @@ class CheckerBNS(Checker):
         nf_samples = []
         use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
         
-        # Prepare conditioning variables based on parameterization
-        if use_tilde:
-            # For tilde parameterization, condition on Mc and q
+        # Prepare conditioning variables based on mass parameterization
+        if use_component_masses:
+            # For component mass parameterization, condition on m1 and m2
+            conditioning_vars = [m1_value, m2_value]
+        else:
+            # For chirp mass/mass ratio parameterization, condition on Mc and q
             from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
             mc_cond = component_masses_to_chirp_mass(m1_value, m2_value)
             q_cond = component_masses_to_mass_ratio(m1_value, m2_value)
             conditioning_vars = [mc_cond, q_cond]
-        else:
-            # For component parameterization, condition on m1 and m2
-            conditioning_vars = [m1_value, m2_value]
         
         if use_flowjax:
             # flowJAX sampling
@@ -366,13 +367,16 @@ class CheckerBNS(Checker):
         
         my_range = [[param_1_lower, param_1_upper], [param_2_lower, param_2_upper]]
         
-        # Create parameter labels based on use_tilde setting
+        # Create parameter labels and filename based on parameterization
         if use_tilde:
             labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
-            name = os.path.join(self.figures_outdir, f"Mc_{conditioning_vars[0]:.2f}_q_{conditioning_vars[1]:.2f}.pdf")
         else:
             labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
+        
+        if use_component_masses:
             name = os.path.join(self.figures_outdir, f"m1_{m1_value:.2f}_m2_{m2_value:.2f}.pdf")
+        else:
+            name = os.path.join(self.figures_outdir, f"Mc_{conditioning_vars[0]:.2f}_q_{conditioning_vars[1]:.2f}.pdf")
         
         print(f"Saving cornerplot to {name}")
         make_cornerplot(training_samples, nf_samples, name, my_range=my_range, labels=labels)
@@ -718,16 +722,16 @@ class CheckerUnconditional(Checker):
         self.make_cornerplot_with_labels(training_samples, nf_samples, name, 
                                        my_range=ranges, labels=labels)
         
-        # Run uniformity test for use_tilde models
-        use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
-        if use_tilde:
+        # Run uniformity test for chirp mass/mass ratio models
+        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
+        if not use_component_masses:
             print("\nRunning marginal uniformity test for Mc, q distribution...")
             uniformity_result = self.test_marginal_uniformity()
             if uniformity_result:
                 print("Uniformity test completed successfully")
                 
-        # For non use_tilde models, check if lambda_1 < lambda_2 for all generated samples
-        else:
+        # For non-tilde lambda models, check if lambda_1 < lambda_2 for all generated samples
+        if not self.nf_kwargs["use_tilde"] and self.nf_kwargs["source_type"] == "bns":
             print("\nChecking if lambda_1 < lambda_2 for all generated samples...")
             
             print(np.min(nf_samples[:, -2]), np.max(nf_samples[:, -2]))
@@ -738,24 +742,47 @@ class CheckerUnconditional(Checker):
             print(f"Percentage of samples with lambda_1 < lambda_2: {percentage_ok:.2f}%")
     
     def get_parameter_labels(self, use_tilde, parameter_names):
-        """Get parameter labels based on tilde setting and parameter names."""
-        if use_tilde:
-            if len(parameter_names) == 4:  # BNS case: Mc, q, lambda_tilde, delta_lambda_tilde
-                return [r"$M_c$ [$M_{\odot}$]", r"$q$", r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
-            elif len(parameter_names) == 2:  # NSBH case: m2, lambda_2
-                return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]
-        else:
-            if len(parameter_names) == 4:  # BNS case: m1, m2, lambda_1, lambda_2
-                return [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]", r"$\Lambda_1$", r"$\Lambda_2$"]
-            elif len(parameter_names) == 2:  # NSBH case: m2, lambda_2
-                return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]
+        """Get parameter labels based on parameterization flags and parameter names."""
+        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
         
-        # Special case for 5D models with dL
-        if len(parameter_names) == 5:
-            if use_tilde:
-                return [r"$M_c$ [$M_{\odot}$]", r"$q$", r"$d_L$ [Mpc]", r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
+        # Handle 4D models
+        if len(parameter_names) == 4:
+            # Mass labels
+            if use_component_masses:
+                mass_labels = [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]"]
             else:
-                return [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]", r"$d_L$ [Mpc]", r"$\Lambda_1$", r"$\Lambda_2$"]
+                mass_labels = [r"$M_c$ [$M_{\odot}$]", r"$q$"]
+            
+            # Lambda labels
+            if use_tilde:
+                lambda_labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
+            else:
+                lambda_labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
+            
+            return mass_labels + lambda_labels
+        
+        # Handle 5D models with dL
+        elif len(parameter_names) == 5:
+            # Mass labels
+            if use_component_masses:
+                mass_labels = [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]"]
+            else:
+                mass_labels = [r"$M_c$ [$M_{\odot}$]", r"$q$"]
+            
+            # Lambda labels
+            if use_tilde:
+                lambda_labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
+            else:
+                lambda_labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
+            
+            return mass_labels + [r"$d_L$ [Mpc]"] + lambda_labels
+        
+        # Handle 2D NSBH case
+        elif len(parameter_names) == 2:
+            if use_tilde:
+                return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]  # NSBH case
+            else:
+                return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]
         
         # Fallback to parameter names if available
         return parameter_names if parameter_names else None
@@ -857,10 +884,10 @@ class CheckerUnconditional(Checker):
         Returns:
             dict: Test results including chi2 statistic and p-value.
         """
-        # Check if this is a use_tilde model
-        use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
-        if not use_tilde:
-            print("Uniformity test only applicable for use_tilde=True models")
+        # Check if this uses chirp mass/mass ratio parameterization
+        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
+        if use_component_masses:
+            print("Uniformity test only applicable for use_component_masses=False models")
             return None
             
         print(f"Testing marginal uniformity of Mc, q distribution with {N_test_samples} samples")
@@ -871,7 +898,7 @@ class CheckerUnconditional(Checker):
         print("nf_samples.shape")
         print(nf_samples.shape)
         
-        # Extract Mc and q samples (first two columns for use_tilde models)
+        # Extract Mc and q samples (first two columns for chirp mass/mass ratio models)
         mc_samples = nf_samples[:, 0]
         q_samples = nf_samples[:, 1]
         
@@ -993,70 +1020,56 @@ class CheckerUnconditional(Checker):
         Get training samples in the same format as NF samples.
         """
         use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
         source_type = self.nf_kwargs.get("source_type", "bns")
+        include_dL = self.nf_kwargs.get("include_dL", "False") == "True"
         
-        if use_tilde:
-            if source_type == "bns":
-                # Get Mc, q, lambda_tilde, delta_lambda_tilde
-                if "chirp_mass" in self.training_data and "mass_ratio" in self.training_data:
-                    mc = self.training_data["chirp_mass"]
-                    q = self.training_data["mass_ratio"]
-                else:
-                    # Convert from component masses
-                    from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
-                    mc = component_masses_to_chirp_mass(self.training_data["m1"], self.training_data["m2"])
-                    q = component_masses_to_mass_ratio(self.training_data["m1"], self.training_data["m2"])
-                
-                lambda_tilde = self.training_data["lambda_tilde"]
-                delta_lambda_tilde = self.training_data["delta_lambda_tilde"]
-                
-                # Check if we need to include luminosity distance for 5D model
-                include_dL = self.nf_kwargs.get("include_dL", "False") == "True"
-                if include_dL:
-                    if "luminosity_distance" in self.training_data:
-                        dL = self.training_data["luminosity_distance"]
-                        return np.column_stack([mc, q, dL, lambda_tilde, delta_lambda_tilde])
-                    else:
-                        raise ValueError("include_dL=True but no luminosity_distance found in training data")
-                else:
-                    # 4D model: Mc, q, lambda_tilde, delta_lambda_tilde
-                    return np.column_stack([mc, q, lambda_tilde, delta_lambda_tilde])
-            else:  # NSBH
-                # For NSBH unconditional with tilde, use all 4 parameters
-                if "chirp_mass" in self.training_data:
-                    mc = self.training_data["chirp_mass"]
-                    q = self.training_data["mass_ratio"]
-                    lambda_tilde = self.training_data["lambda_tilde"]
-                    delta_lambda_tilde = self.training_data["delta_lambda_tilde"]
-                    return np.column_stack([mc, q, lambda_tilde, delta_lambda_tilde])
-                else:
-                    # Fallback to m2, lambda_2
-                    m2 = self.training_data["m2"]
-                    lambda_2 = self.training_data["lambda_2"]
-                    return np.column_stack([m2, lambda_2])
+        # Get mass parameters based on use_component_masses flag
+        if use_component_masses:
+            m1 = self.training_data["m1"]
+            m2 = self.training_data["m2"]
+            mass_params = [m1, m2]
         else:
-            if source_type == "bns":
-                # Use m1, m2, lambda_1, lambda_2 (and optionally dL)
-                m1 = self.training_data["m1"]
-                m2 = self.training_data["m2"]
-                lambda_1 = self.training_data["lambda_1"]
-                lambda_2 = self.training_data["lambda_2"]
-                
-                # Check if we need to include luminosity distance for 5D model
-                include_dL = self.nf_kwargs.get("include_dL", "False") == "True"
-                if include_dL:
-                    if "luminosity_distance" in self.training_data:
-                        dL = self.training_data["luminosity_distance"]
-                        return np.column_stack([m1, m2, dL, lambda_1, lambda_2])
-                    else:
-                        raise ValueError("include_dL=True but no luminosity_distance found in training data")
+            # Use or calculate chirp mass and mass ratio
+            if "chirp_mass" in self.training_data and "mass_ratio" in self.training_data:
+                mc = self.training_data["chirp_mass"]
+                q = self.training_data["mass_ratio"]
+            else:
+                from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
+                mc = component_masses_to_chirp_mass(self.training_data["m1"], self.training_data["m2"])
+                q = component_masses_to_mass_ratio(self.training_data["m1"], self.training_data["m2"])
+            mass_params = [mc, q]
+        
+        # Get lambda parameters based on use_tilde flag
+        if use_tilde:
+            lambda_1 = self.training_data["lambda_tilde"]
+            lambda_2 = self.training_data["delta_lambda_tilde"]
+        else:
+            lambda_1 = self.training_data["lambda_1"]
+            lambda_2 = self.training_data["lambda_2"]
+        lambda_params = [lambda_1, lambda_2]
+        
+        if source_type == "bns":
+            # For BNS: combine mass and lambda parameters
+            if include_dL:
+                if "luminosity_distance" in self.training_data:
+                    dL = self.training_data["luminosity_distance"]
+                    return np.column_stack(mass_params + [dL] + lambda_params)
                 else:
-                    # 4D model: m1, m2, lambda_1, lambda_2
-                    return np.column_stack([m1, m2, lambda_1, lambda_2])
-            else:  # NSBH
-                # Use m2, lambda_2 (concatenated NS data)
+                    raise ValueError("include_dL=True but no luminosity_distance found in training data")
+            else:
+                return np.column_stack(mass_params + lambda_params)
+        else:  # NSBH
+            if not use_component_masses:
+                # For NSBH with chirp mass parameterization, use all 4 parameters
+                return np.column_stack(mass_params + lambda_params)
+            else:
+                # For NSBH with component masses, use m2, lambda_2 (concatenated NS data)
                 m2 = self.training_data["m2"]
-                lambda_2 = self.training_data["lambda_2"]
+                if use_tilde:
+                    lambda_2 = self.training_data["lambda_2"]  # Note: for NSBH, use raw lambda_2 not tilde
+                else:
+                    lambda_2 = self.training_data["lambda_2"]
                 return np.column_stack([m2, lambda_2])
 
 def main():

@@ -5,8 +5,8 @@
     "nn_depth": 5,
     "nn_block_dim": 8,
     "names": [
-        "m_1",
-        "m_2",
+        "chirp_mass",
+        "mass_ratio",
         "luminosity_distance",
         "lambda_1",
         "lambda_2"
@@ -28,5 +28,6 @@
     "take_log_lambda": "False",
     "use_flowjax": "False",
     "use_tilde": "False",
+    "use_component_masses": "False",
     "include_dL": "True"
 }
