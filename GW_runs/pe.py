@@ -14,6 +14,7 @@ import numpy as np
 from bilby.core.prior.analytical import Uniform, Sine, Cosine, DeltaFunction
 from bilby.gw.prior import UniformComovingVolume, AlignedSpin
 from bilby.core.prior.dict import NFConditionalPrior
+from bilby.core.prior.joint import NFDist, NFPrior
 import argparse
 import json
 import pickle
@@ -53,7 +54,10 @@ def timeout(duration):
         # Disable the alarm
         signal.alarm(0)
 
-# Set up the general run settings
+################
+### ARGPARSE ###
+################
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--label',
                     type = str,
@@ -63,6 +67,10 @@ parser.add_argument('--prior-name',
                     type = str,
                     default = 'bns',
                     help = "Output directory for the run")
+parser.add_argument('--eos-samples-name',
+                    type = str,
+                    default = "radio",
+                    help = "Name of the EOS posterior dataset, must match the NF name. Used to construct the path to the NF model data.") # TODO: does it have to be relative?
 parser.add_argument('--waveform-model',
                     type = str,
                     default = 'IMRPhenomXP_NRTidalv3',
@@ -79,14 +87,6 @@ parser.add_argument('--seed',
                     type = int,
                     default = 2024,
                     help = "Seed for the random number generator")
-parser.add_argument('--load-data-generation', 
-                    type = bool,
-                    default = False,
-                    help = "This indicates whether we skip past data generation for debugging purposes, and load in likelihoods and priors from memory instead.")
-parser.add_argument('--save-data-generation', 
-                    type = bool,
-                    default = False,
-                    help = "This indicates whether we pickle the likelihood and priors after data generation, so that we can load them in later without having to run through the data generation steps again.")
 parser.add_argument('--dry-run',
                     action = 'store_true',
                     help = "Run through the script without sampling to validate setup")
@@ -97,10 +97,6 @@ parser.add_argument('--n-pool',
                     type = int,
                     default = 64,
                     help = "How many cores to use for the sampling.")
-parser.add_argument('--eos-samples-name',
-                    type = str,
-                    default = "radio",
-                    help = "Name of the EOS posterior dataset, must match the NF name. Used to construct the path to the NF model data.") # TODO: does it have to be relative?
 
 args = parser.parse_args()
 
@@ -123,6 +119,9 @@ EVENT_CONFIG = {
         'minimum_frequency': 20.0
     }
 }
+
+################
+### PREAMBLE ###
 
 # Check if some of the given arguments are valid
 SUPPORTED_PRIORS = ['default', 'bns', 'nsbh']
@@ -256,242 +255,155 @@ safe_globals = {
     'AlignedSpin': AlignedSpin
 }
 
-if not args.load_data_generation:
+logger.info(f"Loading priors from {prior_filename}")
+
+### PRIORS
+# Read the prior file as text
+with open(prior_filename, "r") as f:
+    prior_lines = f.readlines()
+
+# Replace 'UniformComovingVolume' with full path
+modified_lines = [
+    line.replace(
+        "UniformComovingVolume", "bilby.gw.prior.UniformComovingVolume"
+    ) for line in prior_lines
+]
+
+# Evaluate the prior lines in a safe namespace
+prior_dict = {}
+exec("".join(modified_lines), safe_globals, prior_dict)
+
+if args.prior_name == "default":
+    logger.info("Using the default priors")
+    # Build PriorDict straight from all given priors
+    priors = bilby.core.prior.PriorDict(prior_dict)
     
-    logger.info(f"Loading priors from {prior_filename}")
+    # Lambdas are not in the prior files, so we add them manually here
+    priors["lambda_1"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\Lambda_1$')
+    priors["lambda_2"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\Lambda_2$')
     
-    ### PRIORS
-    if args.prior_name == "default":
-        logger.info("Using the default priors")
-        
-        # Read the prior file as text
-        with open(prior_filename, "r") as f:
-            prior_lines = f.readlines()
-
-        # Replace 'UniformComovingVolume' with full path
-        modified_lines = [
-            line.replace(
-                "UniformComovingVolume", "bilby.gw.prior.UniformComovingVolume"
-            ) for line in prior_lines
-        ]
-
-        # Evaluate the prior lines in a safe namespace
-        prior_dict = {}
-        exec("".join(modified_lines), safe_globals, prior_dict)
-
-        # Filter out only the Prior instances
-        priors = bilby.core.prior.PriorDict({k: v for k, v in prior_dict.items() if isinstance(v, bilby.core.prior.Prior)})
-        
-        # Lambdas are not in the prior files, so we add them manually here
-        priors["lambda_1"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\Lambda_1$')
-        priors["lambda_2"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\Lambda_2$')
-        
-    else:
-        logger.info(f"Sampling with an NF prior, with name {args.prior_name}")
-        # Path to NF model
-        nf_model_path = os.path.join(cwd, f"../NFprior/models/{args.eos_samples_name}_conditional_{args.prior_name}/model.pt")
-        nf_model_path = os.path.abspath(nf_model_path)
-        logger.info(f"Using NF model path: {nf_model_path}")
-            
-        if args.prior_name == "bns":
-            
-            # Execute prior file
-            local_vars = {}
-            with open(prior_filename, 'r') as f:
-                prior_code = f.read()
-            exec(prior_code, safe_globals, local_vars)
-            
-            # Use ConditionalPriorDict for BNS conditional prior approach
-            priors = bilby.core.prior.ConditionalPriorDict()
-            
-            # Add all non-lambda priors from the prior file
-            lambda_params = ['lambda_1', 'lambda_2']
-            for var_name, var_value in local_vars.items():
-                if var_name not in lambda_params:
-                    priors[var_name] = var_value
-            
-            # Add conditional NF priors for lambda parameters with shared state coordination
-            from bilby.core.prior.dict import NFConditionalPrior
-            
-            # Create shared state object for coordination between lambda_1 and lambda_2
-            shared_state = {'lambda_1': None, 'lambda_2': None}
-            
-            priors['lambda_1'] = NFConditionalPrior(
-                nf_model_path=nf_model_path,
-                target_param='lambda_1',
-                minimum=1e-3,
-                maximum=100_000.0,
-                latex_label='$\\Lambda_1$',
-                shared_lambda_state=shared_state
-            )
-            
-            priors['lambda_2'] = NFConditionalPrior(
-                nf_model_path=nf_model_path,
-                target_param='lambda_2', 
-                minimum=1e-3,
-                maximum=100_000.0,
-                latex_label='$\\Lambda_2$',
-                shared_lambda_state=shared_state
-            )
-                
-            logger.info("Going to show priors in priors:")
-            for key, value in priors.items():
-                logger.info(f"      {key}: {value}")
-            
-        elif args.prior_name == "nsbh":
-            logger.info("Setting up NSBH conditional prior")
-            
-            # Execute prior file
-            local_vars = {}
-            with open(prior_filename, 'r') as f:
-                prior_code = f.read()
-            exec(prior_code, safe_globals, local_vars)
-            
-            # Use ConditionalPriorDict for NSBH
-            priors = bilby.core.prior.ConditionalPriorDict()
-            
-            # Add all non-lambda priors from the prior file
-            # For NSBH, we exclude lambda_1 (BH has no tidal deformability) and lambda_2 (will be conditional)
-            lambda_params = ['lambda_1', 'lambda_2']
-            for var_name, var_value in local_vars.items():
-                if var_name not in lambda_params:
-                    priors[var_name] = var_value
-            
-            # Add fixed lambda_1 = 0 for black hole (no tidal deformability)
-            priors['lambda_1'] = DeltaFunction(peak=0.0, name='lambda_1', latex_label='$\\Lambda_1$')
-            
-            # Add conditional NF prior for lambda_2 (neutron star)
-            priors['lambda_2'] = NFConditionalPrior(
-                nf_model_path=nf_model_path,
-                target_param='lambda_2',
-                minimum=1e-3,
-                maximum=100_000.0,
-                latex_label='$\\Lambda_2$'
-            )
-                
-            logger.info("Going to show priors in NSBH priors:")
-            for key, value in priors.items():
-                logger.info(f"      {key}: {value}")
-        else:
-            raise ValueError("Invalid prior name provided. Please provide a valid prior name.")
-    
-    logger.info(f"Using priors with {len(priors)} parameters: {list(priors.keys())}")
-        
-    ### GW DATA GENERATION
-    logger.info(f"Not loading a previous data generation. Running through data generation steps now")
-    data_path = os.path.join(cwd, '..', 'data', args.label)
-    if args.label == 'GW190425':
-        frame_files = {
-            "L1": os.path.join(data_path, "L-L1_GWOSC_16KHZ_R1-1240213455-4096.gwf"),
-            "V1": os.path.join(data_path, "V-V1_GWOSC_16KHZ_R1-1240213455-4096.gwf")
-        }
-        channels_dict = {
-            "L1": "L1:GWOSC-16KHZ_R1_STRAIN", 
-            "V1": "V1:GWOSC-16KHZ_R1_STRAIN"
-        }
-        psd_files = {
-            "L1": os.path.join(data_path, "glitch_median_PSD_forLI_L1_srate8192.txt"),
-            "V1": os.path.join(data_path, "glitch_median_PSD_forLI_V1_srate8192.txt")
-        }
-    elif args.label == 'GW170817':
-        frame_files = {
-            "H1": os.path.join(data_path, "H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf"),
-            "L1": os.path.join(data_path, "L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf"),
-            "V1": os.path.join(data_path, "V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf")
-        }
-        channels_dict = {
-            "H1": "H1:LOSC-STRAIN",
-            "L1": "L1:LOSC-STRAIN", 
-            "V1": "V1:LOSC-STRAIN"
-        }
-        psd_files = {
-            "H1": os.path.join(data_path, "h1_psd.txt"),
-            "L1": os.path.join(data_path, "l1_psd.txt"),
-            "V1": os.path.join(data_path, "v1_psd.txt")
-        }
-    elif args.label == 'GW230529':
-        # FIXME: not sure if this is correct?
-        channels_dict = {
-            # "H1": "GDS-CALIB_STRAIN_CLEAN",
-            # "V1": "Hrec_hoft_16384Hz",
-            "L1": "L1:GWOSC-4KHZ_R1_STRAIN", # TODO: L1:GWOSC-16KHZ_R1_STRAIN for the 16 kHz data
-        }
-        # FIXME: maybe change to the 16 kHz data?
-        frame_files = {
-            "L1": os.path.join(data_path, "L-L1_GWOSC_4KHZ_R1-1369417271-4096.gwf"),
-        }
-        psd_files = {
-            "L1": os.path.join(data_path, "L1_psd.dat"),
-        }
-    else:
-        raise ValueError("Need to get the data still for GW230529")
-
-    # Load the data into the ifos:
-    for ifo in ifos:
-        ifo.set_strain_data_from_frame_file(
-            frame_files[ifo.name],
-            sampling_frequency,
-            duration,
-            start_time=start_time,
-            channel=channels_dict[ifo.name])
-        
-        # TODO: Ensure PSD, not ASD, for different events
-        ifo.power_spectral_density = bilby.gw.detector.PowerSpectralDensity(psd_file=psd_files[ifo.name])
-        
-    logger.info("Priors loaded:")
-
-    ### LIKELIHOOD
-    sampling_waveform_generator = bilby.gw.WaveformGenerator(
-        duration=duration,
-        sampling_frequency=sampling_frequency,
-        start_time=start_time,
-        frequency_domain_source_model=bilby.gw.source.binary_neutron_star_frequency_sequence,
-        parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters,
-        waveform_arguments=waveform_arguments)
-
-    logger.info(f"Going to construct bins with:")
-    logger.info(f"  - delta: {args.relative_binning_delta}")
-    logger.info(f"  - minimum_bin_threshold: {args.minimum_bin_threshold}")
-    likelihood = RelBinning(
-        interferometers=ifos,
-        waveform_generator=sampling_waveform_generator, 
-        ref_injection=reference_parameters,
-        priors=priors,
-        delta=args.relative_binning_delta,
-        minimum_bin_threshold=args.minimum_bin_threshold)
-    
-    # Save likelihood and priors
-    if args.save_data_generation:
-        logger.info(f"Going to save likelihood and priors")
-        with open("saved_likelihood.pkl", "wb") as f:
-            pickle.dump(likelihood, f)
-        
-        with open("saved_priors.pkl", "wb") as f:
-            pickle.dump(priors, f)
-            
-        logger.info(f"Saved likelihood and priors")
-        
 else:
-    logger.info(f"Loading likelihood and priors from memory instead of running through data generation steps")
-    with open("saved_likelihood.pkl", "rb") as f:
-        likelihood = pickle.load(f)
+    logger.info(f"Sampling with an NF prior, with name {args.prior_name}, and {args.prior_name}")
     
-    with open("saved_priors.pkl", "rb") as f:
-        priors = pickle.load(f)
+    # First, drop chirp_mass, mass_ratio and luminosity_distance from the prior_dict, as these are modelled by the NF
+    prior_dict.pop('chirp_mass', None)
+    prior_dict.pop('mass_ratio', None)
+    prior_dict.pop('luminosity_distance', None)
+    
+    # Path to NF model
+    nf_model_path = os.path.join(cwd, f"../NFprior/models/{args.label}/{args.eos_samples_name}_{args.prior_name}/model.pt")
+    nf_model_path = os.path.abspath(nf_model_path)
+    logger.info(f"Using NF model path: {nf_model_path}")
+    
+    nf_kwargs_filename = nf_model_path.replace('.pt', '_kwargs.json')
+    if os.path.exists(nf_kwargs_filename):
+        with open(nf_kwargs_filename, 'r') as f:
+            nf_kwargs = json.load(f)
+        logger.info(f"Loaded NF kwargs from {nf_kwargs_filename}")
+    else:
+        raise FileNotFoundError(f"NF kwargs file not found: {nf_kwargs_filename}")
+    
+    # TODO: this is hard-coded for now, but might be more flexible in the future
+    nf_dist = NFDist(
+        names=nf_kwargs["names"],
+        flow_filename=nf_model_path,
+        include_dL=True,
+        use_tilde=False,
+        use_component_masses=False
+        )
+    
+    # Add NFPrior for each name that is in the dist
+    for name in nf_dist.names:
+        prior_dict[name] = NFPrior(dist=nf_dist, name=name)
         
-# TODO: decide if we want to keep it
-# if args.debug==1:
-#     likelihood.parameters = injection_parameters
-#     logger.info(f'Relative binning log likelihood ratio at the injected value {likelihood.log_likelihood_ratio()}')
+    priors = bilby.core.prior.PriorDict(prior_dict)
+        
+logger.info("Going to show priors in priors:")
+for key, value in priors.items():
+    logger.info(f"      {key}: {value}")
     
-#     likelihood.parameters = {}
+### GW DATA GENERATION
+logger.info(f"Running through data generation steps now")
+data_path = os.path.join(cwd, '..', 'data', args.label)
+if args.label == 'GW190425':
+    frame_files = {
+        "L1": os.path.join(data_path, "L-L1_GWOSC_16KHZ_R1-1240213455-4096.gwf"),
+        "V1": os.path.join(data_path, "V-V1_GWOSC_16KHZ_R1-1240213455-4096.gwf")
+    }
+    channels_dict = {
+        "L1": "L1:GWOSC-16KHZ_R1_STRAIN", 
+        "V1": "V1:GWOSC-16KHZ_R1_STRAIN"
+    }
+    psd_files = {
+        "L1": os.path.join(data_path, "glitch_median_PSD_forLI_L1_srate8192.txt"),
+        "V1": os.path.join(data_path, "glitch_median_PSD_forLI_V1_srate8192.txt")
+    }
+elif args.label == 'GW170817':
+    frame_files = {
+        "H1": os.path.join(data_path, "H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf"),
+        "L1": os.path.join(data_path, "L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf"),
+        "V1": os.path.join(data_path, "V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf")
+    }
+    channels_dict = {
+        "H1": "H1:LOSC-STRAIN",
+        "L1": "L1:LOSC-STRAIN", 
+        "V1": "V1:LOSC-STRAIN"
+    }
+    psd_files = {
+        "H1": os.path.join(data_path, "h1_psd.txt"),
+        "L1": os.path.join(data_path, "l1_psd.txt"),
+        "V1": os.path.join(data_path, "v1_psd.txt")
+    }
+elif args.label == 'GW230529':
+    # FIXME: not sure if this is correct?
+    channels_dict = {
+        # "H1": "GDS-CALIB_STRAIN_CLEAN",
+        # "V1": "Hrec_hoft_16384Hz",
+        "L1": "L1:GWOSC-4KHZ_R1_STRAIN", # TODO: L1:GWOSC-16KHZ_R1_STRAIN for the 16 kHz data
+    }
+    # FIXME: maybe change to the 16 kHz data?
+    frame_files = {
+        "L1": os.path.join(data_path, "L-L1_GWOSC_4KHZ_R1-1369417271-4096.gwf"),
+    }
+    psd_files = {
+        "L1": os.path.join(data_path, "L1_psd.dat"),
+    }
+else:
+    raise ValueError("Need to get the data still for GW230529")
 
-#     exact_likelihood = bilby.gw.likelihood.GravitationalWaveTransient(
-#     interferometers=ifos,
-#     waveform_generator=waveform_generator)
+# Load the data into the ifos:
+for ifo in ifos:
+    ifo.set_strain_data_from_frame_file(
+        frame_files[ifo.name],
+        sampling_frequency,
+        duration,
+        start_time=start_time,
+        channel=channels_dict[ifo.name])
+    
+    # TODO: Ensure PSD, not ASD, for different events
+    ifo.power_spectral_density = bilby.gw.detector.PowerSpectralDensity(psd_file=psd_files[ifo.name])
+    
+logger.info("Priors loaded:")
 
-#     exact_likelihood.parameters = injection_parameters
-#     logger.info(f'Exact log likelihood ratio at the injected value {exact_likelihood.log_likelihood_ratio()}')
+### LIKELIHOOD
+sampling_waveform_generator = bilby.gw.WaveformGenerator(
+    duration=duration,
+    sampling_frequency=sampling_frequency,
+    start_time=start_time,
+    frequency_domain_source_model=bilby.gw.source.binary_neutron_star_frequency_sequence,
+    parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters,
+    waveform_arguments=waveform_arguments)
+
+logger.info(f"Going to construct bins with:")
+logger.info(f"  - delta: {args.relative_binning_delta}")
+logger.info(f"  - minimum_bin_threshold: {args.minimum_bin_threshold}")
+likelihood = RelBinning(
+    interferometers=ifos,
+    waveform_generator=sampling_waveform_generator, 
+    ref_injection=reference_parameters,
+    priors=priors,
+    delta=args.relative_binning_delta,
+    minimum_bin_threshold=args.minimum_bin_threshold)
 
 
 if args.dry_run:

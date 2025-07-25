@@ -62,7 +62,6 @@ print(f"JAX: devices available: {jax_devices}")
 # Get the device as well:
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-
 parser = argparse.ArgumentParser(description="Train a normalizing flow prior on EOS samples.")
 parser.add_argument("--eos-samples-name", 
                     type=str, 
@@ -80,6 +79,11 @@ parser.add_argument("--event-name",
 parser.add_argument("--conditional", 
                     action="store_true", 
                     help="Use conditional NF training")
+parser.add_argument("--no-conditional", 
+                    dest="conditional", 
+                    action="store_false", 
+                    help="Disable conditional NF training")
+parser.set_defaults(conditional=False)
 parser.add_argument("--use-tilde", 
                     action="store_true", 
                     help="Use tilde parameterization for lambdas (lambda_tilde, delta_lambda_tilde) instead of (lambda_1, lambda_2)")
@@ -100,10 +104,10 @@ parser.add_argument("--include-dL",
 parser.add_argument("--no-include-dL", 
                     dest="include_dL", 
                     action="store_false")
-parser.set_defaults(include_dL=False)
+parser.set_defaults(include_dL=True)
 parser.add_argument("--N-samples-training", 
                     type=int, 
-                    default=100_000, 
+                    default=20_000, 
                     help="Number of training samples")
 parser.add_argument("--N-samples-plot", 
                     type=int, 
@@ -113,12 +117,6 @@ parser.add_argument("--m-max-BH",
                     type=float, 
                     default=5.0, 
                     help="Maximum BH mass for NSBH sources")
-parser.add_argument("--no-conditional", 
-                    dest="conditional", 
-                    action="store_false", 
-                    help="Disable conditional NF training")
-
-parser.set_defaults(conditional=True)
 parser.add_argument("--take-log-lambda", 
                     action="store_true", 
                     help="Take log of Lambda before training")
@@ -142,7 +140,7 @@ parser.add_argument("--no-scale-input",
 parser.set_defaults(scale_input=True)
 parser.add_argument("--num-epochs", 
                     type=int, 
-                    default=250, 
+                    default=500,
                     help="Number of training epochs")
 parser.add_argument("--learning-rate", 
                     type=float, 
@@ -162,11 +160,11 @@ parser.add_argument("--n-transforms",
                     help="Number of NF transforms")
 parser.add_argument("--n-neurons", 
                     type=int, 
-                    default=128, 
+                    default=64, 
                     help="Number of neurons per layer")
 parser.add_argument("--n-blocks-per-transform", 
                     type=int, 
-                    default=4, 
+                    default=1, 
                     help="Number of blocks per transform")
 parser.add_argument("--num-bins", 
                     type=int, 
