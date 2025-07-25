@@ -5,7 +5,9 @@ import numpy as np
 import h5py
 import json
 
-GW_event_list = ["GW170817", "GW190425"]
+GW_event_list = ["GW170817",
+#"GW190425"
+                 ]
 filename_list = ["GW170817/GW170817_Pade_0_result.hdf5",
                  "GW190425/GW190425_nrt3_0_result.hdf5"]
 
