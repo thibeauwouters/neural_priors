@@ -2,7 +2,7 @@ torch: CUDA is available. Number of devices: 1
 torch: Current CUDA device: 0
 JAX: devices available: [CudaDevice(id=0)]
 Starting training with the following parameters:
-    - eos_samples_name: radio
+    - eos_samples_name: radio_chiEFT
     - source_type: bns
     - event_name: GW170817
     - conditional: False
@@ -25,34 +25,35 @@ Starting training with the following parameters:
     - num_bins: 10
     - nn_depth: 5
     - nn_block_dim: 8
-Training data will be loaded from: ../data/eos/radio/eos_samples.npz
+Training data will be loaded from: ../data/eos/radio_chiEFT/eos_samples.npz
 Training a normalizing flow for bns sources with event name set to GW170817
-Everything for this model will be saved to ././models/GW170817/radio_bns
+Created output directory ././models/GW170817/radio_chiEFT_bns
+Everything for this model will be saved to ././models/GW170817/radio_chiEFT_bns
 Creating training data for event GW170817 using the priors
 Loading priors from bilby prior filename: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
 Loaded priors: {'chirp_mass': Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None), 'mass_ratio': Uniform(minimum=0.5, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None), 'luminosity_distance': bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)}
 Sampling 50000 parameters from the prior and converting to source frame component masses
 Sampling 50000 parameters DONE
-Reading the EOS data from ../data/eos/radio/eos_samples.npz
-Number of good samples:  0.9949
-Saving training data to ././models/GW170817/radio_bns/training_data.npz
+Reading the EOS data from ../data/eos/radio_chiEFT/eos_samples.npz
+Number of good samples:  0.9995
+Wrong lambda order for m1=1.3768275313425755, m2=1.346827624346659, lambda_1=138.3848546498143, lambda_2=138.10524425991002. Trying again.
+Saving training data to ././models/GW170817/radio_chiEFT_bns/training_data.npz
 Using chirp mass and mass ratio (Mc, q) for training
 Using component parameterization for lambdas (lambda_1, lambda_2)
 Sanity checking the ranges of the training data
-train_mass_1 ranges from 1.1800004518675271 to 1.20999970129997
-train_mass_2 ranges from 0.5000126205582263 to 0.9999931880841615
-train_lambda_1 ranges from 4.121511096506724 to 2092.8730655449494
-train_lambda_2 ranges from 127.5970555973069 to 8984.985813267524
+train_mass_1 ranges from 1.1800001566208171 to 1.2099999612235843
+train_mass_2 ranges from 0.5000069589148197 to 0.9999855758580531
+train_lambda_1 ranges from 3.869264996633164 to 2174.0633212364005
+train_lambda_2 ranges from 130.62323818210996 to 9385.158263306712
 We are training BNS and not conditional
 Including luminosity distance in 5D model
 np.shape(self.x)
 (50000, 5)
 Using MinMaxScaler to scale the input data x
-Saved sklearn scaler to ././models/GW170817/radio_bns/scaler.gz
+Saved sklearn scaler to ././models/GW170817/radio_chiEFT_bns/scaler.gz
 Going to start training for glasflow . . .
-Early stopping triggered at epoch 447
-Saving the training loss plot to ././models/GW170817/radio_bns/training_loss.pdf
-Training done. Took around 14.91 minutes
-Saving the model weights to ././models/GW170817/radio_bns/model.pt
-Saving the model kwargs to ././models/GW170817/radio_bns/model_kwargs.json
+Saving the training loss plot to ././models/GW170817/radio_chiEFT_bns/training_loss.pdf
+Training done. Took around 16.50 minutes
+Saving the model weights to ././models/GW170817/radio_chiEFT_bns/model.pt
+Saving the model kwargs to ././models/GW170817/radio_chiEFT_bns/model_kwargs.json
 DONE training!
