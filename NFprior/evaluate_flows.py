@@ -1104,7 +1104,7 @@ class CheckerUnconditional(Checker):
 
 def main():
     # Example usage for unconditional models (both BNS and NSBH)
-    unconditional_checker = CheckerUnconditional("./models/GW170817/radio_chiEFT_bns/", N_samples=10_000)
+    unconditional_checker = CheckerUnconditional("./models/GW190425/radio_chiEFT_nsbh/", N_samples=10_000)
     print("\n" + "="*50)
     print("Testing unconditional model")
     print("="*50)
