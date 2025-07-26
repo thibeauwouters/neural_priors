@@ -106,7 +106,7 @@ EVENT_CONFIG = {
     'GW170817': {
         'ifo_list': ['H1', 'L1', 'V1'],
         'duration': 128.0,
-        'minimum_frequency': 20.0
+        'minimum_frequency': 23.1
     },
     'GW190425': {
         'ifo_list': ['L1', 'V1'],
