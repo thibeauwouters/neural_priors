@@ -1,0 +1,82 @@
+NFDist has source_type = bns
+interferometers
+[Interferometer(name='H1', power_spectral_density=PowerSpectralDensity(psd_file='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW170817/h1_psd.txt', asd_file='None'), minimum_frequency=20.0, maximum_frequency=2048.0, length=4.0, latitude=46.45514666666667, longitude=-119.4076571388889, elevation=142.554, xarm_azimuth=125.9994, yarm_azimuth=215.9994, xarm_tilt=-0.0006195, yarm_tilt=1.25e-05), Interferometer(name='L1', power_spectral_density=PowerSpectralDensity(psd_file='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW170817/l1_psd.txt', asd_file='None'), minimum_frequency=20.0, maximum_frequency=2048.0, length=4.0, latitude=30.562894333333332, longitude=-90.77424038888887, elevation=-6.574, xarm_azimuth=197.7165, yarm_azimuth=287.7165, xarm_tilt=-0.0003121, yarm_tilt=-0.0006107), Interferometer(name='V1', power_spectral_density=PowerSpectralDensity(psd_file='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW170817/v1_psd.txt', asd_file='None'), minimum_frequency=20.0, maximum_frequency=2048.0, length=3.0, latitude=43.631414472222225, longitude=10.504496611111112, elevation=51.884, xarm_azimuth=70.56740000000002, yarm_azimuth=160.5674, xarm_tilt=0.0, yarm_tilt=0.0)]
+waveform_generator
+WaveformGenerator(duration=128.0, sampling_frequency=4096.0, start_time=1187008756.43, frequency_domain_source_model=binary_neutron_star_frequency_sequence, time_domain_source_model=None, parameter_conversion=convert_to_lal_binary_neutron_star_parameters, waveform_arguments={'waveform_approximant': 'IMRPhenomXP_NRTidalv3', 'reference_frequency': 20.0, 'minimum_frequency': 20.0, 'maximum_frequency': 2048.0})
+ref_injection
+{'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'a_1': 0.01890608, 'a_2': 0.04888488, 'tilt_1': 0.0, 'tilt_2': 0.0, 'phi_jl': 0.0, 'phi_12': 0.0, 'lambda_1': 791.04366468, 'lambda_2': 891.04366468, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
+NFDist has source_type = bns
+NFDist has source_type = bns
+NFDist has source_type = bns
+NFDist has source_type = bns
+NFDist has source_type = bns
+At this point, we cannot create a float from 0       1.197550
+1       1.197516
+2       1.197523
+3       1.197667
+4       1.197532
+          ...   
+5297    1.197487
+5298    1.197513
+5299    1.197528
+5300    1.197540
+5301    1.197548
+Name: chirp_mass, Length: 5302, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       0.782853
+1       0.799498
+2       0.835556
+3       0.918831
+4       0.838221
+          ...   
+5297    0.822340
+5298    0.860860
+5299    0.820934
+5300    0.841629
+5301    0.825208
+Name: mass_ratio, Length: 5302, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       36.126865
+1       36.034252
+2       46.756840
+3       43.912056
+4       30.122879
+          ...    
+5297    20.918558
+5298    22.143867
+5299    23.433474
+5300    18.592838
+5301    19.282776
+Name: luminosity_distance, Length: 5302, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       218.865997
+1       409.231049
+2       256.577576
+3       566.124268
+4       295.583008
+           ...    
+5297    188.591431
+5298    251.198196
+5299    169.598236
+5300    186.003555
+5301    199.578278
+Name: lambda_1, Length: 5302, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0        861.972229
+1       1371.664795
+2        759.173401
+3        890.618286
+4        864.946289
+           ...     
+5297     575.276367
+5298     583.971802
+5299     526.395691
+5300     510.621277
+5301     612.872498
+Name: lambda_2, Length: 5302, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from [1.19737661 1.19737783 1.19737904 ... 1.197738   1.19773922
+ 1.19774044], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [0.62650174 0.62776014 0.62901855 ... 1.00024813 1.00150653
+ 1.00276494], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [16.71869087 16.83373641 16.94878194 ... 50.88721469 51.00226022
+ 51.11730576], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [103.41996765 105.80870817 108.19744868 ... 812.87590032
+ 815.26464083 817.65338135], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [ 182.79650879  190.38623782  197.97596685 ... 2436.94603022
+ 2444.53575925 2452.12548828], error: only length-1 arrays can be converted to Python scalars
