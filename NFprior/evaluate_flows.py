@@ -1103,22 +1103,8 @@ class CheckerUnconditional(Checker):
                 return np.column_stack([m2, lambda_2])
 
 def main():
-    # Example usage for BNS conditional model
-    # bns_checker = CheckerBNS("./models/radio_chiEFT_conditional_bns/", N_samples=10_000, N_masses=5)
-    # print("\n" + "="*50)
-    # print("Testing BNS conditional model")
-    # print("="*50)
-    # bns_checker.check_conditional_bns_model()
-    
-    # Example usage for NSBH conditional model
-    # nsbh_checker = CheckerNSBH("./models/radio_chiEFT_conditional_nsbh/", N_samples=10_000, N_masses=5)
-    # print("\n" + "="*50)
-    # print("Testing NSBH conditional model")
-    # print("="*50)
-    # nsbh_checker.check_conditional_nsbh_model()
-    
     # Example usage for unconditional models (both BNS and NSBH)
-    unconditional_checker = CheckerUnconditional("./models/GW170817/radio_nsbh/", N_samples=10_000)
+    unconditional_checker = CheckerUnconditional("./models/GW170817/radio_chiEFT_bns/", N_samples=10_000)
     print("\n" + "="*50)
     print("Testing unconditional model")
     print("="*50)
