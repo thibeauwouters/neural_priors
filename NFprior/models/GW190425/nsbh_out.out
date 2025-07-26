@@ -2,7 +2,7 @@ torch: CUDA is available. Number of devices: 1
 torch: Current CUDA device: 0
 JAX: devices available: [CudaDevice(id=0)]
 Starting training with the following parameters:
-    - eos_samples_name: radio
+    - eos_samples_name: radio_chiEFT
     - source_type: nsbh
     - event_name: GW190425
     - conditional: False
@@ -25,33 +25,33 @@ Starting training with the following parameters:
     - num_bins: 10
     - nn_depth: 5
     - nn_block_dim: 8
-Training data will be loaded from: ../data/eos/radio/eos_samples.npz
+Training data will be loaded from: ../data/eos/radio_chiEFT/eos_samples.npz
 Training a normalizing flow for nsbh sources with event name set to GW190425
-Everything for this model will be saved to ././models/GW190425/radio_nsbh
+Created output directory ././models/GW190425/radio_chiEFT_nsbh
+Everything for this model will be saved to ././models/GW190425/radio_chiEFT_nsbh
 Creating training data for event GW190425 using the priors
 Loading priors from bilby prior filename: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/prior.prior
 Loaded priors: {'chirp_mass': Uniform(minimum=1.485, maximum=1.49, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None), 'mass_ratio': Uniform(minimum=0.5, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None), 'luminosity_distance': bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=500.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)}
 Sampling 50000 parameters from the prior and converting to source frame component masses
 Sampling 50000 parameters DONE
-Reading the EOS data from ../data/eos/radio/eos_samples.npz
-Number of good samples:  0.9949
-Saving training data to ././models/GW190425/radio_nsbh/training_data.npz
+Reading the EOS data from ../data/eos/radio_chiEFT/eos_samples.npz
+Number of good samples:  0.9995
+Saving training data to ././models/GW190425/radio_chiEFT_nsbh/training_data.npz
 Using chirp mass and mass ratio (Mc, q) for training
 Using component parameterization for lambdas (lambda_1, lambda_2)
 NSBH mode: concatenating all neutron star data for single NS modeling
 Sanity checking the ranges of the training data
-train_mass_2 (concatenated) ranges from 0.5000061037270269 to 1.4899997677101955
-train_lambda_2 (concatenated) ranges from 2.4777398049978956 to 4684.809372837686
+train_mass_2 (concatenated) ranges from 0.5000071634102881 to 1.4899998364507208
+train_lambda_2 (concatenated) ranges from 2.7012725611985684 to 5013.239462312808
 We are training NSBH and not conditional
 Using 4 parameters (Mc, q, dL, lambda_2) for NSBH unconditional training
 np.shape(self.x)
 (50000, 4)
 Using MinMaxScaler to scale the input data x
-Saved sklearn scaler to ././models/GW190425/radio_nsbh/scaler.gz
+Saved sklearn scaler to ././models/GW190425/radio_chiEFT_nsbh/scaler.gz
 Going to start training for glasflow . . .
-Early stopping triggered at epoch 479
-Saving the training loss plot to ././models/GW190425/radio_nsbh/training_loss.pdf
-Training done. Took around 15.49 minutes
-Saving the model weights to ././models/GW190425/radio_nsbh/model.pt
-Saving the model kwargs to ././models/GW190425/radio_nsbh/model_kwargs.json
+Saving the training loss plot to ././models/GW190425/radio_chiEFT_nsbh/training_loss.pdf
+Training done. Took around 16.40 minutes
+Saving the model weights to ././models/GW190425/radio_chiEFT_nsbh/model.pt
+Saving the model kwargs to ././models/GW190425/radio_chiEFT_nsbh/model_kwargs.json
 DONE training!

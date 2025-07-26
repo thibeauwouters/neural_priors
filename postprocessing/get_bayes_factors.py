@@ -52,13 +52,16 @@ for GW_event in GW_event_list:
     highest_bf = max(bf_bns, bf_default, bf_nsbh)
     if highest_bf == bf_bns:
         diff = bf_bns - max(bf_default, bf_nsbh)
-        print(f"{GW_event} is classified as BNS (diff ln BF = {diff:.2f})\n\n")
+        diff_10 = diff / np.log(10)
+        print(f"{GW_event} is classified as BNS (diff ln BF = {diff:.2f}, diff log10 BF = {diff_10:.2f})\n\n")
     elif highest_bf == bf_default:
         diff = bf_default - max(bf_bns, bf_nsbh)
-        print(f"{GW_event} is classified as default (diff ln BF = {diff:.2f})\n\n")
+        diff_10 = diff / np.log(10)
+        print(f"{GW_event} is classified as default (diff ln BF = {diff:.2f}, diff log10 BF = {diff_10:.2f})\n\n")
     elif highest_bf == bf_nsbh:
         diff = bf_nsbh - max(bf_bns, bf_default)
-        print(f"{GW_event} is classified as NSBH (diff ln BF = {diff:.2f})\n\n")
+        diff_10 = diff / np.log(10)
+        print(f"{GW_event} is classified as NSBH (diff ln BF = {diff:.2f}, diff log10 BF = {diff_10:.2f})\n\n")
         
     with open(output_filename, "a") as f:
         f.write(f"Checking source classification for {GW_event}:\n")
