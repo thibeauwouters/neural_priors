@@ -353,11 +353,12 @@ def main():
                      "GW230529",
                     ]
     
+    # for plot_all_params in [True, False]:
     for plot_default in [True, False]:
-        for plot_adrian in [True, False]:
-            for plot_hauke in [True, False]:
+        for plot_adrian in [False, True]:
+            for plot_hauke in [False, True]:
                 for convert_lambdas in [True, False]:
-                    for GW_event in GW_event_list:
+                    for GW_event in GW_event_list:  
                         settings = dict(plot_all_params=False,
                                         plot_default=plot_default,
                                         convert_lambdas=convert_lambdas,
