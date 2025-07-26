@@ -9,59 +9,59 @@ NFDist has source_type = nsbh
 NFDist has source_type = nsbh
 NFDist has source_type = nsbh
 NFDist has source_type = nsbh
-At this point, we cannot create a float from 0       1.486045
-1       1.486496
-2       1.486541
-3       1.486364
-4       1.486223
+At this point, we cannot create a float from 0       1.486533
+1       1.486324
+2       1.487011
+3       1.486172
+4       1.486339
           ...   
-5263    1.486788
-5264    1.486664
-5265    1.486820
-5266    1.486720
-5267    1.486787
-Name: chirp_mass, Length: 5268, dtype: float64, error: cannot convert the series to <class 'float'>
-At this point, we cannot create a float from 0       0.843206
-1       0.943562
-2       0.633708
-3       0.872236
-4       0.755687
+5418    1.486816
+5419    1.486784
+5420    1.486797
+5421    1.486772
+5422    1.486817
+Name: chirp_mass, Length: 5423, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       0.955225
+1       0.747377
+2       0.890213
+3       0.796494
+4       0.952697
           ...   
-5263    0.834635
-5264    0.893929
-5265    0.827916
-5266    0.916791
-5267    0.877960
-Name: mass_ratio, Length: 5268, dtype: float64, error: cannot convert the series to <class 'float'>
-At this point, we cannot create a float from 0       197.845993
-1       236.147369
-2       247.805908
-3       204.620392
-4       211.333969
+5418    0.726313
+5419    0.989358
+5420    0.747575
+5421    0.889129
+5422    0.730235
+Name: mass_ratio, Length: 5423, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       338.732727
+1       236.637604
+2       229.859695
+3       128.039200
+4       193.010742
            ...    
-5263    118.851166
-5264    121.480476
-5265    207.426254
-5266    182.743103
-5267    123.011848
-Name: luminosity_distance, Length: 5268, dtype: float64, error: cannot convert the series to <class 'float'>
-At this point, we cannot create a float from 0       463.529663
-1       144.783920
-2       654.509399
-3       379.543182
-4       660.070862
+5418    183.500381
+5419    180.817200
+5420    107.520187
+5421    188.559006
+5422    181.656570
+Name: luminosity_distance, Length: 5423, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       269.999115
+1       366.910217
+2       149.803635
+3       287.554260
+4       177.399750
            ...    
-5263    349.986725
-5264    226.740128
-5265    316.676392
-5266    241.940353
-5267    281.746399
-Name: lambda_2, Length: 5268, dtype: float64, error: cannot convert the series to <class 'float'>
-At this point, we cannot create a float from [1.48604536 1.48604969 1.48605402 ... 1.4873312  1.48733552
- 1.48733985], error: only length-1 arrays can be converted to Python scalars
-At this point, we cannot create a float from [0.63370806 0.63495933 0.63621059 ... 1.00533393 1.0065852
- 1.00783646], error: only length-1 arrays can be converted to Python scalars
-At this point, we cannot create a float from [ 61.82141113  62.51695022  63.2124893  ... 268.39651949
- 269.09205857 269.78759766], error: only length-1 arrays can be converted to Python scalars
-At this point, we cannot create a float from [  86.03230286   89.2426967    92.45309055 ... 1039.51927578
- 1042.72966963 1045.94006348], error: only length-1 arrays can be converted to Python scalars
+5418    494.792480
+5419    300.521362
+5420    391.084015
+5421    465.836639
+5422    465.485870
+Name: lambda_2, Length: 5423, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from [1.48599911 1.48600361 1.48600812 ... 1.48733693 1.48734143
+ 1.48734593], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [0.63513923 0.63644738 0.63775553 ... 1.02366064 1.02496879
+ 1.02627695], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [ 46.75421524  47.730732    48.70724876 ... 336.77969353
+ 337.75621029 338.73272705], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [  45.76747513   49.00402181   52.2405685  ... 1007.02184071
+ 1010.2583874  1013.49493408], error: only length-1 arrays can be converted to Python scalars
