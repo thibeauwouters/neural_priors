@@ -97,6 +97,10 @@ parser.add_argument('--n-pool',
                     type = int,
                     default = 64,
                     help = "How many cores to use for the sampling.")
+parser.add_argument('--base-outdir',
+                    type = str,
+                    default = None,
+                    help = "Base output directory for results. If not provided, uses auto-detected environment path.")
 group = parser.add_mutually_exclusive_group()
 group.add_argument('--use-relative-binning',
                    dest='use_relative_binning',
@@ -159,12 +163,16 @@ def detect_environment():
 
 cwd = detect_environment()
 from LikelihoodRB import RelBinning
+
+# Use base_outdir if provided, otherwise use auto-detected environment path
+base_outdir = args.base_outdir if args.base_outdir is not None else cwd
+
 if args.waveform_model == 'IMRPhenomD_NRTidalv2':
-    full_outdir = os.path.join(cwd, "PhenomD_NRTv2", args.label, args.prior_name)
+    full_outdir = os.path.join(base_outdir, "PhenomD_NRTv2", args.label, args.prior_name)
     reference_parameters_filename = os.path.join(cwd, "PhenomD_NRTv2", args.label, "reference_parameters.json")
     prior_filename = os.path.join(cwd, "PhenomD_NRTv2", args.label, "prior.prior")
 else:
-    full_outdir = os.path.join(cwd, args.label, args.prior_name)
+    full_outdir = os.path.join(base_outdir, args.label, args.prior_name)
     reference_parameters_filename = os.path.join(cwd, args.label, "reference_parameters.json")
     prior_filename = os.path.join(cwd, args.label, "prior.prior")
     
