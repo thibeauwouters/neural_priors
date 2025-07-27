@@ -97,6 +97,16 @@ parser.add_argument('--n-pool',
                     type = int,
                     default = 64,
                     help = "How many cores to use for the sampling.")
+group = parser.add_mutually_exclusive_group()
+group.add_argument('--use-relative-binning',
+                   dest='use_relative_binning',
+                   action='store_true',
+                   help='Use relative binning likelihood (default).')
+group.add_argument('--no-use-relative-binning',
+                   dest='use_relative_binning',
+                   action='store_false',
+                   help='Do not use relative binning (use regular GW likelihood).')
+parser.set_defaults(use_relative_binning=True)
 
 args = parser.parse_args()
 
@@ -122,6 +132,7 @@ EVENT_CONFIG = {
 
 ################
 ### PREAMBLE ###
+################
 
 # Check if some of the given arguments are valid
 SUPPORTED_PRIORS = ['default', 'bns', 'nsbh']
@@ -386,6 +397,10 @@ for ifo in ifos:
     
     # TODO: Ensure PSD, not ASD, for different events
     ifo.power_spectral_density = bilby.gw.detector.PowerSpectralDensity(psd_file=psd_files[ifo.name])
+
+# Log frequency arrays for each IFO
+for ifo in ifos:
+    logger.info(f"Frequency array for {ifo.name}: {ifo.frequency_array}")
     
 logger.info("Priors loaded:")
 
@@ -398,16 +413,23 @@ sampling_waveform_generator = bilby.gw.WaveformGenerator(
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters,
     waveform_arguments=waveform_arguments)
 
-logger.info(f"Going to construct bins with:")
-logger.info(f"  - delta: {args.relative_binning_delta}")
-logger.info(f"  - minimum_bin_threshold: {args.minimum_bin_threshold}")
-likelihood = RelBinning(
-    interferometers=ifos,
-    waveform_generator=sampling_waveform_generator, 
-    ref_injection=reference_parameters,
-    priors=priors,
-    delta=args.relative_binning_delta,
-    minimum_bin_threshold=args.minimum_bin_threshold)
+if args.use_relative_binning:
+    logger.info(f"Using relative binning likelihood")
+    logger.info(f"Going to construct bins with:")
+    logger.info(f"  - delta: {args.relative_binning_delta}")
+    logger.info(f"  - minimum_bin_threshold: {args.minimum_bin_threshold}")
+    likelihood = RelBinning(
+        interferometers=ifos,
+        waveform_generator=sampling_waveform_generator, 
+        ref_injection=reference_parameters,
+        priors=priors,
+        delta=args.relative_binning_delta,
+        minimum_bin_threshold=args.minimum_bin_threshold)
+else:
+    logger.info(f"Using regular GW likelihood")
+    likelihood = bilby.gw.GravitationalWaveTransient(
+        interferometers=ifos,
+        waveform_generator=waveform_generator)
 
 
 if args.dry_run:
@@ -420,10 +442,12 @@ if args.dry_run:
     logger.info(f"  - Duration: {duration}s")
     logger.info(f"  - Minimum frequency: {minimum_frequency}Hz")
     logger.info(f"  - Approximant: {approximant}")
+    logger.info(f"  - npool: {args.npool}")
     logger.info("DRY RUN: All checks passed. Ready for actual sampling.")
 else:
     logger.info("Starting up the sampler now . . .")
     
+    logger.info(f"npool is set to: {args.n_pool}")
     if args.test_sampling:
         logger.info("Test sampling mode enabled - using 30 second timeout")
         try:
