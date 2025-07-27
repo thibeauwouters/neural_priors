@@ -1,82 +1,76 @@
 NFDist has source_type = bns
-interferometers
-[Interferometer(name='L1', power_spectral_density=PowerSpectralDensity(psd_file='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW190425/glitch_median_PSD_forLI_L1_srate8192.txt', asd_file='None'), minimum_frequency=20.0, maximum_frequency=2048.0, length=4.0, latitude=30.562894333333332, longitude=-90.77424038888887, elevation=-6.574, xarm_azimuth=197.7165, yarm_azimuth=287.7165, xarm_tilt=-0.0003121, yarm_tilt=-0.0006107), Interferometer(name='V1', power_spectral_density=PowerSpectralDensity(psd_file='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/../data/GW190425/glitch_median_PSD_forLI_V1_srate8192.txt', asd_file='None'), minimum_frequency=20.0, maximum_frequency=2048.0, length=3.0, latitude=43.631414472222225, longitude=10.504496611111112, elevation=51.884, xarm_azimuth=70.56740000000002, yarm_azimuth=160.5674, xarm_tilt=0.0, yarm_tilt=0.0)]
-waveform_generator
-WaveformGenerator(duration=128.0, sampling_frequency=4096.0, start_time=1240215377.017147, frequency_domain_source_model=binary_neutron_star_frequency_sequence, time_domain_source_model=None, parameter_conversion=convert_to_lal_binary_neutron_star_parameters, waveform_arguments={'waveform_approximant': 'IMRPhenomXP_NRTidalv3', 'reference_frequency': 20.0, 'minimum_frequency': 20.0, 'maximum_frequency': 2048.0})
-ref_injection
-{'chirp_mass': 1.4867847675135448, 'symmetric_mass_ratio': 0.24999995594642316, 'a_1': 0.011080273335494708, 'a_2': 0.04692984939031852, 'tilt_1': 2.6219694401252394, 'tilt_2': 1.0090315132594154, 'phi_jl': 0.977223832370418, 'phi_12': 5.868535624409604, 'lambda_1': 456.3727388222372, 'lambda_2': 43.226589341633236, 'luminosity_distance': 160.68570884930463, 'phase': 5.904192752190891, 'theta_jn': 0.20643139003708647, 'psi': 0.3008124663367458, 'ra': 1.4454755957606107, 'dec': 0.07257856505111598, 'mass_ratio': 0.999160794522431, 'mass_1': 1.7085843239096237, 'mass_2': 1.7071504705861102, 'geocent_time': 1240215503.017147, 'duration': 128.0}
 NFDist has source_type = bns
 NFDist has source_type = bns
 NFDist has source_type = bns
 NFDist has source_type = bns
 NFDist has source_type = bns
-At this point, we cannot create a float from 0       1.486725
-1       1.486794
-2       1.486608
-3       1.486415
-4       1.485981
+At this point, we cannot create a float from 0       1.486865
+1       1.487141
+2       1.486328
+3       1.486346
+4       1.486194
           ...   
-5414    1.486779
-5415    1.486720
-5416    1.486644
-5417    1.486781
-5418    1.486772
-Name: chirp_mass, Length: 5419, dtype: float64, error: cannot convert the series to <class 'float'>
-At this point, we cannot create a float from 0       0.960826
-1       0.884355
-2       0.932003
-3       0.712809
-4       0.691047
+5328    1.486790
+5329    1.486745
+5330    1.486658
+5331    1.486776
+5332    1.486874
+Name: chirp_mass, Length: 5333, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       0.667143
+1       0.747961
+2       0.986214
+3       0.996208
+4       0.840798
           ...   
-5414    0.804069
-5415    0.953484
-5416    0.925468
-5417    0.919002
-5418    0.956926
-Name: mass_ratio, Length: 5419, dtype: float64, error: cannot convert the series to <class 'float'>
-At this point, we cannot create a float from 0       160.776642
-1       209.245560
-2       145.677811
-3       179.693359
-4       149.661072
+5328    0.979362
+5329    0.863807
+5330    0.962065
+5331    0.968381
+5332    0.838634
+Name: mass_ratio, Length: 5333, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       216.653946
+1       271.898560
+2       176.993591
+3       176.143524
+4       283.048370
            ...    
-5414    157.622284
-5415    138.963608
-5416    196.552841
-5417    163.332199
-5418     94.309433
-Name: luminosity_distance, Length: 5419, dtype: float64, error: cannot convert the series to <class 'float'>
-At this point, we cannot create a float from 0        28.641136
-1       159.091766
-2       163.578674
-3        20.468914
-4        21.007893
+5328    180.530701
+5329    181.037460
+5330    178.209473
+5331    124.273392
+5332    201.003967
+Name: luminosity_distance, Length: 5333, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0        68.153404
+1        55.167038
+2        59.342480
+3       104.120499
+4        98.739876
            ...    
-5414     66.485039
-5415    192.295593
-5416    200.068756
-5417    253.936172
-5418    108.842636
-Name: lambda_1, Length: 5419, dtype: float64, error: cannot convert the series to <class 'float'>
-At this point, we cannot create a float from 0        42.374344
-1       338.353424
-2       247.314682
-3       596.934631
-4       294.457031
+5328    268.537231
+5329    199.803986
+5330    230.332825
+5331    207.277481
+5332    226.189011
+Name: lambda_1, Length: 5333, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       982.620117
+1       418.464294
+2        73.870636
+3       114.925240
+4       439.224365
            ...    
-5414    290.728333
-5415    259.998688
-5416    330.190826
-5417    440.988831
-5418    148.754654
-Name: lambda_2, Length: 5419, dtype: float64, error: cannot convert the series to <class 'float'>
-At this point, we cannot create a float from [1.48598075 1.48598537 1.48598999 ... 1.48735291 1.48735753
- 1.48736215], error: only length-1 arrays can be converted to Python scalars
-At this point, we cannot create a float from [0.63923115 0.64047031 0.64170947 ... 1.00726191 1.00850107
- 1.00974023], error: only length-1 arrays can be converted to Python scalars
-At this point, we cannot create a float from [ 57.25837326  57.99771708  58.73706089 ... 276.84348644
- 277.58283026 278.32217407], error: only length-1 arrays can be converted to Python scalars
-At this point, we cannot create a float from [  2.60413456   4.43104801   6.25796147 ... 545.19743042
- 547.02434387 548.85125732], error: only length-1 arrays can be converted to Python scalars
-At this point, we cannot create a float from [  10.66706944   14.02946246   17.39185548 ... 1009.29779696
- 1012.66018999 1016.02258301], error: only length-1 arrays can be converted to Python scalars
+5328    307.964142
+5329    464.175690
+5330    292.281830
+5331    266.057098
+5332    621.789124
+Name: lambda_2, Length: 5333, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from [1.48604846 1.48605272 1.48605699 ... 1.48731511 1.48731938
+ 1.48732364], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [0.62804455 0.62932725 0.63060995 ... 1.00900684 1.01028954
+ 1.01157224], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [ 30.61803055  31.46227918  32.3065278  ... 281.35987311
+ 282.20412173 283.04837036], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [  5.67567158   7.30725894   8.93884631 ... 490.25711946
+ 491.88870682 493.52029419], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [  35.29411316   39.48109329   43.66807342 ... 1278.82721162
+ 1283.01419175 1287.20117188], error: only length-1 arrays can be converted to Python scalars
