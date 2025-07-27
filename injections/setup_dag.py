@@ -3,7 +3,7 @@
 Script to automate creating DAG files for given rundirs
 
 Usage:
-    python setup_and_submit_injection.py --injection-dir GW170817_bns_jester --eos-samples-name radio
+    python setup_and_submit_injection.py --run-dir GW170817_bns_jester --eos-samples-name radio
 """
 
 import os
@@ -12,22 +12,23 @@ import subprocess
 import sys
 
 
-def create_subdirectories(injection_dir, priors=['bns', 'nsbh', 'default']):
+def create_subdirectories(run_dir, priors=['bns', 'nsbh', 'default']):
     """Create subdirectories for each prior in the injection directory."""
     for prior in priors:
-        subdir = os.path.join(injection_dir, prior)
+        subdir = os.path.join(run_dir, prior)
         os.makedirs(subdir, exist_ok=True)
         print(f"Created directory: {subdir}")
 
 
-def modify_dag_file(injection_dir, eos_samples_name='radio'):
+def modify_dag_file(run_dir, eos_samples_name='radio'):
     """
     Modifies and saves the template DAG file to use the correct template and paths.
     """
-    dag_file = os.path.join(injection_dir, 'run.dag')
     
-    if not os.path.exists(dag_file):
-        raise FileNotFoundError(f"DAG file not found: {dag_file}")
+    # Put it in a separate dir, to separate all aux dag files from our run_dir
+    dag_dir = os.path.join(run_dir, 'dag')
+    os.makedirs(dag_dir, exist_ok=True)
+    dag_file = os.path.join(dag_dir, 'run.dag')
     
     # Get absolute path to analysis.sub
     sub_path = os.path.abspath('analysis.sub')
@@ -36,12 +37,12 @@ def modify_dag_file(injection_dir, eos_samples_name='radio'):
     
     # Create new DAG content
     dag_content = f"""JOB run_a {sub_path}
-        VARS run_a run_dir="{injection_dir}" prior_name="bns" eos_samples_name="{eos_samples_name}"
-        JOB run_b {sub_path}
-        VARS run_b run_dir="{injection_dir}" prior_name="nsbh" eos_samples_name="{eos_samples_name}"
-        JOB run_c {sub_path}
-        VARS run_c run_dir="{injection_dir}" prior_name="default" eos_samples_name="{eos_samples_name}"
-        """
+VARS run_a run_dir="{run_dir}" prior_name="bns" eos_samples_name="{eos_samples_name}"
+JOB run_b {sub_path}
+VARS run_b run_dir="{run_dir}" prior_name="nsbh" eos_samples_name="{eos_samples_name}"
+JOB run_c {sub_path}
+VARS run_c run_dir="{run_dir}" prior_name="default" eos_samples_name="{eos_samples_name}"
+"""
     
     # Write the modified DAG file
     with open(dag_file, 'w') as f:
@@ -74,7 +75,7 @@ def modify_dag_file(injection_dir, eos_samples_name='radio'):
 
 def main():
     parser = argparse.ArgumentParser(description='Setup and submit injection analysis DAG')
-    parser.add_argument('--injection-dir', required=True,
+    parser.add_argument('--run-dir', required=True,
                         help='Injection directory name (e.g., GW170817_bns_jester)')
     parser.add_argument('--eos-samples-name', default='radio',
                         help='EOS samples name (default: radio)')
@@ -88,17 +89,17 @@ def main():
     args = parser.parse_args()
     
     # Check if injection directory exists
-    if not os.path.exists(args.injection_dir):
-        raise FileNotFoundError(f"Injection directory not found: {args.injection_dir}")
+    if not os.path.exists(args.run_dir):
+        raise FileNotFoundError(f"Injection directory not found: {args.run_dir}")
     
-    print(f"Setting up injection analysis for: {args.injection_dir}")
+    print(f"Setting up injection analysis for: {args.run_dir}")
     
     # Create subdirectories
-    create_subdirectories(args.injection_dir)
+    create_subdirectories(args.run_dir)
     
     # Modify DAG file
     dag_file = modify_dag_file(
-        args.injection_dir,
+        args.run_dir,
         args.eos_samples_name,
     )
     

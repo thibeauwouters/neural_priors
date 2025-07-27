@@ -1,7 +1,0 @@
-JOB run_a /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/injections/analysis.sub
-        VARS run_a run_dir="GW170817_bns_jester" prior_name="bns" eos_samples_name="radio"
-        JOB run_b /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/injections/analysis.sub
-        VARS run_b run_dir="GW170817_bns_jester" prior_name="nsbh" eos_samples_name="radio"
-        JOB run_c /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/injections/analysis.sub
-        VARS run_c run_dir="GW170817_bns_jester" prior_name="default" eos_samples_name="radio"
-        

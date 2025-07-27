@@ -1,0 +1,50 @@
+000 (2560970.000.000) 2025-07-27 23:39:22 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_a
+...
+001 (2560970.000.000) 2025-07-27 23:39:36 Job executing on host: <145.107.5.59:9618?addrs=145.107.5.59-9618+[2a07-8500-120-e070--53b]-9618&alias=wn-lot-059.nikhef.nl&noUDP&sock=startd_1972_34da>
+	SlotName: slot1_1@wn-lot-059.nikhef.nl
+	CondorScratchDir = "/scratch/condor_execute/dir_3454557"
+	Cpus = 64
+	Disk = 16780555
+	GPUs = 0
+	Memory = 16384
+...
+006 (2560970.000.000) 2025-07-27 23:39:48 Image size of job updated: 268484
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (2560970.000.000) 2025-07-27 23:39:48 Job terminated.
+	(1) Normal termination (return value 2)
+		Usr 0 00:00:12, Sys 0 00:00:07  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:12, Sys 0 00:00:07  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     0.01       64        64 
+	   Disk (KB)            : 17500    16777216  16780555 
+	   GPUs                 :                           0 
+	   Memory (MB)          :     0       16384     16384 
+	   TimeExecute (s)      :    12                       
+	   TimeSlotBusy (s)     :    12                       
+
+	Job terminated of its own accord at 2025-07-27T21:39:48Z with exit-code 2.
+...
+000 (2560974.000.000) 2025-07-27 23:45:16 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_a
+...
+001 (2560974.000.000) 2025-07-27 23:45:37 Job executing on host: <145.107.5.59:9618?addrs=145.107.5.59-9618+[2a07-8500-120-e070--53b]-9618&alias=wn-lot-059.nikhef.nl&noUDP&sock=startd_1972_34da>
+	SlotName: slot1_1@wn-lot-059.nikhef.nl
+	CondorScratchDir = "/scratch/condor_execute/dir_3458037"
+	Cpus = 64
+	Disk = 16780555
+	GPUs = 0
+	Memory = 16384
+...
+006 (2560974.000.000) 2025-07-27 23:45:51 Image size of job updated: 563976
+	551  -  MemoryUsage of job (MB)
+	563976  -  ResidentSetSize of job (KB)
+...

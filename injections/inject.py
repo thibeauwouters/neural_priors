@@ -75,10 +75,6 @@ parser.add_argument('--seed',
                     type = int,
                     default = 2024,
                     help = "Seed for the random number generator")
-parser.add_argument('--event-name',
-                    type = str,
-                    required = True,
-                    help = "Name of the event to use for injection configuration (e.g., GW170817)")
 parser.add_argument('--relative-binning-delta', 
                     type = float,
                     default = 1e-2,
@@ -163,11 +159,16 @@ base_dir = detect_environment()
 cwd = os.getcwd()
 from LikelihoodRB import RelBinning
     
+SUPPORTED_EVENT_NAMES = ["GW170817", "GW190425", "GW230529"] # TODO: add "design" when implemented
+event_name = args.run_dir.split('_')[0]  # Extract event name from run_dir
+if event_name not in SUPPORTED_EVENT_NAMES:
+    raise ValueError(f"Invalid event name detected: {event_name}. Please provide one of {SUPPORTED_EVENT_NAMES}")
+    
 # Validate event name and get configuration
-if args.event_name not in EVENT_CONFIG:
-    raise ValueError(f"Invalid event name provided. Please provide one of {list(EVENT_CONFIG.keys())}")
+if event_name not in EVENT_CONFIG:
+    raise ValueError(f"Event name not found in EVENT_CONFIG, which has keys: {list(EVENT_CONFIG.keys())}")
 
-event_config = EVENT_CONFIG[args.event_name]
+event_config = EVENT_CONFIG[event_name]
 
 # Setup file paths
 run_dir = os.path.abspath(args.run_dir)
@@ -330,7 +331,7 @@ else:
     prior_dict.pop('luminosity_distance', None)
     
     # Path to NF model - use the same event as injection for consistency
-    nf_model_path = os.path.join(base_dir, f"NFprior/models/{args.event_name}/{args.eos_samples_name}_{args.prior_name}/model.pt")
+    nf_model_path = os.path.join(base_dir, f"NFprior/models/{event_name}/{args.eos_samples_name}_{args.prior_name}/model.pt")
     nf_model_path = os.path.abspath(nf_model_path)
     logger.info(f"Using NF model path: {nf_model_path}")
     
@@ -390,25 +391,25 @@ if args.psd_type == 'design':
 else:
     # Use event-specific PSDs - fetch from data directory like pe.py
     logger.info("Loading event-specific PSDs...")
-    data_path = os.path.join(base_dir, 'data', args.event_name)
+    data_path = os.path.join(base_dir, 'data', event_name)
     
-    if args.event_name == 'GW190425':
+    if event_name == 'GW190425':
         psd_files = {
             "L1": os.path.join(data_path, "glitch_median_PSD_forLI_L1_srate8192.txt"),
             "V1": os.path.join(data_path, "glitch_median_PSD_forLI_V1_srate8192.txt")
         }
-    elif args.event_name == 'GW170817':
+    elif event_name == 'GW170817':
         psd_files = {
             "H1": os.path.join(data_path, "h1_psd.txt"),
             "L1": os.path.join(data_path, "l1_psd.txt"),
             "V1": os.path.join(data_path, "v1_psd.txt")
         }
-    elif args.event_name == 'GW230529':
+    elif event_name == 'GW230529':
         psd_files = {
             "L1": os.path.join(data_path, "L1_psd.dat"),
         }
     else:
-        raise ValueError(f"Event-specific PSDs not available for {args.event_name}")
+        raise ValueError(f"Event-specific PSDs not available for {event_name}")
     
     # Load PSDs for each interferometer
     for ifo in ifos:
@@ -416,7 +417,7 @@ else:
             logger.info(f"Loading PSD for {ifo.name} from {psd_files[ifo.name]}")
             ifo.power_spectral_density = bilby.gw.detector.PowerSpectralDensity(psd_file=psd_files[ifo.name])
         else:
-            raise ValueError(f"No PSD file found for interferometer {ifo.name} in {args.event_name}")
+            raise ValueError(f"No PSD file found for interferometer {ifo.name} in {event_name}")
 
 # Inject the signal
 logger.info("Generating injection...")

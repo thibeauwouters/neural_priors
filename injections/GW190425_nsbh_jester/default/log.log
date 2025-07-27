@@ -1,0 +1,15 @@
+000 (2560985.000.000) 2025-07-27 23:47:26 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_c
+...
+001 (2560985.000.000) 2025-07-27 23:47:37 Job executing on host: <145.107.5.58:9618?addrs=145.107.5.58-9618+[2a07-8500-120-e070--53a]-9618&alias=wn-lot-058.nikhef.nl&noUDP&sock=startd_1933_74a8>
+	SlotName: slot1_1@wn-lot-058.nikhef.nl
+	CondorScratchDir = "/scratch/condor_execute/dir_2204100"
+	Cpus = 64
+	Disk = 16780562
+	GPUs = 0
+	Memory = 16384
+...
+006 (2560985.000.000) 2025-07-27 23:47:50 Image size of job updated: 319744
+	313  -  MemoryUsage of job (MB)
+	319744  -  ResidentSetSize of job (KB)
+...
