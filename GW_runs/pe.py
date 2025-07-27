@@ -156,7 +156,7 @@ def detect_environment() -> str:
     else:
         logger.info("You are testing locally, setting paths accordingly.")
         sys.path.append("/Users/Woute029/Documents/Code/projects/eos_source_classification/uu_relative_binning/uu_relative_binning") # locally
-        base_dir = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/"
+        base_dir = "/Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/"
         return base_dir
 
 base_dir = detect_environment()
