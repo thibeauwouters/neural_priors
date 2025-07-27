@@ -71,10 +71,6 @@ parser.add_argument('--eos-samples-name',
                     type = str,
                     default = "radio",
                     help = "Name of the EOS posterior dataset, must match the NF name")
-parser.add_argument('--label',
-                    type = str,
-                    default = 'injection',
-                    help = "Label to give to the injection")
 parser.add_argument('--seed', 
                     type = int,
                     default = 2024,
@@ -179,10 +175,10 @@ injection_parameters_file = os.path.join(run_dir, "injection_parameters.json")
 prior_filename = os.path.join(run_dir, "prior.prior")
 
 # Setup output directory
-full_outdir = os.path.join(cwd, args.run_dir, args.label)
+full_outdir = os.path.join(cwd, args.run_dir, args.prior_name)
 os.makedirs(full_outdir, exist_ok=True)
 
-bilby.core.utils.setup_logger(outdir=full_outdir, label=args.label)
+bilby.core.utils.setup_logger(outdir=full_outdir, label=args.prior_name)
 logger.info(f"Output directory set to {full_outdir}")
 
 # Load injection parameters from JSON file
@@ -469,7 +465,7 @@ likelihood = RelBinning(
 if args.dry_run:
     logger.info("DRY RUN: Setup validation complete. Skipping sampling.")
     logger.info(f"Would run sampling with:")
-    logger.info(f"  - Label: {args.label}")
+    logger.info(f"  - Label: {args.prior_name}")
     logger.info(f"  - Prior: {args.prior_name}")
     logger.info(f"  - Output directory: {full_outdir}")
     logger.info(f"  - Interferometers: {[ifo.name for ifo in ifos]}")
