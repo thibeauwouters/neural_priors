@@ -284,8 +284,8 @@ def create_corner_plot(GW_event: str,
     if GW_event in ["GW170817", "GW190425"] and plot_hauke:
         
         print(f"Loading Hauke's data and adding it to the corner plot...")
-        hauke_gw170817_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}_result.npz"
-        hauke_data = np.load(hauke_gw170817_posterior_filename)
+        hauke_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}_result.npz"
+        hauke_data = np.load(hauke_posterior_filename)
         hauke_data = {k: hauke_data[k] for k in params_to_plot} # convert to dict
         
         for key in params_to_dummy_replace:
@@ -329,7 +329,7 @@ def create_corner_plot(GW_event: str,
     save_name = f'./figures/{GW_event}/corner' + \
             ('_all' if plot_all_params else '') + \
             ('_default' if plot_default else '') + \
-            ('_hauke' if (plot_hauke and GW_event == "GW170817") else '') + \
+            ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
             ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
             ('_tilde' if convert_lambdas else '') + '.pdf'
             
@@ -339,8 +339,8 @@ def create_corner_plot(GW_event: str,
     
 def main():
     
-    GW_event_list = ["GW170817",
-                     "GW190425",
+    GW_event_list = ["GW190425",
+                    #  "GW170817",
                     #  "GW230529",
                     ]
     
@@ -357,7 +357,7 @@ def main():
                                         plot_adrian=plot_adrian,
                                         prevent_bns_leakage=False,
                                         )
-                        print(f"Creating corner plot for {GW_event}... and settings: {settings}")
+                        print(f"Creating corner plot for {GW_event} with settings: {settings}")
                         create_corner_plot(GW_event, **settings)
         
 if __name__ == "__main__":
