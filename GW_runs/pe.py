@@ -97,10 +97,6 @@ parser.add_argument('--n-pool',
                     type = int,
                     default = 64,
                     help = "How many cores to use for the sampling.")
-parser.add_argument('--base-outdir',
-                    type = str,
-                    default = None,
-                    help = "Base output directory for results. If not provided, uses auto-detected environment path.")
 group = parser.add_mutually_exclusive_group()
 group.add_argument('--use-relative-binning',
                    dest='use_relative_binning',
@@ -150,31 +146,26 @@ if args.label not in SUPPORTED_EVENTS:
 
 
 # Auto-detect environment and set paths
-def detect_environment():
+def detect_environment() -> str:
     """Auto-detect whether running locally or on cluster"""
     if os.path.exists("/data/gravwav/twouters/projects/eos_source_classification"):
         logger.info("You are running on the Nikhef cluster, setting paths accordingly.")
         sys.path.append('/data/gravwav/twouters/uu_relative_binning/uu_relative_binning') # on the cluster
-        return "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs"
+        base_dir = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/"
+        return base_dir
     else:
         logger.info("You are testing locally, setting paths accordingly.")
         sys.path.append("/Users/Woute029/Documents/Code/projects/eos_source_classification/uu_relative_binning/uu_relative_binning") # locally
-        return "/Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/GW_runs"
+        base_dir = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/"
+        return base_dir
 
-cwd = detect_environment()
+base_dir = detect_environment()
+cwd = os.getcwd()
 from LikelihoodRB import RelBinning
 
-# Use base_outdir if provided, otherwise use auto-detected environment path
-base_outdir = args.base_outdir if args.base_outdir is not None else cwd
-
-if args.waveform_model == 'IMRPhenomD_NRTidalv2':
-    full_outdir = os.path.join(base_outdir, "PhenomD_NRTv2", args.label, args.prior_name)
-    reference_parameters_filename = os.path.join(cwd, "PhenomD_NRTv2", args.label, "reference_parameters.json")
-    prior_filename = os.path.join(cwd, "PhenomD_NRTv2", args.label, "prior.prior")
-else:
-    full_outdir = os.path.join(base_outdir, args.label, args.prior_name)
-    reference_parameters_filename = os.path.join(cwd, args.label, "reference_parameters.json")
-    prior_filename = os.path.join(cwd, args.label, "prior.prior")
+full_outdir = os.path.join(cwd, args.label, args.prior_name)
+reference_parameters_filename = os.path.join(cwd, args.label, "reference_parameters.json")
+prior_filename = os.path.join(cwd, args.label, "prior.prior")
     
 bilby.core.utils.setup_logger(outdir=full_outdir, label=args.label)
 logger.info(f"We set full_outdir to {full_outdir}")
@@ -310,7 +301,7 @@ else:
     prior_dict.pop('luminosity_distance', None)
     
     # Path to NF model
-    nf_model_path = os.path.join(cwd, f"../NFprior/models/{args.label}/{args.eos_samples_name}_{args.prior_name}/model.pt")
+    nf_model_path = os.path.join(base_dir, f"NFprior/models/{args.label}/{args.eos_samples_name}_{args.prior_name}/model.pt")
     nf_model_path = os.path.abspath(nf_model_path)
     logger.info(f"Using NF model path: {nf_model_path}")
     
@@ -347,7 +338,7 @@ for key, value in priors.items():
     
 ### GW DATA GENERATION
 logger.info(f"Running through data generation steps now")
-data_path = os.path.join(cwd, '..', 'data', args.label)
+data_path = os.path.join(base_dir, 'data', args.label)
 if args.label == 'GW190425':
     frame_files = {
         "L1": os.path.join(data_path, "L-L1_GWOSC_16KHZ_R1-1240213455-4096.gwf"),

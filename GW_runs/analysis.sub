@@ -1,6 +1,6 @@
 Universe = vanilla
 Executable = /data/gravwav/twouters/miniconda3/envs/eos_source_classification/bin/python
-arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/pe.py --label $(label) --prior-name $(prior_name) --eos-samples-name $(eos_samples_name) --relative-binning-delta $(relative_binning_delta) --seed $(seed) --n-pool $(_CONDOR_SLOT_CPUS) --base-outdir $ENV(PWD)"
+arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/pe.py --label $(label) --prior-name $(prior_name) --eos-samples-name $(eos_samples_name) --relative-binning-delta $(relative_binning_delta) --seed $(seed) --n-pool 64"
 getenv = true
 Log = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/$(label)/$(prior_name)/log.log
 Error = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/$(label)/$(prior_name)/err.err

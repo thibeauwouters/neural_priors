@@ -1,0 +1,233 @@
+11:28 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh
+11:31 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh
+11:31 INFO    : Using geocent_time from reference parameters: 1187008882.43
+11:31 INFO    : Showing the reference parameters for GW170817
+11:31 INFO    : chirp_mass: 1.1975896
+11:31 INFO    : symmetric_mass_ratio: 0.2461001
+11:31 INFO    : a_1: 0.01890608
+11:31 INFO    : a_2: 0.04888488
+11:31 INFO    : tilt_1: 0.0
+11:31 INFO    : tilt_2: 0.0
+11:31 INFO    : phi_jl: 0.0
+11:31 INFO    : phi_12: 0.0
+11:31 INFO    : lambda_1: 100.0
+11:31 INFO    : lambda_2: 200.0
+11:31 INFO    : luminosity_distance: 40.06331818
+11:31 INFO    : phase: 5.88649652
+11:31 INFO    : theta_jn: 1.93095421
+11:31 INFO    : psi: 1.59687217
+11:31 INFO    : ra: 3.39736826
+11:31 INFO    : dec: -0.34000186
+11:31 INFO    : mass_ratio: 0.7779384106788951
+11:31 INFO    : mass_1: 1.5621553813557303
+11:31 INFO    : mass_2: 1.2152606746053602
+11:31 INFO    : Geocent time is 1187008882.43 and duration is 128.0
+11:31 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+11:31 INFO    : Relative binning delta 0.01
+11:31 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+11:31 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+11:31 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/prior.prior
+11:37 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh
+11:37 INFO    : Using geocent_time from reference parameters: 1187008882.43
+11:37 INFO    : Showing the reference parameters for GW170817
+11:37 INFO    : chirp_mass: 1.1975896
+11:37 INFO    : symmetric_mass_ratio: 0.2461001
+11:37 INFO    : a_1: 0.01890608
+11:37 INFO    : a_2: 0.04888488
+11:37 INFO    : tilt_1: 0.0
+11:37 INFO    : tilt_2: 0.0
+11:37 INFO    : phi_jl: 0.0
+11:37 INFO    : phi_12: 0.0
+11:37 INFO    : lambda_1: 100.0
+11:37 INFO    : lambda_2: 200.0
+11:37 INFO    : luminosity_distance: 40.06331818
+11:37 INFO    : phase: 5.88649652
+11:37 INFO    : theta_jn: 1.93095421
+11:37 INFO    : psi: 1.59687217
+11:37 INFO    : ra: 3.39736826
+11:37 INFO    : dec: -0.34000186
+11:37 INFO    : mass_ratio: 0.7779384106788951
+11:37 INFO    : mass_1: 1.5621553813557303
+11:37 INFO    : mass_2: 1.2152606746053602
+11:37 INFO    : Geocent time is 1187008882.43 and duration is 128.0
+11:37 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+11:37 INFO    : Relative binning delta 0.01
+11:37 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+11:37 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+11:37 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/prior.prior
+11:37 INFO    : Sampling with an NF prior, with name nsbh, and nsbh
+11:37 INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/NFprior/models/GW170817/radio_nsbh/model.pt
+11:40 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh
+11:40 INFO    : Using geocent_time from reference parameters: 1187008882.43
+11:40 INFO    : Showing the reference parameters for GW170817
+11:40 INFO    : chirp_mass: 1.1975896
+11:40 INFO    : symmetric_mass_ratio: 0.2461001
+11:40 INFO    : a_1: 0.01890608
+11:40 INFO    : a_2: 0.04888488
+11:40 INFO    : tilt_1: 0.0
+11:40 INFO    : tilt_2: 0.0
+11:40 INFO    : phi_jl: 0.0
+11:40 INFO    : phi_12: 0.0
+11:40 INFO    : lambda_1: 100.0
+11:40 INFO    : lambda_2: 200.0
+11:40 INFO    : luminosity_distance: 40.06331818
+11:40 INFO    : phase: 5.88649652
+11:40 INFO    : theta_jn: 1.93095421
+11:40 INFO    : psi: 1.59687217
+11:40 INFO    : ra: 3.39736826
+11:40 INFO    : dec: -0.34000186
+11:40 INFO    : mass_ratio: 0.7779384106788951
+11:40 INFO    : mass_1: 1.5621553813557303
+11:40 INFO    : mass_2: 1.2152606746053602
+11:40 INFO    : Geocent time is 1187008882.43 and duration is 128.0
+11:40 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+11:40 INFO    : Relative binning delta 0.01
+11:40 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+11:40 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+11:40 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/prior.prior
+11:40 INFO    : Sampling with an NF prior, with name nsbh, and nsbh
+11:40 INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt
+11:40 INFO    : Loaded NF kwargs from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model_kwargs.json
+11:40 INFO    : Loading scaler from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/scaler.gz
+11:40 INFO    : Loaded NFDist prior with n_dim = 4 from flow_filename = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt
+11:40 INFO    : Going to show priors in priors:
+11:40 INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+11:40 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+11:40 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+11:40 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+11:40 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+11:40 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+11:40 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+11:40 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+11:40 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+11:40 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+11:40 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+11:40 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+11:40 INFO    :       chirp_mass: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None)
+11:40 INFO    :       mass_ratio: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='mass_ratio', latex_label='$q$', unit=None)
+11:40 INFO    :       luminosity_distance: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='luminosity_distance', latex_label='$d_L$', unit=None)
+11:40 INFO    :       lambda_2: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
+11:40 INFO    :       lambda_1: DeltaFunction(peak=0.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+11:40 INFO    : Running through data generation steps now
+11:40 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/../data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
+11:45 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh
+11:45 INFO    : Using geocent_time from reference parameters: 1187008882.43
+11:45 INFO    : Showing the reference parameters for GW170817
+11:45 INFO    : chirp_mass: 1.1975896
+11:45 INFO    : symmetric_mass_ratio: 0.2461001
+11:45 INFO    : a_1: 0.01890608
+11:45 INFO    : a_2: 0.04888488
+11:45 INFO    : tilt_1: 0.0
+11:45 INFO    : tilt_2: 0.0
+11:45 INFO    : phi_jl: 0.0
+11:45 INFO    : phi_12: 0.0
+11:45 INFO    : lambda_1: 100.0
+11:45 INFO    : lambda_2: 200.0
+11:45 INFO    : luminosity_distance: 40.06331818
+11:45 INFO    : phase: 5.88649652
+11:45 INFO    : theta_jn: 1.93095421
+11:45 INFO    : psi: 1.59687217
+11:45 INFO    : ra: 3.39736826
+11:45 INFO    : dec: -0.34000186
+11:45 INFO    : mass_ratio: 0.7779384106788951
+11:45 INFO    : mass_1: 1.5621553813557303
+11:45 INFO    : mass_2: 1.2152606746053602
+11:45 INFO    : Geocent time is 1187008882.43 and duration is 128.0
+11:45 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+11:45 INFO    : Relative binning delta 0.01
+11:45 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+11:45 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+11:45 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/prior.prior
+11:45 INFO    : Sampling with an NF prior, with name nsbh, and nsbh
+11:45 INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt
+11:45 INFO    : Loaded NF kwargs from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model_kwargs.json
+11:45 INFO    : Loading scaler from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/scaler.gz
+11:45 INFO    : Loaded NFDist prior with n_dim = 4 from flow_filename = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt
+11:45 INFO    : Going to show priors in priors:
+11:45 INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+11:45 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+11:45 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+11:45 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+11:45 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+11:45 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+11:45 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+11:45 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+11:45 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+11:45 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+11:45 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+11:45 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+11:45 INFO    :       chirp_mass: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None)
+11:45 INFO    :       mass_ratio: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='mass_ratio', latex_label='$q$', unit=None)
+11:45 INFO    :       luminosity_distance: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='luminosity_distance', latex_label='$d_L$', unit=None)
+11:45 INFO    :       lambda_2: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
+11:45 INFO    :       lambda_1: DeltaFunction(peak=0.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+11:45 INFO    : Running through data generation steps now
+11:45 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
+11:45 INFO    : Successfully loaded H1:LOSC-STRAIN.
+11:45 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf
+11:45 INFO    : Successfully loaded L1:LOSC-STRAIN.
+11:45 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf
+11:46 INFO    : Successfully loaded V1:LOSC-STRAIN.
+11:46 INFO    : Frequency array for H1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+ 2.04799219e+03 2.04800000e+03]
+11:46 INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+ 2.04799219e+03 2.04800000e+03]
+11:46 INFO    : Frequency array for V1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+ 2.04799219e+03 2.04800000e+03]
+11:46 INFO    : Priors loaded:
+11:46 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.binary_neutron_star_frequency_sequence
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+11:46 INFO    : Using regular GW likelihood
+11:46 INFO    : Starting up the sampler now . . .
+11:46 INFO    : npool is set to: 128
+11:46 INFO    : Running for label 'nsbh', output will be saved to '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh'
+11:46 INFO    : Using lal version 7.6.1
+11:46 INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+11:46 INFO    : Using lalsimulation version 6.1.0
+11:46 INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+11:46 INFO    : Analysis priors:
+11:46 INFO    : geocent_time=Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+11:46 INFO    : a_1=Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+11:46 INFO    : a_2=Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+11:46 INFO    : tilt_1=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+11:46 INFO    : tilt_2=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+11:46 INFO    : phi_12=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+11:46 INFO    : phi_jl=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+11:46 INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+11:46 INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+11:46 INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+11:46 INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+11:46 INFO    : phase=Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+11:46 INFO    : chirp_mass=NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None)
+11:46 INFO    : mass_ratio=NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='mass_ratio', latex_label='$q$', unit=None)
+11:46 INFO    : luminosity_distance=NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='luminosity_distance', latex_label='$d_L$', unit=None)
+11:46 INFO    : lambda_2=NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_nsbh/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
+11:46 INFO    : lambda_1=0.0
+11:46 INFO    : Analysis likelihood class: <class 'bilby.gw.likelihood.base.GravitationalWaveTransient'>
+11:46 INFO    : Analysis likelihood noise evidence: -821024.646293187
+11:46 INFO    : Single likelihood evaluation took 8.156e-02 s
+11:46 INFO    : Using sampler Dynesty with kwargs {'nlive': 1024, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'npdim': None, 'rstate': None, 'queue_size': 128, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'gradient': None, 'grad_args': None, 'grad_kwargs': None, 'compute_jac': False, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'fmove': 0.9, 'max_move': 100, 'update_func': None, 'ncdim': None, 'blob': False, 'save_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'n_effective': None, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x152363833550>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
+11:46 INFO    : Checkpoint every check_point_delta_t = 3600s
+11:46 INFO    : Using dynesty version 2.1.5
+11:46 INFO    : Using the bilby-implemented acceptance-walk sampling with an average of 60 accepted steps per MCMC and maximum length 5000
+11:46 INFO    : Setting up multiproccesing pool with 128 processes
+11:46 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh/nsbh_resume.pickle does not exist.
+11:46 INFO    : Generating initial points from the prior
+11:48 INFO    : Generating initial points from the prior DONE
+12:59 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh/nsbh_resume.pickle
+14:10 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh/nsbh_resume.pickle
+15:19 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW170817/nsbh/nsbh_resume.pickle
