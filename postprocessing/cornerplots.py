@@ -74,13 +74,10 @@ def create_corner_plot(GW_event: str,
                        convert_lambdas: bool = True,
                        plot_hauke: bool = True,
                        plot_adrian: bool = True,
-                       prevent_bns_leakage: bool = True,
-                       use_PhenomD_NRTv2_path: bool = False):
+                       prevent_bns_leakage: bool = True):
     """
     Create a corner plot comparing posterior samples from BNS, Default, and NSBH runs for a given GW event.
     """
-    
-    # if use_PhenomD_NRTv2_path: # TODO: implement this
     
     # Load result files
     base_path = f"../GW_runs/final_results/{GW_event}"
@@ -278,31 +275,30 @@ def create_corner_plot(GW_event: str,
     y -= dy
     plt.text(x, y, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
-    if GW_event == "GW170817" and plot_hauke and not plot_all_params:
+    # Hauke and Adrian's runs did not sample some params and had them fixed -- jitter a bit to avoid corner complaints
+    if GW_event == "GW170817":
+        params_to_dummy_replace = ["geocent_time", "phase", "ra", "dec"]
+    else:
+        params_to_dummy_replace = ["geocent_time", "phase"]
+        
+    if GW_event in ["GW170817", "GW190425"] and plot_hauke:
         
         print(f"Loading Hauke's data and adding it to the corner plot...")
-        hauke_gw170817_posterior_filename = "../data/hauke/GW170817_result.npz"
+        hauke_gw170817_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}_result.npz"
         hauke_data = np.load(hauke_gw170817_posterior_filename)
-        hauke_Mc, hauke_q, hauke_lambda_1, hauke_lambda_2 = hauke_data['chirp_mass'], hauke_data['mass_ratio'], hauke_data['lambda_1'], hauke_data['lambda_2']
+        hauke_data = {k: hauke_data[k] for k in params_to_plot} # convert to dict
         
-        # NOTE: this was not sampled!
-        hauke_trigger_time = hauke_data['geocent_time'][0]
-        hauke_tc = np.random.normal(hauke_trigger_time, 0.01, size=len(hauke_Mc))
+        for key in params_to_dummy_replace:
+            if key in hauke_data:
+                print(f"Replacing {key} with dummy values for Hauke...")
+                hauke_data[key] = np.random.normal(hauke_data[key], 0.01, size=len(hauke_data["chirp_mass"]))
         
-        # Convert Hauke's data to lambda_tilde and delta_lambda_tilde
-        if convert_lambdas:
-            hauke_mass_1, hauke_mass_2 = chirp_mass_and_mass_ratio_to_component_masses(hauke_Mc, hauke_q)
-            hauke_lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(hauke_lambda_1, hauke_lambda_2, hauke_mass_1, hauke_mass_2)
-            hauke_delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(hauke_lambda_1, hauke_lambda_2, hauke_mass_1, hauke_mass_2)
-        else:
-            # Bit hacky for now
-            hauke_lambda_tilde = hauke_lambda_1
-            hauke_delta_lambda_tilde = hauke_lambda_2
-            
+        # Fetch the samples we want to plot
+        hauke_samples = np.array([hauke_data[param] for param in params_to_plot]).T
+        
         # Make the cornerplot:
         hauke_kwargs = corner_kwargs_with_range.copy()
         hauke_kwargs.update({'color': HAUKE_COLOR, 'hist_kwargs': {'color': HAUKE_COLOR, 'density': use_density}})
-        hauke_samples = np.array([hauke_Mc, hauke_q, hauke_tc, hauke_lambda_tilde, hauke_delta_lambda_tilde]).T
         corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
         y -= dy
         plt.text(x, y, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
@@ -312,24 +308,19 @@ def create_corner_plot(GW_event: str,
         print(f"Loading Adrian's data and adding it to the corner plot...")
         adrian_posterior_filename = f"../data/adrian/{GW_event}/{GW_event}_result.npz"
         adrian_data = np.load(adrian_posterior_filename)
-        adrian_Mc, adrian_q, adrian_lambda_1, adrian_lambda_2 = adrian_data['chirp_mass'], adrian_data['mass_ratio'], adrian_data['lambda_1'], adrian_data['lambda_2']
-       
-        adrian_tc = adrian_data['geocent_time']  # Use the geocent_time directly from Adrian's data
-       
-        # Convert adrian's data to lambda_tilde and delta_lambda_tilde
-        if convert_lambdas:
-            adrian_mass_1, adrian_mass_2 = chirp_mass_and_mass_ratio_to_component_masses(adrian_Mc, adrian_q)
-            adrian_lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(adrian_lambda_1, adrian_lambda_2, adrian_mass_1, adrian_mass_2)
-            adrian_delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(adrian_lambda_1, adrian_lambda_2, adrian_mass_1, adrian_mass_2)
-        else:
-            # Bit hacky for now
-            adrian_lambda_tilde = adrian_lambda_1
-            adrian_delta_lambda_tilde = adrian_lambda_2
+        adrian_data = {k: adrian_data[k] for k in params_to_plot}
+        
+        for key in params_to_dummy_replace:
+            if key in adrian_data:
+                print(f"Replacing {key} with dummy values for Adrian...")
+                adrian_data[key] = np.random.normal(adrian_data[key], 0.01, size=len(adrian_data["chirp_mass"]))
+        
+        # Fetch the samples we want to plot
+        adrian_samples = np.array([adrian_data[param] for param in params_to_plot]).T
             
         # Make the cornerplot:
         adrian_kwargs = corner_kwargs_with_range.copy()
         adrian_kwargs.update({'color': ADRIAN_COLOR, 'hist_kwargs': {'color': ADRIAN_COLOR, 'density': use_density}})
-        adrian_samples = np.array([adrian_Mc, adrian_q, adrian_tc, adrian_lambda_tilde, adrian_delta_lambda_tilde]).T
         corner.corner(adrian_samples, labels=latex_labels, fig=fig, **adrian_kwargs)
         y -= dy
         plt.text(x, y, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
@@ -350,13 +341,13 @@ def main():
     
     GW_event_list = ["GW170817",
                      "GW190425",
-                     "GW230529",
+                    #  "GW230529",
                     ]
     
     # for plot_all_params in [True, False]:
     for plot_default in [True, False]:
-        for plot_adrian in [False, True]:
-            for plot_hauke in [False, True]:
+        for plot_adrian in [True, False]:
+            for plot_hauke in [True, False]:
                 for convert_lambdas in [True, False]:
                     for GW_event in GW_event_list:  
                         settings = dict(plot_all_params=False,
@@ -365,10 +356,9 @@ def main():
                                         plot_hauke=plot_hauke,
                                         plot_adrian=plot_adrian,
                                         prevent_bns_leakage=False,
-                                        use_PhenomD_NRTv2_path=True,
                                         )
                         print(f"Creating corner plot for {GW_event}... and settings: {settings}")
                         create_corner_plot(GW_event, **settings)
-            
+        
 if __name__ == "__main__":
     main()
