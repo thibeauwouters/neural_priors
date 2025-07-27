@@ -44,8 +44,9 @@ default_corner_kwargs = dict(bins=40,
 DEFAULT_COLOR = 'blue'
 BNS_COLOR = 'green'
 NSBH_COLOR = 'red'
-HAUKE_COLOR = 'black'
-ADRIAN_COLOR = 'orange'
+HAUKE_COLOR = 'orange'
+HAUKE_EM_COLOR = 'purple'
+ADRIAN_COLOR = 'black'
 
 LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
               "mass_ratio": r"$q$",
@@ -73,9 +74,9 @@ def create_corner_plot(GW_event: str,
                        plot_default: bool = False,
                        convert_lambdas: bool = True,
                        plot_hauke: bool = True,
+                       plot_hauke_EM: bool = True,
                        plot_adrian: bool = True,
-                       prevent_bns_leakage: bool = True,
-                       use_EM_Hauke: bool = True):
+                       prevent_bns_leakage: bool = True):
     """
     Create a corner plot comparing posterior samples from BNS, Default, and NSBH runs for a given GW event.
     
@@ -85,9 +86,9 @@ def create_corner_plot(GW_event: str,
         plot_default (bool): If True, include the Default run in the corner plot.
         convert_lambdas (bool): If True, convert lambda_1 and lambda_2 to lambda_tilde and delta_lambda_tilde.
         plot_hauke (bool): If True, include Hauke's data in the corner plot.
+        plot_hauke_EM (bool): If True, include Hauke's data in the corner plot that analyzed the GW+EM dataset.
         plot_adrian (bool): If True, include Adrian's data in the corner plot.
         prevent_bns_leakage (bool): If True, prevent BNS leakage by masking samples with negative delta_lambda_tilde.
-        use_EM_Hauke (bool): If True, use Hauke's analysis that also considered EM data for the corner plot.
     """
     
     # Load result files
@@ -294,14 +295,7 @@ def create_corner_plot(GW_event: str,
         
     if GW_event in ["GW170817", "GW190425"] and plot_hauke:
         
-        if use_EM_Hauke:
-            hauke_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}+EM_result.npz"
-            if not os.path.exists(hauke_posterior_filename):
-                print(f"WARNING: EM Hauke data not found for {GW_event}, using non-EM data instead.")
-                use_EM_Hauke = False
-                hauke_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}_result.npz"
-        else:
-            hauke_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}_result.npz"
+        hauke_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}_result.npz"
         print(f"Loading Hauke's data and adding it to the corner plot, filename: {hauke_posterior_filename}")
         hauke_data = np.load(hauke_posterior_filename)
         hauke_data = {k: hauke_data[k] for k in params_to_plot} # convert to dict
@@ -319,10 +313,29 @@ def create_corner_plot(GW_event: str,
         hauke_kwargs.update({'color': HAUKE_COLOR, 'hist_kwargs': {'color': HAUKE_COLOR, 'density': use_density}})
         corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
         y -= dy
-        if use_EM_Hauke:
-            plt.text(x, y, 'Hauke (GW+EM)', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-        else:
-            plt.text(x, y, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        plt.text(x, y, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        
+    if GW_event in ["GW170817"] and plot_hauke_EM:
+        
+        hauke_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}+EM_result.npz"
+        print(f"Loading Hauke's data and adding it to the corner plot, filename: {hauke_posterior_filename}")
+        hauke_data = np.load(hauke_posterior_filename)
+        hauke_data = {k: hauke_data[k] for k in params_to_plot} # convert to dict
+        
+        for key in params_to_dummy_replace:
+            if key in hauke_data:
+                print(f"Replacing {key} with dummy values for Hauke...")
+                hauke_data[key] = np.random.normal(hauke_data[key], 0.01, size=len(hauke_data["chirp_mass"]))
+        
+        # Fetch the samples we want to plot
+        hauke_samples = np.array([hauke_data[param] for param in params_to_plot]).T
+        
+        # Make the cornerplot:
+        hauke_kwargs = corner_kwargs_with_range.copy()
+        hauke_kwargs.update({'color': HAUKE_EM_COLOR, 'hist_kwargs': {'color': HAUKE_EM_COLOR, 'density': use_density}})
+        corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
+        y -= dy
+        plt.text(x, y, 'Hauke (GW+EM)', fontsize=fs, color=HAUKE_EM_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
         
     if GW_event in ["GW170817", "GW190425"] and plot_adrian:
         
@@ -350,8 +363,8 @@ def create_corner_plot(GW_event: str,
     save_name = f'./figures/{GW_event}/corner' + \
             ('_all' if plot_all_params else '') + \
             ('_default' if plot_default else '') + \
-            ('_hauke' if (plot_hauke and not use_EM_Hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
-            ('_haukeEM' if (plot_hauke and use_EM_Hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
+            ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
+            ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
             ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
             ('_tilde' if convert_lambdas else '') + '.pdf'
             
@@ -370,18 +383,19 @@ def main():
     for plot_default in [True, False]:
         for plot_adrian in [True, False]:
             for plot_hauke in [True, False]:
-                for convert_lambdas in [True, False]:
-                    for GW_event in GW_event_list:  
-                        settings = dict(plot_all_params=False,
-                                        plot_default=plot_default,
-                                        convert_lambdas=convert_lambdas,
-                                        plot_hauke=plot_hauke,
-                                        plot_adrian=plot_adrian,
-                                        prevent_bns_leakage=False,
-                                        use_EM_Hauke=True
-                                        )
-                        print(f"Creating corner plot for {GW_event} with settings: {settings}")
-                        create_corner_plot(GW_event, **settings)
-        
+                for plot_hauke_EM in [True, False]:
+                    for convert_lambdas in [True, False]:
+                        for GW_event in GW_event_list:  
+                            settings = dict(plot_all_params=False,
+                                            plot_default=plot_default,
+                                            convert_lambdas=convert_lambdas,
+                                            plot_hauke=plot_hauke,
+                                            plot_hauke_EM=plot_hauke_EM,
+                                            plot_adrian=plot_adrian,
+                                            prevent_bns_leakage=False,
+                                            )
+                            print(f"Creating corner plot for {GW_event} with settings: {settings}")
+                            create_corner_plot(GW_event, **settings)
+            
 if __name__ == "__main__":
     main()
