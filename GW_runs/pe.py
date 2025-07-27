@@ -442,10 +442,12 @@ if args.dry_run:
     logger.info(f"  - Duration: {duration}s")
     logger.info(f"  - Minimum frequency: {minimum_frequency}Hz")
     logger.info(f"  - Approximant: {approximant}")
+    logger.info(f"  - npool: {args.npool}")
     logger.info("DRY RUN: All checks passed. Ready for actual sampling.")
 else:
     logger.info("Starting up the sampler now . . .")
     
+    logger.info(f"npool is set to: {args.n_pool}")
     if args.test_sampling:
         logger.info("Test sampling mode enabled - using 30 second timeout")
         try:
