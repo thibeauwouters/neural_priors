@@ -100,3 +100,36 @@
 15:23 bilby INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle does not exist.
 15:23 bilby INFO    : Generating initial points from the prior
 15:25 bilby INFO    : Generating initial points from the prior DONE
+16:25 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+17:29 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/utils.py:136: RuntimeWarning: overflow encountered in divide
+  integrand = np.conj(aa) * bb / power_spectral_density
+/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/utils.py:137: RuntimeWarning: invalid value encountered in scalar multiply
+  return 4 / duration * np.sum(integrand)
+/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/likelihood/base.py:286: RuntimeWarning: invalid value encountered in scalar divide
+  complex_matched_filter_snr = d_inner_h / (optimal_snr_squared**0.5)
+18:29 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+19:31 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+20:35 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+21:36 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+22:42 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+23:46 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+00:49 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/utils.py:136: RuntimeWarning: overflow encountered in multiply
+  integrand = np.conj(aa) * bb / power_spectral_density
+/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/utils.py:136: RuntimeWarning: overflow encountered in divide
+  integrand = np.conj(aa) * bb / power_spectral_density
+/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/utils.py:136: RuntimeWarning: invalid value encountered in divide
+  integrand = np.conj(aa) * bb / power_spectral_density
+/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/likelihood/base.py:286: RuntimeWarning: invalid value encountered in scalar divide
+  complex_matched_filter_snr = d_inner_h / (optimal_snr_squared**0.5)
+01:53 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+02:59 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+03:59 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+05:02 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+06:03 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+07:09 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+08:00 bilby INFO    : Run interrupted by signal 15: checkpoint and exit on 130
+08:00 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/regular_likelihood/GW190425/default/default_resume.pickle
+08:00 bilby INFO    : Starting to close worker pool.
+08:00 bilby INFO    : Finished closing worker pool.
