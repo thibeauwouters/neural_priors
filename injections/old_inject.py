@@ -83,6 +83,12 @@ parser.add_argument('--minimum-bin-threshold',
                     type = int,
                     default = 1000,
                     help = "The minimum number of bins allowed to have")
+parser.add_argument('--dry-run',
+                    action = 'store_true',
+                    help = "Run through the script without sampling to validate setup")
+parser.add_argument('--test-sampling',
+                    action = 'store_true',
+                    help = "Test sampling with 30 second timeout for debugging")
 parser.add_argument('--n-pool',
                     type = int,
                     default = 64,
@@ -238,6 +244,12 @@ waveform_generator = bilby.gw.WaveformGenerator(
     frequency_domain_source_model=bilby.gw.source.lal_binary_neutron_star,                    
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters,
     waveform_arguments=waveform_arguments)
+
+# If a dry run, then make sure we always get passed the relative binning
+if args.dry_run:
+    dry_run_bin_threshold = 10 # just a low value
+    logger.info(f"Running in dry run mode, setting minimum_bin_threshold to {dry_run_bin_threshold}")
+    args.minimum_bin_threshold = dry_run_bin_threshold
 
 # Reference parameters are the injection parameters
 reference_parameters = injection_parameters.copy()
@@ -419,18 +431,6 @@ ifos.inject_signal(waveform_generator=waveform_generator,
                    parameters=injection_parameters)
 logger.info("Injection generated successfully!")
 
-# # DEBUG: Print the injected signal to the screen and the PSD as well, just some values to see if done properly
-# logger.info("Injected signal:")
-# for ifo in ifos:
-#     logger.info(f"  {ifo.name}:")
-#     # Mask to have frequencies above starting frequency
-#     mask = ifo.frequency_array >= minimum_frequency
-#     max_idx = 20
-#     logger.info(f"    Frequencies: {ifo.frequency_array[mask][:max_idx]} ... ")
-#     logger.info(f"    Strain data: {ifo.strain_data.frequency_domain_strain[mask][:max_idx]} ...")
-#     psd_array = ifo.power_spectral_density.get_power_spectral_density_array(ifo.frequency_array)
-#     logger.info(f"    PSD: {psd_array[mask][:max_idx]} ...")
-
 # Compute the network SNR:
 snr_list = []
 for ifo in ifos:
@@ -461,26 +461,62 @@ likelihood = RelBinning(
     ref_injection=reference_parameters,
     priors=priors,
     delta=args.relative_binning_delta,
-    minimum_bin_threshold=args.minimum_bin_threshold,
-    use_analytic_method=True,
-    perturb_lambdas=True)
+    minimum_bin_threshold=args.minimum_bin_threshold)
 
-logger.info("Starting up the sampler now . . .")
+if args.dry_run:
+    logger.info("DRY RUN: Setup validation complete. Skipping sampling.")
+    logger.info(f"Would run sampling with:")
+    logger.info(f"  - Label: {args.prior_name}")
+    logger.info(f"  - Prior: {args.prior_name}")
+    logger.info(f"  - Output directory: {full_outdir}")
+    logger.info(f"  - Interferometers: {[ifo.name for ifo in ifos]}")
+    logger.info(f"  - Duration: {duration}s")
+    logger.info(f"  - Minimum frequency: {minimum_frequency}Hz")
+    logger.info(f"  - Approximant: {approximant}")
+    logger.info("DRY RUN: All checks passed. Ready for actual sampling.")
+else:
+    logger.info("Starting up the sampler now . . .")
     
-result = bilby.run_sampler(likelihood=likelihood,
-                            priors=priors,
-                            npool=args.n_pool,
-                            verbose=True, 
-                            sampler='dynesty',
-                            nlive=1024,
-                            outdir=full_outdir,
-                            label=args.prior_name,
-                            naccept=60,
-                            check_point_plot=True,
-                            check_point_delta_t=3600,
-                            dlogz=0.1,
-                            print_method='interval-60',
-                            sample = 'acceptance-walk',
-                            )
-result.plot_corner(priors = True)
-logger.info(f"Parameter estimation complete! Results saved to {full_outdir}")
+    if args.test_sampling:
+        logger.info("Test sampling mode enabled - using 30 second timeout")
+        try:
+            with timeout(10):
+                result = bilby.run_sampler(likelihood=likelihood,
+                                           priors=priors,
+                                           npool=args.n_pool,
+                                           verbose=True, 
+                                           sampler='dynesty',
+                                           nlive=1024,
+                                           outdir=full_outdir,
+                                           label=args.prior_name,
+                                           naccept=60,
+                                           check_point_plot=True,
+                                           check_point_delta_t=3600,
+                                           dlogz=0.1,
+                                           print_method='interval-60',
+                                           sample = 'acceptance-walk',
+                                           )
+                result.plot_corner(priors = True)
+                logger.info("✓ Test sampling completed successfully within timeout!")
+        except TimeoutError as e:
+            logger.error(f"✗ {e}")
+            logger.error("Sampling appears to be stuck or very slow. Check conditional NF implementation.")
+            sys.exit(1)
+    else:
+        result = bilby.run_sampler(likelihood=likelihood,
+                                   priors=priors,
+                                   npool=args.n_pool,
+                                   verbose=True, 
+                                   sampler='dynesty',
+                                   nlive=1024,
+                                   outdir=full_outdir,
+                                   label=args.prior_name,
+                                   naccept=60,
+                                   check_point_plot=True,
+                                   check_point_delta_t=3600,
+                                   dlogz=0.1,
+                                   print_method='interval-60',
+                                   sample = 'acceptance-walk',
+                                   )
+        result.plot_corner(priors = True)
+        logger.info(f"Parameter estimation complete! Results saved to {full_outdir}")
