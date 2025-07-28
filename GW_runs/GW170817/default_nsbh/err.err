@@ -1,0 +1,507 @@
+09:23 bilby INFO    : You are running on the Nikhef cluster, setting paths accordingly.
+09:23 bilby INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default_nsbh
+09:23 bilby INFO    : Using geocent_time from reference parameters: 1187008882.43
+09:23 bilby INFO    : Showing the reference parameters for GW170817
+09:23 bilby INFO    : chirp_mass: 1.1975896
+09:23 bilby INFO    : symmetric_mass_ratio: 0.2461001
+09:23 bilby INFO    : a_1: 0.01890608
+09:23 bilby INFO    : a_2: 0.04888488
+09:23 bilby INFO    : tilt_1: 0.0
+09:23 bilby INFO    : tilt_2: 0.0
+09:23 bilby INFO    : phi_jl: 0.0
+09:23 bilby INFO    : phi_12: 0.0
+09:23 bilby INFO    : lambda_1: 100.0
+09:23 bilby INFO    : lambda_2: 200.0
+09:23 bilby INFO    : luminosity_distance: 40.06331818
+09:23 bilby INFO    : phase: 5.88649652
+09:23 bilby INFO    : theta_jn: 1.93095421
+09:23 bilby INFO    : psi: 1.59687217
+09:23 bilby INFO    : ra: 3.39736826
+09:23 bilby INFO    : dec: -0.34000186
+09:23 bilby INFO    : mass_ratio: 0.7779384106788951
+09:23 bilby INFO    : mass_1: 1.5621553813557303
+09:23 bilby INFO    : mass_2: 1.2152606746053602
+09:23 bilby INFO    : Geocent time is 1187008882.43 and duration is 128.0
+09:23 bilby INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+09:23 bilby INFO    : Relative binning delta 0.01
+09:23 bilby INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+09:23 bilby INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+09:23 bilby INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
+09:23 bilby INFO    : Using the default priors but with the NSBH assumption (i.e., lambda_1 = 0.0)
+09:23 bilby INFO    : Going to show priors in priors:
+09:23 bilby INFO    :       chirp_mass: Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
+09:23 bilby INFO    :       mass_ratio: Uniform(minimum=0.5, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
+09:23 bilby INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
+09:23 bilby INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+09:23 bilby INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+09:23 bilby INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+09:23 bilby INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+09:23 bilby INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+09:23 bilby INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+09:23 bilby INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+09:23 bilby INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+09:23 bilby INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+09:23 bilby INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+09:23 bilby INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+09:23 bilby INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+09:23 bilby INFO    :       lambda_1: DeltaFunction(peak=0.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+09:23 bilby INFO    :       lambda_2: Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
+09:23 bilby INFO    : Running through data generation steps now
+09:23 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
+09:24 bilby INFO    : Successfully loaded H1:LOSC-STRAIN.
+09:24 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf
+09:24 bilby INFO    : Successfully loaded L1:LOSC-STRAIN.
+09:24 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf
+09:24 bilby INFO    : Successfully loaded V1:LOSC-STRAIN.
+09:24 bilby INFO    : Frequency array for H1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+ 2.04799219e+03 2.04800000e+03]
+09:24 bilby INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+ 2.04799219e+03 2.04800000e+03]
+09:24 bilby INFO    : Frequency array for V1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+ 2.04799219e+03 2.04800000e+03]
+09:24 bilby INFO    : Priors loaded:
+09:24 bilby INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.binary_neutron_star_frequency_sequence
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+09:24 bilby INFO    : Using relative binning likelihood
+09:24 bilby INFO    : Going to construct bins with:
+09:24 bilby INFO    :   - delta: 0.01
+09:24 bilby INFO    :   - minimum_bin_threshold: 1000
+09:24 bilby INFO    : Percentage error on chirp mass -0.004714351637336023 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197646058584916 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : self.maximum_frequency: None
+09:24 bilby INFO    : Length of the original frequency array 262145
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:807, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:743, 807
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:723, 743
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:718, 723
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:715, 718
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:713, 715
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:710, 713
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:709, 710
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:708, 709
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:707, 708
+09:24 bilby INFO    : Percentage error on chirp mass 0.011909756947059424 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1974469699894166 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1974469699894166
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:860, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:808, 860
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:785, 808
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:773, 785
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:766, 773
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:764, 766
+09:24 bilby INFO    : Percentage error on chirp mass -0.014327069684250127 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1977611794965233 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1977611794965233
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:965, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:957, 965
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:954, 957
+09:24 bilby INFO    : Percentage error on chirp mass 0.0031265189609164246 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197552157134082 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.197552157134082
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:869, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:840, 869
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:831, 840
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:828, 831
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:827, 828
+09:24 bilby INFO    : Percentage error on chirp mass 0.007205887333650018 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1975033030427045 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1975033030427045
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:944, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:931, 944
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:927, 931
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:924, 927
+09:24 bilby INFO    : Percentage error on chirp mass -0.008871629403084391 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1976958457110818 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1976958457110818
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:868, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:825, 868
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:811, 825
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:807, 811
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:804, 807
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:803, 804
+09:24 bilby INFO    : Percentage error on chirp mass -0.008595884137174714 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1976925434144547 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1976925434144547
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:869, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:817, 869
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:801, 817
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:799, 801
+09:24 bilby INFO    : Percentage error on chirp mass 0.006365235044170081 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1975133706070953 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1975133706070953
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:921, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:903, 921
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:896, 903
+09:24 bilby INFO    : Percentage error on chirp mass -0.00015696372115403534 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1975914797812002 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1975914797812002
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:758, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:693, 758
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:675, 693
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:672, 675
+09:24 bilby INFO    : Percentage error on chirp mass 0.022426849541856697 and mass_ratio 0.0
+09:24 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197321018382279 0.7779384106788951
+09:24 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:24 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.197321018382279
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:929, 1000
+09:24 bilby INFO    : Rerunning the binning algorithm with new and old bins:893, 929
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:876, 893
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:865, 876
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:861, 865
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:859, 861
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:858, 859
+09:25 bilby INFO    : Percentage error on chirp mass -0.011500357247196114 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1977273270823552 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1977273270823552
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:906, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:873, 906
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:863, 873
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:861, 863
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:859, 861
+09:25 bilby INFO    : Percentage error on chirp mass -0.009919460223417609 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1977083944240117 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1977083944240117
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:873, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:826, 873
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:808, 826
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:802, 808
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:798, 802
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:796, 798
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:795, 796
+09:25 bilby INFO    : Percentage error on chirp mass -0.009533241281123317 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1977037691061256 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1977037691061256
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:858, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:815, 858
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:803, 815
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:796, 803
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:794, 796
+09:25 bilby INFO    : Percentage error on chirp mass 0.020212548201947733 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1973475366248385 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1973475366248385
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:919, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:889, 919
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:880, 889
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:876, 880
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:875, 876
+09:25 bilby INFO    : Percentage error on chirp mass 0.0033407736580781666 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1975495912421112 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1975495912421112
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:867, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:841, 867
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:834, 841
+09:25 bilby INFO    : Percentage error on chirp mass -2.1183646836675507e-05 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1975898536931513 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1975898536931513
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:755, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:690, 755
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:671, 690
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:668, 671
+09:25 bilby INFO    : Percentage error on chirp mass -0.004054534115693897 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1976381566788978 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1976381566788978
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:802, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:728, 802
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:704, 728
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:694, 704
+09:25 bilby INFO    : Percentage error on chirp mass -0.0028909194097925806 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197624221350196 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.197624221350196
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:784, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:724, 784
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:705, 724
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:699, 705
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:698, 699
+09:25 bilby INFO    : Percentage error on chirp mass -0.013211581921290794 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1977478205310848 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1977478205310848
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:941, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:920, 941
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:913, 920
+09:25 bilby INFO    : Percentage error on chirp mass 0.015469055532291165 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197404344199727 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.197404344199727
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:870, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:827, 870
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:810, 827
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:802, 810
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:800, 802
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:799, 800
+09:25 bilby INFO    : Percentage error on chirp mass 0.002026463246296295 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1975653312869146 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1975653312869146
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:832, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:775, 832
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:756, 775
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:754, 756
+09:25 bilby INFO    : Percentage error on chirp mass 0.00655969344138807 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197511041793554 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.197511041793554
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:923, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:901, 923
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:895, 901
+09:25 bilby INFO    : Percentage error on chirp mass -0.0019342137647093693 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197612763942888 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.197612763942888
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:764, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:703, 764
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:682, 703
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:675, 682
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:674, 675
+09:25 bilby INFO    : Percentage error on chirp mass -0.005534389109573823 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1976558792683998 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1976558792683998
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:818, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:749, 818
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:720, 749
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:707, 720
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:701, 707
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:700, 701
+09:25 bilby INFO    : Percentage error on chirp mass -0.013181515541793587 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1977474604592508 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1977474604592508
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:942, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:922, 942
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:916, 922
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:914, 916
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:913, 914
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:912, 913
+09:25 bilby INFO    : Percentage error on chirp mass 0.00469305284706012 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197533396487181 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.197533396487181
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:909, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:878, 909
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:865, 878
+09:25 bilby INFO    : Percentage error on chirp mass -0.006755540851233199 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197670503654658 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.197670503654658
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:809, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:761, 809
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:746, 761
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:738, 746
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:734, 738
+09:25 bilby INFO    : Percentage error on chirp mass 0.018170272265904952 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1973719947090518 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1973719947090518
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:901, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:878, 901
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:865, 878
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:862, 865
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:860, 862
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:859, 860
+09:25 bilby INFO    : Percentage error on chirp mass 0.001831085401793331 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.197567671111661 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.197567671111661
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:816, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:771, 816
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:757, 771
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:753, 757
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:752, 753
+09:25 bilby INFO    : Percentage error on chirp mass -0.010589691875706464 and mass_ratio 0.0
+09:25 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1977164210485753 0.7779384106788951
+09:25 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:25 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1977164210485753
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:891, 1000
+09:25 bilby INFO    : Rerunning the binning algorithm with new and old bins:838, 891
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:820, 838
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:815, 820
+09:26 bilby INFO    : Percentage error on chirp mass 0.003978402282001081 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1975419550680244 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1975419550680244
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:882, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:849, 882
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:841, 849
+09:26 bilby INFO    : Percentage error on chirp mass -0.003374376536147139 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1976300111824616 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1976300111824616
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:788, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:724, 788
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:706, 724
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:698, 706
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:695, 698
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:694, 695
+09:26 bilby INFO    : Percentage error on chirp mass -0.010475785728925047 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1977150569204078 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1977150569204078
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:890, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:839, 890
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:817, 839
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:810, 817
+09:26 bilby INFO    : Percentage error on chirp mass -0.010459382556282648 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1977148604777181 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1977148604777181
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:883, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:836, 883
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:817, 836
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:807, 817
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:806, 807
+09:26 bilby INFO    : Percentage error on chirp mass -0.008637172916858837 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1976930378845863 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1976930378845863
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:865, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:817, 865
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:808, 817
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:806, 808
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:805, 806
+09:26 bilby INFO    : Percentage error on chirp mass 0.0012209157484788236 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1975749784399714 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1975749784399714
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:789, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:729, 789
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:715, 729
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:713, 715
+09:26 bilby INFO    : Percentage error on chirp mass -0.001247129537684799 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1976045354936418 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1976045354936418
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:755, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:689, 755
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:662, 689
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:655, 662
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:652, 655
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:650, 652
+09:26 bilby INFO    : Percentage error on chirp mass 0.0032279480560837293 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1975509424297868 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1975509424297868
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:874, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:839, 874
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:833, 839
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:832, 833
+09:26 bilby INFO    : Percentage error on chirp mass -0.008416747129968982 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1976903980882867 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1976903980882867
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:860, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:798, 860
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:779, 798
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:772, 779
+09:26 bilby INFO    : Percentage error on chirp mass -0.023909605154637248 and mass_ratio 0.0
+09:26 bilby INFO    : Perturbed chirp mass and mass ratio: 1.1978759389447329 0.7779384106788951
+09:26 bilby INFO    : Perturbed lambda_1,2: 300.0 600.0
+09:26 bilby INFO    : The previous set of pertrubed parameters resulted in too few bins. Updated perturbed chirp mass to 1.1978759389447329
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:1288, 1000
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:1393, 1288
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:1434, 1393
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:1451, 1434
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:1461, 1451
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:1465, 1461
+09:26 bilby INFO    : Rerunning the binning algorithm with new and old bins:1466, 1465
+09:26 bilby INFO    : Observed errors: 0.0034017733206487305
+09:26 bilby INFO    : Expected errors: 0.01
+09:26 bilby INFO    : Terminating the bisection algorithm. The number of bins made: 1466
+09:26 bilby INFO    : Using bisection method to create the grid
+09:26 bilby INFO    : Make sure ref parameters are correct {'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'a_1': 0.01890608, 'a_2': 0.04888488, 'tilt_1': 0.0, 'tilt_2': 0.0, 'phi_jl': 0.0, 'phi_12': 0.0, 'lambda_1': 100.0, 'lambda_2': 200.0, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
+09:26 bilby INFO    : Starting up the sampler now . . .
+09:26 bilby INFO    : npool is set to: 64
+09:26 bilby INFO    : Running for label 'default_nsbh', output will be saved to '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default_nsbh'
+09:26 bilby INFO    : Using lal version 7.6.1
+09:26 bilby INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+09:26 bilby INFO    : Using lalsimulation version 6.1.0
+09:26 bilby INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+09:26 bilby INFO    : Analysis priors:
+09:26 bilby INFO    : chirp_mass=Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
+09:26 bilby INFO    : mass_ratio=Uniform(minimum=0.5, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
+09:26 bilby INFO    : luminosity_distance=bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
+09:26 bilby INFO    : geocent_time=Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+09:26 bilby INFO    : a_1=Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+09:26 bilby INFO    : a_2=Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+09:26 bilby INFO    : tilt_1=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+09:26 bilby INFO    : tilt_2=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+09:26 bilby INFO    : phi_12=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+09:26 bilby INFO    : phi_jl=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+09:26 bilby INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+09:26 bilby INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+09:26 bilby INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+09:26 bilby INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+09:26 bilby INFO    : phase=Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+09:26 bilby INFO    : lambda_2=Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
+09:26 bilby INFO    : lambda_1=0.0
+09:26 bilby INFO    : Analysis likelihood class: <class 'LikelihoodRB.RelBinning'>
+09:26 bilby INFO    : Analysis likelihood noise evidence: -821024.6462931833
+09:26 bilby INFO    : Single likelihood evaluation took 3.110e-03 s
+09:26 bilby INFO    : Using sampler Dynesty with kwargs {'nlive': 1024, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'npdim': None, 'rstate': None, 'queue_size': 64, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'gradient': None, 'grad_args': None, 'grad_kwargs': None, 'compute_jac': False, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'fmove': 0.9, 'max_move': 100, 'update_func': None, 'ncdim': None, 'blob': False, 'save_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'n_effective': None, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x146da8dbfd90>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
+09:26 bilby INFO    : Checkpoint every check_point_delta_t = 3600s
+09:26 bilby INFO    : Using dynesty version 2.1.5
+09:26 bilby INFO    : Using the bilby-implemented acceptance-walk sampling with an average of 60 accepted steps per MCMC and maximum length 5000
+09:26 bilby INFO    : Setting up multiproccesing pool with 64 processes
+09:26 bilby INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default_nsbh/default_nsbh_resume.pickle does not exist.
+09:26 bilby INFO    : Generating initial points from the prior
+09:26 bilby INFO    : Generating initial points from the prior DONE
+10:27 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default_nsbh/default_nsbh_resume.pickle
+otFoundError: [Errno 2] No such file or directory: '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default_nsbh/default_nsbh_resume.pickle.temp' -> '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default_nsbh/default_nsbh_resume.pickle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/pe.py", line 486, in <module>
+    result = bilby.run_sampler(likelihood=likelihood,
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/sampler/__init__.py", line 307, in run_sampler
+    result = sampler.run_sampler()
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/sampler/base_sampler.py", line 97, in wrapped
+    output = method(self, *args, **kwargs)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/sampler/dynesty.py", line 566, in run_sampler
+    out = self._run_external_sampler_with_checkpointing()
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/sampler/dynesty.py", line 710, in _run_external_sampler_with_checkpointing
+    self.write_current_state()
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/sampler/dynesty.py", line 844, in write_current_state
+    safe_file_dump(self.sampler, self.resume_file, dill)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/core/utils/io.py", line 579, in safe_file_dump
+    shutil.move(temp_filename, filename)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/shutil.py", line 836, in move
+    copy_function(src, real_dst)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/shutil.py", line 434, in copy2
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/shutil.py", line 254, in copyfile
+    with open(src, 'rb') as fsrc:
+FileNotFoundError: [Errno 2] No such file or directory: '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default_nsbh/default_nsbh_resume.pickle.temp'
+10:29 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/default_nsbh/default_nsbh_resume.pickle
+10:29 bilby INFO    : Starting to close worker pool.
+10:29 bilby INFO    : Finished closing worker pool.
+10:29 bilby INFO    : Rejection sampling nested samples to obtain 5284 posterior samples
+10:29 bilby INFO    : Sampling time: 1:02:43.374705
+10:29 bilby INFO    : Summary of results:
+nsamples: 5284
+ln_noise_evidence: -821024.646
+ln_evidence: -820500.276 +/-  0.203
+ln_bayes_factor: 524.370 +/-  0.203
+
