@@ -77,7 +77,7 @@ parser.add_argument('--seed',
                     help = "Seed for the random number generator")
 parser.add_argument('--relative-binning-delta', 
                     type = float,
-                    default = 1e-2,
+                    default = 1e-3,
                     help = "The total error on the relative binning likelihood at the reference value")
 parser.add_argument('--minimum-bin-threshold', 
                     type = int,
@@ -253,6 +253,9 @@ if args.dry_run:
 
 # Reference parameters are the injection parameters
 reference_parameters = injection_parameters.copy()
+
+reference_parameters['lambda_1'] = 0.0
+reference_parameters['lambda_2'] = 0.0
 
 # FIXME: make this a separate function, to avoid duplicating code
 # Compute merger frequency for reference parameters

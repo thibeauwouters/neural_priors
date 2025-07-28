@@ -1,14 +1,15 @@
-000 (2560977.000.000) 2025-07-27 23:47:14 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+000 (2563212.000.000) 2025-07-28 09:25:08 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
 ...
-001 (2560977.000.000) 2025-07-27 23:47:14 Job executing on host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+001 (2563212.000.000) 2025-07-28 09:25:15 Job executing on host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
 ...
-004 (2560977.000.000) 2025-07-28 09:13:08 Job was evicted.
-	(0) CPU times
+005 (2563212.000.000) 2025-07-28 09:26:02 Job terminated.
+	(1) Normal termination (return value 1)
 		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
 		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
 	0  -  Run Bytes Sent By Job
 	0  -  Run Bytes Received By Job
-...
-009 (2560977.000.000) 2025-07-28 09:13:08 Job was aborted.
-	via condor_rm (by user twouters)
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
 ...

@@ -1,63 +1,78 @@
-000 (2560988.000.000) 2025-07-27 23:47:26 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+000 (2563203.000.000) 2025-07-28 09:19:08 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
     DAG Node: run_c
 ...
-001 (2560988.000.000) 2025-07-27 23:47:37 Job executing on host: <145.107.5.48:9618?addrs=145.107.5.48-9618+[2a07-8500-120-e070--530]-9618&alias=wn-lot-048.nikhef.nl&noUDP&sock=startd_1954_dc25>
+001 (2563203.000.000) 2025-07-28 09:19:46 Job executing on host: <145.107.5.48:9618?addrs=145.107.5.48-9618+[2a07-8500-120-e070--530]-9618&alias=wn-lot-048.nikhef.nl&noUDP&sock=startd_1954_dc25>
 	SlotName: slot1_1@wn-lot-048.nikhef.nl
-	CondorScratchDir = "/scratch/condor_execute/dir_1352557"
+	CondorScratchDir = "/scratch/condor_execute/dir_1965493"
 	Cpus = 64
 	Disk = 16780525
 	GPUs = 0
 	Memory = 16384
 ...
-006 (2560988.000.000) 2025-07-27 23:47:50 Image size of job updated: 290860
-	285  -  MemoryUsage of job (MB)
-	290860  -  ResidentSetSize of job (KB)
+006 (2563203.000.000) 2025-07-28 09:20:00 Image size of job updated: 274388
+	268  -  MemoryUsage of job (MB)
+	274388  -  ResidentSetSize of job (KB)
 ...
-006 (2560988.000.000) 2025-07-27 23:52:50 Image size of job updated: 1035988
-	1012  -  MemoryUsage of job (MB)
-	1035988  -  ResidentSetSize of job (KB)
+006 (2563203.000.000) 2025-07-28 09:20:42 Image size of job updated: 537316
+	269  -  MemoryUsage of job (MB)
+	274476  -  ResidentSetSize of job (KB)
 ...
-006 (2560988.000.000) 2025-07-27 23:57:51 Image size of job updated: 1061440
-	1037  -  MemoryUsage of job (MB)
-	1061440  -  ResidentSetSize of job (KB)
-...
-006 (2560988.000.000) 2025-07-28 00:02:52 Image size of job updated: 1069488
-	1045  -  MemoryUsage of job (MB)
-	1069488  -  ResidentSetSize of job (KB)
-...
-006 (2560988.000.000) 2025-07-28 00:07:52 Image size of job updated: 1075236
-	1051  -  MemoryUsage of job (MB)
-	1075236  -  ResidentSetSize of job (KB)
-...
-006 (2560988.000.000) 2025-07-28 00:12:52 Image size of job updated: 1079908
-	1055  -  MemoryUsage of job (MB)
-	1079908  -  ResidentSetSize of job (KB)
-...
-006 (2560988.000.000) 2025-07-28 00:17:53 Image size of job updated: 1085252
-	1060  -  MemoryUsage of job (MB)
-	1085252  -  ResidentSetSize of job (KB)
-...
-006 (2560988.000.000) 2025-07-28 00:21:55 Image size of job updated: 1789720
-	1060  -  MemoryUsage of job (MB)
-	1085252  -  ResidentSetSize of job (KB)
-...
-005 (2560988.000.000) 2025-07-28 00:21:55 Job terminated.
-	(1) Normal termination (return value 0)
-		Usr 0 22:50:57, Sys 0 00:00:43  -  Run Remote Usage
+005 (2563203.000.000) 2025-07-28 09:20:42 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:51, Sys 0 00:00:08  -  Run Remote Usage
 		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-		Usr 0 22:50:57, Sys 0 00:00:43  -  Total Remote Usage
+		Usr 0 00:00:51, Sys 0 00:00:08  -  Total Remote Usage
 		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
 	0  -  Run Bytes Sent By Job
 	0  -  Run Bytes Received By Job
 	0  -  Total Bytes Sent By Job
 	0  -  Total Bytes Received By Job
 	Partitionable Resources :    Usage  Request Allocated 
-	   Cpus                 :     2.59       64        64 
+	   Cpus                 :     1.00       64        64 
 	   Disk (KB)            : 17500    16777216  16780525 
 	   GPUs                 :                           0 
-	   Memory (MB)          :  1060       16384     16384 
-	   TimeExecute (s)      :  2058                       
-	   TimeSlotBusy (s)     :  2059                       
+	   Memory (MB)          :   269       16384     16384 
+	   TimeExecute (s)      :    56                       
+	   TimeSlotBusy (s)     :    56                       
 
-	Job terminated of its own accord at 2025-07-27T22:21:55Z with exit-code 0.
+	Job terminated of its own accord at 2025-07-28T07:20:42Z with exit-code 1.
+...
+000 (2563223.000.000) 2025-07-28 09:25:17 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_c
+...
+001 (2563223.000.000) 2025-07-28 09:25:46 Job executing on host: <145.107.5.40:9618?addrs=145.107.5.40-9618+[2a07-8500-120-e070--528]-9618&alias=wn-lot-040.nikhef.nl&noUDP&sock=startd_1714_3d6a>
+	SlotName: slot1_1@wn-lot-040.nikhef.nl
+	CondorScratchDir = "/scratch/condor_execute/dir_3558537"
+	Cpus = 64
+	Disk = 16780533
+	GPUs = 0
+	Memory = 16384
+...
+006 (2563223.000.000) 2025-07-28 09:26:00 Image size of job updated: 295228
+	289  -  MemoryUsage of job (MB)
+	295228  -  ResidentSetSize of job (KB)
+...
+006 (2563223.000.000) 2025-07-28 09:26:41 Image size of job updated: 537476
+	289  -  MemoryUsage of job (MB)
+	295276  -  ResidentSetSize of job (KB)
+...
+005 (2563223.000.000) 2025-07-28 09:26:41 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:52, Sys 0 00:00:08  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:52, Sys 0 00:00:08  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.00       64        64 
+	   Disk (KB)            : 17500    16777216  16780533 
+	   GPUs                 :                           0 
+	   Memory (MB)          :   289       16384     16384 
+	   TimeExecute (s)      :    55                       
+	   TimeSlotBusy (s)     :    55                       
+
+	Job terminated of its own accord at 2025-07-28T07:26:41Z with exit-code 1.
 ...
