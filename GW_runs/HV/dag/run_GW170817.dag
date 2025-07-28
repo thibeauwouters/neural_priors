@@ -1,0 +1,10 @@
+JOB run_a /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/HV/analysis.sub
+VARS run_a prior_name="default"
+JOB run_b /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/HV/analysis.sub
+VARS run_b prior_name="bns"
+JOB run_c /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/HV/analysis.sub
+VARS run_c prior_name="nsbh"
+JOB run_d /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/HV/analysis.sub
+VARS run_d prior_name="default_nsbh"
+JOB run_e /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/HV/analysis.sub
+VARS run_e prior_name="default_nsbh_primary"

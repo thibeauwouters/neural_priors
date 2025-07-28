@@ -104,8 +104,10 @@ def main(args):
     
     # Compute the tidal deformabilities, first, load the EOS
     masses_EOS, Lambdas_eos = load_eos(args.eos_name)
-    lambda_1 = 0.0
-    lambda_2 = 0.0
+    
+    # For lalsuite, choose a very small number, since zero gives issues
+    lambda_1 = 1e-3
+    lambda_2 = 1e-3
     
     if args.source_type == 'bns':
         lambda_1 = np.interp(mass_1_src, masses_EOS, Lambdas_eos)

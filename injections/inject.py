@@ -36,23 +36,6 @@ class MaskingFilter(logging.Filter):
         return True
 logger.addFilter(MaskingFilter())
 
-# Timeout context manager for testing
-@contextmanager
-def timeout(duration):
-    """Context manager that raises TimeoutError if operation takes longer than duration seconds"""
-    def timeout_handler(_signum, _frame):
-        raise TimeoutError(f"Operation timed out after {duration} seconds")
-    
-    # Set the signal handler and a timeout alarm
-    signal.signal(signal.SIGALRM, timeout_handler)
-    signal.alarm(duration)
-    
-    try:
-        yield
-    finally:
-        # Disable the alarm
-        signal.alarm(0)
-
 ################
 ### ARGPARSE ###
 ################
@@ -179,6 +162,10 @@ logger.info(f"Output directory set to {full_outdir}")
 logger.info(f"Loading injection parameters from {injection_parameters_file}")
 with open(injection_parameters_file, 'r') as f:
     injection_parameters = json.load(f)
+    
+# For some reason, lalsuite thinks minus zero is not allowed? Clip to a small value
+injection_parameters["lambda_1"] = np.clip(injection_parameters["lambda_1"], 1e-2, None)
+injection_parameters["lambda_2"] = np.clip(injection_parameters["lambda_2"], 1e-2, None)
 
 logger.info(f"Injection parameters:")
 for key, value in injection_parameters.items():

@@ -1,77 +1,60 @@
 import os
 import json
 import numpy as np
+import argparse
 
-GW_event_list = ["GW170817", "GW190425", "GW230529"]
+parser = argparse.ArgumentParser()
+parser.add_argument('--run-dir',
+                    type = str,
+                    required = True,
+                    help = "Directory containing all the runs as subdirs, and we will save the classification summary there as well.")
 
-# Save the text to a file as well:
-output_filename = "./bayes_factors.txt"
-
-# Empty the file at the start
-with open(output_filename, "w") as f:
-    f.write("Classification Summary of GW Events:\n\n")
+def main():
+    args = parser.parse_args()
+    run_dir = args.run_dir
+    if not os.path.exists(run_dir):
+        raise FileNotFoundError(f"The specified run directory does not exist: {run_dir}")
     
-for GW_event in GW_event_list:
-    base_path = f"../GW_runs/final_results/{GW_event}"
+    output_file = os.path.join(run_dir, "bayes_factors.txt")
+    subdirs = [d for d in os.listdir(run_dir) if os.path.isdir(os.path.join(run_dir, d))]
+    subdirs = [d for d in subdirs if "dag" not in d and "figures" not in d]
     
-    bns_results_filename = os.path.join(base_path, "bns/bns_result.json")
-    default_results_filename = os.path.join(base_path, "default/default_result.json")
-    nsbh_results_filename = os.path.join(base_path, "nsbh/nsbh_result.json")
+    print(f"Found {len(subdirs)} subdirectories in {run_dir}: {subdirs}.")
     
-    # Open them and load the Bayes factorr
-    try:
-        with open(bns_results_filename, "r") as f:
-            bns_result = json.load(f)
-            bf_bns = bns_result["log_bayes_factor"]
-    except FileNotFoundError:
-        print(f"File not found: {bns_results_filename}. Setting its Bayes factor to 0.0.")
-        bf_bns = 0.0
-    
-    try:
-        with open(default_results_filename, "r") as f:
-            default_result = json.load(f)
-            bf_default = default_result["log_bayes_factor"]
-    except FileNotFoundError:
-        print(f"File not found: {default_results_filename}. Setting its Bayes factor to 0.0.")
-        bf_default = 0.0
+    # Store all the rundir's Bayes factors in a dictionary
+    bf_dict = {}
+    for subdir in subdirs:
+        # Locate results file
+        full_dir = os.path.join(run_dir, subdir)
+        results_filename = os.path.join(full_dir, f"{subdir}_result.json")
         
-    try:
-        with open(nsbh_results_filename, "r") as f:
-            nsbh_result = json.load(f)
-            bf_nsbh = nsbh_result["log_bayes_factor"]
-    except FileNotFoundError:
-        print(f"File not found: {nsbh_results_filename}. Setting its Bayes factor to 0.0.")
-        bf_nsbh = 0.0
-    
-    # Print the Bayes factors
-    print(f"Checking source classification for {GW_event}:")
-    print(f"   Bayes factor for BNS: {bf_bns}")
-    print(f"   Bayes factor for default: {bf_default}")
-    print(f"   Bayes factor for NSBH: {bf_nsbh}")
-    
-    highest_bf = max(bf_bns, bf_default, bf_nsbh)
-    if highest_bf == bf_bns:
-        diff = bf_bns - max(bf_default, bf_nsbh)
-        diff_10 = diff / np.log(10)
-        print(f"{GW_event} is classified as BNS (diff ln BF = {diff:.2f}, diff log10 BF = {diff_10:.2f})\n\n")
-    elif highest_bf == bf_default:
-        diff = bf_default - max(bf_bns, bf_nsbh)
-        diff_10 = diff / np.log(10)
-        print(f"{GW_event} is classified as default (diff ln BF = {diff:.2f}, diff log10 BF = {diff_10:.2f})\n\n")
-    elif highest_bf == bf_nsbh:
-        diff = bf_nsbh - max(bf_bns, bf_default)
-        diff_10 = diff / np.log(10)
-        print(f"{GW_event} is classified as NSBH (diff ln BF = {diff:.2f}, diff log10 BF = {diff_10:.2f})\n\n")
+        if not os.path.exists(results_filename):
+            print(f"Results file not found for {subdir}: {results_filename}. Skipping this directory.")
+            continue
         
-    with open(output_filename, "a") as f:
-        f.write(f"Checking source classification for {GW_event}:\n")
-        f.write(f"   Bayes factor for BNS: {bf_bns}\n")
-        f.write(f"   Bayes factor for default: {bf_default}\n")
-        f.write(f"   Bayes factor for NSBH: {bf_nsbh}\n")
+        # Open them and load the Bayes factor
+        try:
+            with open(results_filename, "r") as f:
+                result = json.load(f)
+                ln_bf = result["log_bayes_factor"]
+        except FileNotFoundError:
+            print(f"File not found: {results_filename}. Setting its Bayes factor to 0.0.")
+            ln_bf = 0.0
+            
+        # Store it
+        bf_dict[subdir] = ln_bf
         
-        if highest_bf == bf_bns:
-            f.write(f"{GW_event} is classified as BNS (diff ln BF = {diff:.2f})\n\n")
-        elif highest_bf == bf_default:
-            f.write(f"{GW_event} is classified as default (diff ln BF = {diff:.2f})\n\n")
-        elif highest_bf == bf_nsbh:
-            f.write(f"{GW_event} is classified as NSBH (diff ln BF = {diff:.2f})\n\n")
+    # Sort all the Bayes factors from highest to lowest
+    sort_idx = np.argsort(list(bf_dict.values()))[::-1]
+    sorted_bf = {k: bf_dict[k] for k in np.array(list(bf_dict.keys()))[sort_idx]}
+    
+    # Save to the txt: one column is subdir, the other is the Bayes factor
+    with open(output_file, "w") as f:
+        f.write("Subdirectory\tLog Bayes Factor\n")
+        for subdir, ln_bf in sorted_bf.items():
+            f.write(f"{subdir}\t{ln_bf}\n")
+            
+    print("Saved Bayes factors to:", output_file)
+    
+if __name__ == "__main__":
+    main()

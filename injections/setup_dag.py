@@ -18,7 +18,6 @@ def create_subdirectories(run_dir,
     for prior in priors:
         subdir = os.path.join(run_dir, prior)
         os.makedirs(subdir, exist_ok=True)
-        print(f"Created directory: {subdir}")
 
 
 def modify_dag_file(run_dir, eos_samples_name='radio'):
@@ -36,6 +35,7 @@ def modify_dag_file(run_dir, eos_samples_name='radio'):
     if not os.path.exists(sub_path):
         raise FileNotFoundError(f"Template file not found: {sub_path}")
     
+    # TODO: this can be unified with the priors in the function above to sync and make it one function -- more streamlined
     # Create new DAG content
     dag_content = f"""JOB run_a {sub_path}
 VARS run_a run_dir="{run_dir}" prior_name="bns" eos_samples_name="{eos_samples_name}"
@@ -44,9 +44,9 @@ VARS run_b run_dir="{run_dir}" prior_name="nsbh" eos_samples_name="{eos_samples_
 JOB run_c {sub_path}
 VARS run_c run_dir="{run_dir}" prior_name="default" eos_samples_name="{eos_samples_name}"
 JOB run_d {sub_path}
-VARS run_d run_dir="{run_dir}" prior_name="default_primary" eos_samples_name="{eos_samples_name}"
+VARS run_d run_dir="{run_dir}" prior_name="default_nsbh" eos_samples_name="{eos_samples_name}"
 JOB run_e {sub_path}
-VARS run_e run_dir="{run_dir}" prior_name="default_primary_nsbh" eos_samples_name="{eos_samples_name}"
+VARS run_e run_dir="{run_dir}" prior_name="default_nsbh_primary" eos_samples_name="{eos_samples_name}"
 JOB run_f {sub_path}
 VARS run_f run_dir="{run_dir}" prior_name="bbh" eos_samples_name="{eos_samples_name}"
 """

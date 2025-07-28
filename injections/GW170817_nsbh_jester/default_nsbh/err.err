@@ -1,0 +1,113 @@
+22:44 bilby INFO    : You are running on the Nikhef cluster, setting paths accordingly.
+22:44 bilby INFO    : Output directory set to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default_nsbh
+22:44 bilby INFO    : Loading injection parameters from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/injection_parameters.json
+22:44 bilby INFO    : Injection parameters:
+22:44 bilby INFO    :   chirp_mass: 1.197537639260543
+22:44 bilby INFO    :   mass_ratio: 0.8641172053705731
+22:44 bilby INFO    :   luminosity_distance: 38.07152942880151
+22:44 bilby INFO    :   a_1: 0.021540277479414695
+22:44 bilby INFO    :   a_2: 0.021072244772762056
+22:44 bilby INFO    :   tilt_1: 1.4498899386568587
+22:44 bilby INFO    :   tilt_2: 1.4453364947888132
+22:44 bilby INFO    :   phi_12: 3.1792853888042205
+22:44 bilby INFO    :   phi_jl: 3.003919422678343
+22:44 bilby INFO    :   dec: -0.3586425106486367
+22:44 bilby INFO    :   ra: 3.420702985286708
+22:44 bilby INFO    :   theta_jn: 2.5637364933960782
+22:44 bilby INFO    :   psi: 1.5623250252173946
+22:44 bilby INFO    :   phase: 2.9695069368745304
+22:44 bilby INFO    :   geocent_time: 1187008882.43
+22:44 bilby INFO    :   mass_1: 1.4806084510880273
+22:44 bilby INFO    :   mass_2: 1.279419237002239
+22:44 bilby INFO    :   mass_1_source: 1.4680615723234944
+22:44 bilby INFO    :   mass_2_source: 1.2685772631881074
+22:44 bilby INFO    :   lambda_1: 0.01
+22:44 bilby INFO    :   lambda_2: 494.6449830849099
+22:44 bilby INFO    :   lambda_tilde: 193.98795394594137
+22:44 bilby INFO    :   delta_lambda_tilde: 84.36192206065176
+22:44 bilby INFO    : Merger frequency: 2204.86 Hz
+22:44 bilby INFO    : 1.2 × merger frequency: 2645.84 Hz
+22:44 bilby INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+22:44 bilby INFO    : Duration: 128.0s
+22:44 bilby INFO    : Sampling frequency: 4096.0 Hz
+22:44 bilby INFO    : Minimum frequency: 23.1 Hz
+22:44 bilby INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+22:44 bilby INFO    : Reference merger frequency: 2204.86 Hz
+22:44 bilby INFO    : Reference parameters for PE:
+22:44 bilby INFO    : chirp_mass: 1.197537639260543
+22:44 bilby INFO    : mass_ratio: 0.8641172053705731
+22:44 bilby INFO    : luminosity_distance: 38.07152942880151
+22:44 bilby INFO    : a_1: 0.021540277479414695
+22:44 bilby INFO    : a_2: 0.021072244772762056
+22:44 bilby INFO    : tilt_1: 1.4498899386568587
+22:44 bilby INFO    : tilt_2: 1.4453364947888132
+22:44 bilby INFO    : phi_12: 3.1792853888042205
+22:44 bilby INFO    : phi_jl: 3.003919422678343
+22:44 bilby INFO    : dec: -0.3586425106486367
+22:44 bilby INFO    : ra: 3.420702985286708
+22:44 bilby INFO    : theta_jn: 2.5637364933960782
+22:44 bilby INFO    : psi: 1.5623250252173946
+22:44 bilby INFO    : phase: 2.9695069368745304
+22:44 bilby INFO    : geocent_time: 1187008882.43
+22:44 bilby INFO    : mass_1: 1.4806084510880273
+22:44 bilby INFO    : mass_2: 1.279419237002239
+22:44 bilby INFO    : mass_1_source: 1.4680615723234944
+22:44 bilby INFO    : mass_2_source: 1.2685772631881074
+22:44 bilby INFO    : lambda_1: 0.01
+22:44 bilby INFO    : lambda_2: 494.6449830849099
+22:44 bilby INFO    : lambda_tilde: 193.98795394594137
+22:44 bilby INFO    : delta_lambda_tilde: 84.36192206065176
+22:44 bilby INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/prior.prior
+22:44 bilby INFO    : Using the default priors but with the NSBH assumption (i.e., lambda_1 = 0.0)
+22:44 bilby INFO    : Going to show priors:
+22:44 bilby INFO    :       chirp_mass: Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
+22:44 bilby INFO    :       mass_ratio: Uniform(minimum=0.5, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
+22:44 bilby INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
+22:44 bilby INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+22:44 bilby INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+22:44 bilby INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+22:44 bilby INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+22:44 bilby INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+22:44 bilby INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+22:44 bilby INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+22:44 bilby INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+22:44 bilby INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+22:44 bilby INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+22:44 bilby INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+22:44 bilby INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+22:44 bilby INFO    :       lambda_1: DeltaFunction(peak=0.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+22:44 bilby INFO    :       lambda_2: Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
+22:44 bilby INFO    : Setting up interferometers: ['H1', 'L1', 'V1']
+22:44 bilby INFO    : Setting up PSDs...
+22:44 bilby INFO    : Loading event-specific PSDs...
+22:44 bilby INFO    : Loading PSD for H1 from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/h1_psd.txt
+22:44 bilby INFO    : Loading PSD for L1 from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/l1_psd.txt
+22:44 bilby INFO    : Loading PSD for V1 from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/v1_psd.txt
+22:44 bilby INFO    : Generating injection...
+XLAL Error - IMRPhenomXSetWaveformVariables (LALSimIMRPhenomX_internals.c:327): lambda1 = -0.000000, lambda2 = 494.644983. Both should be greater than zero for NRTidalv2 and NRTidalv3
+XLAL Error - IMRPhenomXSetWaveformVariables (LALSimIMRPhenomX_internals.c:327): Internal function call failed
+XLAL Error - XLALSimIMRPhenomXPHM (LALSimIMRPhenomXPHM.c:278): Error: IMRPhenomXSetWaveformVariables failed.
+
+XLAL Error - XLALSimIMRPhenomXPHM (LALSimIMRPhenomXPHM.c:278): Internal function call failed
+XLAL Error - XLALSimInspiralChooseFDWaveform_legacy (LALSimInspiralGeneratorLegacy.c:2503): Internal function call failed
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/inject.py", line 434, in <module>
+    ifos.inject_signal(waveform_generator=waveform_generator, 
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/detector/networks.py", line 165, in inject_signal
+    injection_polarizations = waveform_generator.frequency_domain_strain(
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/waveform_generator.py", line 131, in frequency_domain_strain
+    return self._calculate_strain(model=self.frequency_domain_source_model,
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/waveform_generator.py", line 176, in _calculate_strain
+    model_strain = self._strain_from_model(model_data_points, model)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/waveform_generator.py", line 189, in _strain_from_model
+    return model(model_data_points, **self.parameters)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/source.py", line 422, in lal_binary_neutron_star
+    return _base_lal_cbc_fd_waveform(
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/source.py", line 631, in _base_lal_cbc_fd_waveform
+    hplus, hcross = wf_func(
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/utils.py", line 705, in lalsim_SimInspiralChooseFDWaveform
+    return SimInspiralChooseFDWaveform(*args, waveform_dictionary, approximant)
+RuntimeError: Internal function call failed

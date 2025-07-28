@@ -4,3 +4,9 @@ JOB run_b /data/gravwav/twouters/projects/eos_source_classification/eos_source_c
 VARS run_b run_dir="GW190425_nsbh_jester/" prior_name="nsbh" eos_samples_name="radio"
 JOB run_c /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/analysis.sub
 VARS run_c run_dir="GW190425_nsbh_jester/" prior_name="default" eos_samples_name="radio"
+JOB run_d /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/analysis.sub
+VARS run_d run_dir="GW190425_nsbh_jester/" prior_name="default_nsbh" eos_samples_name="radio"
+JOB run_e /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/analysis.sub
+VARS run_e run_dir="GW190425_nsbh_jester/" prior_name="default_nsbh_primary" eos_samples_name="radio"
+JOB run_f /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/analysis.sub
+VARS run_f run_dir="GW190425_nsbh_jester/" prior_name="bbh" eos_samples_name="radio"

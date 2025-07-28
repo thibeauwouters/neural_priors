@@ -9,13 +9,13 @@ from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lamb
 from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
 
 params = {"axes.grid": True,
-        "text.usetex" : True,
+        # "text.usetex" : True,
         "font.family" : "serif",
         "ytick.color" : "black",
         "xtick.color" : "black",
         "axes.labelcolor" : "black",
         "axes.edgecolor" : "black",
-        "font.serif" : ["Computer Modern Serif"],
+        # "font.serif" : ["Computer Modern Serif"],
         "xtick.labelsize": 16,
         "ytick.labelsize": 16,
         "axes.labelsize": 16,
@@ -38,7 +38,7 @@ default_corner_kwargs = dict(bins=40,
                         fill_contours=True,
                         max_n_ticks=4, 
                         min_n_ticks=3,
-                        truth_color = "red",
+                        truth_color = "black",
                         save=False)
 
 DEFAULT_COLOR = 'blue'
@@ -70,13 +70,14 @@ LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
               }
 
 def create_corner_plot(GW_event: str,
+                       base_path: str = "../GW_runs/final_results",
                        plot_all_params: bool = False,
                        plot_default: bool = False,
                        convert_lambdas: bool = True,
-                       plot_hauke: bool = True,
-                       plot_hauke_EM: bool = True,
-                       plot_adrian: bool = True,
-                       prevent_bns_leakage: bool = True):
+                       plot_hauke: bool = False,
+                       plot_hauke_EM: bool = False,
+                       plot_adrian: bool = False,
+                       prevent_bns_leakage: bool = False):
     """
     Create a corner plot comparing posterior samples from BNS, Default, and NSBH runs for a given GW event.
     
@@ -91,8 +92,13 @@ def create_corner_plot(GW_event: str,
         prevent_bns_leakage (bool): If True, prevent BNS leakage by masking samples with negative delta_lambda_tilde.
     """
     
+    # Check whether this is for real events or from the injection runs
+    if "injection" in base_path:
+        injection_run = True
+    else:
+        injection_run = False
+    
     # Load result files
-    base_path = f"../GW_runs/final_results/{GW_event}"
     bns_results_filename = os.path.join(base_path, "bns/bns_result.json")
     default_results_filename = os.path.join(base_path, "default/default_result.json")
     nsbh_results_filename = os.path.join(base_path, "nsbh/nsbh_result.json")
@@ -211,7 +217,6 @@ def create_corner_plot(GW_event: str,
     default_samples = np.array(default_data).T  
     nsbh_samples = np.array(nsbh_data).T
     
-    
     # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
     if 'delta_lambda_tilde' in params_to_plot and prevent_bns_leakage:
         delta_lambda_tilde_index = labels.index('delta_lambda_tilde')
@@ -265,8 +270,17 @@ def create_corner_plot(GW_event: str,
     nsbh_kwargs = corner_kwargs_with_range.copy()
     nsbh_kwargs.update({'color': NSBH_COLOR, 'hist_kwargs': {'color': NSBH_COLOR, 'density': use_density}})
 
+    # If this was an injection, locate the truth values
+    if injection_run:
+        truths_filename = os.path.join(base_path, "injection_parameters.json")
+        with open(truths_filename, "r") as f:
+            truths_dict = json.load(f)
+        truths = [truths_dict[k] for k in params_to_plot]
+    else:
+        truths = None
+
     # Create the overlaid corner plot
-    fig = corner.corner(bns_samples, labels=latex_labels, **bns_kwargs)
+    fig = corner.corner(bns_samples, labels=latex_labels, truths=truths, **bns_kwargs)
     corner.corner(nsbh_samples, labels=latex_labels, fig=fig, **nsbh_kwargs)
     if plot_default:
         corner.corner(default_samples, labels=latex_labels, fig=fig, **default_kwargs)
@@ -359,31 +373,34 @@ def create_corner_plot(GW_event: str,
         y -= dy
         plt.text(x, y, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
-    os.makedirs(f'./figures/{GW_event}', exist_ok=True)
-    save_name = f'./figures/{GW_event}/corner' + \
+    # Save the figure
+    output_dir = os.path.join(base_path, "figures")
+    os.makedirs(output_dir, exist_ok=True)
+    save_name = 'corner' + \
             ('_all' if plot_all_params else '') + \
             ('_default' if plot_default else '') + \
             ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
             ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
             ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
             ('_tilde' if convert_lambdas else '') + '.pdf'
+    save_name = os.path.join(output_dir, f"{save_name}")
             
     print(f"\nSaving corner plot to {save_name}\n")
     plt.savefig(save_name, dpi=300, bbox_inches='tight')
     plt.close()
     
-def main():
+def real_events():
     
-    GW_event_list = ["GW170817",
+    GW_event_list = ["HV/GW170817",
                     #  "GW190425",
                     #  "GW230529",
                     ]
     
     # for plot_all_params in [True, False]:
     for plot_default in [True, False]:
-        for plot_adrian in [True, False]:
-            for plot_hauke in [True, False]:
-                for plot_hauke_EM in [True, False]:
+        for plot_adrian in [False]:
+            for plot_hauke in [False]:
+                for plot_hauke_EM in [False]:
                     for convert_lambdas in [True, False]:
                         for GW_event in GW_event_list:  
                             settings = dict(plot_all_params=False,
@@ -392,10 +409,40 @@ def main():
                                             plot_hauke=plot_hauke,
                                             plot_hauke_EM=plot_hauke_EM,
                                             plot_adrian=plot_adrian,
-                                            prevent_bns_leakage=False,
+                                            base_path=os.path.join("../GW_runs/", GW_event)
                                             )
                             print(f"Creating corner plot for {GW_event} with settings: {settings}")
                             create_corner_plot(GW_event, **settings)
+                            
+def injections():
+    
+    base_path_list = ["../injections/GW170817_bns_jester/",
+                      #"../injections/GW170817_nsbh_jester/"
+                      "../injections/GW190425_bns_jester/",
+                      "../injections/GW190425_nsbh_jester/"
+                    ]
+    
+    # for plot_all_params in [True, False]:
+    for plot_default in [True, False]:
+        for convert_lambdas in [True, False]:
+            for base_path in base_path_list:
+                
+                # Get GW event id from this path
+                GW_event = base_path_list[0].split("/")[-2].split("_")[0]
+                
+                # Build settings
+                settings = dict(plot_all_params=False,
+                                plot_default=plot_default,
+                                convert_lambdas=convert_lambdas,
+                                base_path=base_path
+                                )
+                print(f"Creating corner plot for {base_path} with settings: {settings}")
+                create_corner_plot(GW_event, **settings)
+                
+def main():
+    # Uncomment the function you want to run
+    # real_events()
+    injections()
             
 if __name__ == "__main__":
     main()

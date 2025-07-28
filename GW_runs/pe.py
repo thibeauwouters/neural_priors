@@ -83,6 +83,13 @@ parser.add_argument('--minimum-bin-threshold',
                     type = int,
                     default = 1000,
                     help = "The minimum number of bins allowed to have, otherwise rerun the bin construction method in uu_relative_binning.")
+parser.add_argument('--GW170817-HV',
+                    action = 'store_true',
+                    help = "Run GW170817 only with HV, not HLV")
+parser.add_argument('--output-dir',
+                    type = str,
+                    default = '',
+                    help = "Base path, with subdirs being the priors, to which we store the results. If empty, will use the current working directory.")
 parser.add_argument('--seed', 
                     type = int,
                     default = 2024,
@@ -135,7 +142,7 @@ EVENT_CONFIG = {
 ################
 
 # Check if some of the given arguments are valid
-SUPPORTED_PRIORS = ['default', 'default_nsbh', 'default_nsbh_primary', 'bns', 'nsbh']
+SUPPORTED_PRIORS = ['default', 'default_nsbh', 'default_nsbh_primary', 'bns', 'nsbh', 'bbh']
 SUPPORTED_EVENTS = list(EVENT_CONFIG.keys())
 
 if args.prior_name not in SUPPORTED_PRIORS:
@@ -160,12 +167,19 @@ def detect_environment() -> str:
         return base_dir
 
 base_dir = detect_environment()
-cwd = os.getcwd()
 from LikelihoodRB import RelBinning
 
-full_outdir = os.path.join(cwd, args.label, args.prior_name)
-reference_parameters_filename = os.path.join(cwd, args.label, "reference_parameters.json")
-prior_filename = os.path.join(cwd, args.label, "prior.prior")
+output_dir = args.output_dir
+if len(output_dir) == 0:
+    # If no output directory is given, use the current working directory
+    output_dir = os.getcwd()
+    logger.info("No output directory provided, using current working directory.")
+    
+logger.info(f"Output directory is set to: {output_dir}. Make sure it exists!")
+
+full_outdir = os.path.join(output_dir, args.label, args.prior_name)
+reference_parameters_filename = os.path.join(output_dir, args.label, "reference_parameters.json")
+prior_filename = os.path.join(output_dir, args.label, "prior.prior")
     
 bilby.core.utils.setup_logger(outdir=full_outdir, label=args.label)
 logger.info(f"We set full_outdir to {full_outdir}")
@@ -182,6 +196,10 @@ with open(reference_parameters_filename, 'r') as f:
 
 # Get event configuration
 event_config = EVENT_CONFIG[args.label]
+if args.label == 'GW170817' and args.GW170817_HV:
+    # If we only want to use HV, then we change the ifo_list -- this is mainly to understand what is going on here
+    logger.info("Running GW170817 with only H1 and V1 interferometers")
+    event_config['ifo_list'] = ['H1', 'V1']
 ifo_list = event_config['ifo_list']
 duration = event_config['duration']
 minimum_frequency = event_config['minimum_frequency']
