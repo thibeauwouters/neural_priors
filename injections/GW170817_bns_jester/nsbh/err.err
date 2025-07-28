@@ -211,3 +211,23 @@
 23:46 bilby INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/nsbh/nsbh_resume.pickle does not exist.
 23:46 bilby INFO    : Generating initial points from the prior
 23:46 bilby INFO    : Generating initial points from the prior DONE
+00:46 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/nsbh/nsbh_resume.pickle
+/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
+/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
+01:47 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/nsbh/nsbh_resume.pickle
+02:47 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/nsbh/nsbh_resume.pickle
+03:48 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/nsbh/nsbh_resume.pickle
+04:34 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/nsbh/nsbh_resume.pickle
+04:34 bilby INFO    : Starting to close worker pool.
+04:34 bilby INFO    : Finished closing worker pool.
+04:34 bilby INFO    : Rejection sampling nested samples to obtain 5356 posterior samples
+04:34 bilby INFO    : Sampling time: 4:47:55.577255
+04:34 bilby INFO    : Summary of results:
+nsamples: 5356
+ln_noise_evidence: -779468.475
+ln_evidence: -778963.075 +/-  0.197
+ln_bayes_factor: 505.401 +/-  0.197
+
+04:34 bilby INFO    : Parameter estimation complete! Results saved to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/nsbh

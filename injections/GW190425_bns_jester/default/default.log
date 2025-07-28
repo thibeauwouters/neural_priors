@@ -190,3 +190,15 @@
 23:48 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_bns_jester/default/default_resume.pickle does not exist.
 23:48 INFO    : Generating initial points from the prior
 23:48 INFO    : Generating initial points from the prior DONE
+00:21 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_bns_jester/default/default_resume.pickle
+00:21 INFO    : Starting to close worker pool.
+00:21 INFO    : Finished closing worker pool.
+00:21 INFO    : Rejection sampling nested samples to obtain 5312 posterior samples
+00:21 INFO    : Sampling time: 0:33:25.191562
+00:21 INFO    : Summary of results:
+nsamples: 5312
+ln_noise_evidence: -520203.048
+ln_evidence: -520163.029 +/-  0.155
+ln_bayes_factor: 40.019 +/-  0.155
+
+00:21 INFO    : Parameter estimation complete! Results saved to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_bns_jester/default

@@ -13,3 +13,51 @@
 	285  -  MemoryUsage of job (MB)
 	290860  -  ResidentSetSize of job (KB)
 ...
+006 (2560988.000.000) 2025-07-27 23:52:50 Image size of job updated: 1035988
+	1012  -  MemoryUsage of job (MB)
+	1035988  -  ResidentSetSize of job (KB)
+...
+006 (2560988.000.000) 2025-07-27 23:57:51 Image size of job updated: 1061440
+	1037  -  MemoryUsage of job (MB)
+	1061440  -  ResidentSetSize of job (KB)
+...
+006 (2560988.000.000) 2025-07-28 00:02:52 Image size of job updated: 1069488
+	1045  -  MemoryUsage of job (MB)
+	1069488  -  ResidentSetSize of job (KB)
+...
+006 (2560988.000.000) 2025-07-28 00:07:52 Image size of job updated: 1075236
+	1051  -  MemoryUsage of job (MB)
+	1075236  -  ResidentSetSize of job (KB)
+...
+006 (2560988.000.000) 2025-07-28 00:12:52 Image size of job updated: 1079908
+	1055  -  MemoryUsage of job (MB)
+	1079908  -  ResidentSetSize of job (KB)
+...
+006 (2560988.000.000) 2025-07-28 00:17:53 Image size of job updated: 1085252
+	1060  -  MemoryUsage of job (MB)
+	1085252  -  ResidentSetSize of job (KB)
+...
+006 (2560988.000.000) 2025-07-28 00:21:55 Image size of job updated: 1789720
+	1060  -  MemoryUsage of job (MB)
+	1085252  -  ResidentSetSize of job (KB)
+...
+005 (2560988.000.000) 2025-07-28 00:21:55 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 22:50:57, Sys 0 00:00:43  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 22:50:57, Sys 0 00:00:43  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     2.59       64        64 
+	   Disk (KB)            : 17500    16777216  16780525 
+	   GPUs                 :                           0 
+	   Memory (MB)          :  1060       16384     16384 
+	   TimeExecute (s)      :  2058                       
+	   TimeSlotBusy (s)     :  2059                       
+
+	Job terminated of its own accord at 2025-07-27T22:21:55Z with exit-code 0.
+...

@@ -210,3 +210,19 @@
 23:46 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/bns/bns_resume.pickle does not exist.
 23:46 INFO    : Generating initial points from the prior
 23:46 INFO    : Generating initial points from the prior DONE
+00:46 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/bns/bns_resume.pickle
+01:47 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/bns/bns_resume.pickle
+02:47 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/bns/bns_resume.pickle
+03:48 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/bns/bns_resume.pickle
+04:03 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/bns/bns_resume.pickle
+04:03 INFO    : Starting to close worker pool.
+04:03 INFO    : Finished closing worker pool.
+04:03 INFO    : Rejection sampling nested samples to obtain 5240 posterior samples
+04:03 INFO    : Sampling time: 4:17:29.877167
+04:04 INFO    : Summary of results:
+nsamples: 5240
+ln_noise_evidence: -779468.475
+ln_evidence: -778962.853 +/-  0.209
+ln_bayes_factor: 505.622 +/-  0.209
+
+04:04 INFO    : Parameter estimation complete! Results saved to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_bns_jester/bns

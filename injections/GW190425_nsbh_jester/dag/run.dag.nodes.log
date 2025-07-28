@@ -31,3 +31,63 @@
 	GPUs = 0
 	Memory = 16384
 ...
+005 (2560985.000.000) 2025-07-28 03:22:44 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 6 01:03:59, Sys 0 00:01:39  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 6 01:03:59, Sys 0 00:01:39  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     2.62       64        64 
+	   Disk (KB)            : 17500    16777216  16780562 
+	   GPUs                 :                           0 
+	   Memory (MB)          :  1864       16384     16384 
+	   TimeExecute (s)      : 12907                       
+	   TimeSlotBusy (s)     : 12908                       
+
+	Job terminated of its own accord at 2025-07-28T01:22:44Z with exit-code 0.
+...
+005 (2560983.000.000) 2025-07-28 03:32:34 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 6 12:42:00, Sys 0 00:01:46  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 6 12:42:00, Sys 0 00:01:46  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     2.43       64        64 
+	   Disk (KB)            : 17500    16777216  16780525 
+	   GPUs                 :                           0 
+	   Memory (MB)          :  2188       16384     16384 
+	   TimeExecute (s)      : 13497                       
+	   TimeSlotBusy (s)     : 13498                       
+
+	Job terminated of its own accord at 2025-07-28T01:32:34Z with exit-code 0.
+...
+005 (2560984.000.000) 2025-07-28 03:39:40 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 6 22:43:53, Sys 0 00:01:48  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 6 22:43:53, Sys 0 00:01:48  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.69       64        64 
+	   Disk (KB)            : 17500    16777216  16780528 
+	   GPUs                 :                           0 
+	   Memory (MB)          :  2410       16384     16384 
+	   TimeExecute (s)      : 13923                       
+	   TimeSlotBusy (s)     : 13924                       
+
+	Job terminated of its own accord at 2025-07-28T01:39:40Z with exit-code 0.
+...

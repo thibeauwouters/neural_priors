@@ -213,3 +213,18 @@
 23:48 INFO    : Setting up multiproccesing pool with 64 processes
 23:48 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default/default_resume.pickle does not exist.
 23:48 INFO    : Generating initial points from the prior
+23:49 INFO    : Generating initial points from the prior DONE
+00:49 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default/default_resume.pickle
+00:49 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+00:49 WARNING : Failed to create dynesty state plot at checkpoint
+00:49 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+00:49 WARNING : Failed to create dynesty unit state plot at checkpoint
+00:49 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+00:49 WARNING : Failed to create dynesty run plot at checkpoint
+01:50 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default/default_resume.pickle
+02:50 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default/default_resume.pickle
+03:51 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default/default_resume.pickle
+04:51 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default/default_resume.pickle
+05:52 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default/default_resume.pickle
+06:53 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default/default_resume.pickle
+07:54 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_nsbh_jester/default/default_resume.pickle

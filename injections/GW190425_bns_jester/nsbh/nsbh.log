@@ -194,3 +194,16 @@
 23:48 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_bns_jester/nsbh/nsbh_resume.pickle does not exist.
 23:48 INFO    : Generating initial points from the prior
 23:48 INFO    : Generating initial points from the prior DONE
+00:48 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_bns_jester/nsbh/nsbh_resume.pickle
+00:50 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_bns_jester/nsbh/nsbh_resume.pickle
+00:50 INFO    : Starting to close worker pool.
+00:50 INFO    : Finished closing worker pool.
+00:50 INFO    : Rejection sampling nested samples to obtain 5206 posterior samples
+00:50 INFO    : Sampling time: 1:02:15.130764
+00:50 INFO    : Summary of results:
+nsamples: 5206
+ln_noise_evidence: -520203.048
+ln_evidence: -520162.362 +/-  0.147
+ln_bayes_factor: 40.686 +/-  0.147
+
+00:50 INFO    : Parameter estimation complete! Results saved to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_bns_jester/nsbh

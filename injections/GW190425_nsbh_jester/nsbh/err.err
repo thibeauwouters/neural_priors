@@ -204,3 +204,19 @@
 23:49 bilby INFO    : Setting up multiproccesing pool with 64 processes
 23:49 bilby INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_nsbh_jester/nsbh/nsbh_resume.pickle does not exist.
 23:49 bilby INFO    : Generating initial points from the prior
+23:49 bilby INFO    : Generating initial points from the prior DONE
+00:49 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_nsbh_jester/nsbh/nsbh_resume.pickle
+01:50 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_nsbh_jester/nsbh/nsbh_resume.pickle
+02:50 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_nsbh_jester/nsbh/nsbh_resume.pickle
+03:39 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_nsbh_jester/nsbh/nsbh_resume.pickle
+03:39 bilby INFO    : Starting to close worker pool.
+03:39 bilby INFO    : Finished closing worker pool.
+03:39 bilby INFO    : Rejection sampling nested samples to obtain 5079 posterior samples
+03:39 bilby INFO    : Sampling time: 3:49:45.065710
+03:39 bilby INFO    : Summary of results:
+nsamples: 5079
+ln_noise_evidence: -520210.446
+ln_evidence: -520164.517 +/-  0.154
+ln_bayes_factor: 45.929 +/-  0.154
+
+03:39 bilby INFO    : Parameter estimation complete! Results saved to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW190425_nsbh_jester/nsbh

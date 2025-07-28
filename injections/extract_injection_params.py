@@ -97,6 +97,9 @@ def main(args):
     median_params['mass_2'] = m2
     m1_src = m1 / (1 + z)
     m2_src = m2 / (1 + z)
+    
+    median_params['mass_1_source'] = m1_src
+    median_params['mass_2_source'] = m2_src
     print(f"Source-frame component masses: m1 = {m1_src:.2f} M_sun, m2 = {m2_src:.2f} M_sun")
     
     # Compute the tidal deformabilities, first, load the EOS
