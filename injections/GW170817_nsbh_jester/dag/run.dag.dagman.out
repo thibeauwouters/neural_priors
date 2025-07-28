@@ -575,3 +575,37 @@
 07/28/25 08:47:48      Idle     Held     Running     Successful     Failed
 07/28/25 08:47:48       ===      ===         ===            ===        ===
 07/28/25 08:47:48         0        0           2              1          0
+07/28/25 08:54:58 2403 seconds since last log event
+07/28/25 08:54:58 Pending DAG nodes:
+07/28/25 08:54:58   Node run_a, HTCondor ID 2560978, status STATUS_SUBMITTED
+07/28/25 08:54:58   Node run_b, HTCondor ID 2560979, status STATUS_SUBMITTED
+07/28/25 09:02:49 Total jobs placed to AP: 3
+07/28/25 09:02:49      Idle     Held     Running     Successful     Failed
+07/28/25 09:02:49       ===      ===         ===            ===        ===
+07/28/25 09:02:49         0        0           2              1          0
+07/28/25 09:04:59 3004 seconds since last log event
+07/28/25 09:04:59 Pending DAG nodes:
+07/28/25 09:04:59   Node run_a, HTCondor ID 2560978, status STATUS_SUBMITTED
+07/28/25 09:04:59   Node run_b, HTCondor ID 2560979, status STATUS_SUBMITTED
+07/28/25 09:13:07 Received SIGUSR1
+07/28/25 09:13:07 Aborting DAG...
+07/28/25 09:13:07 Writing Rescue DAG to GW170817_nsbh_jester/dag/run.dag.rescue001...
+07/28/25 09:13:07 Removing submitted jobs...
+07/28/25 09:13:07 Removing any/all submitted HTCondor jobs...
+07/28/25 09:13:07 Running: /usr/bin/condor_rm -const DAGManJobId==2560977 -reason DAG' 'Removed:' 'User' 'removed' 'scheduler' 'job' 'from' 'queue.
+07/28/25 09:13:07 Note: 0 total node deferrals because of -MaxJobs limit (0)
+07/28/25 09:13:07 Note: 0 total node deferrals because of -MaxIdle limit (1000)
+07/28/25 09:13:07 Note: 0 total node deferrals because of node category throttles
+07/28/25 09:13:07 Note: 0 total PRE script deferrals because of -MaxPre limit (20) or DEFER
+07/28/25 09:13:07 Note: 0 total POST script deferrals because of -MaxPost limit (20) or DEFER
+07/28/25 09:13:07 Note: 0 total HOLD script deferrals because of -MaxHold limit (20) or DEFER
+07/28/25 09:13:07 DAG status: 4 (DAG_STATUS_RM)
+07/28/25 09:13:07 Of 3 nodes total:
+07/28/25 09:13:07  Done     Pre   Queued    Post   Ready   Un-Ready   Failed   Futile
+07/28/25 09:13:07   ===     ===      ===     ===     ===        ===      ===      ===
+07/28/25 09:13:07     1       0        2       0       0          0        0        0
+07/28/25 09:13:07 0 job proc(s) currently held
+07/28/25 09:13:07 DAGMan Runtime Statistics: [EventCycleTimeAvg=0.000; EventCycleTimeMax=0.122; EventCycleTimeMin=0.000; EventCycleTimeStd=0.002; EventCycleTimeSum=2.643; SleepCycleTimeAvg=5.005; SleepCycleTimeMax=5.085; SleepCycleTimeMin=4.005; SleepCycleTimeStd=0.018; SleepCycleTimeSum=33946.207; SubmitCycleTimeAvg=0.000; SubmitCycleTimeMax=0.032; SubmitCycleTimeMin=0.000; SubmitCycleTimeStd=0.000; SubmitCycleTimeSum=0.070; EventCycleTimeCount=6784.000; SleepCycleTimeCount=6783.000; SubmitCycleTimeCount=6784.000; LogProcessCycleTimeAvg=0.006; LogProcessCycleTimeMax=0.012; LogProcessCycleTimeMin=0.003; LogProcessCycleTimeStd=0.005; LogProcessCycleTimeSum=0.019; LogProcessCycleTimeCount=3.000; ]
+07/28/25 09:13:07 Wrote metrics file GW170817_nsbh_jester/dag/run.dag.metrics.
+07/28/25 09:13:07 DAGMan Runtime Statistics: [EventCycleTimeAvg=0.000; EventCycleTimeMax=0.122; EventCycleTimeMin=0.000; EventCycleTimeStd=0.002; EventCycleTimeSum=2.643; SleepCycleTimeAvg=5.005; SleepCycleTimeMax=5.085; SleepCycleTimeMin=4.005; SleepCycleTimeStd=0.018; SleepCycleTimeSum=33946.207; SubmitCycleTimeAvg=0.000; SubmitCycleTimeMax=0.032; SubmitCycleTimeMin=0.000; SubmitCycleTimeStd=0.000; SubmitCycleTimeSum=0.070; EventCycleTimeCount=6784.000; SleepCycleTimeCount=6783.000; SubmitCycleTimeCount=6784.000; LogProcessCycleTimeAvg=0.006; LogProcessCycleTimeMax=0.012; LogProcessCycleTimeMin=0.003; LogProcessCycleTimeStd=0.005; LogProcessCycleTimeSum=0.019; LogProcessCycleTimeCount=3.000; ]
+07/28/25 09:13:07 **** condor_scheduniv_exec.2560977.0 (condor_DAGMAN) pid 3883721 EXITING WITH STATUS 2

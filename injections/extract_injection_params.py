@@ -130,7 +130,8 @@ def main(args):
         print(f"    {key}: {value}")
         
     # Save to a directory with a name uniquely built from the most important settings put here
-    dir_name = f"./{args.GW_event}_{args.source_type}_{args.eos_name}"
+    # TODO: this is hardcoded to jester for now!
+    dir_name = f"./{args.GW_event}_{args.source_type}_jester"
     os.makedirs(dir_name, exist_ok=True)
     
     # Put the parameters into a JSON file
