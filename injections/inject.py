@@ -130,8 +130,7 @@ EVENT_CONFIG = {
 ################
 
 # Check if some of the given arguments are valid
-SUPPORTED_PRIORS = ['default', 'bns', 'nsbh']
-
+SUPPORTED_PRIORS = ['default', 'default_nsbh', 'default_nsbh_primary', 'bns', 'nsbh', 'bbh']
 if args.prior_name not in SUPPORTED_PRIORS:
     raise ValueError(f"Invalid prior name provided. Please provide one of {SUPPORTED_PRIORS}")
 
@@ -309,6 +308,36 @@ if args.prior_name == "default":
     # Lambdas are not in the prior files, so we add them manually here
     priors["lambda_1"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$')
     priors["lambda_2"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$')
+    
+elif args.prior_name == "default_nsbh":
+    logger.info("Using the default priors but with the NSBH assumption (i.e., lambda_1 = 0.0)")
+    
+    # Build PriorDict straight from all given priors
+    priors = bilby.core.prior.PriorDict(prior_dict)
+    
+    # Lambdas are not in the prior files, so we add them manually here
+    priors["lambda_1"] = DeltaFunction(0.0, name='lambda_1', latex_label='$\Lambda_1$')
+    priors["lambda_2"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\Lambda_2$')
+    
+elif args.prior_name == "default_nsbh_primary":
+    logger.info("Using the default priors but with the NSBH assumption, where the NS is the primary (i.e., lambda_2 = 0.0)")
+    
+    # Build PriorDict straight from all given priors
+    priors = bilby.core.prior.PriorDict(prior_dict)
+    
+    # Lambdas are not in the prior files, so we add them manually here
+    priors["lambda_1"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\Lambda_1$')
+    priors["lambda_2"] = DeltaFunction(0.0, name='lambda_2', latex_label='$\Lambda_2$')
+    
+elif args.prior_name == "bbh":
+    logger.info("Using the default priors but with the NSBH assumption, where the NS is the primary (i.e., lambda_2 = 0.0)")
+    
+    # Build PriorDict straight from all given priors
+    priors = bilby.core.prior.PriorDict(prior_dict)
+    
+    # Lambdas are not in the prior files, so we add them manually here
+    priors["lambda_1"] = DeltaFunction(0.0, name='lambda_1', latex_label='$\Lambda_1$')
+    priors["lambda_2"] = DeltaFunction(0.0, name='lambda_2', latex_label='$\Lambda_2$')
     
 else:
     logger.info(f"Sampling with an NF prior, with name {args.prior_name}")

@@ -12,7 +12,8 @@ import subprocess
 import sys
 
 
-def create_subdirectories(run_dir, priors=['bns', 'nsbh', 'default']):
+def create_subdirectories(run_dir,
+                          priors=['bns', 'nsbh', 'bbh', 'default', 'default_nsbh', 'default_nsbh_primary']):
     """Create subdirectories for each prior in the injection directory."""
     for prior in priors:
         subdir = os.path.join(run_dir, prior)
@@ -42,6 +43,12 @@ JOB run_b {sub_path}
 VARS run_b run_dir="{run_dir}" prior_name="nsbh" eos_samples_name="{eos_samples_name}"
 JOB run_c {sub_path}
 VARS run_c run_dir="{run_dir}" prior_name="default" eos_samples_name="{eos_samples_name}"
+JOB run_d {sub_path}
+VARS run_d run_dir="{run_dir}" prior_name="default_primary" eos_samples_name="{eos_samples_name}"
+JOB run_e {sub_path}
+VARS run_e run_dir="{run_dir}" prior_name="default_primary_nsbh" eos_samples_name="{eos_samples_name}"
+JOB run_f {sub_path}
+VARS run_f run_dir="{run_dir}" prior_name="bbh" eos_samples_name="{eos_samples_name}"
 """
     
     # Write the modified DAG file
