@@ -62,7 +62,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--label',
                     type = str,
                     default = 'GW190425',
-                    help = "Label to give to the run")
+                    help = "Label to give to the run. This is the GW event name.")
 parser.add_argument('--prior-name',
                     type = str,
                     default = 'bns',
@@ -135,7 +135,7 @@ EVENT_CONFIG = {
 ################
 
 # Check if some of the given arguments are valid
-SUPPORTED_PRIORS = ['default', 'default_nsbh', 'bns', 'nsbh']
+SUPPORTED_PRIORS = ['default', 'default_nsbh', 'default_nsbh_primary', 'bns', 'nsbh']
 SUPPORTED_EVENTS = list(EVENT_CONFIG.keys())
 
 if args.prior_name not in SUPPORTED_PRIORS:
@@ -289,6 +289,7 @@ if args.prior_name == "default":
     priors = bilby.core.prior.PriorDict(prior_dict)
     
     # Lambdas are not in the prior files, so we add them manually here
+    logger.info("WARNING: Setting the GW170817 priors for lambda_1 to be between 0 and 2000")
     priors["lambda_1"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\Lambda_1$')
     priors["lambda_2"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\Lambda_2$')
     
@@ -301,6 +302,16 @@ elif args.prior_name == "default_nsbh":
     # Lambdas are not in the prior files, so we add them manually here
     priors["lambda_1"] = DeltaFunction(0.0, name='lambda_1', latex_label='$\Lambda_1$')
     priors["lambda_2"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\Lambda_2$')
+    
+elif args.prior_name == "default_nsbh_primary":
+    logger.info("Using the default priors but with the NSBH assumption, where the NS is the primary (i.e., lambda_2 = 0.0)")
+    
+    # Build PriorDict straight from all given priors
+    priors = bilby.core.prior.PriorDict(prior_dict)
+    
+    # Lambdas are not in the prior files, so we add them manually here
+    priors["lambda_1"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\Lambda_1$')
+    priors["lambda_2"] = DeltaFunction(0.0, name='lambda_2', latex_label='$\Lambda_2$')
     
 else:
     logger.info(f"Sampling with an NF prior, with name {args.prior_name}, and {args.prior_name}")
