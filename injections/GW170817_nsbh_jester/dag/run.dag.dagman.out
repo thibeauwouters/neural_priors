@@ -539,3 +539,39 @@
 07/28/25 08:08:10   Node run_a, HTCondor ID 2560978, status STATUS_SUBMITTED
 07/28/25 08:08:10   Node run_b, HTCondor ID 2560979, status STATUS_SUBMITTED
 07/28/25 08:08:10   Node run_c, HTCondor ID 2560980, status STATUS_SUBMITTED
+07/28/25 08:14:55 Currently monitoring 1 HTCondor log file(s)
+07/28/25 08:14:55 Event: ULOG_JOB_TERMINATED for HTCondor Node run_c (2560980.0.0) {07/28/25 08:14:52}
+07/28/25 08:14:55 Number of idle job procs: 0
+07/28/25 08:14:55 Node run_c job proc (2560980.0.0) completed successfully.
+07/28/25 08:14:55 Node run_c job completed
+07/28/25 08:14:55 DAG status: 0 (DAG_STATUS_OK)
+07/28/25 08:14:55 Of 3 nodes total:
+07/28/25 08:14:55  Done     Pre   Queued    Post   Ready   Un-Ready   Failed   Futile
+07/28/25 08:14:55   ===     ===      ===     ===     ===        ===      ===      ===
+07/28/25 08:14:55     1       0        2       0       0          0        0        0
+07/28/25 08:14:55 0 job proc(s) currently held
+07/28/25 08:14:55 DAGMan Runtime Statistics: [EventCycleTimeAvg=0.000; EventCycleTimeMax=0.122; EventCycleTimeMin=0.000; EventCycleTimeStd=0.002; EventCycleTimeSum=2.269; SleepCycleTimeAvg=5.005; SleepCycleTimeMax=5.085; SleepCycleTimeMin=4.005; SleepCycleTimeStd=0.019; SleepCycleTimeSum=30457.664; SubmitCycleTimeAvg=0.000; SubmitCycleTimeMax=0.032; SubmitCycleTimeMin=0.000; SubmitCycleTimeStd=0.000; SubmitCycleTimeSum=0.066; EventCycleTimeCount=6086.000; SleepCycleTimeCount=6086.000; SubmitCycleTimeCount=6087.000; LogProcessCycleTimeAvg=0.006; LogProcessCycleTimeMax=0.012; LogProcessCycleTimeMin=0.003; LogProcessCycleTimeStd=0.005; LogProcessCycleTimeSum=0.019; LogProcessCycleTimeCount=3.000; ]
+07/28/25 08:17:45 Total jobs placed to AP: 3
+07/28/25 08:17:45      Idle     Held     Running     Successful     Failed
+07/28/25 08:17:45       ===      ===         ===            ===        ===
+07/28/25 08:17:45         0        0           2              1          0
+07/28/25 08:24:56 601 seconds since last log event
+07/28/25 08:24:56 Pending DAG nodes:
+07/28/25 08:24:56   Node run_a, HTCondor ID 2560978, status STATUS_SUBMITTED
+07/28/25 08:24:56   Node run_b, HTCondor ID 2560979, status STATUS_SUBMITTED
+07/28/25 08:32:47 Total jobs placed to AP: 3
+07/28/25 08:32:47      Idle     Held     Running     Successful     Failed
+07/28/25 08:32:47       ===      ===         ===            ===        ===
+07/28/25 08:32:47         0        0           2              1          0
+07/28/25 08:34:57 1202 seconds since last log event
+07/28/25 08:34:57 Pending DAG nodes:
+07/28/25 08:34:57   Node run_a, HTCondor ID 2560978, status STATUS_SUBMITTED
+07/28/25 08:34:57   Node run_b, HTCondor ID 2560979, status STATUS_SUBMITTED
+07/28/25 08:44:57 1802 seconds since last log event
+07/28/25 08:44:57 Pending DAG nodes:
+07/28/25 08:44:57   Node run_a, HTCondor ID 2560978, status STATUS_SUBMITTED
+07/28/25 08:44:57   Node run_b, HTCondor ID 2560979, status STATUS_SUBMITTED
+07/28/25 08:47:48 Total jobs placed to AP: 3
+07/28/25 08:47:48      Idle     Held     Running     Successful     Failed
+07/28/25 08:47:48       ===      ===         ===            ===        ===
+07/28/25 08:47:48         0        0           2              1          0

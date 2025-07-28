@@ -31,7 +31,7 @@ def load_eos(eos_name: str = 'jester') -> tuple[np.array, np.array]:
     Use it to extract the mass and tidal deformabilities arrays, to create GW injections
 
     Args:
-        eos_filename (str): Filename of the EOS file to load. Default is '../data/eos/jester.npz'.
+        eos_filename (str): Filename of the EOS file to load. Default is '../data/eos/jester_radio_chiEFT.npz'.
     Returns:
         tuple: A tuple containing two numpy arrays: mass and tidal deformabilities.
     """
@@ -54,7 +54,7 @@ parser.add_argument('--GW-event',
                     help = "GW event from which to copy the setup, such as the prior files.")
 parser.add_argument('--eos-name',
                     type=str,
-                    default='jester',
+                    default='jester_radio_chiEFT',
                     help="Name of the EOS to be loaded, that also has to correspond with the filename of the EOS file in ../data/eos/ directory.")
 parser.add_argument('--source-type',
                     type=str,
@@ -74,7 +74,7 @@ def main(args):
         # Load posterior and its probability distribution
         results = json.load(f)
         posterior = results["posterior"]['content']
-        log_likelihood = np.array(posterior["log_likelihood"][:])
+        # log_likelihood = np.array(posterior["log_likelihood"][:])
         # log_prior = np.array(posterior["log_prior"][:])
         # log_posterior = log_prior + log_likelihood
         
@@ -90,17 +90,17 @@ def main(args):
         
     # Convert to source-frame component masses
     z = luminosity_distance_to_redshift(median_params['luminosity_distance'])
-    m1, m2 = chirp_mass_and_mass_ratio_to_component_masses(
+    mass_1, mass_2 = chirp_mass_and_mass_ratio_to_component_masses(
         median_params['chirp_mass'],
         median_params['mass_ratio'])
-    median_params['mass_1'] = m1
-    median_params['mass_2'] = m2
-    m1_src = m1 / (1 + z)
-    m2_src = m2 / (1 + z)
+    median_params['mass_1'] = mass_1
+    median_params['mass_2'] = mass_2
+    mass_1_src = mass_1 / (1 + z)
+    mass_2_src = mass_2 / (1 + z)
     
-    median_params['mass_1_source'] = m1_src
-    median_params['mass_2_source'] = m2_src
-    print(f"Source-frame component masses: m1 = {m1_src:.2f} M_sun, m2 = {m2_src:.2f} M_sun")
+    median_params['mass_1_source'] = mass_1_src
+    median_params['mass_2_source'] = mass_2_src
+    print(f"Source-frame component masses: mass_1 = {mass_1_src:.2f} M_sun, mass_2 = {mass_2_src:.2f} M_sun")
     
     # Compute the tidal deformabilities, first, load the EOS
     masses_EOS, Lambdas_eos = load_eos(args.eos_name)
@@ -108,19 +108,22 @@ def main(args):
     lambda_2 = 0.0
     
     if args.source_type == 'bns':
-        lambda_1 = np.interp(m1_src, masses_EOS, Lambdas_eos)
-        lambda_2 = np.interp(m2_src, masses_EOS, Lambdas_eos)
+        lambda_1 = np.interp(mass_1_src, masses_EOS, Lambdas_eos)
+        lambda_2 = np.interp(mass_2_src, masses_EOS, Lambdas_eos)
     
     elif args.source_type == 'nsbh':
         # For NSBH, we assume the primary is a BH and the secondary is the NS
-        lambda_2 = np.interp(m2_src, masses_EOS, Lambdas_eos)
+        lambda_2 = np.interp(mass_2_src, masses_EOS, Lambdas_eos)
     else:
         raise ValueError(f"Unsupported source type: {args.source_type}. Supported types are 'bns' and 'nsbh'.")
     
     median_params['lambda_1'] = lambda_1
     median_params['lambda_2'] = lambda_2
-        
     print(f"Interpolated tidal deformabilities: lambda_1 = {lambda_1:.2f}, lambda_2 = {lambda_2:.2f}")
+    
+    # Also compute the lambda_tilde and delta_lambda_tilde
+    median_params["lambda_tilde"] = lambda_1_lambda_2_to_lambda_tilde(lambda_1, lambda_2, mass_1_src, mass_2_src)
+    median_params["delta_lambda_tilde"] = lambda_1_lambda_2_to_delta_lambda_tilde(lambda_1, lambda_2, mass_1_src, mass_2_src)
             
     print(f"Extracted the following parameters from the {args.GW_event} event:")
     for key, value in median_params.items():
