@@ -1,0 +1,137 @@
+23:24 bilby INFO    : You are running on the Nikhef cluster, setting paths accordingly.
+23:24 bilby INFO    : Output directory set to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_design_nsbh_jester/bns
+23:24 bilby INFO    : Loading injection parameters from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_design_nsbh_jester/injection_parameters.json
+23:24 bilby INFO    : Injection parameters:
+23:24 bilby INFO    :   chirp_mass: 1.197537639260543
+23:24 bilby INFO    :   mass_ratio: 0.8641172053705731
+23:24 bilby INFO    :   luminosity_distance: 38.07152942880151
+23:24 bilby INFO    :   a_1: 0.021540277479414695
+23:24 bilby INFO    :   a_2: 0.021072244772762056
+23:24 bilby INFO    :   tilt_1: 1.4498899386568587
+23:24 bilby INFO    :   tilt_2: 1.4453364947888132
+23:24 bilby INFO    :   phi_12: 3.1792853888042205
+23:24 bilby INFO    :   phi_jl: 3.003919422678343
+23:24 bilby INFO    :   dec: -0.3586425106486367
+23:24 bilby INFO    :   ra: 3.420702985286708
+23:24 bilby INFO    :   theta_jn: 2.5637364933960782
+23:24 bilby INFO    :   psi: 1.5623250252173946
+23:24 bilby INFO    :   phase: 2.9695069368745304
+23:24 bilby INFO    :   geocent_time: 1187008882.43
+23:24 bilby INFO    :   mass_1: 1.4806084510880273
+23:24 bilby INFO    :   mass_2: 1.279419237002239
+23:24 bilby INFO    :   mass_1_source: 1.4680615723234944
+23:24 bilby INFO    :   mass_2_source: 1.2685772631881074
+23:24 bilby INFO    :   lambda_1: 0.01
+23:24 bilby INFO    :   lambda_2: 494.6449830849099
+23:24 bilby INFO    :   lambda_tilde: 193.98795394594137
+23:24 bilby INFO    :   delta_lambda_tilde: 84.36192206065176
+23:24 bilby INFO    : Merger frequency: 2204.86 Hz
+23:24 bilby INFO    : 1.2 × merger frequency: 2645.84 Hz
+23:24 bilby INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+23:24 bilby INFO    : Duration: 128.0s
+23:24 bilby INFO    : Sampling frequency: 4096.0 Hz
+23:24 bilby INFO    : Minimum frequency: 23.1 Hz
+23:24 bilby INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+23:24 bilby INFO    : Reference merger frequency: 2204.86 Hz
+23:24 bilby INFO    : Reference parameters for PE:
+23:24 bilby INFO    : chirp_mass: 1.197537639260543
+23:24 bilby INFO    : mass_ratio: 0.8641172053705731
+23:24 bilby INFO    : luminosity_distance: 38.07152942880151
+23:24 bilby INFO    : a_1: 0.021540277479414695
+23:24 bilby INFO    : a_2: 0.021072244772762056
+23:24 bilby INFO    : tilt_1: 1.4498899386568587
+23:24 bilby INFO    : tilt_2: 1.4453364947888132
+23:24 bilby INFO    : phi_12: 3.1792853888042205
+23:24 bilby INFO    : phi_jl: 3.003919422678343
+23:24 bilby INFO    : dec: -0.3586425106486367
+23:24 bilby INFO    : ra: 3.420702985286708
+23:24 bilby INFO    : theta_jn: 2.5637364933960782
+23:24 bilby INFO    : psi: 1.5623250252173946
+23:24 bilby INFO    : phase: 2.9695069368745304
+23:24 bilby INFO    : geocent_time: 1187008882.43
+23:24 bilby INFO    : mass_1: 1.4806084510880273
+23:24 bilby INFO    : mass_2: 1.279419237002239
+23:24 bilby INFO    : mass_1_source: 1.4680615723234944
+23:24 bilby INFO    : mass_2_source: 1.2685772631881074
+23:24 bilby INFO    : lambda_1: 0.01
+23:24 bilby INFO    : lambda_2: 494.6449830849099
+23:24 bilby INFO    : lambda_tilde: 193.98795394594137
+23:24 bilby INFO    : delta_lambda_tilde: 84.36192206065176
+23:24 bilby INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/GW170817_design_nsbh_jester/prior.prior
+23:24 bilby INFO    : Sampling with an NF prior, with name bns
+23:24 bilby INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_bns/model.pt
+23:24 bilby INFO    : Loaded NF kwargs from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_bns/model_kwargs.json
+23:24 bilby INFO    : Loading scaler from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_bns/scaler.gz
+23:24 bilby INFO    : Loaded NFDist prior with n_dim = 5 from flow_filename = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_bns/model.pt
+23:24 bilby INFO    : Going to show priors:
+23:24 bilby INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+23:24 bilby INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+23:24 bilby INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+23:24 bilby INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+23:24 bilby INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+23:24 bilby INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+23:24 bilby INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+23:24 bilby INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+23:24 bilby INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+23:24 bilby INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+23:24 bilby INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+23:24 bilby INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+23:24 bilby INFO    :       chirp_mass: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_bns/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None)
+23:24 bilby INFO    :       mass_ratio: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_bns/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='mass_ratio', latex_label='$q$', unit=None)
+23:24 bilby INFO    :       luminosity_distance: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_bns/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='luminosity_distance', latex_label='$d_L$', unit=None)
+23:24 bilby INFO    :       lambda_1: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_bns/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+23:24 bilby INFO    :       lambda_2: NFPrior(dist=NFDist(names=['chirp_mass', 'mass_ratio', 'luminosity_distance', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/GW170817/radio_bns/model.pt', include_dL=True, use_tilde=False, use_component_masses=False), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
+23:24 bilby INFO    : Setting up interferometers: ['H1', 'L1', 'V1']
+23:24 bilby INFO    : Setting up PSDs...
+23:24 bilby INFO    : Using design sensitivity PSDs (default for interferometers)
+23:24 bilby INFO    : Generating injection... Showing injection parameters one last time
+23:24 bilby INFO    :   chirp_mass: 1.197537639260543
+23:24 bilby INFO    :   mass_ratio: 0.8641172053705731
+23:24 bilby INFO    :   luminosity_distance: 38.07152942880151
+23:24 bilby INFO    :   a_1: 0.021540277479414695
+23:24 bilby INFO    :   a_2: 0.021072244772762056
+23:24 bilby INFO    :   tilt_1: 1.4498899386568587
+23:24 bilby INFO    :   tilt_2: 1.4453364947888132
+23:24 bilby INFO    :   phi_12: 3.1792853888042205
+23:24 bilby INFO    :   phi_jl: 3.003919422678343
+23:24 bilby INFO    :   dec: -0.3586425106486367
+23:24 bilby INFO    :   ra: 3.420702985286708
+23:24 bilby INFO    :   theta_jn: 2.5637364933960782
+23:24 bilby INFO    :   psi: 1.5623250252173946
+23:24 bilby INFO    :   phase: 2.9695069368745304
+23:24 bilby INFO    :   geocent_time: 1187008882.43
+23:24 bilby INFO    :   mass_1: 1.4806084510880273
+23:24 bilby INFO    :   mass_2: 1.279419237002239
+23:24 bilby INFO    :   mass_1_source: 1.4680615723234944
+23:24 bilby INFO    :   mass_2_source: 1.2685772631881074
+23:24 bilby INFO    :   lambda_1: 0.01
+23:24 bilby INFO    :   lambda_2: 494.6449830849099
+23:24 bilby INFO    :   lambda_tilde: 193.98795394594137
+23:24 bilby INFO    :   delta_lambda_tilde: 84.36192206065176
+XLAL Error - IMRPhenomXSetWaveformVariables (LALSimIMRPhenomX_internals.c:327): lambda1 = -0.000000, lambda2 = 494.644983. Both should be greater than zero for NRTidalv2 and NRTidalv3
+XLAL Error - IMRPhenomXSetWaveformVariables (LALSimIMRPhenomX_internals.c:327): Internal function call failed
+XLAL Error - XLALSimIMRPhenomXPHM (LALSimIMRPhenomXPHM.c:278): Error: IMRPhenomXSetWaveformVariables failed.
+
+XLAL Error - XLALSimIMRPhenomXPHM (LALSimIMRPhenomXPHM.c:278): Internal function call failed
+XLAL Error - XLALSimInspiralChooseFDWaveform_legacy (LALSimInspiralGeneratorLegacy.c:2503): Internal function call failed
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/injections/inject.py", line 436, in <module>
+    ifos.inject_signal(waveform_generator=waveform_generator, 
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/detector/networks.py", line 165, in inject_signal
+    injection_polarizations = waveform_generator.frequency_domain_strain(
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/waveform_generator.py", line 131, in frequency_domain_strain
+    return self._calculate_strain(model=self.frequency_domain_source_model,
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/waveform_generator.py", line 176, in _calculate_strain
+    model_strain = self._strain_from_model(model_data_points, model)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/waveform_generator.py", line 189, in _strain_from_model
+    return model(model_data_points, **self.parameters)
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/source.py", line 422, in lal_binary_neutron_star
+    return _base_lal_cbc_fd_waveform(
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/source.py", line 631, in _base_lal_cbc_fd_waveform
+    hplus, hcross = wf_func(
+  File "/data/gravwav/twouters/projects/eos_source_classification/bilby/bilby/gw/utils.py", line 705, in lalsim_SimInspiralChooseFDWaveform
+    return SimInspiralChooseFDWaveform(*args, waveform_dictionary, approximant)
+RuntimeError: Internal function call failed

@@ -60,7 +60,7 @@ parser.add_argument('--seed',
                     help = "Seed for the random number generator")
 parser.add_argument('--relative-binning-delta', 
                     type = float,
-                    default = 1e-2,
+                    default = 1e-3,
                     help = "The total error on the relative binning likelihood at the reference value")
 parser.add_argument('--minimum-bin-threshold', 
                     type = int,
@@ -70,11 +70,12 @@ parser.add_argument('--n-pool',
                     type = int,
                     default = 64,
                     help = "How many cores to use for the sampling")
-parser.add_argument('--psd-type',
-                    type = str,
-                    default = 'event',
-                    choices = ['design', 'event'],
-                    help = "Type of PSD to use: design sensitivity or event-specific PSDs")
+# FIXME: support this again, but also needs the support then in the setup of the dag files
+# parser.add_argument('--psd-type',
+#                     type = str,
+#                     default = 'event',
+#                     choices = ['design', 'event'],
+#                     help = "Type of PSD to use: design sensitivity or event-specific PSDs")
 
 args = parser.parse_args()
 
@@ -386,12 +387,10 @@ for ifo in ifos:
 
 # Set up PSDs
 logger.info("Setting up PSDs...")
-if args.psd_type == 'design':
+if "design" in args.run_dir:
     # Use design sensitivity curves - the interferometers already have default PSDs set
     # No additional setup needed for design sensitivity
-    raise NotImplementedError("Design sensitivity PSDs are not implemented yet. Please use event-specific PSDs for now.")
-    # logger.info("Using design sensitivity PSDs (default for interferometers)")
-    
+    logger.info("Using design sensitivity PSDs (default for interferometers)")
 else:
     # Use event-specific PSDs - fetch from data directory like pe.py
     logger.info("Loading event-specific PSDs...")
@@ -424,7 +423,10 @@ else:
             raise ValueError(f"No PSD file found for interferometer {ifo.name} in {event_name}")
 
 # Inject the signal
-logger.info("Generating injection...")
+logger.info("Generating injection... Showing injection parameters one last time")
+for key, value in injection_parameters.items():
+    logger.info(f"  {key}: {value}")
+
 for ifo in ifos:
     ifo.set_strain_data_from_power_spectral_density(
         sampling_frequency=sampling_frequency,
@@ -434,18 +436,6 @@ for ifo in ifos:
 ifos.inject_signal(waveform_generator=waveform_generator, 
                    parameters=injection_parameters)
 logger.info("Injection generated successfully!")
-
-# # DEBUG: Print the injected signal to the screen and the PSD as well, just some values to see if done properly
-# logger.info("Injected signal:")
-# for ifo in ifos:
-#     logger.info(f"  {ifo.name}:")
-#     # Mask to have frequencies above starting frequency
-#     mask = ifo.frequency_array >= minimum_frequency
-#     max_idx = 20
-#     logger.info(f"    Frequencies: {ifo.frequency_array[mask][:max_idx]} ... ")
-#     logger.info(f"    Strain data: {ifo.strain_data.frequency_domain_strain[mask][:max_idx]} ...")
-#     psd_array = ifo.power_spectral_density.get_power_spectral_density_array(ifo.frequency_array)
-#     logger.info(f"    PSD: {psd_array[mask][:max_idx]} ...")
 
 # Compute the network SNR:
 snr_list = []

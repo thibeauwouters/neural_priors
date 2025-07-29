@@ -50,9 +50,11 @@ def main():
     
     # Save to the txt: one column is subdir, the other is the Bayes factor
     with open(output_file, "w") as f:
-        f.write("Subdirectory\tLog Bayes Factor\n")
+        f.write(f"{'Subdirectory':<30}{'Log Bayes Factor':>20}\n")
+        f.write("-" * 50 + "\n")
         for subdir, ln_bf in sorted_bf.items():
-            f.write(f"{subdir}\t{ln_bf}\n")
+            f.write(f"{subdir:<30}{ln_bf:>20.6f}\n")
+
             
     print("Saved Bayes factors to:", output_file)
     

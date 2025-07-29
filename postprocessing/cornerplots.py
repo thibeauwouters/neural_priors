@@ -391,7 +391,7 @@ def create_corner_plot(GW_event: str,
     
 def real_events():
     
-    GW_event_list = ["HV/GW170817",
+    GW_event_list = ["GW170817",
                     #  "GW190425",
                     #  "GW230529",
                     ]
@@ -416,10 +416,10 @@ def real_events():
                             
 def injections():
     
-    base_path_list = ["../injections/GW170817_bns_jester/",
+    base_path_list = [#"../injections/GW170817_bns_jester/",
                       #"../injections/GW170817_nsbh_jester/"
-                      "../injections/GW190425_bns_jester/",
-                      "../injections/GW190425_nsbh_jester/"
+                      "../injections/GW190425_design_bns_jester/",
+                      "../injections/GW190425_design_nsbh_jester/"
                     ]
     
     # for plot_all_params in [True, False]:
@@ -440,7 +440,6 @@ def injections():
                 create_corner_plot(GW_event, **settings)
                 
 def main():
-    # Uncomment the function you want to run
     # real_events()
     injections()
             
