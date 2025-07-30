@@ -13,21 +13,5 @@ echo "Generating corner plots for $GW_EVENT..."
 echo "=== Uniform population ==="
 python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-default --convert-lambdas
 python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-default --no-convert-lambdas
-
-echo "=== Gaussian population ==="
-python cornerplots.py --gw-event $GW_EVENT --population-type gaussian --plot-default --convert-lambdas
-python cornerplots.py --gw-event $GW_EVENT --population-type gaussian --plot-default --no-convert-lambdas
-
-echo "=== Double Gaussian population ==="
-python cornerplots.py --gw-event $GW_EVENT --population-type double_gaussian --plot-default --convert-lambdas
-python cornerplots.py --gw-event $GW_EVENT --population-type double_gaussian --plot-default --no-convert-lambdas
-
-# Example with all parameters plotted
-echo "=== Generating detailed plots with all parameters ==="
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-default --plot-all-params --convert-lambdas
-
-# Example with external comparison data (if available)
-echo "=== Generating plots with external comparisons ==="
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-default --plot-hauke --plot-adrian --convert-lambdas
-
-echo "Corner plot generation complete!"
+python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-hauke --convert-lambdas
+python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-hauke --no-convert-lambdas

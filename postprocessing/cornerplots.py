@@ -8,6 +8,7 @@ import argparse
 
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
+from bilby.gw.conversion import luminosity_distance_to_redshift
 
 params = {"axes.grid": True,
         # "text.usetex" : True,
@@ -70,6 +71,17 @@ LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
               "delta_lambda_tilde": r"$\delta \tilde{\Lambda}$"
               }
 
+def convert_chirp_mass(posterior: dict):
+    """
+    Convert source-frame chirp mass into detector-frame chirp mass.
+    """
+    d_L = np.array(posterior['luminosity_distance'])
+    z = luminosity_distance_to_redshift(d_L)
+    chirp_mass_source = np.array(posterior['chirp_mass_source'])
+    posterior['chirp_mass'] = chirp_mass_source * (1 + z)
+    return
+    
+
 def create_corner_plot(GW_event: str,
                        population_type: str,
                        eos_samples_name: str = "radio",
@@ -127,10 +139,12 @@ def create_corner_plot(GW_event: str,
     with open(bns_results_filename, "r") as f:
         bns_result = json.load(f)
         bns_posterior = bns_result['posterior']['content']
+        convert_chirp_mass(bns_posterior)
 
     with open(nsbh_results_filename, "r") as f:
         nsbh_result = json.load(f)
         nsbh_posterior = nsbh_result['posterior']['content']
+        convert_chirp_mass(nsbh_posterior)
         
     if plot_default:
         with open(default_results_filename, "r") as f:
