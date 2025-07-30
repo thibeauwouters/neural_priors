@@ -64,6 +64,44 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 script_dir = os.path.dirname(os.path.abspath(__file__))
 EOS_DIR = os.path.join(script_dir, "..", "data", "eos")
 
+
+def sample_ns_mass_gaussian(nb_mass_samples: int):
+    """
+    Sample from single Gaussian distribution, found the hyperparams in https://arxiv.org/pdf/2407.16669
+    """
+    mu = 1.33
+    sigma = 0.09
+    mass_samples = np.random.normal(mu, sigma, nb_mass_samples)
+    
+    if len(mass_samples) == 1:
+        return mass_samples[0]
+    else:
+        return mass_samples
+    
+def sample_ns_mass_double_gaussian(nb_mass_samples: int):
+    """
+    Sample from double Gaussian, found the hyperparams in https://arxiv.org/pdf/2407.16669
+    """
+    mu_1 = 1.34
+    sigma_1 = 0.07
+    
+    mu_2 = 1.80
+    sigma_2 = 0.21
+    w = 0.65
+    
+    # Sample from mixture of gaussians
+    u = np.random.rand(nb_mass_samples) # uniform [0,1], to determine the mode
+    mass_samples = np.where(
+        u < w,
+        np.random.normal(mu_1, sigma_1, size=nb_mass_samples),
+        np.random.normal(mu_2, sigma_2, size=nb_mass_samples)
+    )
+    
+    if len(mass_samples) == 1:
+        return mass_samples[0]
+    else:
+        return mass_samples
+
 parser = argparse.ArgumentParser(description="Train a normalizing flow prior on EOS samples.")
 parser.add_argument("--eos-samples-name", 
                     type=str, 
@@ -244,15 +282,19 @@ class NFPriorCreator:
         if source_type not in SUPPORTED_SOURCE_TYPES:
             raise ValueError(f"source_type must be one of {SUPPORTED_SOURCE_TYPES}, got {source_type} instead.")
         
-        self.source_type = source_type
+        SUPPORTED_POPULATION_TYPES = ["uniform", "gaussian", "double_gaussian"]
+        if population_type not in SUPPORTED_POPULATION_TYPES:
+            raise ValueError(f"source_type must be one of {SUPPORTED_POPULATION_TYPES}, got {population_type} instead.")
         
-        print(f"Training a normalizing flow for {self.source_type} sources")
+        self.source_type = source_type
+        self.population_type = population_type
+        
+        print(f"Training a normalizing flow for population =  {self.population_type} and {self.source_type} sources")
         self.N_samples_training = N_samples_training
         self.N_samples_plot = N_samples_plot
         self.m_max_BH = m_max_BH
         self.take_log_lambda = take_log_lambda
         self.use_flowjax = use_flowjax
-        self.population_type = population_type
         self.use_tilde = use_tilde
         self.use_component_masses = use_component_masses
 
@@ -371,11 +413,19 @@ class NFPriorCreator:
             idx = np.random.randint(0, len(masses_EOS))
             m, l = masses_EOS[idx], Lambdas_EOS[idx]
             
-            # Sample two masses between 1 and MTOV for this EOS
             mtov = np.max(m)
             if self.source_type == "bns":
-                # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
-                mass_samples = np.random.uniform(1.0, mtov, 2)
+                if self.population_type == "uniform":
+                    # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
+                    mass_samples = np.random.uniform(1.0, mtov, 2)
+                elif self.population_type == "gaussian":
+                    mass_samples = sample_ns_mass_gaussian(2)
+                elif self.population_type == "double_gaussian":
+                    mass_samples = sample_ns_mass_double_gaussian(2)
+                else:
+                    raise ValueError(f"Unsupported population type: {self.population_type}")
+                    
+                # Ensure that m1 >= m2
                 m1 = np.max(mass_samples)
                 m2 = np.min(mass_samples)
                 
@@ -384,7 +434,16 @@ class NFPriorCreator:
             else:
                 # This automatically satisfies m1 >= m2
                 m1 = np.random.uniform(mtov, self.m_max_BH, 1)[0]
-                m2 = np.random.uniform(1.0, mtov, 1)[0]
+                
+                if self.population_type == "uniform":
+                    # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
+                    mass_samples = np.random.uniform(1.0, mtov, 1)
+                elif self.population_type == "gaussian":
+                    mass_samples = sample_ns_mass_gaussian(1)
+                elif self.population_type == "double_gaussian":
+                    mass_samples = sample_ns_mass_double_gaussian(1)
+                else:
+                    raise ValueError(f"Unsupported population type: {self.population_type}")
                 
                 Lambda_1 = 0.0
                 Lambda_2 = np.interp(m2, m, l)
