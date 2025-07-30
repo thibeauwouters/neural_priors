@@ -92,7 +92,9 @@ def create_corner_plot(GW_event: str,
                        plot_hauke: bool = False,
                        plot_hauke_EM: bool = False,
                        plot_adrian: bool = False,
-                       prevent_bns_leakage: bool = False):
+                       prevent_bns_leakage: bool = False,
+                       plot_bns: bool = True,
+                       plot_nsbh: bool = True):
     """
     Create a corner plot comparing posterior samples from BNS, Default, and NSBH runs for a given GW event.
     
@@ -108,6 +110,8 @@ def create_corner_plot(GW_event: str,
         plot_hauke_EM (bool): If True, include Hauke's data in the corner plot that analyzed the GW+EM dataset.
         plot_adrian (bool): If True, include Adrian's data in the corner plot.
         prevent_bns_leakage (bool): If True, prevent BNS leakage by masking samples with negative delta_lambda_tilde.
+        plot_bns (bool): If True, include BNS posterior in the corner plot.
+        plot_nsbh (bool): If True, include NSBH posterior in the corner plot.
     """
     
     # Check whether this is for real events or from the injection runs
@@ -135,28 +139,34 @@ def create_corner_plot(GW_event: str,
     print(f"  Default: {default_results_filename}")
     print(f"  NSBH: {nsbh_results_filename}")
 
-    # Load posterior samples
-    with open(bns_results_filename, "r") as f:
-        bns_result = json.load(f)
-        bns_posterior = bns_result['posterior']['content']
-        convert_chirp_mass(bns_posterior)
+    # Load posterior samples based on what we want to plot
+    bns_posterior = None
+    nsbh_posterior = None
+    
+    if plot_bns:
+        with open(bns_results_filename, "r") as f:
+            bns_result = json.load(f)
+            bns_posterior = bns_result['posterior']['content']
+            convert_chirp_mass(bns_posterior)
 
-    with open(nsbh_results_filename, "r") as f:
-        nsbh_result = json.load(f)
-        nsbh_posterior = nsbh_result['posterior']['content']
-        convert_chirp_mass(nsbh_posterior)
+    if plot_nsbh:
+        with open(nsbh_results_filename, "r") as f:
+            nsbh_result = json.load(f)
+            nsbh_posterior = nsbh_result['posterior']['content']
+            convert_chirp_mass(nsbh_posterior)
+        
+    posteriors_dict = {}
+    
+    if plot_bns:
+        posteriors_dict["bns"] = bns_posterior
+    if plot_nsbh:
+        posteriors_dict["nsbh"] = nsbh_posterior
         
     if plot_default:
         with open(default_results_filename, "r") as f:
             default_result = json.load(f)
             default_posterior = default_result['posterior']['content']
-            
-        posteriors_dict = {"bns": bns_posterior,
-                           "default": default_posterior,
-                           "nsbh": nsbh_posterior}
-    else:
-        posteriors_dict = {"bns": bns_posterior,
-                           "nsbh": nsbh_posterior}
+        posteriors_dict["default"] = default_posterior
 
     # Define parameters to plot (excluding log_likelihood and log_prior)
     if plot_all_params:
@@ -237,22 +247,33 @@ def create_corner_plot(GW_event: str,
     labels = []
     latex_labels = []
 
+    # Get reference posterior to check which parameters exist
+    ref_posterior = None
+    if plot_bns and bns_posterior is not None:
+        ref_posterior = bns_posterior
+    elif plot_nsbh and nsbh_posterior is not None:
+        ref_posterior = nsbh_posterior
+    elif plot_default:
+        ref_posterior = default_posterior
+
     for param in params_to_plot:
-        if param in bns_posterior: # TODO: remove this line?
-            bns_data.append(bns_posterior[param])
-            nsbh_data.append(nsbh_posterior[param])
+        if ref_posterior is not None and param in ref_posterior:
+            if plot_bns and bns_posterior is not None:
+                bns_data.append(bns_posterior[param])
+            if plot_nsbh and nsbh_posterior is not None:
+                nsbh_data.append(nsbh_posterior[param])
             if plot_default:
                 default_data.append(default_posterior[param])
             labels.append(param)
             latex_labels.append(LaTeX_dict.get(param, param))
 
     # Convert to numpy arrays and transpose to get (n_samples, n_params)
-    bns_samples = np.array(bns_data).T
-    default_samples = np.array(default_data).T  
-    nsbh_samples = np.array(nsbh_data).T
+    bns_samples = np.array(bns_data).T if plot_bns and bns_data else None
+    default_samples = np.array(default_data).T if plot_default and default_data else None
+    nsbh_samples = np.array(nsbh_data).T if plot_nsbh and nsbh_data else None
     
     # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
-    if 'delta_lambda_tilde' in params_to_plot and prevent_bns_leakage:
+    if 'delta_lambda_tilde' in params_to_plot and prevent_bns_leakage and plot_bns and bns_samples is not None:
         delta_lambda_tilde_index = labels.index('delta_lambda_tilde')
         bns_samples = bns_samples[bns_samples[:, delta_lambda_tilde_index] > 0]
     
@@ -260,18 +281,32 @@ def create_corner_plot(GW_event: str,
     ranges = []
     for i, param in enumerate(labels):
         # Get all values for this parameter across all runs
-        if plot_default:
-            all_vals = np.concatenate([bns_samples[:, i], default_samples[:, i], nsbh_samples[:, i]])
-        else:
-            all_vals = np.concatenate([bns_samples[:, i], nsbh_samples[:, i]])
+        all_vals_list = []
+        if plot_bns and bns_samples is not None:
+            all_vals_list.append(bns_samples[:, i])
+        if plot_nsbh and nsbh_samples is not None:
+            all_vals_list.append(nsbh_samples[:, i])
+        if plot_default and default_samples is not None:
+            all_vals_list.append(default_samples[:, i])
         
-        if param == 'lambda_1' and np.std(nsbh_samples[:, i]) < 1e-10:
+        if all_vals_list:
+            all_vals = np.concatenate(all_vals_list)
+        else:
+            continue
+        
+        if param == 'lambda_1' and plot_nsbh and nsbh_samples is not None and np.std(nsbh_samples[:, i]) < 1e-10:
             # For constant lambda_1 in NSBH, use range from BNS and Default only
-            if plot_default:
-                non_zero_vals = np.concatenate([bns_samples[:, i], default_samples[:, i]])
+            non_zero_vals_list = []
+            if plot_bns and bns_samples is not None:
+                non_zero_vals_list.append(bns_samples[:, i])
+            if plot_default and default_samples is not None:
+                non_zero_vals_list.append(default_samples[:, i])
+            
+            if non_zero_vals_list:
+                non_zero_vals = np.concatenate(non_zero_vals_list)
+                param_range = (np.min(non_zero_vals), np.max(non_zero_vals))
             else:
-                non_zero_vals = [bns_samples[:, i]]
-            param_range = (np.min(non_zero_vals), np.max(non_zero_vals))
+                param_range = (np.min(all_vals), np.max(all_vals))
         else:
             # Use full range for all other parameters
             param_range = (np.min(all_vals), np.max(all_vals))
@@ -279,7 +314,7 @@ def create_corner_plot(GW_event: str,
         ranges.append(param_range)
         
     # Make lambda_1 NaN for NSBH samples for plotting
-    if 'lambda_1' in params_to_plot:
+    if 'lambda_1' in params_to_plot and plot_nsbh and nsbh_samples is not None:
         lambda_1_index = labels.index('lambda_1')
         # print("Setting those values to NaN")
         # # Set lambda_1 values in NSBH samples to NaN
@@ -313,11 +348,23 @@ def create_corner_plot(GW_event: str,
     else:
         truths = None
 
-    # Create the overlaid corner plot
-    fig = corner.corner(bns_samples, labels=latex_labels, truths=truths, **bns_kwargs)
-    corner.corner(nsbh_samples, labels=latex_labels, fig=fig, **nsbh_kwargs)
-    if plot_default:
-        corner.corner(default_samples, labels=latex_labels, fig=fig, **default_kwargs)
+    # Create the overlaid corner plot - start with the first available dataset
+    fig = None
+    
+    if plot_bns and bns_samples is not None:
+        fig = corner.corner(bns_samples, labels=latex_labels, truths=truths, **bns_kwargs)
+    
+    if plot_nsbh and nsbh_samples is not None:
+        if fig is None:
+            fig = corner.corner(nsbh_samples, labels=latex_labels, truths=truths, **nsbh_kwargs)
+        else:
+            corner.corner(nsbh_samples, labels=latex_labels, fig=fig, **nsbh_kwargs)
+    
+    if plot_default and default_samples is not None:
+        if fig is None:
+            fig = corner.corner(default_samples, labels=latex_labels, truths=truths, **default_kwargs)
+        else:
+            corner.corner(default_samples, labels=latex_labels, fig=fig, **default_kwargs)
         
     # Add legend
     if plot_all_params:
@@ -330,10 +377,13 @@ def create_corner_plot(GW_event: str,
     dy = 0.1
     if plot_default:
         plt.text(x, y, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-    y -= dy
-    plt.text(x, y, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-    y -= dy
-    plt.text(x, y, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        y -= dy
+    if plot_bns:
+        plt.text(x, y, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        y -= dy
+    if plot_nsbh:
+        plt.text(x, y, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+        y -= dy
     
     # Hauke and Adrian's runs did not sample some params and had them fixed -- jitter a bit to avoid corner complaints
     if GW_event == "GW170817":
@@ -413,6 +463,8 @@ def create_corner_plot(GW_event: str,
     save_name = 'corner' + \
             ('_all' if plot_all_params else '') + \
             ('_default' if plot_default else '') + \
+            ('_bns' if plot_bns else '') + \
+            ('_nsbh' if plot_nsbh else '') + \
             ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
             ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
             ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
@@ -503,6 +555,14 @@ def main():
                         help='Include Adrian\'s results in plot')
     parser.add_argument('--prevent-bns-leakage', action='store_true',
                         help='Prevent BNS leakage by masking negative delta_lambda_tilde')
+    parser.add_argument('--plot-bns', action='store_true', default=True,
+                        help='Include BNS posterior in plot (default: True)')
+    parser.add_argument('--no-plot-bns', dest='plot_bns', action='store_false',
+                        help='Do not include BNS posterior in plot')
+    parser.add_argument('--plot-nsbh', action='store_true', default=True,
+                        help='Include NSBH posterior in plot (default: True)')
+    parser.add_argument('--no-plot-nsbh', dest='plot_nsbh', action='store_false',
+                        help='Do not include NSBH posterior in plot')
     parser.add_argument('--batch-mode', action='store_true',
                         help='Run in batch mode (old behavior for testing)')
     
@@ -524,7 +584,9 @@ def main():
             plot_hauke=args.plot_hauke,
             plot_hauke_EM=args.plot_hauke_em,
             plot_adrian=args.plot_adrian,
-            prevent_bns_leakage=args.prevent_bns_leakage
+            prevent_bns_leakage=args.prevent_bns_leakage,
+            plot_bns=args.plot_bns,
+            plot_nsbh=args.plot_nsbh
         )
             
 if __name__ == "__main__":
