@@ -14,3 +14,86 @@
 	659  -  MemoryUsage of job (MB)
 	673908  -  ResidentSetSize of job (KB)
 ...
+006 (2575634.000.000) 2025-07-30 11:32:19 Image size of job updated: 1066812
+	1041  -  MemoryUsage of job (MB)
+	1065064  -  ResidentSetSize of job (KB)
+...
+005 (2575634.000.000) 2025-07-30 11:33:34 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:06:18, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:06:18, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :     0.09        1         1 "GPU-feb79665-637f-7d00-0944-9b688d6e2aa4"
+	   GpusMemory (MB)      :  1172                       
+	   Memory (MB)          :  1041       16384     16384 
+	   TimeExecute (s)      :   388                       
+	   TimeSlotBusy (s)     :   389                       
+
+	Job terminated of its own accord at 2025-07-30T09:33:34Z with exit-code 0.
+...
+000 (2575643.000.000) 2025-07-30 11:50:40 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+001 (2575643.000.000) 2025-07-30 11:51:06 Job executing on host: <145.107.4.167:9618?addrs=145.107.4.167-9618+[2a07-8500-120-e070--a7]-9618&alias=wn-pijl-006.nikhef.nl&noUDP&sock=startd_4304_c3b5>
+	SlotName: slot1_3@wn-pijl-006.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_f0aae384_9666_11e5_b85f_558ab6a9e936 }
+	CondorScratchDir = "/scratch/condor_execute/dir_3083513"
+	Cpus = 1
+	Disk = 16790397
+	GPUs = 1
+	GPUs_GPU_f0aae384_9666_11e5_b85f_558ab6a9e936 = [ Id = "GPU-f0aae384-9666-11e5-b85f-558ab6a9e936"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "f0aae384-9666-11e5-b85f-558ab6a9e936"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "570.124.06"; DriverVersion = 12.8; DevicePciBusId = "0000:C1:00.0"; GlobalMemoryMb = 45468; MaxSupportedVersion = 12080 ]
+	Memory = 16384
+...
+006 (2575643.000.000) 2025-07-30 11:51:20 Image size of job updated: 1043360
+	1019  -  MemoryUsage of job (MB)
+	1043360  -  ResidentSetSize of job (KB)
+...
+006 (2575643.000.000) 2025-07-30 11:51:34 Image size of job updated: 1044340
+	1019  -  MemoryUsage of job (MB)
+	1043360  -  ResidentSetSize of job (KB)
+...
+004 (2575643.000.000) 2025-07-30 11:51:34 Job was evicted.
+	(0) CPU times
+		Usr 0 00:00:17, Sys 0 00:00:01  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     0.55        1         1 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :     0.03        1         1 "GPU-f0aae384-9666-11e5-b85f-558ab6a9e936"
+	   GpusMemory (MB)      :  1172                       
+	   Memory (MB)          :  1019       16384     16384 
+	   TimeExecute (s)      :    28                       
+	   TimeSlotBusy (s)     :    28                       
+...
+009 (2575643.000.000) 2025-07-30 11:51:34 Job was aborted.
+	via condor_rm (by user twouters)
+...
+000 (2575649.000.000) 2025-07-30 11:52:17 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+001 (2575649.000.000) 2025-07-30 11:53:06 Job executing on host: <145.107.4.167:9618?addrs=145.107.4.167-9618+[2a07-8500-120-e070--a7]-9618&alias=wn-pijl-006.nikhef.nl&noUDP&sock=startd_4304_c3b5>
+	SlotName: slot1_4@wn-pijl-006.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_d36af8dd_2284_85df_7b52_1f9a5115bfa5 }
+	CondorScratchDir = "/scratch/condor_execute/dir_3084543"
+	Cpus = 1
+	Disk = 16790397
+	GPUs = 1
+	GPUs_GPU_d36af8dd_2284_85df_7b52_1f9a5115bfa5 = [ Id = "GPU-d36af8dd-2284-85df-7b52-1f9a5115bfa5"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "d36af8dd-2284-85df-7b52-1f9a5115bfa5"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "570.124.06"; DriverVersion = 12.8; DevicePciBusId = "0000:C2:00.0"; GlobalMemoryMb = 45468; MaxSupportedVersion = 12080 ]
+	Memory = 16384
+...
+006 (2575649.000.000) 2025-07-30 11:53:19 Image size of job updated: 560372
+	548  -  MemoryUsage of job (MB)
+	560372  -  ResidentSetSize of job (KB)
+...
+006 (2575649.000.000) 2025-07-30 11:58:19 Image size of job updated: 1052440
+	1026  -  MemoryUsage of job (MB)
+	1050520  -  ResidentSetSize of job (KB)
+...

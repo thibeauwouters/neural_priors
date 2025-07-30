@@ -1,1 +1,1 @@
-python pe.py --label GW170817 --prior-name bns --seed 123 --n-pool 1 --minimum-bin-threshold 10 --no-use-relative-binning
+python pe.py --GW-event GW170817 --prior-name bns --seed 123 --n-pool 1 --minimum-bin-threshold 10

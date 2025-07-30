@@ -80,7 +80,7 @@ parser.add_argument("--use-tilde",
 parser.add_argument("--no-use-tilde", 
                     dest="use_tilde", 
                     action="store_false")
-parser.set_defaults(use_tilde=True)
+parser.set_defaults(use_tilde=False)
 parser.add_argument("--use-component-masses", 
                     action="store_true", 
                     help="Use component masses (m1, m2) instead of (Mc, q)")
@@ -278,7 +278,7 @@ class NFPriorCreator:
                           }
         
         # Set names based on parameterization
-        mass_names = ["m_1", "m_2"] if self.use_component_masses else ["chirp_mass", "mass_ratio"]
+        mass_names = ["m_1", "m_2"] if self.use_component_masses else ["chirp_mass_source", "mass_ratio"]
         if self.source_type == "nsbh" and not self.use_tilde:
             lambda_names = ["lambda_2"]
         else:
@@ -497,6 +497,7 @@ class NFPriorCreator:
         training_filename = os.path.join(self.outdir, "training_data.npz")
         self.load_training_data(training_filename)
         
+        # TODO: wow this is cumbersome, improve this massively
         if self.source_type == "bns":
             # This is always a 4D model
             print(f"We are training for BNS")
@@ -508,8 +509,8 @@ class NFPriorCreator:
             if self.use_tilde:
                 # This is a 4D model
                 print("NSBH: training lambda tildes, so 4D model")
-                self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_2]).T
-                self.x_val = np.array([self.val_mass_1, self.val_mass_2, self.val_lambda_2]).T
+                self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
+                self.x_val = np.array([self.val_mass_1, self.val_mass_2, self.val_lambda_1, self.val_lambda_2]).T
             else:
                 # This is a 3D model, since Lambda_1 is always 0 for NSBH
                 print("NSBH: training lambda_2")

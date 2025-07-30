@@ -59,10 +59,10 @@ def timeout(duration):
 ################
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--label',
+parser.add_argument('--GW-event',
                     type = str,
-                    default = 'GW190425',
-                    help = "Label to give to the run. This is the GW event name.")
+                    default = 'GW170817',
+                    help = "GW-event to analyze, which is also used as label.")
 parser.add_argument('--prior-name',
                     type = str,
                     default = 'bns',
@@ -152,8 +152,8 @@ SUPPORTED_EVENTS = list(EVENT_CONFIG.keys())
 if args.prior_name not in SUPPORTED_PRIORS:
     raise ValueError(f"Invalid prior name provided. Please provide one of {SUPPORTED_PRIORS}")
 
-if args.label not in SUPPORTED_EVENTS:
-    raise ValueError(f"Invalid event label provided. Please provide one of {SUPPORTED_EVENTS}")
+if args.GW_event not in SUPPORTED_EVENTS:
+    raise ValueError(f"Invalid event provided. Please provide one of {SUPPORTED_EVENTS}")
 
 
 # Auto-detect environment and set paths
@@ -182,11 +182,11 @@ if len(output_dir) == 0:
     
 logger.info(f"Output directory is set to: {output_dir}. Make sure it exists!")
 
-full_outdir = os.path.join(output_dir, args.label, args.population_type, args.prior_name, args.eos_samples_name)
-reference_parameters_filename = os.path.join(output_dir, args.label, "reference_parameters.json")
-prior_filename = os.path.join(output_dir, args.label, "prior.prior")
+full_outdir = os.path.join(output_dir, args.GW_event, args.population_type, args.prior_name, args.eos_samples_name)
+reference_parameters_filename = os.path.join(output_dir, args.GW_event, "reference_parameters.json")
+prior_filename = os.path.join(output_dir, args.GW_event, "prior.prior")
     
-bilby.core.utils.setup_logger(outdir=full_outdir, label=args.label)
+bilby.core.utils.setup_logger(outdir=full_outdir, label=args.GW_event)
 logger.info(f"We set full_outdir to {full_outdir}")
 
 # If a dry run, then make sure we always get pased the relative binning
@@ -200,8 +200,8 @@ with open(reference_parameters_filename, 'r') as f:
     reference_parameters = json.load(f)
 
 # Get event configuration
-event_config = EVENT_CONFIG[args.label]
-if args.label == 'GW170817' and args.GW170817_HV:
+event_config = EVENT_CONFIG[args.GW_event]
+if args.GW_event == 'GW170817' and args.GW170817_HV:
     # If we only want to use HV, then we change the ifo_list -- this is mainly to understand what is going on here
     logger.info("Running GW170817 with only H1 and V1 interferometers")
     event_config['ifo_list'] = ['H1', 'V1']
@@ -215,7 +215,7 @@ if 'geocent_time' in reference_parameters:
     del reference_parameters['geocent_time']  # Remove to avoid confusion later
     logger.info(f"Using geocent_time from reference parameters: {geocent_time}")
 else:
-    raise ValueError(f"geocent_time not found in reference parameters for {args.label} -- PE cannot be run without this information.")
+    raise ValueError(f"geocent_time not found in reference parameters for {args.GW_event} -- PE cannot be run without this information.")
     
 # Need to do a few conversions on these parameters 
 chirp_mass = reference_parameters["chirp_mass"]
@@ -228,7 +228,7 @@ reference_parameters["mass_ratio"] = mass_ratio
 reference_parameters["mass_1"] = mass_1 # TODO: source frame or detector frame? To check!
 reference_parameters["mass_2"] = mass_2
 
-logger.info(f"Showing the reference parameters for {args.label}")
+logger.info(f"Showing the reference parameters for {args.GW_event}")
 for key, value in reference_parameters.items():
     logger.info(f"{key}: {value}")
 
@@ -262,7 +262,7 @@ waveform_generator = bilby.gw.WaveformGenerator(
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters,
     waveform_arguments=waveform_arguments)
 
-logger.info(f"Running with label {args.label} and ifo_list {ifo_list}")
+logger.info(f"Running with label {args.GW_event} and ifo_list {ifo_list}")
 np.random.seed(args.seed)
 bilby.core.utils.random.seed(args.seed)
 
@@ -342,7 +342,6 @@ else:
     # First, drop chirp_mass, mass_ratio and luminosity_distance from the prior_dict, as these are modelled by the NF
     prior_dict.pop('chirp_mass', None)
     prior_dict.pop('mass_ratio', None)
-    prior_dict.pop('luminosity_distance', None)
     
     # Path to NF model - updated to match new folder structure
     nf_model_path = os.path.join(base_dir, f"NFprior/models/{args.population_type}/{args.prior_name}/{args.eos_samples_name}/model.pt")
@@ -361,9 +360,8 @@ else:
     nf_dist = NFDist(
         names=nf_kwargs["names"],
         flow_filename=nf_model_path,
-        include_dL=True,
-        use_tilde=False,
-        use_component_masses=False
+        use_tilde=nf_kwargs["use_tilde"],
+        use_component_masses=nf_kwargs["use_component_masses"]
         )
     
     # Add NFPrior for each name that is in the dist
@@ -382,8 +380,8 @@ for key, value in priors.items():
     
 ### GW DATA GENERATION
 logger.info(f"Running through data generation steps now")
-data_path = os.path.join(base_dir, 'data', args.label)
-if args.label == 'GW190425':
+data_path = os.path.join(base_dir, 'data', args.GW_event)
+if args.GW_event == 'GW190425':
     frame_files = {
         "L1": os.path.join(data_path, "L-L1_GWOSC_16KHZ_R1-1240213455-4096.gwf"),
         "V1": os.path.join(data_path, "V-V1_GWOSC_16KHZ_R1-1240213455-4096.gwf")
@@ -396,7 +394,7 @@ if args.label == 'GW190425':
         "L1": os.path.join(data_path, "glitch_median_PSD_forLI_L1_srate8192.txt"),
         "V1": os.path.join(data_path, "glitch_median_PSD_forLI_V1_srate8192.txt")
     }
-elif args.label == 'GW170817':
+elif args.GW_event == 'GW170817':
     frame_files = {
         "H1": os.path.join(data_path, "H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf"),
         "L1": os.path.join(data_path, "L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf"),
@@ -412,7 +410,7 @@ elif args.label == 'GW170817':
         "L1": os.path.join(data_path, "l1_psd.txt"),
         "V1": os.path.join(data_path, "v1_psd.txt")
     }
-elif args.label == 'GW230529':
+elif args.GW_event == 'GW230529':
     # FIXME: not sure if this is correct?
     channels_dict = {
         # "H1": "GDS-CALIB_STRAIN_CLEAN",
@@ -478,7 +476,7 @@ else:
 if args.dry_run:
     logger.info("DRY RUN: Setup validation complete. Skipping sampling.")
     logger.info(f"Would run sampling with:")
-    logger.info(f"  - Event: {args.label}")
+    logger.info(f"  - Event: {args.GW_event}")
     logger.info(f"  - Prior: {args.prior_name}")
     logger.info(f"  - Output directory: {full_outdir}")
     logger.info(f"  - Interferometers: {[ifo.name for ifo in ifos]}")
@@ -558,7 +556,7 @@ else:
     
 #     collect_exact_likelihood = np.array(collect_exact_likelihood)
 #     collect_relative_binning_likelihood = np.array(collect_relative_binning_likelihood)
-#     np.savetxt(f'{args.outdir}/{args.label}_comparison_likelihoods.dat', np.vstack([choice_idx, collect_relative_binning_likelihood, collect_exact_likelihood]).T)
+#     np.savetxt(f'{args.outdir}/{args.GW_event}_comparison_likelihoods.dat', np.vstack([choice_idx, collect_relative_binning_likelihood, collect_exact_likelihood]).T)
 
 
 
@@ -571,4 +569,4 @@ else:
 #     ax.hist(likelihood_differences, bins = 20)
 #     ax.set_xlabel('LRelBin - LExact')
 #     ax.grid()
-#     fig.savefig(f"{args.outdir}/{args.label}_likelihood_errors.png")
+#     fig.savefig(f"{args.outdir}/{args.GW_event}_likelihood_errors.png")
