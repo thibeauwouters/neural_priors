@@ -1,0 +1,34 @@
+11:38 INFO    : We set full_outdir to /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio
+11:38 INFO    : Using geocent_time from reference parameters: 1187008882.43
+11:38 INFO    : Showing the reference parameters for GW170817
+11:38 INFO    : chirp_mass: 1.1975896
+11:38 INFO    : symmetric_mass_ratio: 0.2461001
+11:38 INFO    : a_1: 0.01890608
+11:38 INFO    : a_2: 0.04888488
+11:38 INFO    : tilt_1: 0.0
+11:38 INFO    : tilt_2: 0.0
+11:38 INFO    : phi_jl: 0.0
+11:38 INFO    : phi_12: 0.0
+11:38 INFO    : lambda_1: 100.0
+11:38 INFO    : lambda_2: 200.0
+11:38 INFO    : luminosity_distance: 40.06331818
+11:38 INFO    : phase: 5.88649652
+11:38 INFO    : theta_jn: 1.93095421
+11:38 INFO    : psi: 1.59687217
+11:38 INFO    : ra: 3.39736826
+11:38 INFO    : dec: -0.34000186
+11:38 INFO    : mass_ratio: 0.7779384106788951
+11:38 INFO    : mass_1: 1.5621553813557303
+11:38 INFO    : mass_2: 1.2152606746053602
+11:38 INFO    : Geocent time is 1187008882.43 and duration is 128.0
+11:38 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+11:38 INFO    : Relative binning delta 0.01
+11:38 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+11:38 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+11:38 INFO    : Loading priors from /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
+11:38 INFO    : Sampling with an NF prior, with name bns, and bns
+11:38 INFO    : Using NF model path: /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio/model.pt
+11:38 INFO    : Loaded NF kwargs from /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio/model_kwargs.json

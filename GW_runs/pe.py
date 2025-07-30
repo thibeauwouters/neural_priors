@@ -71,6 +71,10 @@ parser.add_argument('--eos-samples-name',
                     type = str,
                     default = "radio",
                     help = "Name of the EOS posterior dataset, must match the NF name. Used to construct the path to the NF model data.") # TODO: does it have to be relative?
+parser.add_argument('--population-type',
+                    type = str,
+                    default = "uniform",
+                    help = "Population type for NF model path construction (e.g., uniform)")
 parser.add_argument('--waveform-model',
                     type = str,
                     default = 'IMRPhenomXP_NRTidalv3',
@@ -171,13 +175,14 @@ from LikelihoodRB import RelBinning
 
 output_dir = args.output_dir
 if len(output_dir) == 0:
-    # If no output directory is given, use the current working directory
-    output_dir = os.getcwd()
-    logger.info("No output directory provided, using current working directory.")
+    # If no output directory is given, use the script directory as base
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    output_dir = script_dir
+    logger.info("No output directory provided, using script directory as base.")
     
 logger.info(f"Output directory is set to: {output_dir}. Make sure it exists!")
 
-full_outdir = os.path.join(output_dir, args.label, args.prior_name)
+full_outdir = os.path.join(output_dir, args.label, args.population_type, args.prior_name, args.eos_samples_name)
 reference_parameters_filename = os.path.join(output_dir, args.label, "reference_parameters.json")
 prior_filename = os.path.join(output_dir, args.label, "prior.prior")
     
@@ -339,8 +344,8 @@ else:
     prior_dict.pop('mass_ratio', None)
     prior_dict.pop('luminosity_distance', None)
     
-    # Path to NF model
-    nf_model_path = os.path.join(base_dir, f"NFprior/models/{args.label}/{args.eos_samples_name}_{args.prior_name}/model.pt")
+    # Path to NF model - updated to match new folder structure
+    nf_model_path = os.path.join(base_dir, f"NFprior/models/{args.population_type}/{args.prior_name}/{args.eos_samples_name}/model.pt")
     nf_model_path = os.path.abspath(nf_model_path)
     logger.info(f"Using NF model path: {nf_model_path}")
     
