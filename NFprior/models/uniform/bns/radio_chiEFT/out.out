@@ -39,3 +39,9 @@ np.shape(self.x)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/bns/radio_chiEFT/scaler.gz
 Going to start training for glasflow . . .
+Early stopping triggered at epoch 339
+Saving the training loss plot to ./models/uniform/bns/radio_chiEFT/training_loss.pdf
+Training done. Took around 9.15 minutes
+Saving the model weights to ./models/uniform/bns/radio_chiEFT/model.pt
+Saving the model kwargs to ./models/uniform/bns/radio_chiEFT/model_kwargs.json
+DONE training!
