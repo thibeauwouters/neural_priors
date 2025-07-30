@@ -720,14 +720,6 @@ class CheckerUnconditional(Checker):
         self.make_cornerplot_with_labels(training_samples, nf_samples, name, 
                                        my_range=ranges, labels=labels)
         
-        # Run uniformity test for chirp mass/mass ratio models
-        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
-        if not use_component_masses:
-            print("\nRunning marginal uniformity test for Mc, q distribution...")
-            uniformity_result = self.test_marginal_uniformity()
-            if uniformity_result:
-                print("Uniformity test completed successfully")
-                
         # For non-tilde lambda models, check if lambda_1 < lambda_2 for all generated samples
         if self.nf_kwargs.get("use_tilde", "False") == "False" and self.nf_kwargs.get("source_type", "bns") == "bns":
             print("\nChecking if lambda_1 < lambda_2 for all generated samples...")
@@ -890,100 +882,6 @@ class CheckerUnconditional(Checker):
         
         return nf_samples
     
-    def test_marginal_uniformity(self, N_test_samples: int = 5_000, n_bins: int = 20):
-        """
-        Test whether samples from the marginal Mc, q distribution are uniform.
-        This is only applicable for unconditional use_tilde parameterization where the first 
-        two parameters are Mc (chirp mass) and q (mass ratio).
-        
-        Args:
-            N_test_samples (int): Number of samples to generate for the test.
-            n_bins (int): Number of bins per dimension for the 2D histogram.
-            
-        Returns:
-            dict: Test results including chi2 statistic and p-value.
-        """
-        # Check if this uses chirp mass/mass ratio parameterization
-        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
-        if use_component_masses:
-            print("Uniformity test only applicable for use_component_masses=False models")
-            return None
-            
-        print(f"Testing marginal uniformity of Mc, q distribution with {N_test_samples} samples")
-        
-        # Generate samples from the unconditional NF
-        nf_samples = self.generate_nf_samples_for_test(N_test_samples)
-        
-        print("nf_samples.shape")
-        print(nf_samples.shape)
-        
-        # Extract Mc and q samples (first two columns for chirp mass/mass ratio models)
-        mc_samples = nf_samples[:, 0]
-        q_samples = nf_samples[:, 1]
-        
-        print(np.min(mc_samples), np.max(mc_samples))
-        print(np.min(q_samples), np.max(q_samples))
-        
-        # Normalize to [0, 1] range for uniformity test
-        mc_min, mc_max = mc_samples.min(), mc_samples.max()
-        q_min, q_max = q_samples.min(), q_samples.max()
-        
-        mc_normalized = (mc_samples - mc_min) / (mc_max - mc_min)
-        q_normalized = (q_samples - q_min) / (q_max - q_min)
-        
-        # Create 2D histogram
-        H, _, _ = np.histogram2d(mc_normalized, q_normalized, 
-                               bins=(n_bins, n_bins), range=[[0, 1], [0, 1]])
-        
-        # Flatten histogram for chi-square test
-        observed = H.flatten()
-        expected = np.full_like(observed, fill_value=np.mean(observed))  # For uniform distribution
-        
-        # Perform chi-square test
-        chi2_stat, p_value = chisquare(observed, expected)
-        
-        result = {
-            'chi2_statistic': chi2_stat,
-            'p_value': p_value,
-            'n_samples': N_test_samples,
-            'n_bins': n_bins,
-            'degrees_of_freedom': len(observed) - 1,
-            'is_uniform': p_value > 0.05  # Common significance level
-        }
-        
-        print(f"Uniformity Test Results:")
-        print(f"  Chi2 statistic: {chi2_stat:.4f}")
-        print(f"  p-value: {p_value:.4f}")
-        print(f"  Degrees of freedom: {result['degrees_of_freedom']}")
-        print(f"  Is uniform (p > 0.05): {result['is_uniform']}")
-        
-        # Save a visualization of the 2D histogram
-        _, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-        
-        # Plot the 2D histogram
-        im = ax1.imshow(H.T, origin='lower', extent=[0, 1, 0, 1], cmap='Blues')
-        ax1.set_xlabel('Normalized Mc')
-        ax1.set_ylabel('Normalized q')
-        ax1.set_title(f'2D Histogram (p-value: {p_value:.4f})')
-        plt.colorbar(im, ax=ax1)
-        
-        # Plot marginal distributions
-        ax2.hist(mc_normalized, bins=n_bins, alpha=0.7, label='Mc marginal', density=True)
-        ax2.hist(q_normalized, bins=n_bins, alpha=0.7, label='q marginal', density=True)
-        ax2.axhline(y=1.0, color='red', linestyle='--', label='Uniform (density=1)')
-        ax2.set_xlabel('Normalized parameter value')
-        ax2.set_ylabel('Density')
-        ax2.set_title('Marginal Distributions')
-        ax2.legend()
-        
-        plt.tight_layout()
-        name = os.path.join(self.figures_outdir, "marginal_uniformity_test.pdf")
-        plt.savefig(name, bbox_inches="tight")
-        plt.close()
-        print(f"Uniformity test visualization saved to {name}")
-        
-        return result
-    
     def generate_nf_samples_for_test(self, N_test_samples: int):
         """
         Generate samples from the NF model for testing purposes.
@@ -1102,12 +1000,14 @@ class CheckerUnconditional(Checker):
                 return np.column_stack([m1, m2, lambda_2])
 
 def main():
-    # Example usage for unconditional models (both BNS and NSBH)
-    unconditional_checker = CheckerUnconditional("./models/uniform/bns/radio/", N_samples=10_000)
-    print("\n" + "="*50)
-    print("Testing unconditional model")
-    print("="*50)
-    unconditional_checker.check_unconditional_model()
+    # Evaluate all of our flows at the same time
+    source_type_list = ["bns", "nsbh"]
+    eos_list = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
+    for source_type in source_type_list:
+        for eos in eos_list:
+            print(f"Checking unconditional model for {source_type} with EOS {eos}")
+            unconditional_checker = CheckerUnconditional(f"./models/uniform/{source_type}/{eos}/", N_samples=10_000)
+            unconditional_checker.check_unconditional_model()
     
 if __name__ == "__main__":
     main()
