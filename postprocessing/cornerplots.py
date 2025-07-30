@@ -4,6 +4,7 @@ import arviz
 import numpy as np
 import matplotlib.pyplot as plt
 import corner
+import argparse
 
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
@@ -70,7 +71,9 @@ LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
               }
 
 def create_corner_plot(GW_event: str,
-                       base_path: str = "../GW_runs/final_results",
+                       population_type: str,
+                       eos_samples_name: str = "radio",
+                       base_path: str = "../GW_runs/",
                        plot_all_params: bool = False,
                        plot_default: bool = False,
                        convert_lambdas: bool = True,
@@ -83,6 +86,9 @@ def create_corner_plot(GW_event: str,
     
     Args:
         GW_event (str): The name of the GW event to create the corner plot for.
+        population_type (str): Population type (uniform, gaussian, double_gaussian).
+        eos_samples_name (str): EOS samples name (default: radio).
+        base_path (str): Base path to the GW runs directory.
         plot_all_params (bool): If True, plot all parameters. If False, plot only a subset of parameters.
         plot_default (bool): If True, include the Default run in the corner plot.
         convert_lambdas (bool): If True, convert lambda_1 and lambda_2 to lambda_tilde and delta_lambda_tilde.
@@ -98,10 +104,24 @@ def create_corner_plot(GW_event: str,
     else:
         injection_run = False
     
+    # Construct paths based on new directory structure
+    # For default runs in gaussian/double_gaussian, they are stored in uniform/radio/
+    if population_type in ["gaussian", "double_gaussian"]:
+        default_population_type = "uniform"
+        default_eos_samples_name = "radio"
+    else:
+        default_population_type = population_type
+        default_eos_samples_name = eos_samples_name
+    
     # Load result files
-    bns_results_filename = os.path.join(base_path, "bns/bns_result.json")
-    default_results_filename = os.path.join(base_path, "default/default_result.json")
-    nsbh_results_filename = os.path.join(base_path, "nsbh/nsbh_result.json")
+    bns_results_filename = os.path.join(base_path, GW_event, population_type, "bns", eos_samples_name, "bns_result.json")
+    default_results_filename = os.path.join(base_path, GW_event, default_population_type, "default", default_eos_samples_name, "default_result.json")
+    nsbh_results_filename = os.path.join(base_path, GW_event, population_type, "nsbh", eos_samples_name, "nsbh_result.json")
+    
+    print(f"Looking for results files:")
+    print(f"  BNS: {bns_results_filename}")
+    print(f"  Default: {default_results_filename}")
+    print(f"  NSBH: {nsbh_results_filename}")
 
     # Load posterior samples
     with open(bns_results_filename, "r") as f:
@@ -374,7 +394,7 @@ def create_corner_plot(GW_event: str,
         plt.text(x, y, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     # Save the figure
-    output_dir = os.path.join(base_path, "figures")
+    output_dir = os.path.join(base_path, GW_event, population_type, "figures")
     os.makedirs(output_dir, exist_ok=True)
     save_name = 'corner' + \
             ('_all' if plot_all_params else '') + \
@@ -396,23 +416,26 @@ def real_events():
                     #  "GW230529",
                     ]
     
+    population_types = ["uniform", "gaussian", "double_gaussian"]
+    
     # for plot_all_params in [True, False]:
     for plot_default in [True, False]:
         for plot_adrian in [False]:
             for plot_hauke in [False]:
                 for plot_hauke_EM in [False]:
                     for convert_lambdas in [True, False]:
-                        for GW_event in GW_event_list:  
-                            settings = dict(plot_all_params=False,
-                                            plot_default=plot_default,
-                                            convert_lambdas=convert_lambdas,
-                                            plot_hauke=plot_hauke,
-                                            plot_hauke_EM=plot_hauke_EM,
-                                            plot_adrian=plot_adrian,
-                                            base_path=os.path.join("../GW_runs/", GW_event)
-                                            )
-                            print(f"Creating corner plot for {GW_event} with settings: {settings}")
-                            create_corner_plot(GW_event, **settings)
+                        for GW_event in GW_event_list:
+                            for population_type in population_types:
+                                settings = dict(plot_all_params=False,
+                                                plot_default=plot_default,
+                                                convert_lambdas=convert_lambdas,
+                                                plot_hauke=plot_hauke,
+                                                plot_hauke_EM=plot_hauke_EM,
+                                                plot_adrian=plot_adrian,
+                                                population_type=population_type
+                                                )
+                                print(f"Creating corner plot for {GW_event} {population_type} with settings: {settings}")
+                                create_corner_plot(GW_event, **settings)
                             
 def injections():
     
@@ -440,8 +463,55 @@ def injections():
                 create_corner_plot(GW_event, **settings)
                 
 def main():
-    # real_events()
-    injections()
+    parser = argparse.ArgumentParser(description="Create corner plots for GW parameter estimation results")
+    parser.add_argument('--gw-event', type=str, required=True,
+                        help='GW event name (e.g., GW170817)')
+    parser.add_argument('--population-type', type=str, required=True,
+                        choices=['uniform', 'gaussian', 'double_gaussian'],
+                        help='Population type for the analysis')
+    parser.add_argument('--eos-samples-name', type=str, default='radio',
+                        help='EOS samples name (default: radio)')
+    parser.add_argument('--base-dir', type=str, default='../GW_runs/',
+                        help='Base directory path (default: ../GW_runs/)')
+    parser.add_argument('--plot-all-params', action='store_true',
+                        help='Plot all parameters instead of subset')
+    parser.add_argument('--plot-default', action='store_true',
+                        help='Include default prior in plot')
+    parser.add_argument('--convert-lambdas', action='store_true', default=True,
+                        help='Convert lambda_1,lambda_2 to lambda_tilde,delta_lambda_tilde')
+    parser.add_argument('--no-convert-lambdas', dest='convert_lambdas', action='store_false',
+                        help='Do not convert lambdas')
+    parser.add_argument('--plot-hauke', action='store_true',
+                        help='Include Hauke\'s results in plot')
+    parser.add_argument('--plot-hauke-em', action='store_true',
+                        help='Include Hauke\'s GW+EM results in plot')
+    parser.add_argument('--plot-adrian', action='store_true',
+                        help='Include Adrian\'s results in plot')
+    parser.add_argument('--prevent-bns-leakage', action='store_true',
+                        help='Prevent BNS leakage by masking negative delta_lambda_tilde')
+    parser.add_argument('--batch-mode', action='store_true',
+                        help='Run in batch mode (old behavior for testing)')
+    
+    args = parser.parse_args()
+    
+    if args.batch_mode:
+        # real_events()
+        injections()
+    else:
+        # Single run mode with command line arguments
+        create_corner_plot(
+            GW_event=args.gw_event,
+            population_type=args.population_type,
+            eos_samples_name=args.eos_samples_name,
+            base_path=args.base_dir,
+            plot_all_params=args.plot_all_params,
+            plot_default=args.plot_default,
+            convert_lambdas=args.convert_lambdas,
+            plot_hauke=args.plot_hauke,
+            plot_hauke_EM=args.plot_hauke_em,
+            plot_adrian=args.plot_adrian,
+            prevent_bns_leakage=args.prevent_bns_leakage
+        )
             
 if __name__ == "__main__":
     main()
