@@ -14,7 +14,7 @@ import joblib
 from scipy.special import kl_div
 from scipy.stats import gaussian_kde, chisquare
 
-from glasflow.flows import RealNVP
+from glasflow.flows.nsf import CouplingNSF
 
 ### flowjax imports
 import jax
@@ -160,7 +160,7 @@ class CheckerBNS(Checker):
             nf_kwargs = json.load(f)
         self.nf_kwargs = nf_kwargs
         
-        # Check if this is a flowJAX model
+        # Check if this is a flowJAX model - all booleans are stored as strings
         use_flowjax = nf_kwargs.get("use_flowjax", "False") == "True"
         
         if use_flowjax:
@@ -192,12 +192,13 @@ class CheckerBNS(Checker):
             print("Loading glasflow BNS model")
             nf_path = os.path.join(self.path, "model.pt")
             
-            flow = RealNVP(
-                    n_inputs=2,
-                    n_conditional_inputs=2,
-                    n_transforms=nf_kwargs["n_transforms"],
-                    n_neurons=nf_kwargs["n_neurons"],
-                    batch_norm_between_transforms=True)
+            flow = CouplingNSF(
+                n_inputs=nf_kwargs["n_inputs"],
+                n_transforms=nf_kwargs["n_transforms"],
+                n_neurons=nf_kwargs["n_neurons"],
+                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
+                num_bins=nf_kwargs["num_bins"]
+            )
             
             print(f"Loading glasflow model from {nf_path}")
             flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
@@ -349,7 +350,7 @@ class CheckerBNS(Checker):
             with torch.no_grad():
                 for _ in range(self.N_samples):
                     value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()
-                    if self.nf_kwargs["take_log_lambda"] == "True":
+                    if self.nf_kwargs.get("take_log_lambda", "False") == "True":
                         value = np.exp(value)  # Scale back to original Lambda_2
                     nf_samples.append(value)
                     
@@ -459,16 +460,14 @@ class CheckerNSBH(Checker):
             
         else:
             print("Loading glasflow NSBH model")
-            from glasflow.flows.autoregressive import MaskedAffineAutoregressiveFlow
-            
             nf_path = os.path.join(self.path, "model.pt")
             
-            flow = MaskedAffineAutoregressiveFlow(
-                n_inputs=1,  # fixed for NSBH case
-                n_conditional_inputs=1,  # fixed for NSBH case
+            flow = CouplingNSF(
+                n_inputs=nf_kwargs["n_inputs"],
                 n_transforms=nf_kwargs["n_transforms"],
                 n_neurons=nf_kwargs["n_neurons"],
-                # n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"] # FIXME: not passed during training bug here as well
+                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
+                num_bins=nf_kwargs["num_bins"]
             )
             print(f"Loading glasflow NSBH model from {nf_path}")
             flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
@@ -558,7 +557,7 @@ class CheckerNSBH(Checker):
             with torch.no_grad():
                 for _ in range(self.N_samples):
                     value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()[0]
-                    if self.nf_kwargs["take_log_lambda"] == "True":
+                    if self.nf_kwargs.get("take_log_lambda", "False") == "True":
                         value = np.exp(value)  # Scale back to original Lambda_2
                     nf_samples.append(value)
                     
@@ -663,13 +662,12 @@ class CheckerUnconditional(Checker):
             print(f"Loading glasflow unconditional model with {n_inputs} inputs")
             nf_path = os.path.join(self.path, "model.pt")
             
-            # Initialize glasflow model based on n_inputs
-            from glasflow.flows.nsf import CouplingNSF
             flow = CouplingNSF(
                 n_inputs=n_inputs,
                 n_transforms=nf_kwargs["n_transforms"],
                 n_neurons=nf_kwargs["n_neurons"],
-                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"]
+                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
+                num_bins=nf_kwargs["num_bins"]
             )
             
             print(f"Loading glasflow model from {nf_path}")
@@ -731,7 +729,7 @@ class CheckerUnconditional(Checker):
                 print("Uniformity test completed successfully")
                 
         # For non-tilde lambda models, check if lambda_1 < lambda_2 for all generated samples
-        if not self.nf_kwargs["use_tilde"] and self.nf_kwargs["source_type"] == "bns":
+        if self.nf_kwargs.get("use_tilde", "False") == "False" and self.nf_kwargs.get("source_type", "bns") == "bns":
             print("\nChecking if lambda_1 < lambda_2 for all generated samples...")
             
             print(np.min(nf_samples[:, -2]), np.max(nf_samples[:, -2]))
@@ -785,13 +783,13 @@ class CheckerUnconditional(Checker):
             
             return mass_labels + [r"$d_L$ [Mpc]"] + lambda_labels
         
-        # Handle 3D NSBH case (Mc, q, lambda_2)
+        # Handle 3D NSBH case 
         elif len(parameter_names) == 3:
             source_type = self.nf_kwargs.get("source_type", "bns")
             if source_type == "nsbh":
-                # NSBH case: Mc, q, lambda_2 (only NS has lambda)
+                # NSBH case: for component masses m1, m2, lambda_2 or for chirp mass Mc, q, lambda_2
                 if use_component_masses:
-                    return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]  # 2D case, shouldn't be 3
+                    return [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]
                 else:
                     return [r"$M_c$ [$M_{\odot}$]", r"$q$", r"$\Lambda_2$"]
             else:
@@ -1094,17 +1092,18 @@ class CheckerUnconditional(Checker):
                     # Use 3 parameters: Mc, q, lambda_2 (only NS has lambda)
                     return np.column_stack(mass_params + [lambda_2])  # Only lambda_2 for NSBH
             else:
-                # For NSBH with component masses, use m2, lambda_2 (concatenated NS data)
+                # For NSBH with component masses, use m1, m2, lambda_2 
+                m1 = self.training_data["m1"]
                 m2 = self.training_data["m2"]
                 if use_tilde:
                     lambda_2 = self.training_data["lambda_2"]  # Note: for NSBH, use raw lambda_2 not tilde
                 else:
                     lambda_2 = self.training_data["lambda_2"]
-                return np.column_stack([m2, lambda_2])
+                return np.column_stack([m1, m2, lambda_2])
 
 def main():
     # Example usage for unconditional models (both BNS and NSBH)
-    unconditional_checker = CheckerUnconditional("./models/GW190425/radio_chiEFT_nsbh/", N_samples=10_000)
+    unconditional_checker = CheckerUnconditional("./models/uniform/bns/radio/", N_samples=10_000)
     print("\n" + "="*50)
     print("Testing unconditional model")
     print("="*50)
