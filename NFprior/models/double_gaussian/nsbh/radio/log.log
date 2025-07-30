@@ -1,0 +1,36 @@
+000 (2575719.000.000) 2025-07-30 15:20:37 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+001 (2575719.000.000) 2025-07-30 15:21:12 Job executing on host: <145.107.4.164:9618?addrs=145.107.4.164-9618+[2a07-8500-120-e070--a4]-9618&alias=wn-pijl-003.nikhef.nl&noUDP&sock=startd_4461_7413>
+	SlotName: slot1_2@wn-pijl-003.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_569990fd_2b62_0adb_f587_bbb820db7247 }
+	CondorScratchDir = "/scratch/condor_execute/dir_4131428"
+	Cpus = 1
+	Disk = 16790397
+	GPUs = 1
+	GPUs_GPU_569990fd_2b62_0adb_f587_bbb820db7247 = [ Id = "GPU-569990fd-2b62-0adb-f587-bbb820db7247"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "569990fd-2b62-0adb-f587-bbb820db7247"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "570.124.06"; DriverVersion = 12.8; DevicePciBusId = "0000:01:00.0"; GlobalMemoryMb = 45468; MaxSupportedVersion = 12080 ]
+	Memory = 16384
+...
+006 (2575719.000.000) 2025-07-30 15:21:23 Image size of job updated: 336464
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (2575719.000.000) 2025-07-30 15:21:24 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:03, Sys 0 00:00:01  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:03, Sys 0 00:00:01  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     0.43        1         1 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :                 1         1 "GPU-569990fd-2b62-0adb-f587-bbb820db7247"
+	   Memory (MB)          :     0       16384     16384 
+	   TimeExecute (s)      :    11                       
+	   TimeSlotBusy (s)     :    11                       
+
+	Job terminated of its own accord at 2025-07-30T13:21:23Z with exit-code 1.
+...

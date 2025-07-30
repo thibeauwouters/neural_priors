@@ -103,15 +103,20 @@ def sample_ns_mass_double_gaussian(nb_mass_samples: int):
         return mass_samples
 
 parser = argparse.ArgumentParser(description="Train a normalizing flow prior on EOS samples.")
-parser.add_argument("--eos-samples-name", 
+parser.add_argument("--population-type", 
                     type=str, 
-                    default="radio", 
-                    help="EOS samples name (default: radio)")
+                    default="uniform", 
+                    choices=["uniform", "gaussian", "double_gaussian"], 
+                    help="Type of source to model")
 parser.add_argument("--source-type", 
                     type=str, 
                     default="bns", 
                     choices=["bns", "nsbh"], 
                     help="Type of source to model")
+parser.add_argument("--eos-samples-name", 
+                    type=str, 
+                    default="radio", 
+                    help="EOS samples name (default: radio)")
 parser.add_argument("--use-tilde", 
                     action="store_true", 
                     help="Use tilde parameterization for lambdas (lambda_tilde, delta_lambda_tilde) instead of (lambda_1, lambda_2)")
@@ -284,7 +289,7 @@ class NFPriorCreator:
         
         SUPPORTED_POPULATION_TYPES = ["uniform", "gaussian", "double_gaussian"]
         if population_type not in SUPPORTED_POPULATION_TYPES:
-            raise ValueError(f"source_type must be one of {SUPPORTED_POPULATION_TYPES}, got {population_type} instead.")
+            raise ValueError(f"population_type must be one of {SUPPORTED_POPULATION_TYPES}, got {population_type} instead.")
         
         self.source_type = source_type
         self.population_type = population_type

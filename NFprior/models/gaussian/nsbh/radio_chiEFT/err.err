@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 943, in <module>
+    exit(main() or 0)
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 939, in main
+    trainer.create_data()
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 454, in create_data
+    Lambda_2 = np.interp(m2, m, l)
+UnboundLocalError: local variable 'm2' referenced before assignment
