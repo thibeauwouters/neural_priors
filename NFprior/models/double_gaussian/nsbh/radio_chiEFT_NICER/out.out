@@ -29,3 +29,21 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/double_gaussian/nsbh/radio_chiEFT_NICER
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/../data/eos/radio_chiEFT_NICER/eos_samples.npz
 Number of good samples:  0.9882
+Saving training data to ./models/double_gaussian/nsbh/radio_chiEFT_NICER/training_data.npz
+Saving training data DONE
+Using chirp mass and mass ratio (Mc, q) for training
+Using component parameterization for lambdas (lambda_1, lambda_2)
+Training samples: 40000, Validation samples: 10000
+We are training NSBH
+NSBH: training lambda_2
+np.shape(self.x)
+(40000, 3)
+Using MinMaxScaler to scale the input data x
+Saved sklearn scaler to ./models/double_gaussian/nsbh/radio_chiEFT_NICER/scaler.gz
+Going to start training for glasflow . . .
+Early stopping triggered at epoch 175
+Saving the training loss plot to ./models/double_gaussian/nsbh/radio_chiEFT_NICER/training_loss.pdf
+Training done. Took around 4.13 minutes
+Saving the model weights to ./models/double_gaussian/nsbh/radio_chiEFT_NICER/model.pt
+Saving the model kwargs to ./models/double_gaussian/nsbh/radio_chiEFT_NICER/model_kwargs.json
+DONE training!

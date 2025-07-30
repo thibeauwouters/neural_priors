@@ -442,11 +442,11 @@ class NFPriorCreator:
                 
                 if self.population_type == "uniform":
                     # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
-                    mass_samples = np.random.uniform(1.0, mtov, 1)
+                    m2 = np.random.uniform(1.0, mtov, 1)
                 elif self.population_type == "gaussian":
-                    mass_samples = sample_ns_mass_gaussian(1)
+                    m2 = sample_ns_mass_gaussian(1)
                 elif self.population_type == "double_gaussian":
-                    mass_samples = sample_ns_mass_double_gaussian(1)
+                    m2 = sample_ns_mass_double_gaussian(1)
                 else:
                     raise ValueError(f"Unsupported population type: {self.population_type}")
                 
