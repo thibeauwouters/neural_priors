@@ -1,0 +1,16 @@
+Universe = vanilla
+Executable = /data/gravwav/twouters/miniconda3/envs/eos_source_classification/bin/python
+arguments = "PLACEHOLDER_ARGUMENTS"
+getenv = true
+Log = PLACEHOLDER_LOG
+Error = PLACEHOLDER_ERROR
+Output = PLACEHOLDER_OUTPUT
+request_memory = 16GB
+request_cpus = 1
+request_disk = 16GB
+request_gpus = 1
+requirements = regexp("L40S", TARGET.GPUs_DeviceName)
++USeOS = "el9"
++JobCategory = "long"
++MaxWallTime = 345600
+Queue 1
