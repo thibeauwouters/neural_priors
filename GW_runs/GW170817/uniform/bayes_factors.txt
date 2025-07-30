@@ -1,0 +1,16 @@
+Bayes Factor Analysis for GW170817 - uniform population
+============================================================
+
+Absolute log Bayes factors:
+Prior                   Log Bayes Factor
+----------------------------------------
+default                       522.113027
+bns                           523.095194
+nsbh                           16.107294
+
+Relative log Bayes factors:
+Comparison                ln(BF)   log10(BF)          Preference
+----------------------------------------------------------------
+bns_vs_default          0.982167    0.426550    BNS (barely worth mentioning)
+nsbh_vs_default      -506.005733 -219.755498    DEFAULT (decisive)
+bns_vs_nsbh           506.987900  220.182047    BNS (decisive)
