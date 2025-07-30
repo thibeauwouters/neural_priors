@@ -41,3 +41,9 @@ np.shape(self.x)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/double_gaussian/nsbh/radio/scaler.gz
 Going to start training for glasflow . . .
+Early stopping triggered at epoch 382
+Saving the training loss plot to ./models/double_gaussian/nsbh/radio/training_loss.pdf
+Training done. Took around 37.98 minutes
+Saving the model weights to ./models/double_gaussian/nsbh/radio/model.pt
+Saving the model kwargs to ./models/double_gaussian/nsbh/radio/model_kwargs.json
+DONE training!

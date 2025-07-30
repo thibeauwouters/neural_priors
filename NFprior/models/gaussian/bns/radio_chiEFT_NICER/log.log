@@ -63,3 +63,24 @@
 	1046  -  MemoryUsage of job (MB)
 	1070904  -  ResidentSetSize of job (KB)
 ...
+005 (2575803.000.000) 2025-07-30 17:26:56 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 01:01:26, Sys 0 00:00:09  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 01:01:26, Sys 0 00:00:09  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :     0.10        1         1 "GPU-28701473-2bc0-ba00-3737-13d19e1cede7"
+	   GpusMemory (MB)      :  1210                       
+	   Memory (MB)          :  1046       16384     16384 
+	   TimeExecute (s)      :  3704                       
+	   TimeSlotBusy (s)     :  3704                       
+
+	Job terminated of its own accord at 2025-07-30T15:26:56Z with exit-code 0.
+...

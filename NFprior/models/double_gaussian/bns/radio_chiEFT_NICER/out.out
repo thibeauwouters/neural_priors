@@ -40,3 +40,9 @@ np.shape(self.x)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/double_gaussian/bns/radio_chiEFT_NICER/scaler.gz
 Going to start training for glasflow . . .
+Early stopping triggered at epoch 630
+Saving the training loss plot to ./models/double_gaussian/bns/radio_chiEFT_NICER/training_loss.pdf
+Training done. Took around 63.33 minutes
+Saving the model weights to ./models/double_gaussian/bns/radio_chiEFT_NICER/model.pt
+Saving the model kwargs to ./models/double_gaussian/bns/radio_chiEFT_NICER/model_kwargs.json
+DONE training!
