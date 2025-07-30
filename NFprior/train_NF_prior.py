@@ -133,7 +133,7 @@ parser.add_argument("--no-use-component-masses",
 parser.set_defaults(use_component_masses=False)
 parser.add_argument("--N-samples-training", 
                     type=int, 
-                    default=50_000, 
+                    default=200_000, 
                     help="Number of training samples")
 parser.add_argument("--N-samples-plot", 
                     type=int, 
@@ -166,7 +166,7 @@ parser.add_argument("--no-scale-input",
 parser.set_defaults(scale_input=True)
 parser.add_argument("--num-epochs", 
                     type=int, 
-                    default=500,
+                    default=1_000,
                     help="Number of training epochs")
 parser.add_argument("--learning-rate", 
                     type=float, 
@@ -178,7 +178,7 @@ parser.add_argument("--batch-size",
                     help="Batch size")
 parser.add_argument("--max-patience", 
                     type=int, 
-                    default=50, 
+                    default=100, 
                     help="Max patience for early stopping")
 parser.add_argument("--n-transforms", 
                     type=int, 

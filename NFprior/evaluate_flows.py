@@ -1001,8 +1001,13 @@ class CheckerUnconditional(Checker):
 
 def main():
     # Evaluate all of our flows at the same time
-    source_type_list = ["bns", "nsbh"]
-    eos_list = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
+    source_type_list = ["nsbh",
+                        # "bns"
+                        ]
+    eos_list = ["radio",
+                # "radio_chiEFT",
+                # "radio_chiEFT_NICER"
+                ]
     for source_type in source_type_list:
         for eos in eos_list:
             print(f"Checking unconditional model for {source_type} with EOS {eos}")

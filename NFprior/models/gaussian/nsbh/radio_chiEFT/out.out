@@ -6,16 +6,16 @@ Starting training with the following parameters:
     - eos_samples_name: radio_chiEFT
     - use_tilde: False
     - use_component_masses: False
-    - N_samples_training: 50000
+    - N_samples_training: 200000
     - N_samples_plot: 10000
     - m_max_BH: 5.0
     - take_log_lambda: False
     - use_flowjax: False
     - scale_input: True
-    - num_epochs: 500
+    - num_epochs: 1000
     - learning_rate: 0.001
     - batch_size: 1024
-    - max_patience: 50
+    - max_patience: 100
     - n_transforms: 4
     - n_neurons: 64
     - n_blocks_per_transform: 1
@@ -33,17 +33,17 @@ Saving training data to ./models/gaussian/nsbh/radio_chiEFT/training_data.npz
 Saving training data DONE
 Using chirp mass and mass ratio (Mc, q) for training
 Using component parameterization for lambdas (lambda_1, lambda_2)
-Training samples: 40000, Validation samples: 10000
+Training samples: 160000, Validation samples: 40000
 We are training NSBH
 NSBH: training lambda_2
 np.shape(self.x)
-(40000, 3)
+(160000, 3)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/gaussian/nsbh/radio_chiEFT/scaler.gz
 Going to start training for glasflow . . .
-Early stopping triggered at epoch 249
+Early stopping triggered at epoch 324
 Saving the training loss plot to ./models/gaussian/nsbh/radio_chiEFT/training_loss.pdf
-Training done. Took around 6.15 minutes
+Training done. Took around 33.48 minutes
 Saving the model weights to ./models/gaussian/nsbh/radio_chiEFT/model.pt
 Saving the model kwargs to ./models/gaussian/nsbh/radio_chiEFT/model_kwargs.json
 DONE training!
