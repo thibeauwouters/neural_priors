@@ -860,10 +860,17 @@ def main():
         return setup_submission(args, submit=False)
     
     print(f"Starting training with the following parameters:")
+    
+    # Filter out submission-related arguments
+    trainer_args = {}
+    exclude_args = {'setup_submission', 'template_file', 'submit'}
+    
     for key, value in vars(args).items():
-        if key not in {'setup_submission', 'template_file', 'submit'}:
+        if key not in exclude_args:
             print(f"    - {key}: {value}")
-    trainer = NFPriorCreator(**vars(args))
+            trainer_args[key] = value
+    
+    trainer = NFPriorCreator(**trainer_args)
     trainer.create_data()
     trainer.train()
     
