@@ -1,6 +1,6 @@
 JOB run_a /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_a GW_event="GW170817" prior_name="default" eos_samples_name="radio" relative_binning_delta="0.01" seed="1234"
+VARS run_a GW_event="GW170817" population_type="uniform" prior_name="default" eos_samples_name="radio" relative_binning_delta="0.01" seed="1234"
 JOB run_b /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_b GW_event="GW170817" prior_name="bns" eos_samples_name="radio" relative_binning_delta="0.01" seed="1234"
+VARS run_b GW_event="GW170817" population_type="uniform" prior_name="bns" eos_samples_name="radio" relative_binning_delta="0.01" seed="1234"
 JOB run_c /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_c GW_event="GW170817" prior_name="nsbh" eos_samples_name="radio" relative_binning_delta="0.01" seed="1234"
+VARS run_c GW_event="GW170817" population_type="uniform" prior_name="nsbh" eos_samples_name="radio" relative_binning_delta="0.01" seed="1234"
