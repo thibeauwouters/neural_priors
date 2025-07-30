@@ -1,0 +1,27 @@
+Training:   0%|          | 0/500 [00:00<?, ?epoch/s]Training:   0%|          | 0/500 [00:00<?, ?epoch/s]
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 878, in <module>
+    exit(main() or 0)
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 875, in main
+    trainer.train()
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 543, in train
+    flow = self._train_glasflow()
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 624, in _train_glasflow
+    loss = -flow.log_prob(inputs=batch).mean()
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/glasflow/flows/base.py", line 71, in log_prob
+    noise, logabsdet = self._transform(inputs, context=conditional)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/glasflow/nflows/transforms/base.py", line 56, in forward
+    return self._cascade(inputs, funcs, context)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/glasflow/nflows/transforms/base.py", line 50, in _cascade
+    outputs, logabsdet = func(outputs, context)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/glasflow/nflows/transforms/coupling.py", line 77, in forward
+    raise ValueError(
+ValueError: Expected features = 4, got 3.

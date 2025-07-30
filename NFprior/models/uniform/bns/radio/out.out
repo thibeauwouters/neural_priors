@@ -1,0 +1,41 @@
+torch: CUDA is available. Number of devices: 1
+torch: Current CUDA device: 0
+Starting training with the following parameters:
+    - eos_samples_name: radio
+    - source_type: bns
+    - use_tilde: True
+    - use_component_masses: False
+    - N_samples_training: 50000
+    - N_samples_plot: 10000
+    - m_max_BH: 5.0
+    - take_log_lambda: False
+    - use_flowjax: False
+    - scale_input: True
+    - num_epochs: 500
+    - learning_rate: 0.001
+    - batch_size: 1024
+    - max_patience: 50
+    - n_transforms: 4
+    - n_neurons: 64
+    - n_blocks_per_transform: 1
+    - num_bins: 10
+    - nn_depth: 5
+    - nn_block_dim: 8
+    - validation_split_fraction: 0.2
+Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/../data/eos/radio/eos_samples.npz
+Training a normalizing flow for bns sources
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 5, 'nn_block_dim': 8, 'names': ['chirp_mass', 'mass_ratio', 'lambda_tilde', 'delta_lambda_tilde'], 'n_inputs': 4}
+Everything for this model will be saved to ./models/uniform/bns/radio
+Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/../data/eos/radio/eos_samples.npz
+Number of good samples:  0.9601
+Saving training data to ./models/uniform/bns/radio/training_data.npz
+Saving training data DONE
+Using chirp mass and mass ratio (Mc, q) for training
+Using tilde parameterization for lambdas (lambda_tilde, delta_lambda_tilde)
+Training samples: 40000, Validation samples: 10000
+We are training for BNS
+np.shape(self.x)
+(40000, 4)
+Using MinMaxScaler to scale the input data x
+Saved sklearn scaler to ./models/uniform/bns/radio/scaler.gz
+Going to start training for glasflow . . .
