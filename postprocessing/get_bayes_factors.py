@@ -90,16 +90,20 @@ def get_bayes_factors(gw_event: str, population_type: str, eos_samples_name: str
             else:
                 preference = "EQUAL"
             
-            # Add strength assessment
-            abs_bf = abs(ln_bf_rel)
-            if abs_bf < 1:
-                strength = "weak"
-            elif abs_bf < 3:
-                strength = "moderate"
-            elif abs_bf < 5:
+            # Convert ln(BF) to log10(BF) for Jeffrey's scale
+            log10_bf_rel = abs(ln_bf_rel) / np.log(10)
+            
+            # Jeffrey's scale interpretation
+            if log10_bf_rel < 0.5:
+                strength = "barely worth mentioning"
+            elif log10_bf_rel < 1.0:
+                strength = "substantial"
+            elif log10_bf_rel < 1.5:
                 strength = "strong"
-            else:
+            elif log10_bf_rel < 2.0:
                 strength = "very strong"
+            else:
+                strength = "decisive"
             
             f.write(f"{comparison:<20}{ln_bf_rel:>15.6f}    {preference} ({strength})\n")
     
