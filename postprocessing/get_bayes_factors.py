@@ -76,8 +76,8 @@ def get_bayes_factors(gw_event: str, population_type: str, eos_samples_name: str
             f.write(f"{prior_name:<20}{ln_bf:>20.6f}\n")
         
         f.write("\nRelative log Bayes factors:\n")
-        f.write(f"{'Comparison':<20}{'Log BF':>15}{'Preference':>20}\n")
-        f.write("-" * 55 + "\n")
+        f.write(f"{'Comparison':<20}{'ln(BF)':>12}{'log10(BF)':>12}{'Preference':>20}\n")
+        f.write("-" * 64 + "\n")
         
         for comparison, ln_bf_rel in relative_bf.items():
             if ln_bf_rel > 0:
@@ -88,21 +88,22 @@ def get_bayes_factors(gw_event: str, population_type: str, eos_samples_name: str
                 preference = "EQUAL"
             
             # Convert ln(BF) to log10(BF) for Jeffrey's scale
-            log10_bf_rel = abs(ln_bf_rel) / np.log(10)
+            log10_bf_rel = ln_bf_rel / np.log(10)
+            abs_log10_bf_rel = abs(log10_bf_rel)
             
             # Jeffrey's scale interpretation
-            if log10_bf_rel < 0.5:
+            if abs_log10_bf_rel < 0.5:
                 strength = "barely worth mentioning"
-            elif log10_bf_rel < 1.0:
+            elif abs_log10_bf_rel < 1.0:
                 strength = "substantial"
-            elif log10_bf_rel < 1.5:
+            elif abs_log10_bf_rel < 1.5:
                 strength = "strong"
-            elif log10_bf_rel < 2.0:
+            elif abs_log10_bf_rel < 2.0:
                 strength = "very strong"
             else:
                 strength = "decisive"
             
-            f.write(f"{comparison:<20}{ln_bf_rel:>15.6f}    {preference} ({strength})\n")
+            f.write(f"{comparison:<20}{ln_bf_rel:>12.6f}{log10_bf_rel:>12.6f}    {preference} ({strength})\n")
     
     print(f"\nBayes factor analysis saved to: {output_file}")
     return bf_dict, relative_bf
