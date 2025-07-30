@@ -555,11 +555,11 @@ def main():
                         help='Include Adrian\'s results in plot')
     parser.add_argument('--prevent-bns-leakage', action='store_true',
                         help='Prevent BNS leakage by masking negative delta_lambda_tilde')
-    parser.add_argument('--plot-bns', action='store_true', default=True,
+    parser.add_argument('--plot-bns', action='store_true', default=False,
                         help='Include BNS posterior in plot (default: True)')
     parser.add_argument('--no-plot-bns', dest='plot_bns', action='store_false',
                         help='Do not include BNS posterior in plot')
-    parser.add_argument('--plot-nsbh', action='store_true', default=True,
+    parser.add_argument('--plot-nsbh', action='store_true', default=False,
                         help='Include NSBH posterior in plot (default: True)')
     parser.add_argument('--no-plot-nsbh', dest='plot_nsbh', action='store_false',
                         help='Do not include NSBH posterior in plot')

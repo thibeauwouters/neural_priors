@@ -11,7 +11,5 @@ echo "Generating corner plots for $GW_EVENT..."
 
 # Generate corner plots for each population type
 echo "=== Uniform population ==="
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-default --convert-lambdas
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-default --no-convert-lambdas
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-hauke --convert-lambdas
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-hauke --no-convert-lambdas
+python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-bns --plot-hauke --convert-lambdas
+python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-bns --plot-hauke --no-convert-lambdas
