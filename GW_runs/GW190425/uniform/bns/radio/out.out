@@ -94,3 +94,69 @@ self.parameters_ref
 29016it [1:43:12 bound:407 nc:2136 ncall:3.3e+07 eff:0.1% logz-ratio=57.14+/-0.15 dlogz:0.375>0.1]
 29137it [1:44:13 bound:409 nc:3084 ncall:3.4e+07 eff:0.1% logz-ratio=57.15+/-0.15 dlogz:0.337>0.1]
 29323it [1:45:37 bound:412 nc:3176 ncall:3.4e+07 eff:0.1% logz-ratio=57.17+/-0.15 dlogz:0.284>0.1]
+29509it [1:47:07 bound:415 nc:1659 ncall:3.4e+07 eff:0.1% logz-ratio=57.18+/-0.15 dlogz:0.239>0.1]
+29694it [1:48:37 bound:418 nc:2122 ncall:3.5e+07 eff:0.1% logz-ratio=57.19+/-0.15 dlogz:0.201>0.1]
+29819it [1:49:40 bound:420 nc:2278 ncall:3.5e+07 eff:0.1% logz-ratio=57.20+/-0.15 dlogz:0.179>0.1]
+30006it [1:51:05 bound:423 nc:2328 ncall:3.6e+07 eff:0.1% logz-ratio=57.21+/-0.15 dlogz:0.150>0.1]
+30194it [1:52:24 bound:426 nc:2501 ncall:3.6e+07 eff:0.1% logz-ratio=57.22+/-0.15 dlogz:0.125>0.1]
+30379it [1:53:36 bound:429 nc:1635 ncall:3.6e+07 eff:0.1% logz-ratio=57.22+/-0.15 dlogz:0.105>0.1]
+At this point, we cannot create a float from 0       1.424770
+1       1.429783
+2       1.407435
+3       1.420531
+4       1.417701
+          ...   
+4980    1.420786
+4981    1.430505
+4982    1.432563
+4983    1.431051
+4984    1.431213
+Name: chirp_mass_source, Length: 4985, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       0.792454
+1       0.773198
+2       0.801018
+3       0.800525
+4       0.799397
+          ...   
+4980    0.786763
+4981    0.850022
+4982    0.815967
+4983    0.858288
+4984    0.762976
+Name: mass_ratio, Length: 4985, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       100.407623
+1       138.234039
+2       122.098305
+3       179.370850
+4       144.494537
+           ...    
+4980    120.711281
+4981    168.382919
+4982    147.525635
+4983    194.252609
+4984    118.459305
+Name: lambda_1, Length: 4985, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       493.956848
+1       624.290771
+2       533.057800
+3       634.071594
+4       586.546814
+           ...    
+4980    577.973755
+4981    438.343201
+4982    543.980042
+4983    489.456543
+4984    570.302795
+Name: lambda_2, Length: 4985, dtype: float64, error: cannot convert the series to <class 'float'>
+Skipped taking the float value from [8.11654282 7.38981009 7.94365501 ... 7.68136549 7.68354845
+ 7.64272118], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [1.4074347  1.40758847 1.40774225 ... 1.45310511 1.45325888
+ 1.45341265], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [0.65420949 0.65510091 0.65599232 ... 0.91895962 0.91985104
+ 0.92074245], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [ 11.31838131  12.54733248  13.77628364 ... 376.31687794
+ 377.54582911 378.77478027], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [202.75457764 205.11020459 207.46583154 ... 902.37578223
+ 904.73140918 907.08703613], error: only length-1 arrays can be converted to Python scalars
+Skipped taking the float value from [ 6.14761829  6.24553108  6.33220577 ... -4.45923996 -4.6405592
+ -4.82380676], error: only length-1 arrays can be converted to Python scalars

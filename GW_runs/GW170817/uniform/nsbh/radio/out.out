@@ -105,3 +105,54 @@ self.parameters_ref
 29747it [1:58:22 bound:422 nc:1485 ncall:3.8e+07 eff:0.1% logz-ratio=16.05+/-0.15 dlogz:0.192>0.1]
 29930it [1:59:30 bound:425 nc:2357 ncall:3.8e+07 eff:0.1% logz-ratio=16.06+/-0.15 dlogz:0.162>0.1]
 30114it [2:00:47 bound:428 nc:2132 ncall:3.9e+07 eff:0.1% logz-ratio=16.06+/-0.15 dlogz:0.136>0.1]
+30239it [2:02:12 bound:430 nc:945 ncall:3.9e+07 eff:0.1% logz-ratio=16.07+/-0.15 dlogz:0.179>0.1]
+30426it [2:03:32 bound:433 nc:1865 ncall:3.9e+07 eff:0.1% logz-ratio=16.07+/-0.15 dlogz:0.151>0.1]
+30613it [2:04:46 bound:436 nc:2233 ncall:4.0e+07 eff:0.1% logz-ratio=16.08+/-0.15 dlogz:0.150>0.1]
+30794it [2:06:04 bound:439 nc:2080 ncall:4.0e+07 eff:0.1% logz-ratio=16.08+/-0.15 dlogz:0.127>0.1]
+30980it [2:07:18 bound:442 nc:1181 ncall:4.0e+07 eff:0.1% logz-ratio=16.08+/-0.15 dlogz:0.106>0.1]
+At this point, we cannot create a float from 0       2.484275
+1       2.330407
+2       2.297095
+3       2.068068
+4       2.076981
+          ...   
+6287    2.080868
+6288    2.076262
+6289    2.080441
+6290    2.076450
+6291    2.077742
+Name: chirp_mass_source, Length: 6292, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0       0.348921
+1       0.352432
+2       0.389987
+3       0.265908
+4       0.279129
+          ...   
+6287    0.260196
+6288    0.250608
+6289    0.243855
+6290    0.266399
+6291    0.253452
+Name: mass_ratio, Length: 6292, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0        134.252106
+1        190.207169
+2        278.831024
+3        844.740662
+4        688.154114
+           ...     
+6287     770.411011
+6288     958.204163
+6289    1080.874512
+6290     784.314209
+6291     985.180176
+Name: lambda_2, Length: 6292, dtype: float64, error: cannot convert the series to <class 'float'>
+Skipped taking the float value from [5.42788601 4.97601557 3.80840898 ... 3.285182   3.74716806
+ 3.70094109], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [2.06117797 2.06259301 2.06400805 ... 2.48144526 2.4828603
+ 2.48427534], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [0.23247276 0.23299956 0.23352637 ... 0.38893306 0.38945986
+ 0.38998666], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [ 134.25210571  138.1734564   142.09480709 ... 1298.89326053
+ 1302.81461122 1306.73596191], error: only length-1 arrays can be converted to Python scalars
+Skipped taking the float value from [-14.47487831 -13.93800735 -13.39794922 ...  -9.03069592
+  -9.09808064  -9.16517258], error: only length-1 arrays can be converted to Python scalars

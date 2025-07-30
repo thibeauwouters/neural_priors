@@ -1,0 +1,40 @@
+15:53 bilby INFO    : You are running on the Nikhef cluster, setting paths accordingly.
+15:53 bilby INFO    : No output directory provided, using script directory as base.
+15:53 bilby INFO    : Output directory is set to: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs. Make sure it exists!
+15:53 bilby INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/nsbh/radio_chiEFT
+15:53 bilby INFO    : Using geocent_time from reference parameters: 1187008882.43
+15:53 bilby INFO    : Showing the reference parameters for GW170817
+15:53 bilby INFO    : chirp_mass: 1.1975896
+15:53 bilby INFO    : symmetric_mass_ratio: 0.2461001
+15:53 bilby INFO    : a_1: 0.01890608
+15:53 bilby INFO    : a_2: 0.04888488
+15:53 bilby INFO    : tilt_1: 0.0
+15:53 bilby INFO    : tilt_2: 0.0
+15:53 bilby INFO    : phi_jl: 0.0
+15:53 bilby INFO    : phi_12: 0.0
+15:53 bilby INFO    : lambda_1: 100.0
+15:53 bilby INFO    : lambda_2: 200.0
+15:53 bilby INFO    : luminosity_distance: 40.06331818
+15:53 bilby INFO    : phase: 5.88649652
+15:53 bilby INFO    : theta_jn: 1.93095421
+15:53 bilby INFO    : psi: 1.59687217
+15:53 bilby INFO    : ra: 3.39736826
+15:53 bilby INFO    : dec: -0.34000186
+15:53 bilby INFO    : mass_ratio: 0.7779384106788951
+15:53 bilby INFO    : mass_1: 1.5621553813557303
+15:53 bilby INFO    : mass_2: 1.2152606746053602
+15:53 bilby INFO    : Geocent time is 1187008882.43 and duration is 128.0
+15:53 bilby INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+15:53 bilby INFO    : Relative binning delta 0.01
+15:53 bilby INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+15:53 bilby INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+15:53 bilby INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
+15:53 bilby INFO    : Sampling with an NF prior, with name nsbh, and nsbh
+15:53 bilby INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/nsbh/radio_chiEFT/model.pt
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/pe.py", line 357, in <module>
+    raise FileNotFoundError(f"NF kwargs file not found: {nf_kwargs_filename}")
+FileNotFoundError: NF kwargs file not found: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/nsbh/radio_chiEFT/model_kwargs.json

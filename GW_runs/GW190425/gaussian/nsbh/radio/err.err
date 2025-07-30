@@ -1,0 +1,40 @@
+15:54 bilby INFO    : You are running on the Nikhef cluster, setting paths accordingly.
+15:54 bilby INFO    : No output directory provided, using script directory as base.
+15:54 bilby INFO    : Output directory is set to: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs. Make sure it exists!
+15:54 bilby INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/gaussian/nsbh/radio
+15:54 bilby INFO    : Using geocent_time from reference parameters: 1240215503.017147
+15:54 bilby INFO    : Showing the reference parameters for GW190425
+15:54 bilby INFO    : chirp_mass: 1.4867847675135448
+15:54 bilby INFO    : symmetric_mass_ratio: 0.24999995594642316
+15:54 bilby INFO    : a_1: 0.011080273335494708
+15:54 bilby INFO    : a_2: 0.04692984939031852
+15:54 bilby INFO    : tilt_1: 2.6219694401252394
+15:54 bilby INFO    : tilt_2: 1.0090315132594154
+15:54 bilby INFO    : phi_jl: 0.977223832370418
+15:54 bilby INFO    : phi_12: 5.868535624409604
+15:54 bilby INFO    : lambda_1: 100.0
+15:54 bilby INFO    : lambda_2: 200.0
+15:54 bilby INFO    : luminosity_distance: 160.68570884930463
+15:54 bilby INFO    : phase: 5.904192752190891
+15:54 bilby INFO    : theta_jn: 0.20643139003708647
+15:54 bilby INFO    : psi: 0.3008124663367458
+15:54 bilby INFO    : ra: 1.4454755957606107
+15:54 bilby INFO    : dec: 0.07257856505111598
+15:54 bilby INFO    : mass_ratio: 0.999160794522431
+15:54 bilby INFO    : mass_1: 1.7085843239096237
+15:54 bilby INFO    : mass_2: 1.7071504705861102
+15:54 bilby INFO    : Geocent time is 1240215503.017147 and duration is 128.0
+15:54 bilby INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+15:54 bilby INFO    : Relative binning delta 0.01
+15:54 bilby INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+15:54 bilby INFO    : Running with label GW190425 and ifo_list ['L1', 'V1']
+15:54 bilby INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/prior.prior
+15:54 bilby INFO    : Sampling with an NF prior, with name nsbh, and nsbh
+15:54 bilby INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/nsbh/radio/model.pt
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/pe.py", line 357, in <module>
+    raise FileNotFoundError(f"NF kwargs file not found: {nf_kwargs_filename}")
+FileNotFoundError: NF kwargs file not found: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/nsbh/radio/model_kwargs.json

@@ -133,3 +133,14 @@
 13:09 bilby INFO    : Generating initial points from the prior
 13:09 bilby INFO    : Generating initial points from the prior DONE
 14:09 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/uniform/bns/radio/bns_resume.pickle
+15:03 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/uniform/bns/radio/bns_resume.pickle
+15:03 bilby INFO    : Starting to close worker pool.
+15:03 bilby INFO    : Finished closing worker pool.
+15:03 bilby INFO    : Rejection sampling nested samples to obtain 4985 posterior samples
+15:03 bilby INFO    : Sampling time: 1:54:03.567342
+15:03 bilby INFO    : Summary of results:
+nsamples: 4985
+ln_noise_evidence: -482828.437
+ln_evidence: -482771.161 +/-  0.187
+ln_bayes_factor: 57.275 +/-  0.187
+

@@ -130,3 +130,15 @@
 13:09 INFO    : Generating initial points from the prior
 13:09 INFO    : Generating initial points from the prior DONE
 14:09 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/uniform/nsbh/radio/nsbh_resume.pickle
+15:09 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/uniform/nsbh/radio/nsbh_resume.pickle
+15:52 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/uniform/nsbh/radio/nsbh_resume.pickle
+15:52 INFO    : Starting to close worker pool.
+15:52 INFO    : Finished closing worker pool.
+15:52 INFO    : Rejection sampling nested samples to obtain 6607 posterior samples
+15:52 INFO    : Sampling time: 2:43:11.667486
+15:52 INFO    : Summary of results:
+nsamples: 6607
+ln_noise_evidence: -482828.437
+ln_evidence: -482782.852 +/-  0.224
+ln_bayes_factor: 45.585 +/-  0.224
+

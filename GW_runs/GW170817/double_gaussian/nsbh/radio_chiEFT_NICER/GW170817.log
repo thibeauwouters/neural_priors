@@ -1,0 +1,33 @@
+15:54 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/double_gaussian/nsbh/radio_chiEFT_NICER
+15:54 INFO    : Using geocent_time from reference parameters: 1187008882.43
+15:54 INFO    : Showing the reference parameters for GW170817
+15:54 INFO    : chirp_mass: 1.1975896
+15:54 INFO    : symmetric_mass_ratio: 0.2461001
+15:54 INFO    : a_1: 0.01890608
+15:54 INFO    : a_2: 0.04888488
+15:54 INFO    : tilt_1: 0.0
+15:54 INFO    : tilt_2: 0.0
+15:54 INFO    : phi_jl: 0.0
+15:54 INFO    : phi_12: 0.0
+15:54 INFO    : lambda_1: 100.0
+15:54 INFO    : lambda_2: 200.0
+15:54 INFO    : luminosity_distance: 40.06331818
+15:54 INFO    : phase: 5.88649652
+15:54 INFO    : theta_jn: 1.93095421
+15:54 INFO    : psi: 1.59687217
+15:54 INFO    : ra: 3.39736826
+15:54 INFO    : dec: -0.34000186
+15:54 INFO    : mass_ratio: 0.7779384106788951
+15:54 INFO    : mass_1: 1.5621553813557303
+15:54 INFO    : mass_2: 1.2152606746053602
+15:54 INFO    : Geocent time is 1187008882.43 and duration is 128.0
+15:54 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+15:54 INFO    : Relative binning delta 0.01
+15:54 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+15:54 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+15:54 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
+15:54 INFO    : Sampling with an NF prior, with name nsbh, and nsbh
+15:54 INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/nsbh/radio_chiEFT_NICER/model.pt

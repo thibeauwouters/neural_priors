@@ -1,0 +1,59 @@
+15:54 bilby INFO    : You are running on the Nikhef cluster, setting paths accordingly.
+15:54 bilby INFO    : No output directory provided, using script directory as base.
+15:54 bilby INFO    : Output directory is set to: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs. Make sure it exists!
+15:54 bilby INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/gaussian/bns/radio_chiEFT
+15:54 bilby INFO    : Using geocent_time from reference parameters: 1240215503.017147
+15:54 bilby INFO    : Showing the reference parameters for GW190425
+15:54 bilby INFO    : chirp_mass: 1.4867847675135448
+15:54 bilby INFO    : symmetric_mass_ratio: 0.24999995594642316
+15:54 bilby INFO    : a_1: 0.011080273335494708
+15:54 bilby INFO    : a_2: 0.04692984939031852
+15:54 bilby INFO    : tilt_1: 2.6219694401252394
+15:54 bilby INFO    : tilt_2: 1.0090315132594154
+15:54 bilby INFO    : phi_jl: 0.977223832370418
+15:54 bilby INFO    : phi_12: 5.868535624409604
+15:54 bilby INFO    : lambda_1: 100.0
+15:54 bilby INFO    : lambda_2: 200.0
+15:54 bilby INFO    : luminosity_distance: 160.68570884930463
+15:54 bilby INFO    : phase: 5.904192752190891
+15:54 bilby INFO    : theta_jn: 0.20643139003708647
+15:54 bilby INFO    : psi: 0.3008124663367458
+15:54 bilby INFO    : ra: 1.4454755957606107
+15:54 bilby INFO    : dec: 0.07257856505111598
+15:54 bilby INFO    : mass_ratio: 0.999160794522431
+15:54 bilby INFO    : mass_1: 1.7085843239096237
+15:54 bilby INFO    : mass_2: 1.7071504705861102
+15:54 bilby INFO    : Geocent time is 1240215503.017147 and duration is 128.0
+15:54 bilby INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+15:54 bilby INFO    : Relative binning delta 0.01
+15:54 bilby INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+15:54 bilby INFO    : Running with label GW190425 and ifo_list ['L1', 'V1']
+15:54 bilby INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW190425/prior.prior
+15:54 bilby INFO    : Sampling with an NF prior, with name bns, and bns
+15:54 bilby INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model.pt
+15:54 bilby INFO    : Loaded NF kwargs from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model_kwargs.json
+15:54 bilby INFO    : Loading scaler from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/scaler.gz
+15:54 bilby INFO    : Loaded NFDist prior with n_dim = 4 from flow_filename = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model.pt
+15:54 bilby INFO    : Going to show priors in priors:
+15:54 bilby INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=500.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
+15:54 bilby INFO    :       geocent_time: Uniform(minimum=1240215502.9171472, maximum=1240215503.117147, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+15:54 bilby INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+15:54 bilby INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+15:54 bilby INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+15:54 bilby INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+15:54 bilby INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+15:54 bilby INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+15:54 bilby INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+15:54 bilby INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+15:54 bilby INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+15:54 bilby INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+15:54 bilby INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+15:54 bilby INFO    :       chirp_mass_source: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model.pt', use_tilde='False', use_component_masses='False'), name='chirp_mass_source', latex_label='chirp_mass_source', unit=None)
+15:54 bilby INFO    :       mass_ratio: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model.pt', use_tilde='False', use_component_masses='False'), name='mass_ratio', latex_label='$q$', unit=None)
+15:54 bilby INFO    :       lambda_1: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+15:54 bilby INFO    :       lambda_2: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
+15:54 bilby INFO    : Running through data generation steps now
+15:54 bilby INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW190425/L-L1_GWOSC_16KHZ_R1-1240213455-4096.gwf
