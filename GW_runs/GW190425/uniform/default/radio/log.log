@@ -1,0 +1,67 @@
+009 (2575677.000.000) 2025-07-30 13:07:33 Job was aborted.
+	DAG Removed: User removed scheduler job from queue. (by user twouters)
+...
+000 (2575683.000.000) 2025-07-30 13:07:46 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_a
+...
+001 (2575683.000.000) 2025-07-30 13:08:09 Job executing on host: <145.107.4.164:9618?addrs=145.107.4.164-9618+[2a07-8500-120-e070--a4]-9618&alias=wn-pijl-003.nikhef.nl&noUDP&sock=startd_4461_7413>
+	SlotName: slot1_5@wn-pijl-003.nikhef.nl
+	AvailableGPUs = {  }
+	CondorScratchDir = "/scratch/condor_execute/dir_4055143"
+	Cpus = 64
+	Disk = 16790397
+	GPUs = 0
+	Memory = 16384
+...
+006 (2575683.000.000) 2025-07-30 13:08:22 Image size of job updated: 689272
+	674  -  MemoryUsage of job (MB)
+	689272  -  ResidentSetSize of job (KB)
+...
+006 (2575683.000.000) 2025-07-30 13:13:22 Image size of job updated: 1353908
+	1115  -  MemoryUsage of job (MB)
+	1140856  -  ResidentSetSize of job (KB)
+...
+006 (2575683.000.000) 2025-07-30 13:18:23 Image size of job updated: 1353908
+	1126  -  MemoryUsage of job (MB)
+	1152720  -  ResidentSetSize of job (KB)
+...
+006 (2575683.000.000) 2025-07-30 13:23:24 Image size of job updated: 1353908
+	1134  -  MemoryUsage of job (MB)
+	1160884  -  ResidentSetSize of job (KB)
+...
+006 (2575683.000.000) 2025-07-30 13:28:24 Image size of job updated: 1353908
+	1140  -  MemoryUsage of job (MB)
+	1167120  -  ResidentSetSize of job (KB)
+...
+006 (2575683.000.000) 2025-07-30 13:33:25 Image size of job updated: 1353908
+	1145  -  MemoryUsage of job (MB)
+	1172164  -  ResidentSetSize of job (KB)
+...
+006 (2575683.000.000) 2025-07-30 13:38:26 Image size of job updated: 1602604
+	1145  -  MemoryUsage of job (MB)
+	1172164  -  ResidentSetSize of job (KB)
+...
+006 (2575683.000.000) 2025-07-30 13:38:41 Image size of job updated: 1865300
+	1145  -  MemoryUsage of job (MB)
+	1172164  -  ResidentSetSize of job (KB)
+...
+005 (2575683.000.000) 2025-07-30 13:38:41 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 19:43:56, Sys 0 00:01:03  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 19:43:56, Sys 0 00:01:03  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     3.18       64        64 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :                           0 
+	   Memory (MB)          :  1145       16384     16384 
+	   TimeExecute (s)      :  1832                       
+	   TimeSlotBusy (s)     :  1833                       
+
+	Job terminated of its own accord at 2025-07-30T11:38:41Z with exit-code 0.
+...
