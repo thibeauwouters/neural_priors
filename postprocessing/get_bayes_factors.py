@@ -36,8 +36,6 @@ def get_bayes_factors(gw_event: str, population_type: str, eos_samples_name: str
         # Construct path to results file
         results_path = os.path.join(base_dir, gw_event, pop_type, prior_type, eos_name, f"{prior_type}_result.json")
         
-        print(f"Looking for {prior_name} results at: {results_path}")
-        
         if not os.path.exists(results_path):
             print(f"Results file not found for {prior_name}: {results_path}. Setting Bayes factor to 0.0.")
             ln_bf = 0.0
@@ -46,7 +44,6 @@ def get_bayes_factors(gw_event: str, population_type: str, eos_samples_name: str
                 with open(results_path, "r") as f:
                     result = json.load(f)
                     ln_bf = result["log_bayes_factor"]
-                print(f"Loaded log Bayes factor for {prior_name}: {ln_bf:.6f}")
             except (FileNotFoundError, KeyError) as e:
                 print(f"Error loading Bayes factor for {prior_name}: {e}. Setting to 0.0.")
                 ln_bf = 0.0
