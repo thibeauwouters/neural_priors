@@ -2,78 +2,87 @@ import os
 import json
 import numpy as np
 import argparse
+from utils import get_bayes_factor_data, get_output_directory
 
-def get_bayes_factors(gw_event: str, population_type: str, eos_samples_name: str = "radio", base_dir: str = "../GW_runs/"):
+def get_bayes_factors(gw_event: str, 
+                     comparison_mode: str = "source",
+                     population_type: str = "uniform", 
+                     source_type: str = "bns",
+                     eos_samples_name: str = "radio", 
+                     base_dir: str = "../GW_runs/"):
     """
-    Calculate Bayes factors comparing different priors within a population type.
+    Calculate Bayes factors comparing different dimensions.
     
     Args:
         gw_event (str): GW event name (e.g., GW170817)
+        comparison_mode (str): What to compare - 'source', 'population', or 'eos'
         population_type (str): Population type (uniform, gaussian, double_gaussian)
+        source_type (str): Source type (bns, nsbh, default)
         eos_samples_name (str): EOS samples name (default: radio)
         base_dir (str): Base directory path
     """
     
-    # For default runs in gaussian/double_gaussian, they are stored in uniform/radio/
-    if population_type in ["gaussian", "double_gaussian"]:
-        default_population_type = "uniform"
-        default_eos_samples_name = "radio"
+    # Set up fixed parameters based on comparison mode
+    if comparison_mode == "source":
+        fixed_params = {"population_type": population_type, "eos_samples_name": eos_samples_name}
+    elif comparison_mode == "population":
+        fixed_params = {"source_type": source_type, "eos_samples_name": eos_samples_name}
+    elif comparison_mode == "eos":
+        fixed_params = {"population_type": population_type, "source_type": source_type}
     else:
-        default_population_type = population_type
-        default_eos_samples_name = eos_samples_name
+        raise ValueError(f"Invalid comparison mode: {comparison_mode}")
     
-    # Define the priors to compare
-    priors = {
-        "default": (default_population_type, "default", default_eos_samples_name),
-        "bns": (population_type, "bns", eos_samples_name), 
-        "nsbh": (population_type, "nsbh", eos_samples_name)
-    }
+    # Load Bayes factor data for all groups in the comparison
+    bf_dict = get_bayes_factor_data(gw_event, base_dir, comparison_mode, fixed_params)
     
-    # Store all Bayes factors
-    bf_dict = {}
+    if not bf_dict:
+        print(f"No data found for {comparison_mode} comparison")
+        return {}, {}
     
-    for prior_name, (pop_type, prior_type, eos_name) in priors.items():
-        # Construct path to results file
-        results_path = os.path.join(base_dir, gw_event, pop_type, prior_type, eos_name, f"{prior_type}_result.json")
-        
-        if not os.path.exists(results_path):
-            print(f"Results file not found for {prior_name}: {results_path}. Setting Bayes factor to 0.0.")
-            ln_bf = 0.0
-        else:
-            try:
-                with open(results_path, "r") as f:
-                    result = json.load(f)
-                    ln_bf = result["log_bayes_factor"]
-            except (FileNotFoundError, KeyError) as e:
-                print(f"Error loading Bayes factor for {prior_name}: {e}. Setting to 0.0.")
-                ln_bf = 0.0
-                
-        bf_dict[prior_name] = ln_bf
-    
-    # Calculate relative Bayes factors (using default as reference)
-    default_ln_bf = bf_dict["default"]
+    # Calculate relative Bayes factors
     relative_bf = {}
-    for prior_name, ln_bf in bf_dict.items():
-        if prior_name != "default":
-            relative_bf[f"{prior_name}_vs_default"] = ln_bf - default_ln_bf
+    group_names = list(bf_dict.keys())
     
-    # Also calculate BNS vs NSBH
-    relative_bf["bns_vs_nsbh"] = bf_dict["bns"] - bf_dict["nsbh"]
+    # Calculate pairwise comparisons
+    for i, group1 in enumerate(group_names):
+        for j, group2 in enumerate(group_names):
+            if i < j:  # Avoid duplicate comparisons
+                relative_bf[f"{group1}_vs_{group2}"] = bf_dict[group1] - bf_dict[group2]
     
     # Save results
-    output_dir = os.path.join(base_dir, gw_event, population_type)
+    output_dir = get_output_directory(base_dir, gw_event, comparison_mode, fixed_params)
     os.makedirs(output_dir, exist_ok=True)
-    output_file = os.path.join(output_dir, "bayes_factors.txt")
+    
+    # Create filename based on comparison mode
+    if comparison_mode == "source":
+        filename = f"bayes_factors_{comparison_mode}_{population_type}_{eos_samples_name}.txt"
+    elif comparison_mode == "population":
+        filename = f"bayes_factors_{comparison_mode}_{source_type}_{eos_samples_name}.txt"
+    elif comparison_mode == "eos":
+        filename = f"bayes_factors_{comparison_mode}_{population_type}_{source_type}.txt"
+    
+    output_file = os.path.join(output_dir, filename)
     
     with open(output_file, "w") as f:
-        f.write(f"Bayes Factor Analysis for {gw_event} - {population_type} population\n")
-        f.write("=" * 60 + "\n\n")
+        # Create header based on comparison mode
+        if comparison_mode == "source":
+            header = f"Bayes Factor Analysis for {gw_event} - comparing source types\n" + \
+                    f"Fixed: population={population_type}, eos={eos_samples_name}\n"
+        elif comparison_mode == "population":
+            header = f"Bayes Factor Analysis for {gw_event} - comparing population types\n" + \
+                    f"Fixed: source={source_type}, eos={eos_samples_name}\n"
+        elif comparison_mode == "eos":
+            header = f"Bayes Factor Analysis for {gw_event} - comparing EOS constraints\n" + \
+                    f"Fixed: population={population_type}, source={source_type}\n"
+        
+        f.write(header)
+        f.write("=" * 70 + "\n\n")
         
         f.write("Absolute log Bayes factors:\n")
-        f.write(f"{'Prior':<20}{'Log Bayes Factor':>20}\n")
+        f.write(f"{'Group':<20}{'Log Bayes Factor':>20}\n")
         f.write("-" * 40 + "\n")
-        for prior_name, ln_bf in bf_dict.items():
-            f.write(f"{prior_name:<20}{ln_bf:>20.6f}\n")
+        for group_name, ln_bf in bf_dict.items():
+            f.write(f"{group_name:<20}{ln_bf:>20.6f}\n")
         
         f.write("\nRelative log Bayes factors:\n")
         f.write(f"{'Comparison':<20}{'ln(BF)':>12}{'log10(BF)':>12}{'Preference':>20}\n")
@@ -112,9 +121,15 @@ def main():
     parser = argparse.ArgumentParser(description="Calculate Bayes factors for GW parameter estimation results")
     parser.add_argument('--gw-event', type=str, required=True,
                         help='GW event name (e.g., GW170817)')
-    parser.add_argument('--population-type', type=str, required=True,
+    parser.add_argument('--comparison-mode', type=str, default='source',
+                        choices=['source', 'population', 'eos'],
+                        help='What to compare across (default: source)')
+    parser.add_argument('--population-type', type=str, default='uniform',
                         choices=['uniform', 'gaussian', 'double_gaussian'],
-                        help='Population type for the analysis')
+                        help='Population type for the analysis (default: uniform)')
+    parser.add_argument('--source-type', type=str, default='bns',
+                        choices=['bns', 'nsbh', 'default'],
+                        help='Source type for the analysis (default: bns)')
     parser.add_argument('--eos-samples-name', type=str, default='radio',
                         help='EOS samples name (default: radio)')
     parser.add_argument('--base-dir', type=str, default='../GW_runs/',
@@ -124,7 +139,9 @@ def main():
     
     get_bayes_factors(
         gw_event=args.gw_event,
+        comparison_mode=args.comparison_mode,
         population_type=args.population_type,
+        source_type=args.source_type,
         eos_samples_name=args.eos_samples_name,
         base_dir=args.base_dir
     )

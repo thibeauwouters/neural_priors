@@ -9,6 +9,7 @@ import argparse
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
 from bilby.gw.conversion import luminosity_distance_to_redshift
+from utils import load_comparison_data, get_output_directory, construct_result_path, load_posterior_data
 
 params = {"axes.grid": True,
         # "text.usetex" : True,
@@ -83,7 +84,9 @@ def convert_chirp_mass(posterior: dict):
     
 
 def create_corner_plot(GW_event: str,
-                       population_type: str,
+                       comparison_mode: str = "source",
+                       population_type: str = "uniform",
+                       source_type: str = "bns", 
                        eos_samples_name: str = "radio",
                        base_path: str = "../GW_runs/",
                        plot_all_params: bool = False,
@@ -96,11 +99,13 @@ def create_corner_plot(GW_event: str,
                        plot_bns: bool = True,
                        plot_nsbh: bool = True):
     """
-    Create a corner plot comparing posterior samples from BNS, Default, and NSBH runs for a given GW event.
+    Create a corner plot comparing posterior samples across different dimensions.
     
     Args:
         GW_event (str): The name of the GW event to create the corner plot for.
+        comparison_mode (str): What to compare - 'source', 'population', or 'eos'.
         population_type (str): Population type (uniform, gaussian, double_gaussian).
+        source_type (str): Source type (bns, nsbh, default).
         eos_samples_name (str): EOS samples name (default: radio).
         base_path (str): Base path to the GW runs directory.
         plot_all_params (bool): If True, plot all parameters. If False, plot only a subset of parameters.
@@ -114,59 +119,41 @@ def create_corner_plot(GW_event: str,
         plot_nsbh (bool): If True, include NSBH posterior in the corner plot.
     """
     
-    # Check whether this is for real events or from the injection runs
-    if "injection" in base_path:
-        injection_run = True
-    else:
-        injection_run = False
+    injection_run = "injection" in base_path
     
-    # Construct paths based on new directory structure
-    # For default runs in gaussian/double_gaussian, they are stored in uniform/radio/
-    if population_type in ["gaussian", "double_gaussian"]:
-        default_population_type = "uniform"
-        default_eos_samples_name = "radio"
-    else:
-        default_population_type = population_type
-        default_eos_samples_name = eos_samples_name
-    
-    # Load result files
-    bns_results_filename = os.path.join(base_path, GW_event, population_type, "bns", eos_samples_name, "bns_result.json")
-    default_results_filename = os.path.join(base_path, GW_event, default_population_type, "default", default_eos_samples_name, "default_result.json")
-    nsbh_results_filename = os.path.join(base_path, GW_event, population_type, "nsbh", eos_samples_name, "nsbh_result.json")
-    
-    print(f"Looking for results files:")
-    print(f"  BNS: {bns_results_filename}")
-    print(f"  Default: {default_results_filename}")
-    print(f"  NSBH: {nsbh_results_filename}")
-
-    # Load posterior samples based on what we want to plot
-    bns_posterior = None
-    nsbh_posterior = None
-    
-    if plot_bns:
-        with open(bns_results_filename, "r") as f:
-            bns_result = json.load(f)
-            bns_posterior = bns_result['posterior']['content']
-            convert_chirp_mass(bns_posterior)
-
-    if plot_nsbh:
-        with open(nsbh_results_filename, "r") as f:
-            nsbh_result = json.load(f)
-            nsbh_posterior = nsbh_result['posterior']['content']
-            convert_chirp_mass(nsbh_posterior)
+    if plot_bns or plot_nsbh or plot_default:
+        posteriors_dict = {}
         
-    posteriors_dict = {}
-    
-    if plot_bns:
-        posteriors_dict["bns"] = bns_posterior
-    if plot_nsbh:
-        posteriors_dict["nsbh"] = nsbh_posterior
+        if plot_bns:
+            bns_path = construct_result_path(base_path, GW_event, population_type, "bns", eos_samples_name)
+            bns_posterior = load_posterior_data(bns_path)
+            if bns_posterior:
+                posteriors_dict["bns"] = bns_posterior
+                
+        if plot_nsbh:
+            nsbh_path = construct_result_path(base_path, GW_event, population_type, "nsbh", eos_samples_name)
+            nsbh_posterior = load_posterior_data(nsbh_path)
+            if nsbh_posterior:
+                posteriors_dict["nsbh"] = nsbh_posterior
+                
+        if plot_default:
+            default_path = construct_result_path(base_path, GW_event, population_type, "default", eos_samples_name)
+            default_posterior = load_posterior_data(default_path)
+            if default_posterior:
+                posteriors_dict["default"] = default_posterior
+    else:
+        if comparison_mode == "source":
+            fixed_params = {"population_type": population_type, "eos_samples_name": eos_samples_name}
+        elif comparison_mode == "population":
+            fixed_params = {"source_type": source_type, "eos_samples_name": eos_samples_name}
+        elif comparison_mode == "eos":
+            fixed_params = {"population_type": population_type, "source_type": source_type}
+        else:
+            raise ValueError(f"Invalid comparison mode: {comparison_mode}")
+            
+        posteriors_dict = load_comparison_data(GW_event, base_path, comparison_mode, fixed_params)
         
-    if plot_default:
-        with open(default_results_filename, "r") as f:
-            default_result = json.load(f)
-            default_posterior = default_result['posterior']['content']
-        posteriors_dict["default"] = default_posterior
+    print(f"Loaded {len(posteriors_dict)} posterior datasets: {list(posteriors_dict.keys())}")
 
     # Define parameters to plot (excluding log_likelihood and log_prior)
     if plot_all_params:
@@ -240,104 +227,111 @@ def create_corner_plot(GW_event: str,
         del params_to_plot[params_to_plot.index('lambda_1')]
         del params_to_plot[params_to_plot.index('lambda_2')]
         
-    # Create data arrays for each run
-    bns_data = []
-    default_data = []
-    nsbh_data = []
+    # Create data arrays for each posterior
     labels = []
     latex_labels = []
+    samples_dict = {}
 
     # Get reference posterior to check which parameters exist
-    ref_posterior = None
-    if plot_bns and bns_posterior is not None:
-        ref_posterior = bns_posterior
-    elif plot_nsbh and nsbh_posterior is not None:
-        ref_posterior = nsbh_posterior
-    elif plot_default:
-        ref_posterior = default_posterior
+    if posteriors_dict:
+        ref_posterior = list(posteriors_dict.values())[0]
+    else:
+        ref_posterior = None
 
     for param in params_to_plot:
         if ref_posterior is not None and param in ref_posterior:
-            if plot_bns and bns_posterior is not None:
-                bns_data.append(bns_posterior[param])
-            if plot_nsbh and nsbh_posterior is not None:
-                nsbh_data.append(nsbh_posterior[param])
-            if plot_default:
-                default_data.append(default_posterior[param])
             labels.append(param)
             latex_labels.append(LaTeX_dict.get(param, param))
 
-    # Convert to numpy arrays and transpose to get (n_samples, n_params)
-    bns_samples = np.array(bns_data).T if plot_bns and bns_data else None
-    default_samples = np.array(default_data).T if plot_default and default_data else None
-    nsbh_samples = np.array(nsbh_data).T if plot_nsbh and nsbh_data else None
+    # Create data arrays for each posterior
+    for key, posterior in posteriors_dict.items():
+        data = []
+        for param in labels:
+            if param in posterior:
+                data.append(posterior[param])
+        if data:
+            samples_dict[key] = np.array(data).T
     
     # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
-    if 'delta_lambda_tilde' in params_to_plot and prevent_bns_leakage and plot_bns and bns_samples is not None:
+    if 'delta_lambda_tilde' in params_to_plot and prevent_bns_leakage and 'bns' in samples_dict:
         delta_lambda_tilde_index = labels.index('delta_lambda_tilde')
-        bns_samples = bns_samples[bns_samples[:, delta_lambda_tilde_index] > 0]
+        bns_samples = samples_dict['bns']
+        samples_dict['bns'] = bns_samples[bns_samples[:, delta_lambda_tilde_index] > 0]
     
     # Create range dictionary to handle constant parameters
     ranges = []
     for i, param in enumerate(labels):
         # Get all values for this parameter across all runs
         all_vals_list = []
-        if plot_bns and bns_samples is not None:
-            all_vals_list.append(bns_samples[:, i])
-        if plot_nsbh and nsbh_samples is not None:
-            all_vals_list.append(nsbh_samples[:, i])
-        if plot_default and default_samples is not None:
-            all_vals_list.append(default_samples[:, i])
+        for samples in samples_dict.values():
+            if i < samples.shape[1]:
+                all_vals_list.append(samples[:, i])
         
         if all_vals_list:
             all_vals = np.concatenate(all_vals_list)
         else:
             continue
         
-        if param == 'lambda_1' and plot_nsbh and nsbh_samples is not None and np.std(nsbh_samples[:, i]) < 1e-10:
-            # For constant lambda_1 in NSBH, use range from BNS and Default only
-            non_zero_vals_list = []
-            if plot_bns and bns_samples is not None:
-                non_zero_vals_list.append(bns_samples[:, i])
-            if plot_default and default_samples is not None:
-                non_zero_vals_list.append(default_samples[:, i])
-            
-            if non_zero_vals_list:
-                non_zero_vals = np.concatenate(non_zero_vals_list)
-                param_range = (np.min(non_zero_vals), np.max(non_zero_vals))
+        # Handle special case for lambda_1 in NSBH runs
+        if param == 'lambda_1' and 'nsbh' in samples_dict:
+            nsbh_samples = samples_dict['nsbh']
+            if i < nsbh_samples.shape[1] and np.std(nsbh_samples[:, i]) < 1e-10:
+                # For constant lambda_1 in NSBH, use range from other runs only
+                non_zero_vals_list = []
+                for key, samples in samples_dict.items():
+                    if key != 'nsbh' and i < samples.shape[1]:
+                        non_zero_vals_list.append(samples[:, i])
+                
+                if non_zero_vals_list:
+                    non_zero_vals = np.concatenate(non_zero_vals_list)
+                    param_range = (np.min(non_zero_vals), np.max(non_zero_vals))
+                else:
+                    param_range = (np.min(all_vals), np.max(all_vals))
             else:
                 param_range = (np.min(all_vals), np.max(all_vals))
         else:
-            # Use full range for all other parameters
             param_range = (np.min(all_vals), np.max(all_vals))
         
         ranges.append(param_range)
         
     # Make lambda_1 NaN for NSBH samples for plotting
-    if 'lambda_1' in params_to_plot and plot_nsbh and nsbh_samples is not None:
+    if 'lambda_1' in params_to_plot and 'nsbh' in samples_dict:
         lambda_1_index = labels.index('lambda_1')
-        # print("Setting those values to NaN")
-        # # Set lambda_1 values in NSBH samples to NaN
-        # nsbh_samples[:, lambda_1_index]   = np.ones_like(nsbh_samples[:, lambda_1_index]) * np.nan
+        nsbh_samples = samples_dict['nsbh']
+        if lambda_1_index < nsbh_samples.shape[1]:
+            # Turn into very small jitter around zero instead of NaN to make plot pass
+            jitter = 1e-10
+            nsbh_samples[:, lambda_1_index] = np.random.normal(0, jitter, size=nsbh_samples[:, lambda_1_index].shape)
+            samples_dict['nsbh'] = nsbh_samples
         
-        # Turn into very small jitter around zero instead of NaN to make plot pass
-        jitter = 1e-10
-        nsbh_samples[:, lambda_1_index] = np.random.normal(0, jitter, size=nsbh_samples[:, lambda_1_index].shape)
-        
-    # Create corner plot with three overlaid distributions
+    # Create corner plot with overlaid distributions
     corner_kwargs_with_range = default_corner_kwargs.copy()
-    # corner_kwargs_with_range['range'] = ranges # FIXME: this breaks the scaling of the plots
     use_density = True
 
-    # Create three different corner kwargs with different colors
-    default_kwargs = corner_kwargs_with_range.copy()
-    default_kwargs.update({'color': DEFAULT_COLOR, 'hist_kwargs': {'color': DEFAULT_COLOR, 'density': use_density}})
-
-    bns_kwargs = corner_kwargs_with_range.copy()  
-    bns_kwargs.update({'color': BNS_COLOR, 'hist_kwargs': {'color': BNS_COLOR, 'density': use_density}})
-
-    nsbh_kwargs = corner_kwargs_with_range.copy()
-    nsbh_kwargs.update({'color': NSBH_COLOR, 'hist_kwargs': {'color': NSBH_COLOR, 'density': use_density}})
+    # Define colors for different groups
+    colors = ['blue', 'green', 'red', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
+    group_colors = {}
+    
+    # Assign colors to groups
+    for i, group_name in enumerate(samples_dict.keys()):
+        if group_name in ['default', 'bns', 'nsbh']:
+            # Use predefined colors for known groups
+            if group_name == 'default':
+                group_colors[group_name] = DEFAULT_COLOR
+            elif group_name == 'bns':
+                group_colors[group_name] = BNS_COLOR
+            elif group_name == 'nsbh':
+                group_colors[group_name] = NSBH_COLOR
+        else:
+            # Use rotating colors for other groups
+            group_colors[group_name] = colors[i % len(colors)]
+    
+    # Create corner kwargs for each group
+    group_kwargs = {}
+    for group_name, color in group_colors.items():
+        kwargs = corner_kwargs_with_range.copy()
+        kwargs.update({'color': color, 'hist_kwargs': {'color': color, 'density': use_density}})
+        group_kwargs[group_name] = kwargs
 
     # If this was an injection, locate the truth values
     if injection_run:
@@ -351,20 +345,11 @@ def create_corner_plot(GW_event: str,
     # Create the overlaid corner plot - start with the first available dataset
     fig = None
     
-    if plot_bns and bns_samples is not None:
-        fig = corner.corner(bns_samples, labels=latex_labels, truths=truths, **bns_kwargs)
-    
-    if plot_nsbh and nsbh_samples is not None:
+    for group_name, samples in samples_dict.items():
         if fig is None:
-            fig = corner.corner(nsbh_samples, labels=latex_labels, truths=truths, **nsbh_kwargs)
+            fig = corner.corner(samples, labels=latex_labels, truths=truths, **group_kwargs[group_name])
         else:
-            corner.corner(nsbh_samples, labels=latex_labels, fig=fig, **nsbh_kwargs)
-    
-    if plot_default and default_samples is not None:
-        if fig is None:
-            fig = corner.corner(default_samples, labels=latex_labels, truths=truths, **default_kwargs)
-        else:
-            corner.corner(default_samples, labels=latex_labels, fig=fig, **default_kwargs)
+            corner.corner(samples, labels=latex_labels, fig=fig, **group_kwargs[group_name])
         
     # Add legend
     if plot_all_params:
@@ -375,14 +360,10 @@ def create_corner_plot(GW_event: str,
     x = 0.85
     y = 0.85
     dy = 0.1
-    if plot_default:
-        plt.text(x, y, 'Default', fontsize=fs, color=DEFAULT_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-        y -= dy
-    if plot_bns:
-        plt.text(x, y, 'BNS', fontsize=fs, color=BNS_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-        y -= dy
-    if plot_nsbh:
-        plt.text(x, y, 'NSBH', fontsize=fs, color=NSBH_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    
+    for group_name, color in group_colors.items():
+        label = group_name.upper() if group_name in ['bns', 'nsbh', 'default'] else group_name
+        plt.text(x, y, label, fontsize=fs, color=color, ha='center', va='center', transform=plt.gcf().transFigure)
         y -= dy
     
     # Hauke and Adrian's runs did not sample some params and had them fixed -- jitter a bit to avoid corner complaints
@@ -458,18 +439,40 @@ def create_corner_plot(GW_event: str,
         plt.text(x, y, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     # Save the figure
-    output_dir = os.path.join(base_path, GW_event, population_type, "figures")
+    if plot_bns or plot_nsbh or plot_default:
+        # Use old directory structure for backward compatibility
+        output_dir = os.path.join(base_path, GW_event, population_type, "figures")
+        save_name = 'corner' + \
+                ('_all' if plot_all_params else '') + \
+                ('_default' if plot_default else '') + \
+                ('_bns' if plot_bns else '') + \
+                ('_nsbh' if plot_nsbh else '') + \
+                ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
+                ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
+                ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
+                ('_tilde' if convert_lambdas else '') + '.pdf'
+    else:
+        # Use new directory structure for comparison modes
+        if comparison_mode == "source":
+            fixed_params = {"population_type": population_type, "eos_samples_name": eos_samples_name}
+        elif comparison_mode == "population":
+            fixed_params = {"source_type": source_type, "eos_samples_name": eos_samples_name}
+        elif comparison_mode == "eos":
+            fixed_params = {"population_type": population_type, "source_type": source_type}
+        
+        output_dir = get_output_directory(base_path, GW_event, comparison_mode, fixed_params)
+        
+        # Create filename based on comparison mode
+        groups_str = '_'.join(sorted(samples_dict.keys()))
+        save_name = f'corner_{comparison_mode}_{groups_str}' + \
+                ('_all' if plot_all_params else '') + \
+                ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
+                ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
+                ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
+                ('_tilde' if convert_lambdas else '') + '.pdf'
+    
     os.makedirs(output_dir, exist_ok=True)
-    save_name = 'corner' + \
-            ('_all' if plot_all_params else '') + \
-            ('_default' if plot_default else '') + \
-            ('_bns' if plot_bns else '') + \
-            ('_nsbh' if plot_nsbh else '') + \
-            ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
-            ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
-            ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
-            ('_tilde' if convert_lambdas else '') + '.pdf'
-    save_name = os.path.join(output_dir, f"{save_name}")
+    save_name = os.path.join(output_dir, save_name)
             
     print(f"\nSaving corner plot to {save_name}\n")
     plt.savefig(save_name, dpi=300, bbox_inches='tight')
@@ -532,9 +535,15 @@ def main():
     parser = argparse.ArgumentParser(description="Create corner plots for GW parameter estimation results")
     parser.add_argument('--gw-event', type=str, required=True,
                         help='GW event name (e.g., GW170817)')
-    parser.add_argument('--population-type', type=str, required=True,
+    parser.add_argument('--comparison-mode', type=str, default='source',
+                        choices=['source', 'population', 'eos'],
+                        help='What to compare across (default: source)')
+    parser.add_argument('--population-type', type=str, default='uniform',
                         choices=['uniform', 'gaussian', 'double_gaussian'],
-                        help='Population type for the analysis')
+                        help='Population type for the analysis (default: uniform)')
+    parser.add_argument('--source-type', type=str, default='bns',
+                        choices=['bns', 'nsbh', 'default'],
+                        help='Source type for the analysis (default: bns)')
     parser.add_argument('--eos-samples-name', type=str, default='radio',
                         help='EOS samples name (default: radio)')
     parser.add_argument('--base-dir', type=str, default='../GW_runs/',
@@ -556,11 +565,11 @@ def main():
     parser.add_argument('--prevent-bns-leakage', action='store_true',
                         help='Prevent BNS leakage by masking negative delta_lambda_tilde')
     parser.add_argument('--plot-bns', action='store_true', default=False,
-                        help='Include BNS posterior in plot (default: True)')
+                        help='Include BNS posterior in plot')
     parser.add_argument('--no-plot-bns', dest='plot_bns', action='store_false',
                         help='Do not include BNS posterior in plot')
     parser.add_argument('--plot-nsbh', action='store_true', default=False,
-                        help='Include NSBH posterior in plot (default: True)')
+                        help='Include NSBH posterior in plot')
     parser.add_argument('--no-plot-nsbh', dest='plot_nsbh', action='store_false',
                         help='Do not include NSBH posterior in plot')
     parser.add_argument('--batch-mode', action='store_true',
@@ -572,10 +581,11 @@ def main():
         # real_events()
         injections()
     else:
-        # Single run mode with command line arguments
         create_corner_plot(
             GW_event=args.gw_event,
+            comparison_mode=args.comparison_mode,
             population_type=args.population_type,
+            source_type=args.source_type,
             eos_samples_name=args.eos_samples_name,
             base_path=args.base_dir,
             plot_all_params=args.plot_all_params,
