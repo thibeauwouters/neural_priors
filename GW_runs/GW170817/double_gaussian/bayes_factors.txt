@@ -1,0 +1,16 @@
+Bayes Factor Analysis for GW170817 - double_gaussian population
+============================================================
+
+Absolute log Bayes factors:
+Prior                   Log Bayes Factor
+----------------------------------------
+default                       522.113027
+bns                           524.654992
+nsbh                            4.104345
+
+Relative log Bayes factors:
+Comparison                ln(BF)   log10(BF)          Preference
+----------------------------------------------------------------
+bns_vs_default          2.541966    1.103962    BNS (strong)
+nsbh_vs_default      -518.008681 -224.968312    DEFAULT (decisive)
+bns_vs_nsbh           520.550647  226.072274    BNS (decisive)

@@ -1,0 +1,16 @@
+Bayes Factor Analysis for GW190425 - gaussian population
+============================================================
+
+Absolute log Bayes factors:
+Prior                   Log Bayes Factor
+----------------------------------------
+default                        57.822264
+bns                             1.197594
+nsbh                           51.991609
+
+Relative log Bayes factors:
+Comparison                ln(BF)   log10(BF)          Preference
+----------------------------------------------------------------
+bns_vs_default        -56.624670  -24.591782    DEFAULT (decisive)
+nsbh_vs_default        -5.830655   -2.532221    DEFAULT (decisive)
+bns_vs_nsbh           -50.794015  -22.059560    NSBH (decisive)

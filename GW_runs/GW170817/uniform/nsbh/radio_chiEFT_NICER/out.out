@@ -1,0 +1,12 @@
+NFDist has source_type = nsbh
+self.parameters_ref
+{'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'a_1': 0.01890608, 'a_2': 0.04888488, 'tilt_1': 0.0, 'tilt_2': 0.0, 'phi_jl': 0.0, 'phi_12': 0.0, 'lambda_1': 100.0, 'lambda_2': 200.0, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
+NFDist has source_type = nsbh
+NFDist has source_type = nsbh
+NFDist has source_type = nsbh
+At this point, we cannot create a float from [1.39976287 1.40455811 1.40935335 ... 2.82394901 2.82874425
+ 2.83353949], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [0.2205424  0.22276802 0.22499364 ... 0.88155089 0.88377651
+ 0.88600212], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [   6.1950078    16.94267683   27.69034586 ... 3198.25270882
+ 3209.00037785 3219.74804688], error: only length-1 arrays can be converted to Python scalars

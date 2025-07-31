@@ -1,0 +1,162 @@
+NFDist has source_type = bns
+self.parameters_ref
+{'chirp_mass': 1.4867847675135448, 'symmetric_mass_ratio': 0.24999995594642316, 'a_1': 0.011080273335494708, 'a_2': 0.04692984939031852, 'tilt_1': 2.6219694401252394, 'tilt_2': 1.0090315132594154, 'phi_jl': 0.977223832370418, 'phi_12': 5.868535624409604, 'lambda_1': 100.0, 'lambda_2': 200.0, 'luminosity_distance': 160.68570884930463, 'phase': 5.904192752190891, 'theta_jn': 0.20643139003708647, 'psi': 0.3008124663367458, 'ra': 1.4454755957606107, 'dec': 0.07257856505111598, 'mass_ratio': 0.999160794522431, 'mass_1': 1.7085843239096237, 'mass_2': 1.7071504705861102, 'geocent_time': 1240215503.017147, 'duration': 128.0}
+3742it [0:00:47 bound:2 nc:600 ncall:3.9e+04 eff:9.7% logz-ratio=-0.91+/-0.03 dlogz:5.912>0.1]
+3990it [0:01:56 bound:6 nc:575 ncall:2.0e+05 eff:2.0% logz-ratio=-0.83+/-0.03 dlogz:5.591>0.1]
+4238it [0:03:02 bound:10 nc:532 ncall:3.6e+05 eff:1.2% logz-ratio=-0.75+/-0.03 dlogz:5.277>0.1]
+4488it [0:04:14 bound:14 nc:640 ncall:5.3e+05 eff:0.8% logz-ratio=-0.69+/-0.04 dlogz:4.968>0.1]
+4740it [0:05:27 bound:18 nc:296 ncall:6.9e+05 eff:0.7% logz-ratio=-0.62+/-0.04 dlogz:5.666>0.1]
+4982it [0:06:36 bound:22 nc:922 ncall:8.5e+05 eff:0.6% logz-ratio=-0.57+/-0.04 dlogz:5.375>0.1]
+5228it [0:07:45 bound:26 nc:312 ncall:1.0e+06 eff:0.5% logz-ratio=-0.51+/-0.04 dlogz:5.082>0.1]
+5474it [0:09:00 bound:30 nc:604 ncall:1.2e+06 eff:0.5% logz-ratio=-0.46+/-0.04 dlogz:4.792>0.1]
+5723it [0:10:16 bound:34 nc:346 ncall:1.3e+06 eff:0.4% logz-ratio=-0.41+/-0.04 dlogz:4.502>0.1]
+5908it [0:11:18 bound:37 nc:740 ncall:1.5e+06 eff:0.4% logz-ratio=-0.38+/-0.04 dlogz:6.357>0.1]
+6150it [0:12:36 bound:41 nc:558 ncall:1.6e+06 eff:0.4% logz-ratio=-0.33+/-0.04 dlogz:6.077>0.1]
+6337it [0:13:45 bound:44 nc:1100 ncall:1.8e+06 eff:0.4% logz-ratio=-0.30+/-0.04 dlogz:7.159>0.1]
+6522it [0:14:52 bound:47 nc:1554 ncall:1.9e+06 eff:0.3% logz-ratio=-0.27+/-0.04 dlogz:6.947>0.1]
+6708it [0:15:52 bound:50 nc:778 ncall:2.0e+06 eff:0.3% logz-ratio=-0.24+/-0.04 dlogz:6.736>0.1]
+6898it [0:16:55 bound:53 nc:1100 ncall:2.1e+06 eff:0.3% logz-ratio=-0.21+/-0.04 dlogz:6.521>0.1]
+7088it [0:18:06 bound:56 nc:954 ncall:2.3e+06 eff:0.3% logz-ratio=-0.18+/-0.04 dlogz:6.308>0.1]
+7271it [0:19:15 bound:59 nc:724 ncall:2.4e+06 eff:0.3% logz-ratio=-0.16+/-0.04 dlogz:6.104>0.1]
+7455it [0:20:22 bound:62 nc:957 ncall:2.5e+06 eff:0.3% logz-ratio=-0.13+/-0.04 dlogz:5.899>0.1]
+7643it [0:21:31 bound:65 nc:695 ncall:2.7e+06 eff:0.3% logz-ratio=-0.10+/-0.05 dlogz:5.690>0.1]
+7829it [0:22:41 bound:68 nc:1165 ncall:2.8e+06 eff:0.3% logz-ratio=-0.08+/-0.05 dlogz:5.901>0.1]
+8011it [0:23:48 bound:71 nc:1013 ncall:3.0e+06 eff:0.3% logz-ratio=-0.06+/-0.05 dlogz:5.700>0.1]
+8198it [0:24:58 bound:74 nc:1072 ncall:3.1e+06 eff:0.3% logz-ratio=-0.03+/-0.05 dlogz:5.495>0.1]
+8384it [0:26:03 bound:77 nc:418 ncall:3.3e+06 eff:0.3% logz-ratio=-0.01+/-0.05 dlogz:5.291>0.1]
+8572it [0:27:09 bound:80 nc:530 ncall:3.4e+06 eff:0.3% logz-ratio=0.01+/-0.05 dlogz:5.085>0.1]
+8756it [0:28:21 bound:83 nc:1183 ncall:3.6e+06 eff:0.2% logz-ratio=0.04+/-0.05 dlogz:4.884>0.1]
+8944it [0:29:32 bound:86 nc:1224 ncall:3.7e+06 eff:0.2% logz-ratio=0.06+/-0.05 dlogz:4.679>0.1]
+9130it [0:30:38 bound:89 nc:685 ncall:3.9e+06 eff:0.2% logz-ratio=0.08+/-0.05 dlogz:5.154>0.1]
+9317it [0:31:50 bound:92 nc:584 ncall:4.0e+06 eff:0.2% logz-ratio=0.11+/-0.05 dlogz:4.950>0.1]
+9505it [0:33:05 bound:95 nc:820 ncall:4.2e+06 eff:0.2% logz-ratio=0.13+/-0.05 dlogz:4.746>0.1]
+9694it [0:34:21 bound:98 nc:1015 ncall:4.4e+06 eff:0.2% logz-ratio=0.15+/-0.05 dlogz:4.540>0.1]
+9882it [0:35:40 bound:101 nc:1271 ncall:4.5e+06 eff:0.2% logz-ratio=0.18+/-0.05 dlogz:4.336>0.1]
+10071it [0:37:02 bound:104 nc:604 ncall:4.7e+06 eff:0.2% logz-ratio=0.20+/-0.05 dlogz:4.131>0.1]
+10260it [0:38:23 bound:107 nc:788 ncall:4.9e+06 eff:0.2% logz-ratio=0.22+/-0.06 dlogz:4.049>0.1]
+10449it [0:39:45 bound:110 nc:1500 ncall:5.1e+06 eff:0.2% logz-ratio=0.24+/-0.06 dlogz:3.847>0.1]
+10636it [0:41:08 bound:113 nc:794 ncall:5.3e+06 eff:0.2% logz-ratio=0.27+/-0.06 dlogz:4.590>0.1]
+10821it [0:42:28 bound:116 nc:943 ncall:5.5e+06 eff:0.2% logz-ratio=0.29+/-0.06 dlogz:4.388>0.1]
+11006it [0:43:54 bound:119 nc:1011 ncall:5.7e+06 eff:0.2% logz-ratio=0.31+/-0.06 dlogz:4.187>0.1]
+11192it [0:45:16 bound:122 nc:1121 ncall:5.9e+06 eff:0.2% logz-ratio=0.34+/-0.06 dlogz:3.985>0.1]
+11379it [0:46:38 bound:125 nc:1000 ncall:6.1e+06 eff:0.2% logz-ratio=0.36+/-0.06 dlogz:3.782>0.1]
+11566it [0:48:06 bound:128 nc:1229 ncall:6.3e+06 eff:0.2% logz-ratio=0.39+/-0.06 dlogz:3.579>0.1]
+11756it [0:49:34 bound:131 nc:1613 ncall:6.5e+06 eff:0.2% logz-ratio=0.41+/-0.06 dlogz:3.374>0.1]
+11944it [0:51:04 bound:134 nc:638 ncall:6.7e+06 eff:0.2% logz-ratio=0.44+/-0.06 dlogz:3.172>0.1]
+12134it [0:52:32 bound:137 nc:977 ncall:6.9e+06 eff:0.2% logz-ratio=0.47+/-0.06 dlogz:2.969>0.1]
+12320it [0:54:02 bound:140 nc:793 ncall:7.2e+06 eff:0.2% logz-ratio=0.49+/-0.06 dlogz:3.058>0.1]
+12510it [0:55:28 bound:143 nc:1173 ncall:7.4e+06 eff:0.2% logz-ratio=0.52+/-0.07 dlogz:2.857>0.1]
+12634it [0:56:29 bound:145 nc:1090 ncall:7.5e+06 eff:0.2% logz-ratio=0.54+/-0.07 dlogz:2.727>0.1]
+12817it [0:57:57 bound:148 nc:1011 ncall:7.7e+06 eff:0.2% logz-ratio=0.57+/-0.07 dlogz:2.536>0.1]
+13001it [0:59:26 bound:151 nc:1989 ncall:7.9e+06 eff:0.2% logz-ratio=0.59+/-0.07 dlogz:2.531>0.1]
+13127it [1:00:29 bound:153 nc:837 ncall:8.1e+06 eff:0.2% logz-ratio=0.61+/-0.07 dlogz:3.276>0.1]
+13251it [1:01:47 bound:155 nc:1289 ncall:8.2e+06 eff:0.2% logz-ratio=0.63+/-0.07 dlogz:3.142>0.1]
+13378it [1:02:49 bound:157 nc:1302 ncall:8.4e+06 eff:0.2% logz-ratio=0.65+/-0.07 dlogz:3.006>0.1]
+13502it [1:03:50 bound:159 nc:1869 ncall:8.6e+06 eff:0.2% logz-ratio=0.67+/-0.07 dlogz:2.874>0.1]
+13628it [1:04:50 bound:161 nc:954 ncall:8.7e+06 eff:0.2% logz-ratio=0.69+/-0.07 dlogz:2.741>0.1]
+13753it [1:05:52 bound:163 nc:874 ncall:8.9e+06 eff:0.2% logz-ratio=0.70+/-0.07 dlogz:2.610>0.1]
+13879it [1:06:52 bound:165 nc:942 ncall:9.0e+06 eff:0.2% logz-ratio=0.72+/-0.07 dlogz:2.480>0.1]
+14005it [1:07:53 bound:167 nc:1592 ncall:9.2e+06 eff:0.2% logz-ratio=0.74+/-0.07 dlogz:2.351>0.1]
+14131it [1:08:55 bound:169 nc:1281 ncall:9.3e+06 eff:0.2% logz-ratio=0.76+/-0.07 dlogz:2.225>0.1]
+14255it [1:09:56 bound:171 nc:1555 ncall:9.5e+06 eff:0.2% logz-ratio=0.78+/-0.07 dlogz:2.102>0.1]
+14377it [1:10:57 bound:173 nc:1165 ncall:9.7e+06 eff:0.1% logz-ratio=0.80+/-0.08 dlogz:1.983>0.1]
+14503it [1:12:01 bound:175 nc:905 ncall:9.8e+06 eff:0.1% logz-ratio=0.81+/-0.08 dlogz:1.862>0.1]
+14623it [1:13:07 bound:177 nc:2901 ncall:1.0e+07 eff:0.1% logz-ratio=0.83+/-0.08 dlogz:1.751>0.1]
+14748it [1:14:10 bound:179 nc:1425 ncall:1.0e+07 eff:0.1% logz-ratio=0.85+/-0.08 dlogz:1.637>0.1]
+14874it [1:15:14 bound:181 nc:1286 ncall:1.0e+07 eff:0.1% logz-ratio=0.86+/-0.08 dlogz:1.526>0.1]
+14998it [1:16:19 bound:183 nc:821 ncall:1.0e+07 eff:0.1% logz-ratio=0.88+/-0.08 dlogz:1.420>0.1]
+15123it [1:17:25 bound:185 nc:809 ncall:1.1e+07 eff:0.1% logz-ratio=0.90+/-0.08 dlogz:1.318>0.1]
+15247it [1:18:31 bound:187 nc:1136 ncall:1.1e+07 eff:0.1% logz-ratio=0.91+/-0.08 dlogz:1.387>0.1]
+15371it [1:19:34 bound:189 nc:1465 ncall:1.1e+07 eff:0.1% logz-ratio=0.93+/-0.08 dlogz:1.287>0.1]
+15496it [1:20:43 bound:191 nc:3071 ncall:1.1e+07 eff:0.1% logz-ratio=0.94+/-0.08 dlogz:1.427>0.1]
+15616it [1:21:49 bound:193 nc:1341 ncall:1.1e+07 eff:0.1% logz-ratio=0.95+/-0.08 dlogz:1.330>0.1]
+15740it [1:22:59 bound:195 nc:1600 ncall:1.2e+07 eff:0.1% logz-ratio=0.97+/-0.08 dlogz:1.299>0.1]
+15864it [1:24:05 bound:197 nc:1036 ncall:1.2e+07 eff:0.1% logz-ratio=0.98+/-0.08 dlogz:1.204>0.1]
+15984it [1:25:15 bound:199 nc:1371 ncall:1.2e+07 eff:0.1% logz-ratio=0.99+/-0.08 dlogz:1.115>0.1]
+16108it [1:26:24 bound:201 nc:1257 ncall:1.2e+07 eff:0.1% logz-ratio=1.00+/-0.08 dlogz:1.028>0.1]
+16235it [1:27:33 bound:203 nc:1705 ncall:1.2e+07 eff:0.1% logz-ratio=1.01+/-0.08 dlogz:0.943>0.1]
+16358it [1:28:44 bound:205 nc:1944 ncall:1.2e+07 eff:0.1% logz-ratio=1.02+/-0.08 dlogz:0.865>0.1]
+16482it [1:29:55 bound:207 nc:1276 ncall:1.3e+07 eff:0.1% logz-ratio=1.03+/-0.08 dlogz:0.792>0.1]
+16608it [1:31:07 bound:209 nc:1710 ncall:1.3e+07 eff:0.1% logz-ratio=1.04+/-0.08 dlogz:0.721>0.1]
+16731it [1:32:17 bound:211 nc:1944 ncall:1.3e+07 eff:0.1% logz-ratio=1.05+/-0.08 dlogz:0.665>0.1]
+16854it [1:33:28 bound:213 nc:1261 ncall:1.3e+07 eff:0.1% logz-ratio=1.06+/-0.08 dlogz:0.726>0.1]
+16979it [1:34:42 bound:215 nc:1243 ncall:1.3e+07 eff:0.1% logz-ratio=1.07+/-0.08 dlogz:0.661>0.1]
+17106it [1:35:58 bound:217 nc:1263 ncall:1.4e+07 eff:0.1% logz-ratio=1.08+/-0.08 dlogz:0.599>0.1]
+17229it [1:37:12 bound:219 nc:1828 ncall:1.4e+07 eff:0.1% logz-ratio=1.09+/-0.09 dlogz:0.544>0.1]
+17351it [1:38:30 bound:221 nc:1728 ncall:1.4e+07 eff:0.1% logz-ratio=1.09+/-0.09 dlogz:0.493>0.1]
+17474it [1:39:45 bound:223 nc:946 ncall:1.4e+07 eff:0.1% logz-ratio=1.10+/-0.09 dlogz:0.445>0.1]
+17596it [1:41:00 bound:225 nc:1715 ncall:1.4e+07 eff:0.1% logz-ratio=1.11+/-0.09 dlogz:0.402>0.1]
+17721it [1:42:17 bound:227 nc:1368 ncall:1.5e+07 eff:0.1% logz-ratio=1.11+/-0.09 dlogz:0.361>0.1]
+17845it [1:43:33 bound:229 nc:1656 ncall:1.5e+07 eff:0.1% logz-ratio=1.12+/-0.09 dlogz:0.325>0.1]
+17970it [1:44:46 bound:231 nc:1607 ncall:1.5e+07 eff:0.1% logz-ratio=1.12+/-0.09 dlogz:0.341>0.1]
+18095it [1:46:03 bound:233 nc:2639 ncall:1.5e+07 eff:0.1% logz-ratio=1.13+/-0.09 dlogz:0.306>0.1]
+18220it [1:47:24 bound:235 nc:1864 ncall:1.5e+07 eff:0.1% logz-ratio=1.13+/-0.09 dlogz:0.274>0.1]
+18345it [1:48:44 bound:237 nc:2121 ncall:1.6e+07 eff:0.1% logz-ratio=1.14+/-0.09 dlogz:0.245>0.1]
+18471it [1:50:03 bound:239 nc:1348 ncall:1.6e+07 eff:0.1% logz-ratio=1.14+/-0.09 dlogz:0.219>0.1]
+18593it [1:51:23 bound:241 nc:1191 ncall:1.6e+07 eff:0.1% logz-ratio=1.15+/-0.09 dlogz:0.196>0.1]
+18717it [1:52:46 bound:243 nc:1935 ncall:1.6e+07 eff:0.1% logz-ratio=1.15+/-0.09 dlogz:0.175>0.1]
+18843it [1:54:07 bound:245 nc:1514 ncall:1.6e+07 eff:0.1% logz-ratio=1.15+/-0.09 dlogz:0.155>0.1]
+18968it [1:55:29 bound:247 nc:1074 ncall:1.7e+07 eff:0.1% logz-ratio=1.16+/-0.09 dlogz:0.138>0.1]
+19091it [1:56:52 bound:249 nc:1921 ncall:1.7e+07 eff:0.1% logz-ratio=1.16+/-0.09 dlogz:0.123>0.1]
+19216it [1:58:17 bound:251 nc:1536 ncall:1.7e+07 eff:0.1% logz-ratio=1.16+/-0.09 dlogz:0.110>0.1]
+19342it [1:59:39 bound:253 nc:1898 ncall:1.7e+07 eff:0.1% logz-ratio=1.17+/-0.09 dlogz:0.107>0.1]
+At this point, we cannot create a float from 0        1.212564
+1        1.239783
+2        1.151345
+3        1.099118
+4        1.266304
+           ...   
+10315    1.220031
+10316    1.211893
+10317    1.214424
+10318    1.222811
+10319    1.200937
+Name: chirp_mass_source, Length: 10320, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0        0.933434
+1        0.956637
+2        0.959561
+3        0.954235
+4        0.954649
+           ...   
+10315    0.918294
+10316    0.945668
+10317    0.927489
+10318    0.936409
+10319    0.969546
+Name: mass_ratio, Length: 10320, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0        688.600830
+1        398.711884
+2        573.519897
+3        691.258423
+4        213.553864
+            ...    
+10315    411.998138
+10316    518.629333
+10317    537.776123
+10318    499.777588
+10319    620.645691
+Name: lambda_1, Length: 10320, dtype: float64, error: cannot convert the series to <class 'float'>
+At this point, we cannot create a float from 0        1056.388916
+1         516.677246
+2         730.019104
+3         880.086365
+4         291.455200
+            ...     
+10315     689.621765
+10316     718.507751
+10317     844.787903
+10318     760.409424
+10319     744.843262
+Name: lambda_2, Length: 10320, dtype: float64, error: cannot convert the series to <class 'float'>
+Skipped taking the float value from [6.6246233  9.07205582 9.38178158 ... 8.21248245 7.73975849
+ 9.65342712], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [0.94237518 0.94375983 0.94514448 ... 1.35361581 1.35500046
+ 1.35638511], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [0.68734515 0.6883925  0.68943986 ... 0.99841037 0.99945773
+ 1.00050509], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [1.00000001e-01 9.24625608e+00 1.83925122e+01 ... 2.71653805e+03
+ 2.72568431e+03 2.73483057e+03], error: only length-1 arrays can be converted to Python scalars
+At this point, we cannot create a float from [1.00000001e-01 2.37195770e+01 4.73391540e+01 ... 7.01511436e+03
+ 7.03873394e+03 7.06235352e+03], error: only length-1 arrays can be converted to Python scalars
+Skipped taking the float value from [ -6.68072033  -6.56270885  -6.62170172 ... -55.67002487
+ -58.2641716  -62.42450714], error: only length-1 arrays can be converted to Python scalars
