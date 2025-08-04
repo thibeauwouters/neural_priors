@@ -12,6 +12,9 @@ import numpy as np
 import json
 
 ### bilby imports
+from bilby.core.prior.analytical import Uniform
+from bilby.gw.prior import UniformComovingVolume
+from bilby.core.prior import PriorDict
 from bilby.gw.conversion import (
     luminosity_distance_to_redshift,
     chirp_mass_and_mass_ratio_to_component_masses,
@@ -111,7 +114,7 @@ parser.add_argument("--population-type",
 parser.add_argument("--source-type", 
                     type=str, 
                     default="bns", 
-                    choices=["bns", "nsbh"], 
+                    choices=["bns", "nsbh", "GW170817", "GW190425", "GW230529"],
                     help="Type of source to model")
 parser.add_argument("--eos-samples-name", 
                     type=str, 
@@ -283,7 +286,7 @@ class NFPriorCreator:
             raise ValueError(f"File {self.eos_samples_filename} does not exist. Please check the path or the `eos_samples_name` argument. Available subdirs: {available_subdirs}.")
         print(f"Training data will be loaded from: {self.eos_samples_filename}")
         
-        SUPPORTED_SOURCE_TYPES = ["bns", "nsbh"]
+        SUPPORTED_SOURCE_TYPES = ["bns", "nsbh", "GW170817", "GW190425", "GW230529"]
         if source_type not in SUPPORTED_SOURCE_TYPES:
             raise ValueError(f"source_type must be one of {SUPPORTED_SOURCE_TYPES}, got {source_type} instead.")
         
@@ -325,12 +328,23 @@ class NFPriorCreator:
                           }
         
         # Set names based on parameterization
-        mass_names = ["m_1", "m_2"] if self.use_component_masses else ["chirp_mass_source", "mass_ratio"]
+        if self.use_component_masses:
+            mass_names = ["m_1", "m_2"]
+        else:
+            if "GW" in self.source_type:
+                mass_names = ["chirp_mass", "mass_ratio"]
+            else:
+                mass_names = ["chirp_mass_source", "mass_ratio"]
+        
         if self.source_type == "nsbh" and not self.use_tilde:
             lambda_names = ["lambda_2"]
         else:
             lambda_names = ["lambda_tilde", "delta_lambda_tilde"] if self.use_tilde else ["lambda_1", "lambda_2"]
-        self.nf_kwargs["names"] = mass_names + lambda_names
+            
+        all_names = mass_names + lambda_names
+        if "GW" in self.source_type:
+            all_names += ["luminosity_distance"]
+        self.nf_kwargs["names"] = all_names
         self.nf_kwargs["n_inputs"] = len(self.nf_kwargs["names"])
         
         print(f"Before training, we built the following NF kwargs: {self.nf_kwargs}")
@@ -406,6 +420,75 @@ class NFPriorCreator:
         
         # Load the EOS samples
         masses_EOS, _, Lambdas_EOS = self.load_eos_samples_from_file()
+        
+        if "GW" in self.source_type:
+            print(f"create_data is followign GW_event source type: {self.source_type}")
+            
+            # Read the prior file and process the first three lines for the masses
+            prior_filename = f"../GW_runs/{self.source_type}/prior.prior"
+            Mc_det_list = np.empty(self.N_samples_training)
+            dL_list = np.empty(self.N_samples_training)
+                
+            # Read the first three lines of the prior file to get the priors
+            with open(prior_filename, "r") as f:
+                lines = f.readlines()
+                Mc_prior = lines[0].strip()
+                q_prior = lines[1].strip()
+                dL_prior = lines[2].strip()
+                
+            # For each line, extract the minimum and maximum values
+            def parse_prior_line(line):
+                """Extract minimum and maximum values from a prior definition line."""
+                import re
+                # Pattern to match minimum=value and maximum=value
+                min_match = re.search(r'minimum=([^,\)]+)', line)
+                max_match = re.search(r'maximum=([^,\)]+)', line)
+                
+                min_val = None
+                max_val = None
+                
+                if min_match:
+                    min_str = min_match.group(1).strip()
+                    try:
+                        min_val = float(min_str)
+                    except ValueError:
+                        # Handle expressions like "1369419318.7460938-0.1"
+                        try:
+                            min_val = eval(min_str)
+                        except:
+                            min_val = None
+                
+                if max_match:
+                    max_str = max_match.group(1).strip()
+                    try:
+                        max_val = float(max_str)
+                    except ValueError:
+                        # Handle expressions like "1369419318.7460938+0.1"
+                        try:
+                            max_val = eval(max_str)
+                        except:
+                            max_val = None
+                
+                return min_val, max_val
+            
+            # Parse the prior bounds
+            Mc_min, Mc_max = parse_prior_line(Mc_prior)
+            q_min, q_max = parse_prior_line(q_prior)
+            dL_min, dL_max = parse_prior_line(dL_prior)
+            
+            print(f"Parsed prior bounds:")
+            print(f"  Chirp mass: {Mc_min} - {Mc_max}")
+            print(f"  Mass ratio: {q_min} - {q_max}")
+            print(f"  Luminosity distance: {dL_min} - {dL_max}")
+            
+            # Create the bilby priors
+            priors_dict = {}
+            priors_dict["chirp_mass"] = Uniform(minimum=Mc_min, maximum=Mc_max, name="chirp_mass")
+            priors_dict["mass_ratio"] = Uniform(minimum=q_min, maximum=q_max, name="mass_ratio")
+            priors_dict["luminosity_distance"] = UniformComovingVolume(minimum=dL_min, maximum=dL_max, name='luminosity_distance', latex_label='$D_L$')
+            
+            gw_priors = PriorDict(priors_dict)
+            print(f"Loaded priors: {gw_priors}")
 
         # Make everything ready for sampling
         m1_list = np.empty(self.N_samples_training)
@@ -414,11 +497,11 @@ class NFPriorCreator:
         Lambda2_list = np.empty(self.N_samples_training)
 
         # Construct the prior from sampling from the EOS set - always generate NS-NS pairs
-        for i in range(self.N_samples_training):
+        for i in tqdm.tqdm(range(self.N_samples_training)):
             idx = np.random.randint(0, len(masses_EOS))
             m, l = masses_EOS[idx], Lambdas_EOS[idx]
-            
             mtov = np.max(m)
+            
             if self.source_type == "bns":
                 if self.population_type == "uniform":
                     # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
@@ -436,7 +519,8 @@ class NFPriorCreator:
                 
                 Lambda_1 = np.interp(m1, m, l)
                 Lambda_2 = np.interp(m2, m, l)
-            else:
+            
+            elif self.population_type == "nsbh":
                 # This automatically satisfies m1 >= m2
                 m1 = np.random.uniform(mtov, self.m_max_BH, 1)[0]
                 
@@ -452,12 +536,31 @@ class NFPriorCreator:
                 
                 Lambda_1 = 0.0
                 Lambda_2 = np.interp(m2, m, l)
-            
+                
+            else:
+                # Generate detector frame samples
+                samples = gw_priors.sample(size = 1)
+                
+                Mc, q, dL = samples["chirp_mass"][0], samples["mass_ratio"][0], samples["luminosity_distance"][0]
+                Mc_det_list[i] = Mc
+                dL_list[i] = dL
+                
+                # Convert to source frame component masses
+                m1_det, m2_det = chirp_mass_and_mass_ratio_to_component_masses(Mc, q)
+                z = luminosity_distance_to_redshift(dL)
+                m1 = m1_det / (1 + z)
+                m2 = m2_det / (1 + z)
+                
+                # Get Lambda values by interpolation
+                Lambda_1 = np.interp(m1, m, l)
+                Lambda_2 = np.interp(m2, m, l)
+                    
+            # Save the sampled values
             m1_list[i] = m1
             m2_list[i] = m2
             Lambda1_list[i] = Lambda_1
             Lambda2_list[i] = Lambda_2
-               
+            
         # For numerical stability, we turn zero into a very small number with np.clip:
         Lambda1_list = np.clip(Lambda1_list, a_min=1e-4, a_max=None)
         Lambda2_list = np.clip(Lambda2_list, a_min=1e-4, a_max=None)
@@ -467,23 +570,33 @@ class NFPriorCreator:
         delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(Lambda1_list, Lambda2_list, m1_list, m2_list)
         
         # Also get chirp mass and mass ratio for the training data
-        chirp_mass = component_masses_to_chirp_mass(m1_list, m2_list)
-        mass_ratio = component_masses_to_mass_ratio(m1_list, m2_list)
+        chirp_mass_source = component_masses_to_chirp_mass(m1_list, m2_list)
+        # mass_ratio = component_masses_to_mass_ratio(m1_list, m2_list) # TODO: remove for now?
+        
+        save_dict = {
+            "m1": np.array(m1_list),
+            "m2": np.array(m2_list),
+            "q": np.array(m2_list)/np.array(m1_list),
+            "lambda_1": np.array(Lambda1_list),
+            "lambda_2": np.array(Lambda2_list),
+            "lambda_tilde": np.array(lambda_tilde),
+            "delta_lambda_tilde": np.array(delta_lambda_tilde),
+            "chirp_mass_source": np.array(chirp_mass_source),
+        }
+        
+        if "GW" in self.source_type:
+            save_dict["chirp_mass"] = Mc_det_list
+            save_dict["luminosity_distance"] = dL_list
+            
+        print(f"Create data will save the following data:")
+        for key, value in save_dict.items():
+            print(f"  {key}: range = [{np.min(value)}, {np.max(value)}]")
         
         full_save_path = os.path.join(self.outdir, f"training_data.npz")
         self.training_filename = full_save_path
-        print(f"Saving training data to {full_save_path}")
-        np.savez(full_save_path, 
-                 m1=np.array(m1_list),
-                 m2=np.array(m2_list),
-                 lambda_1=np.array(Lambda1_list),
-                 lambda_2=np.array(Lambda2_list),
-                 lambda_tilde=np.array(lambda_tilde),
-                 delta_lambda_tilde=np.array(delta_lambda_tilde),
-                 chirp_mass=np.array(chirp_mass),
-                 mass_ratio=np.array(mass_ratio)
-        )
-        print(f"Saving training data DONE")
+        print(f"Saving to {full_save_path}:")
+        np.savez(full_save_path, **save_dict)
+        print(f"Saving to {full_save_path} DONE")
         
     def load_training_data(self, training_filename: str):
         """
@@ -512,10 +625,14 @@ class NFPriorCreator:
             train_mass_1 = m1_raw
             train_mass_2 = m2_raw
         else:
-            print("Using chirp mass and mass ratio (Mc, q) for training")
-            # Load or calculate chirp mass and mass ratio
-            train_mass_1 = component_masses_to_chirp_mass(m1_raw, m2_raw)
-            train_mass_2 = component_masses_to_mass_ratio(m1_raw, m2_raw)
+            if "GW" in self.source_type:
+                print("Using detector-frame chirp mass from the GW event and mass ratio (Mc_det, q) for training")
+                train_mass_1 = data["chirp_mass"]
+                train_mass_2 = data["q"]
+            else:
+                print("Using source-frame chirp mass and mass ratio (Mc, q) for training")
+                train_mass_1 = data["chirp_mass_source"]
+                train_mass_2 = data["q"]
         
         # Handle lambda parameterization
         if self.use_tilde:
@@ -530,6 +647,9 @@ class NFPriorCreator:
         
         # Create train-validation split using sklearn
         arrays_to_split = [train_mass_1, train_mass_2, train_lambda_1, train_lambda_2]
+        if "GW" in self.source_type:
+            # If we have GW event data, also include the luminosity distance
+            arrays_to_split.append(data["luminosity_distance"])
         split_result = train_test_split(*arrays_to_split, test_size=self.validation_split_fraction, random_state=42)
         
         # Unpack results
@@ -537,6 +657,7 @@ class NFPriorCreator:
         self.train_mass_2, self.val_mass_2 = split_result[2], split_result[3]
         self.train_lambda_1, self.val_lambda_1 = split_result[4], split_result[5]
         self.train_lambda_2, self.val_lambda_2 = split_result[6], split_result[7]
+        self.train_dL, self.val_dL = split_result[8], split_result[9]
         
         print(f"Training samples: {len(self.train_mass_1)}, Validation samples: {len(self.val_mass_1)}")
         
@@ -561,28 +682,27 @@ class NFPriorCreator:
         training_filename = os.path.join(self.outdir, "training_data.npz")
         self.load_training_data(training_filename)
         
-        # TODO: wow this is cumbersome, improve this massively
-        if self.source_type == "bns":
-            # This is always a 4D model
-            print(f"We are training for BNS")
-            self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
-            self.x_val = np.array([self.val_mass_1, self.val_mass_2, self.val_lambda_1, self.val_lambda_2]).T
-            
-        elif self.source_type == "nsbh":
-            print(f"We are training NSBH")
-            if self.use_tilde:
-                # This is a 4D model
-                print("NSBH: training lambda tildes, so 4D model")
-                self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]).T
-                self.x_val = np.array([self.val_mass_1, self.val_mass_2, self.val_lambda_1, self.val_lambda_2]).T
-            else:
-                # This is a 3D model, since Lambda_1 is always 0 for NSBH
-                print("NSBH: training lambda_2")
-                self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_2]).T
-                self.x_val = np.array([self.val_mass_1, self.val_mass_2, self.val_lambda_2]).T
+        print("Creating the training data arrays")
+        if self.source_type == "nsbh" and not self.use_tilde:
+            print("NSBH and training on lambda_2 (3D)")
+            self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_2]).T
+            self.x_val = np.array([self.val_mass_1, self.val_mass_2, self.val_lambda_2]).T
+            # done for this
         else:
-            raise ValueError(f"Something wrong. To check. Source type is {self.source_type}")
-        
+            # This is always a 4D model
+            print(f"4D training data model for {self.source_type}")
+            x = [self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]
+            x_val = [self.val_mass_1, self.val_mass_2, self.val_lambda_1, self.val_lambda_2]
+                
+            if "GW" in self.source_type:
+                # If we have GW event data, also include the detector-frame chirp mass and luminosity distance
+                x.append(self.train_dL)
+                x_val.append(self.val_dL)
+                print("Including detector-frame chirp mass and luminosity distance in training data")
+                
+            self.x = np.array(x).T
+            self.x_val = np.array(x_val).T
+                
         # Show some stuff
         print("np.shape(self.x)")
         print(np.shape(self.x))
