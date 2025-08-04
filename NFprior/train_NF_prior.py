@@ -586,7 +586,7 @@ class NFPriorCreator:
         save_dict = {
             "m1": np.array(m1_list),
             "m2": np.array(m2_list),
-            "q": np.array(m2_list)/np.array(m1_list),
+            "mass_ratio": np.array(m2_list)/np.array(m1_list),
             "lambda_1": np.array(Lambda1_list),
             "lambda_2": np.array(Lambda2_list),
             "lambda_tilde": np.array(lambda_tilde),
@@ -638,11 +638,11 @@ class NFPriorCreator:
             if self.is_gw_event:
                 print("Using detector-frame chirp mass from the GW event and mass ratio (Mc_det, q) for training")
                 train_mass_1 = data["chirp_mass"]
-                train_mass_2 = data["q"]
+                train_mass_2 = data["mass_ratio"]
             else:
                 print("Using source-frame chirp mass and mass ratio (Mc, q) for training")
                 train_mass_1 = data["chirp_mass_source"]
-                train_mass_2 = data["q"]
+                train_mass_2 = data["mass_ratio"]
         
         # Handle lambda parameterization
         if self.use_tilde:

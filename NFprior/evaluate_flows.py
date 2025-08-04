@@ -3,6 +3,7 @@ Evaluate the performance of the flows, by plotting some comparison cornerplots a
 """
 
 import os
+import sys
 import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
@@ -123,11 +124,10 @@ class Checker:
         """
         training_data_path = os.path.join(self.path, "training_data.npz")
         if os.path.exists(training_data_path):
-            print(f"Loading training data from {training_data_path}")
-            return np.load(training_data_path)
+            data = np.load(training_data_path)
+            return data
         else:
-            print(f"No training data found at {training_data_path}")
-            return None
+            raise FileNotFoundError(f"Training data not found at {training_data_path}. Please ensure the model was trained with training data saved.")
     
 class CheckerBNS(Checker):
     
@@ -606,7 +606,9 @@ class CheckerUnconditional(Checker):
         """
         super().__init__(path, N_samples, N_masses=0)  # N_masses not used for unconditional
         self.flow, self.nf_kwargs, self.scaler = self.load_model_and_data()
+        print(f"Loading training data")
         self.training_data = self.load_training_data()
+        print(f"Loading training data DONE")
         
     def load_model_and_data(self):
         """
@@ -704,7 +706,7 @@ class CheckerUnconditional(Checker):
         use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
         parameter_names = self.nf_kwargs.get("names", [])
         
-        labels = self.get_parameter_labels(use_tilde, parameter_names)
+        labels = self.get_parameter_labels(parameter_names)
         
         # Determine range from combined data
         all_data = np.concatenate([training_samples, nf_samples], axis=0)
@@ -731,72 +733,23 @@ class CheckerUnconditional(Checker):
             percentage_ok = np.sum(ok_samples) / len(ok_samples) * 100
             print(f"Percentage of samples with lambda_1 < lambda_2: {percentage_ok:.2f}%")
     
-    def get_parameter_labels(self, use_tilde, parameter_names):
+    def get_parameter_labels(self, parameter_names):
         """Get parameter labels based on parameterization flags and parameter names."""
-        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
+        translation_dict = {"chirp_mass": r"$M_c$ [M$_\odot$]",
+                            "chirp_mass_source": r"$M_c^{\rm{source}}$ [M$_\odot$]",
+                            "q": r"$q$",
+                            "lambda_1": r"$\Lambda_1$",
+                            "lambda_2": r"$\Lambda_2$",
+                            "lambda_tilde": r"$\tilde{\Lambda}$",
+                            "delta_lambda_tilde": r"$\delta\tilde{\Lambda}$",
+                            "luminosity_distance": r"$d_L$ [Mpc]",
+                            "redshift": r"$z$",
+                            "m_1": r"$m_1$ [M$_\odot$]",
+                            "m_2": r"$m_2$ [M$_\odot$]"
+                            }
         
-        # Handle 4D models
-        if len(parameter_names) == 4:
-            source_type = self.nf_kwargs.get("source_type", "bns")
-            include_dL = self.nf_kwargs.get("include_dL", "False") == "True"
-            
-            if source_type == "nsbh" and not use_component_masses and include_dL:
-                # NSBH case: Mc, q, dL, lambda_2 (only NS has lambda)
-                return [r"$M_c$ [$M_{\odot}$]", r"$q$", r"$d_L$ [Mpc]", r"$\Lambda_2$"]
-            else:
-                # BNS case: standard 4D
-                # Mass labels
-                if use_component_masses:
-                    mass_labels = [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]"]
-                else:
-                    mass_labels = [r"$M_c$ [$M_{\odot}$]", r"$q$"]
-                
-                # Lambda labels
-                if use_tilde:
-                    lambda_labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
-                else:
-                    lambda_labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
-                
-                return mass_labels + lambda_labels
+        return [translation_dict[name] for name in parameter_names]
         
-        # Handle 5D models with dL
-        elif len(parameter_names) == 5:
-            # Mass labels
-            if use_component_masses:
-                mass_labels = [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]"]
-            else:
-                mass_labels = [r"$M_c$ [$M_{\odot}$]", r"$q$"]
-            
-            # Lambda labels
-            if use_tilde:
-                lambda_labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
-            else:
-                lambda_labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
-            
-            return mass_labels + [r"$d_L$ [Mpc]"] + lambda_labels
-        
-        # Handle 3D NSBH case 
-        elif len(parameter_names) == 3:
-            source_type = self.nf_kwargs.get("source_type", "bns")
-            if source_type == "nsbh":
-                # NSBH case: for component masses m1, m2, lambda_2 or for chirp mass Mc, q, lambda_2
-                if use_component_masses:
-                    return [r"$m_1$ [$M_{\odot}$]", r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]
-                else:
-                    return [r"$M_c$ [$M_{\odot}$]", r"$q$", r"$\Lambda_2$"]
-            else:
-                # Fallback for other 3D cases
-                return parameter_names if parameter_names else None
-        
-        # Handle 2D NSBH case
-        elif len(parameter_names) == 2:
-            if use_tilde:
-                return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]  # NSBH case
-            else:
-                return [r"$m_2$ [$M_{\odot}$]", r"$\Lambda_2$"]
-        
-        # Fallback to parameter names if available
-        return parameter_names if parameter_names else None
     
     def make_cornerplot_with_labels(self, chains_1: np.array, chains_2: np.array,
                                   name: str, my_range: list = None, 
@@ -886,6 +839,7 @@ class CheckerUnconditional(Checker):
         """
         Generate samples from the NF model for testing purposes.
         """
+        print(f"Generating {N_test_samples} samples from the NF model for testing")
         nf_samples = []
         use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
         
@@ -930,89 +884,76 @@ class CheckerUnconditional(Checker):
                 # lambda_2 is last column
                 nf_samples[:, -1] = np.exp(nf_samples[:, -1])
         
+        print(f"Generating {N_test_samples} samples from the NF model for testing DONE")
         return nf_samples
     
     def get_training_samples(self):
         """
-        Get training samples in the same format as NF samples.
+        Get training samples in the same format as NF samples by using nf_kwargs["names"].
         """
-        use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
-        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
-        source_type = self.nf_kwargs.get("source_type", "bns")
-        include_dL = self.nf_kwargs.get("include_dL", "False") == "True"
+        parameter_names = self.nf_kwargs.get("names", [])
+        print(f"Constructing training samples for parameters: {parameter_names}")
         
-        # Get mass parameters based on use_component_masses flag
-        if use_component_masses:
-            m1 = self.training_data["m1"]
-            m2 = self.training_data["m2"]
-            mass_params = [m1, m2]
-        else:
-            # Use or calculate chirp mass and mass ratio
-            if "chirp_mass" in self.training_data and "mass_ratio" in self.training_data:
-                mc = self.training_data["chirp_mass"]
-                q = self.training_data["mass_ratio"]
-            else:
-                from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
-                mc = component_masses_to_chirp_mass(self.training_data["m1"], self.training_data["m2"])
-                q = component_masses_to_mass_ratio(self.training_data["m1"], self.training_data["m2"])
-            mass_params = [mc, q]
+        # FIXME: this is a small typo/bug and is now fixed, but old NFs might not have this yet
+        if "mass_ratio" in parameter_names:
+            parameter_names[parameter_names.index("mass_ratio")] = "q"
         
-        # Get lambda parameters based on use_tilde flag
-        if use_tilde:
-            lambda_1 = self.training_data["lambda_tilde"]
-            lambda_2 = self.training_data["delta_lambda_tilde"]
-        else:
-            lambda_1 = self.training_data["lambda_1"]
-            lambda_2 = self.training_data["lambda_2"]
-        lambda_params = [lambda_1, lambda_2]
+        # Build training samples by iterating over the parameter names in order
+        training_columns = []
+        for param_name in parameter_names:
+            training_columns.append(self.training_data[param_name])
         
-        if source_type == "bns":
-            # For BNS: combine mass and lambda parameters
-            if include_dL:
-                if "luminosity_distance" in self.training_data:
-                    dL = self.training_data["luminosity_distance"]
-                    return np.column_stack(mass_params + [dL] + lambda_params)
-                else:
-                    raise ValueError("include_dL=True but no luminosity_distance found in training data")
-            else:
-                return np.column_stack(mass_params + lambda_params)
-        else:  # NSBH
-            if not use_component_masses:
-                # For NSBH with chirp mass parameterization
-                if include_dL:
-                    # Use 4 parameters: Mc, q, dL, lambda_2 (only NS has lambda)
-                    if "luminosity_distance" in self.training_data:
-                        dL = self.training_data["luminosity_distance"]
-                        return np.column_stack(mass_params + [dL] + [lambda_2])  # Only lambda_2 for NSBH
-                    else:
-                        raise ValueError("include_dL=True but no luminosity_distance found in training data")
-                else:
-                    # Use 3 parameters: Mc, q, lambda_2 (only NS has lambda)
-                    return np.column_stack(mass_params + [lambda_2])  # Only lambda_2 for NSBH
-            else:
-                # For NSBH with component masses, use m1, m2, lambda_2 
-                m1 = self.training_data["m1"]
-                m2 = self.training_data["m2"]
-                if use_tilde:
-                    lambda_2 = self.training_data["lambda_2"]  # Note: for NSBH, use raw lambda_2 not tilde
-                else:
-                    lambda_2 = self.training_data["lambda_2"]
-                return np.column_stack([m1, m2, lambda_2])
+        result = np.column_stack(training_columns)
+        print(f"Training samples shape: {result.shape}")
+        return result
 
 def main():
-    # Evaluate all of our flows at the same time
-    source_type_list = ["nsbh",
-                        # "bns"
-                        ]
-    eos_list = ["radio",
-                # "radio_chiEFT",
-                # "radio_chiEFT_NICER"
-                ]
-    for source_type in source_type_list:
-        for eos in eos_list:
-            print(f"Checking unconditional model for {source_type} with EOS {eos}")
-            unconditional_checker = CheckerUnconditional(f"./models/uniform/{source_type}/{eos}/", N_samples=10_000)
-            unconditional_checker.check_unconditional_model()
+    import argparse
+    import sys
+    
+    parser = argparse.ArgumentParser(description="Evaluate a normalizing flow model")
+    parser.add_argument("model_path", help="Path to the model directory")
+    parser.add_argument("--test-only", action="store_true", 
+                       help="Only test if model can generate samples (quick test)")
+    parser.add_argument("--n-samples", type=int, default=10000,
+                       help="Number of samples to generate for evaluation")
+    parser.add_argument("--n-test-samples", type=int, default=100,
+                       help="Number of samples for quick test")
+    
+    args = parser.parse_args()
+    
+    try:
+        if args.test_only:
+            # Quick test - just see if model can generate samples
+            print(f"Quick test for model: {args.model_path}")
+            checker = CheckerUnconditional(args.model_path, N_samples=args.n_test_samples)
+            
+            # Try to generate samples
+            samples = checker.generate_nf_samples_for_test(args.n_test_samples)
+            
+            print(f"✓ Success - Shape: {samples.shape}")
+            print(f"  Ranges: {[f'[{samples[:, i].min():.3f}, {samples[:, i].max():.3f}]' for i in range(samples.shape[1])]}")
+            
+            # Check for issues
+            if np.any(np.isnan(samples)) or np.any(np.isinf(samples)):
+                print("✗ Warning: Found NaN or infinite values")
+                return False
+                
+            return True
+        else:
+            # Full evaluation
+            print(f"Full evaluation for model: {args.model_path}")
+            checker = CheckerUnconditional(args.model_path, N_samples=args.n_samples)
+            checker.check_unconditional_model()
+            print("✓ Full evaluation completed successfully")
+            return True
+            
+    except Exception as e:
+        print(f"✗ Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return False
     
 if __name__ == "__main__":
-    main()
+    success = main()
+    sys.exit(0 if success else 1)
