@@ -360,7 +360,13 @@ class NFPriorCreator:
         
         # Make an outdir based on the given name etc, so that everything is stored in one directory for later on
         backend_suffix = "_flowjax" if self.use_flowjax else ""
-        self.outdir = os.path.join("./models/", self.population_type, self.source_type, f"{self.eos_samples_name}{backend_suffix}")
+        if "GW" in self.source_type:
+            self.gw_event = True # TODO: make this used in this script everywhere rather than double-checking again each time!
+            self.outdir = os.path.join("./models/", self.source_type, f"{self.eos_samples_name}{backend_suffix}")
+        else:
+            self.gw_event = False
+            self.outdir = os.path.join("./models/", self.population_type, self.source_type, f"{self.eos_samples_name}{backend_suffix}")
+        
         if not os.path.exists(self.outdir):
             os.makedirs(self.outdir)
             print(f"Created output directory {self.outdir}")
@@ -497,7 +503,9 @@ class NFPriorCreator:
         Lambda2_list = np.empty(self.N_samples_training)
 
         # Construct the prior from sampling from the EOS set - always generate NS-NS pairs
-        for i in tqdm.tqdm(range(self.N_samples_training)):
+        for i in range(self.N_samples_training):
+            if i % (self.N_samples_training // 10) == 0:
+                print(f"{i}/{self.N_samples_training}")
             idx = np.random.randint(0, len(masses_EOS))
             m, l = masses_EOS[idx], Lambdas_EOS[idx]
             mtov = np.max(m)
@@ -912,150 +920,133 @@ class NFPriorCreator:
         plt.close()
 
 
-def setup_submission(args, submit=False):
-    """
-    Setup .sub file for cluster submission based on current arguments.
-    
-    Args:
-        args: Parsed command line arguments
-        submit: Whether to submit the job after creating .sub file
-    """
-    # Get the output directory that would be created
-    backend_suffix = "_flowjax" if args.use_flowjax else ""
-    population_type = getattr(args, 'population_type', 'uniform')
-    outdir = os.path.join("./models/", population_type, args.source_type, f"{args.eos_samples_name}{backend_suffix}")
-    
-    # Create output directory if it doesn't exist
-    os.makedirs(outdir, exist_ok=True)
-    print(f"Created/verified output directory: {outdir}")
-    
-    # Read the template file
-    template_path = "train.sub"
-    if not os.path.exists(template_path):
-        raise FileNotFoundError(f"Template file {template_path} not found")
-    
-    with open(template_path, 'r') as f:
-        template_content = f.read()
-    
-    # Get the absolute path to this training script
-    train_script_path = os.path.abspath(__file__)
-    
-    # Build the training arguments string from current args, excluding submission-specific ones
-    training_args = []
-    exclude_args = {'setup_submission', 'template_file', 'submit'}
-    
-    for key, value in vars(args).items():
-        if key in exclude_args:
-            continue
-            
-        arg_name = f"--{key.replace('_', '-')}"
+    def setup_submission(self, args, submit=False):
+        """
+        Setup .sub file for cluster submission based on current arguments.
         
-        # Handle boolean flags
-        if isinstance(value, bool):
-            if value:
-                training_args.append(arg_name)
+        Args:
+            args: Parsed command line arguments
+            submit: Whether to submit the job after creating .sub file
+        """
+        
+        # Read the template file
+        template_path = "train.sub"
+        if not os.path.exists(template_path):
+            raise FileNotFoundError(f"Template file {template_path} not found")
+        
+        with open(template_path, 'r') as f:
+            template_content = f.read()
+        
+        # Get the absolute path to this training script
+        train_script_path = os.path.abspath(__file__)
+        
+        # FIXME: is this still necessary given main()?
+        # Build the training arguments string from current args, excluding submission-specific ones
+        training_args = []
+        exclude_args = {'setup_submission', 'template_file', 'submit'}
+        
+        for key, value in args.items():
+            if key in exclude_args:
+                continue
+                
+            arg_name = f"--{key.replace('_', '-')}"
+            
+            # Handle boolean flags
+            if isinstance(value, bool):
+                if value:
+                    training_args.append(arg_name)
+                else:
+                    # For boolean args with "no-" variants, add the negative form if False
+                    if key == 'use_tilde' and not value:
+                        training_args.append("--no-use-tilde")
+                    elif key == 'use_component_masses' and not value:
+                        training_args.append("--no-use-component-masses")
+                    elif key == 'take_log_lambda' and not value:
+                        training_args.append("--no-take-log-lambda")
+                    elif key == 'use_flowjax' and not value:
+                        training_args.append("--no-use-flowjax")
+                    elif key == 'scale_input' and not value:
+                        training_args.append("--no-scale-input")
             else:
-                # For boolean args with "no-" variants, add the negative form if False
-                if key == 'use_tilde' and not value:
-                    training_args.append("--no-use-tilde")
-                elif key == 'use_component_masses' and not value:
-                    training_args.append("--no-use-component-masses")
-                elif key == 'take_log_lambda' and not value:
-                    training_args.append("--no-take-log-lambda")
-                elif key == 'use_flowjax' and not value:
-                    training_args.append("--no-use-flowjax")
-                elif key == 'scale_input' and not value:
-                    training_args.append("--no-scale-input")
+                # Handle non-boolean arguments
+                training_args.extend([arg_name, str(value)])
+        
+        training_args_str = " ".join(training_args)
+        
+        # Modify the template content
+        lines = template_content.strip().split('\n')
+        modified_lines = []
+        
+        for line in lines:
+            if line.startswith('arguments ='):
+                # Replace the arguments line with our specific arguments
+                modified_lines.append(f'arguments = "{train_script_path} {training_args_str}"')
+            elif line.startswith('Log ='):
+                # Update log file path
+                log_path = os.path.join(self.outdir, "log.log")
+                modified_lines.append(f'Log = {log_path}')
+            elif line.startswith('Error ='):
+                # Update error file path
+                err_path = os.path.join(self.outdir, "err.err")
+                modified_lines.append(f'Error = {err_path}')
+            elif line.startswith('Output ='):
+                # Update output file path
+                out_path = os.path.join(self.outdir, "out.out")
+                modified_lines.append(f'Output = {out_path}')
+            else:
+                # Keep the line as is
+                modified_lines.append(line)
+        
+        # Write the modified .sub file
+        sub_file_path = os.path.join(self.outdir, "train.sub")
+        with open(sub_file_path, 'w') as f:
+            f.write('\n'.join(modified_lines) + '\n')
+        
+        print(f"Created .sub file: {sub_file_path}")
+        
+        # Submit the job if requested
+        if submit:
+            try:
+                result = subprocess.run(
+                    ["condor_submit", sub_file_path], 
+                    capture_output=True, 
+                    text=True, 
+                    check=True
+                )
+                print(f"Job submitted successfully!")
+            except Exception as e:
+                print(f"Error submitting job: {e}")
+                return 1
         else:
-            # Handle non-boolean arguments
-            training_args.extend([arg_name, str(value)])
-    
-    training_args_str = " ".join(training_args)
-    
-    # Modify the template content
-    lines = template_content.strip().split('\n')
-    modified_lines = []
-    
-    for line in lines:
-        if line.startswith('arguments ='):
-            # Replace the arguments line with our specific arguments
-            modified_lines.append(f'arguments = "{train_script_path} {training_args_str}"')
-        elif line.startswith('Log ='):
-            # Update log file path
-            log_path = os.path.join(outdir, "log.log")
-            modified_lines.append(f'Log = {log_path}')
-        elif line.startswith('Error ='):
-            # Update error file path
-            err_path = os.path.join(outdir, "err.err")
-            modified_lines.append(f'Error = {err_path}')
-        elif line.startswith('Output ='):
-            # Update output file path
-            out_path = os.path.join(outdir, "out.out")
-            modified_lines.append(f'Output = {out_path}')
-        else:
-            # Keep the line as is
-            modified_lines.append(line)
-    
-    # Write the modified .sub file
-    sub_file_path = os.path.join(outdir, "train.sub")
-    with open(sub_file_path, 'w') as f:
-        f.write('\n'.join(modified_lines) + '\n')
-    
-    print(f"Created .sub file: {sub_file_path}")
-    
-    # Submit the job if requested
-    if submit:
-        try:
-            result = subprocess.run(
-                ["condor_submit", sub_file_path], 
-                capture_output=True, 
-                text=True, 
-                check=True
-            )
-            print(f"Job submitted successfully!")
-            print(f"Condor output: {result.stdout.strip()}")
-        except subprocess.CalledProcessError as e:
-            print(f"Error submitting job: {e}")
-            print(f"Error output: {e.stderr}")
-            return 1
-        except FileNotFoundError:
-            print("Error: condor_submit command not found. Make sure HTCondor is installed and in PATH.")
-            return 1
-    else:
-        print(f"To submit the job, run: condor_submit {sub_file_path}")
-    
-    return 0
+            print(f"To submit the job, run: condor_submit {sub_file_path}")
+        
+        return 0
 
             
 def main():
     args = parser.parse_args()
     
+    # Filter out # TODO: this can likely be improved in the future
+    trainer_args = {}
+    submit_args = {}
+    submit_args_keys = ['setup_submission', 'template_file', 'submit']
+    
+    for key, value in vars(args).items():
+        if key in submit_args_keys:
+            submit_args[key] = value
+        else:
+            trainer_args[key] = value
+    trainer = NFPriorCreator(**trainer_args)
+    
     # Handle submission modes
     if args.submit:
         print(f"Setting up submission and submitting job with the following parameters:")
-        for key, value in vars(args).items():
-            if key not in {'setup_submission', 'template_file', 'submit'}:
-                print(f"    - {key}: {value}")
-        return setup_submission(args, submit=True)
+        return trainer.setup_submission(vars(args), submit=True)
     elif args.setup_submission:
         print(f"Setting up submission (without submitting) with the following parameters:")
-        for key, value in vars(args).items():
-            if key not in {'setup_submission', 'template_file', 'submit'}:
-                print(f"    - {key}: {value}")
-        return setup_submission(args, submit=False)
+        return trainer.setup_submission(vars(args), submit=False)
     
     print(f"Starting training with the following parameters:")
-    
-    # Filter out submission-related arguments
-    trainer_args = {}
-    exclude_args = {'setup_submission', 'template_file', 'submit'}
-    
-    for key, value in vars(args).items():
-        if key not in exclude_args:
-            print(f"    - {key}: {value}")
-            trainer_args[key] = value
-    
-    trainer = NFPriorCreator(**trainer_args)
     trainer.create_data()
     trainer.train()
     

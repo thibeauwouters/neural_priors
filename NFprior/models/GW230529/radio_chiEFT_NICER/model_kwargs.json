@@ -1,0 +1,30 @@
+{
+    "n_transforms": 4,
+    "n_neurons": 64,
+    "n_blocks_per_transform": 1,
+    "nn_depth": 5,
+    "nn_block_dim": 8,
+    "names": [
+        "chirp_mass",
+        "mass_ratio",
+        "lambda_1",
+        "lambda_2",
+        "luminosity_distance"
+    ],
+    "n_inputs": 5,
+    "model_type": "CouplingNSF",
+    "source_type": "GW230529",
+    "N_samples_training": 200000,
+    "m_max_BH": 5.0,
+    "num_epochs": 1000,
+    "learning_rate": 0.001,
+    "max_patience": 100,
+    "batch_size": 1024,
+    "num_bins": 10,
+    "eos_samples_filename": "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/../data/eos/radio_chiEFT_NICER/eos_samples.npz",
+    "training_filename": "./models/GW230529/radio_chiEFT_NICER/training_data.npz",
+    "take_log_lambda": "False",
+    "use_flowjax": "False",
+    "use_tilde": "False",
+    "use_component_masses": "False"
+}
