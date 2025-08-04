@@ -1,0 +1,55 @@
+torch: CUDA is available. Number of devices: 1
+torch: Current CUDA device: 0
+Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
+Training a normalizing flow for population =  GW190425 and nsbh sources
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 5, 'nn_block_dim': 8, 'names': ['chirp_mass', 'mass_ratio', 'lambda_2', 'luminosity_distance'], 'n_inputs': 4}
+Everything for this model will be saved to ./models/GW190425/nsbh/radio
+Starting training with the following parameters:
+Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
+Number of good samples:  0.9601
+create_data is following GW_event source type: GW190425
+Parsed prior bounds:
+  Chirp mass: 1.485 - 1.49
+  Mass ratio: 0.5 - 1.0
+  Luminosity distance: 1.0 - 500.0
+Loaded priors: {'chirp_mass': Uniform(minimum=1.485, maximum=1.49, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None), 'mass_ratio': Uniform(minimum=0.5, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None), 'luminosity_distance': bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=500.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)}
+0/200000
+20000/200000
+40000/200000
+60000/200000
+80000/200000
+100000/200000
+120000/200000
+140000/200000
+160000/200000
+180000/200000
+Create data will save the following data:
+  m1: range = [1.5451751739034258, 2.417420242012525]
+  m2: range = [1.1056864051836475, 1.7002188823456106]
+  q: range = [0.5000015310768102, 0.9999986999312511]
+  lambda_1: range = [2.4777398049978956, 1067.3769541657844]
+  lambda_2: range = [45.335682253801544, 4702.533668131701]
+  lambda_tilde: range = [37.29470346538501, 1185.7149486185997]
+  delta_lambda_tilde: range = [0.00016366441940413203, 283.113916519938]
+  chirp_mass_source: range = [1.3441411382463166, 1.4878981159302427]
+  chirp_mass: range = [1.485000013467585, 1.4899999934611203]
+  luminosity_distance: range = [5.819349090436751, 499.9992418460104]
+Saving to ./models/GW190425/nsbh/radio/training_data.npz:
+Saving to ./models/GW190425/nsbh/radio/training_data.npz DONE
+Using detector-frame chirp mass from the GW event and mass ratio (Mc_det, q) for training
+Using component parameterization for lambdas (lambda_1, lambda_2)
+Training samples: 160000, Validation samples: 40000
+Creating the training data arrays
+NSBH and training on lambda_2 (3D)
+Including luminosity distance in training data
+np.shape(self.x)
+(160000, 4)
+Using MinMaxScaler to scale the input data x
+Saved sklearn scaler to ./models/GW190425/nsbh/radio/scaler.gz
+Going to start training for glasflow . . .
+Early stopping triggered at epoch 556
+Saving the training loss plot to ./models/GW190425/nsbh/radio/training_loss.pdf
+Training done. Took around 58.27 minutes
+Saving the model weights to ./models/GW190425/nsbh/radio/model.pt
+Saving the model kwargs to ./models/GW190425/nsbh/radio/model_kwargs.json
+DONE training!

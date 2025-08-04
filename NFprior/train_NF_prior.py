@@ -109,16 +109,17 @@ parser = argparse.ArgumentParser(description="Train a normalizing flow prior on 
 parser.add_argument("--population-type", 
                     type=str, 
                     default="uniform", 
-                    choices=["uniform", "gaussian", "double_gaussian"], 
+                    choices=["uniform", "gaussian", "double_gaussian", "GW170817", "GW190425", "GW230529"], 
                     help="Type of source to model")
 parser.add_argument("--source-type", 
                     type=str, 
                     default="bns", 
-                    choices=["bns", "nsbh", "GW170817", "GW190425", "GW230529"],
+                    choices=["bns", "nsbh"],
                     help="Type of source to model")
 parser.add_argument("--eos-samples-name", 
                     type=str, 
                     default="radio", 
+                    choices=["radio", "radio_chiEFT", "radio_chiEFT_NICER", ],
                     help="EOS samples name (default: radio)")
 parser.add_argument("--use-tilde", 
                     action="store_true", 
@@ -278,7 +279,7 @@ class NFPriorCreator:
         """
         
         self.eos_samples_name = eos_samples_name
-        self.eos_samples_filename = os.path.join(EOS_DIR, f"{self.eos_samples_name}/eos_samples.npz") 
+        self.eos_samples_filename = os.path.abspath(os.path.join(EOS_DIR, f"{self.eos_samples_name}/eos_samples.npz"))
         
         if not os.path.exists(self.eos_samples_filename):
             # Show all subdirs in 
@@ -286,11 +287,11 @@ class NFPriorCreator:
             raise ValueError(f"File {self.eos_samples_filename} does not exist. Please check the path or the `eos_samples_name` argument. Available subdirs: {available_subdirs}.")
         print(f"Training data will be loaded from: {self.eos_samples_filename}")
         
-        SUPPORTED_SOURCE_TYPES = ["bns", "nsbh", "GW170817", "GW190425", "GW230529"]
+        SUPPORTED_SOURCE_TYPES = ["bns", "nsbh"]
         if source_type not in SUPPORTED_SOURCE_TYPES:
             raise ValueError(f"source_type must be one of {SUPPORTED_SOURCE_TYPES}, got {source_type} instead.")
         
-        SUPPORTED_POPULATION_TYPES = ["uniform", "gaussian", "double_gaussian"]
+        SUPPORTED_POPULATION_TYPES = ["uniform", "gaussian", "double_gaussian", "GW170817", "GW190425", "GW230529"]
         if population_type not in SUPPORTED_POPULATION_TYPES:
             raise ValueError(f"population_type must be one of {SUPPORTED_POPULATION_TYPES}, got {population_type} instead.")
         
@@ -327,11 +328,17 @@ class NFPriorCreator:
                           "nn_block_dim": self.nn_block_dim
                           }
         
+        # Set whether this is specific for a GW event
+        if "GW" in self.population_type:
+            self.is_gw_event = True
+        else:
+            self.is_gw_event = True
+        
         # Set names based on parameterization
         if self.use_component_masses:
             mass_names = ["m_1", "m_2"]
         else:
-            if "GW" in self.source_type:
+            if self.is_gw_event:
                 mass_names = ["chirp_mass", "mass_ratio"]
             else:
                 mass_names = ["chirp_mass_source", "mass_ratio"]
@@ -342,7 +349,7 @@ class NFPriorCreator:
             lambda_names = ["lambda_tilde", "delta_lambda_tilde"] if self.use_tilde else ["lambda_1", "lambda_2"]
             
         all_names = mass_names + lambda_names
-        if "GW" in self.source_type:
+        if self.is_gw_event:
             all_names += ["luminosity_distance"]
         self.nf_kwargs["names"] = all_names
         self.nf_kwargs["n_inputs"] = len(self.nf_kwargs["names"])
@@ -360,13 +367,7 @@ class NFPriorCreator:
         
         # Make an outdir based on the given name etc, so that everything is stored in one directory for later on
         backend_suffix = "_flowjax" if self.use_flowjax else ""
-        if "GW" in self.source_type:
-            self.gw_event = True # TODO: make this used in this script everywhere rather than double-checking again each time!
-            self.outdir = os.path.join("./models/", self.source_type, f"{self.eos_samples_name}{backend_suffix}")
-        else:
-            self.gw_event = False
-            self.outdir = os.path.join("./models/", self.population_type, self.source_type, f"{self.eos_samples_name}{backend_suffix}")
-        
+        self.outdir = os.path.join("./models/", self.population_type, self.source_type, f"{self.eos_samples_name}{backend_suffix}")
         if not os.path.exists(self.outdir):
             os.makedirs(self.outdir)
             print(f"Created output directory {self.outdir}")
@@ -427,11 +428,11 @@ class NFPriorCreator:
         # Load the EOS samples
         masses_EOS, _, Lambdas_EOS = self.load_eos_samples_from_file()
         
-        if "GW" in self.source_type:
-            print(f"create_data is followign GW_event source type: {self.source_type}")
+        if self.is_gw_event:
+            print(f"create_data is following GW_event source type: {self.population_type}")
             
             # Read the prior file and process the first three lines for the masses
-            prior_filename = f"../GW_runs/{self.source_type}/prior.prior"
+            prior_filename = f"../GW_runs/{self.population_type}/prior.prior"
             Mc_det_list = np.empty(self.N_samples_training)
             dL_list = np.empty(self.N_samples_training)
                 
@@ -510,43 +511,44 @@ class NFPriorCreator:
             m, l = masses_EOS[idx], Lambdas_EOS[idx]
             mtov = np.max(m)
             
-            if self.source_type == "bns":
-                if self.population_type == "uniform":
-                    # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
-                    mass_samples = np.random.uniform(1.0, mtov, 2)
-                elif self.population_type == "gaussian":
-                    mass_samples = sample_ns_mass_gaussian(2)
-                elif self.population_type == "double_gaussian":
-                    mass_samples = sample_ns_mass_double_gaussian(2)
-                else:
-                    raise ValueError(f"Unsupported population type: {self.population_type}")
+            if not self.is_gw_event:
+                if self.source_type == "bns":
+                    if self.population_type == "uniform":
+                        # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
+                        mass_samples = np.random.uniform(1.0, mtov, 2)
+                    elif self.population_type == "gaussian":
+                        mass_samples = sample_ns_mass_gaussian(2)
+                    elif self.population_type == "double_gaussian":
+                        mass_samples = sample_ns_mass_double_gaussian(2)
+                    else:
+                        raise ValueError(f"Unsupported population type: {self.population_type}")
+                        
+                    # Ensure that m1 >= m2
+                    m1 = np.max(mass_samples)
+                    m2 = np.min(mass_samples)
                     
-                # Ensure that m1 >= m2
-                m1 = np.max(mass_samples)
-                m2 = np.min(mass_samples)
+                    Lambda_1 = np.interp(m1, m, l)
+                    Lambda_2 = np.interp(m2, m, l)
                 
-                Lambda_1 = np.interp(m1, m, l)
-                Lambda_2 = np.interp(m2, m, l)
-            
-            elif self.population_type == "nsbh":
-                # This automatically satisfies m1 >= m2
-                m1 = np.random.uniform(mtov, self.m_max_BH, 1)[0]
-                
-                if self.population_type == "uniform":
-                    # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
-                    m2 = np.random.uniform(1.0, mtov, 1)
-                elif self.population_type == "gaussian":
-                    m2 = sample_ns_mass_gaussian(1)
-                elif self.population_type == "double_gaussian":
-                    m2 = sample_ns_mass_double_gaussian(1)
-                else:
-                    raise ValueError(f"Unsupported population type: {self.population_type}")
-                
-                Lambda_1 = 0.0
-                Lambda_2 = np.interp(m2, m, l)
+                elif self.population_type == "nsbh":
+                    # This automatically satisfies m1 >= m2
+                    m1 = np.random.uniform(mtov, self.m_max_BH, 1)[0]
+                    
+                    if self.population_type == "uniform":
+                        # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
+                        m2 = np.random.uniform(1.0, mtov, 1)
+                    elif self.population_type == "gaussian":
+                        m2 = sample_ns_mass_gaussian(1)
+                    elif self.population_type == "double_gaussian":
+                        m2 = sample_ns_mass_double_gaussian(1)
+                    else:
+                        raise ValueError(f"Unsupported population type: {self.population_type}")
+                    
+                    Lambda_1 = 0.0
+                    Lambda_2 = np.interp(m2, m, l)
                 
             else:
-                # Generate detector frame samples
+                # For GW events, we sample from the given bilby priors
                 samples = gw_priors.sample(size = 1)
                 
                 Mc, q, dL = samples["chirp_mass"][0], samples["mass_ratio"][0], samples["luminosity_distance"][0]
@@ -592,7 +594,7 @@ class NFPriorCreator:
             "chirp_mass_source": np.array(chirp_mass_source),
         }
         
-        if "GW" in self.source_type:
+        if self.is_gw_event:
             save_dict["chirp_mass"] = Mc_det_list
             save_dict["luminosity_distance"] = dL_list
             
@@ -633,7 +635,7 @@ class NFPriorCreator:
             train_mass_1 = m1_raw
             train_mass_2 = m2_raw
         else:
-            if "GW" in self.source_type:
+            if self.is_gw_event:
                 print("Using detector-frame chirp mass from the GW event and mass ratio (Mc_det, q) for training")
                 train_mass_1 = data["chirp_mass"]
                 train_mass_2 = data["q"]
@@ -655,7 +657,7 @@ class NFPriorCreator:
         
         # Create train-validation split using sklearn
         arrays_to_split = [train_mass_1, train_mass_2, train_lambda_1, train_lambda_2]
-        if "GW" in self.source_type:
+        if self.is_gw_event:
             # If we have GW event data, also include the luminosity distance
             arrays_to_split.append(data["luminosity_distance"])
         split_result = train_test_split(*arrays_to_split, test_size=self.validation_split_fraction, random_state=42)
@@ -693,23 +695,22 @@ class NFPriorCreator:
         print("Creating the training data arrays")
         if self.source_type == "nsbh" and not self.use_tilde:
             print("NSBH and training on lambda_2 (3D)")
-            self.x = np.array([self.train_mass_1, self.train_mass_2, self.train_lambda_2]).T
-            self.x_val = np.array([self.val_mass_1, self.val_mass_2, self.val_lambda_2]).T
-            # done for this
+            x = [self.train_mass_1, self.train_mass_2, self.train_lambda_2]
+            x_val = [self.val_mass_1, self.val_mass_2, self.val_lambda_2]
         else:
             # This is always a 4D model
             print(f"4D training data model for {self.source_type}")
             x = [self.train_mass_1, self.train_mass_2, self.train_lambda_1, self.train_lambda_2]
             x_val = [self.val_mass_1, self.val_mass_2, self.val_lambda_1, self.val_lambda_2]
                 
-            if "GW" in self.source_type:
-                # If we have GW event data, also include the detector-frame chirp mass and luminosity distance
-                x.append(self.train_dL)
-                x_val.append(self.val_dL)
-                print("Including detector-frame chirp mass and luminosity distance in training data")
+        if self.is_gw_event:
+            # If we have GW event data, also include the detector-frame chirp mass and luminosity distance
+            x.append(self.train_dL)
+            x_val.append(self.val_dL)
+            print("Including luminosity distance in training data")
                 
-            self.x = np.array(x).T
-            self.x_val = np.array(x_val).T
+        self.x = np.array(x).T
+        self.x_val = np.array(x_val).T
                 
         # Show some stuff
         print("np.shape(self.x)")
@@ -1007,7 +1008,7 @@ class NFPriorCreator:
         # Submit the job if requested
         if submit:
             try:
-                result = subprocess.run(
+                subprocess.run(
                     ["condor_submit", sub_file_path], 
                     capture_output=True, 
                     text=True, 
