@@ -4,7 +4,7 @@
 GW_event="GW230529"
 
 # Top-level subdirs (population types)
-top_levels=("uniform" "gaussian" "double_gaussian")
+top_levels=("uniform" "gaussian" "double_gaussian" "$GW_event")
 
 # Middle-level subdirs
 mid_subdirs=("default" "bns" "nsbh")

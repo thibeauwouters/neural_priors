@@ -7,24 +7,20 @@
 # Set common parameters
 BASE_DIR="../GW_runs/"
 
-echo "========================================"
-echo "LEGACY MODE EXAMPLES"
-echo "========================================"
+### TODO: remove me
+# echo "========================================"
+# echo "LEGACY MODE EXAMPLES"
+# echo "========================================"
 
-GW_EVENT="GW190425"
-echo "Generating legacy corner plots for $GW_EVENT..."
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-all-params --plot-bns --plot-nsbh --convert-lambdas
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-all-params --plot-bns --plot-nsbh --no-convert-lambdas
+# GW_EVENT="GW190425"
+# echo "Generating legacy corner plots for $GW_EVENT..."
+# python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-all-params --plot-bns --plot-nsbh --convert-lambdas
+# python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-all-params --plot-bns --plot-nsbh --no-convert-lambdas
 
-GW_EVENT="GW170817"
-echo "Generating legacy corner plots for $GW_EVENT..."
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-all-params --plot-bns --plot-nsbh --plot-hauke --convert-lambdas
-python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-all-params --plot-bns --plot-nsbh --plot-hauke --no-convert-lambdas
-
-echo ""
-echo "========================================"
-echo "NEW FLEXIBLE COMPARISON MODE EXAMPLES"
-echo "========================================"
+# GW_EVENT="GW170817"
+# echo "Generating legacy corner plots for $GW_EVENT..."
+# python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-all-params --plot-bns --plot-nsbh --plot-hauke --convert-lambdas
+# python cornerplots.py --gw-event $GW_EVENT --population-type uniform --plot-all-params --plot-bns --plot-nsbh --plot-hauke --no-convert-lambdas
 
 GW_EVENT="GW170817"
 

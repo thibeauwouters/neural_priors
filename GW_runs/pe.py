@@ -17,7 +17,6 @@ from bilby.core.prior.dict import NFConditionalPrior
 from bilby.core.prior.joint import NFDist, NFPrior
 import argparse
 import json
-import pickle
 import matplotlib.pyplot as plt
 from bilby.core.utils import logger
 import warnings
@@ -147,10 +146,17 @@ EVENT_CONFIG = {
 
 # Check if some of the given arguments are valid
 SUPPORTED_PRIORS = ['default', 'default_nsbh', 'default_nsbh_primary', 'bns', 'nsbh', 'bbh']
+SUPPORTED_POPULATIONS = ['GW170817', 'GW190425', 'GW230529']
 SUPPORTED_EVENTS = list(EVENT_CONFIG.keys())
 
 if args.prior_name not in SUPPORTED_PRIORS:
     raise ValueError(f"Invalid prior name provided. Please provide one of {SUPPORTED_PRIORS}")
+
+if args.population_type not in SUPPORTED_POPULATIONS:
+    raise ValueError(f"Invalid population type provided. Please provide one of {SUPPORTED_POPULATIONS}")
+
+if "GW" in args.population_type and args.population_type != args.GW_event:
+    raise ValueError(f"GW-event population type {args.population_type} is different from the GW-event {args.GW_event}. Please ensure they match.")
 
 if args.GW_event not in SUPPORTED_EVENTS:
     raise ValueError(f"Invalid event provided. Please provide one of {SUPPORTED_EVENTS}")
@@ -337,12 +343,15 @@ elif args.prior_name == "default_nsbh_primary":
     priors["lambda_2"] = DeltaFunction(0.0, name='lambda_2', latex_label='$\Lambda_2$')
     
 else:
-    logger.info(f"Sampling with an NF prior, with name {args.prior_name}, and {args.prior_name}")
+    logger.info(f"Sampling with an NF prior, with name {args.prior_name}")
     
     # First, drop chirp_mass, mass_ratio and luminosity_distance from the prior_dict, as these are modelled by the NF
     prior_dict.pop('chirp_mass', None)
     prior_dict.pop('mass_ratio', None)
-    
+    if "GW" in args.population_type:
+        logger.info(f"This is a GW population type run, so popping the luminosity_distance from the prior_dict")
+        prior_dict.pop('luminosity_distance', None)
+        
     # Path to NF model - updated to match new folder structure
     nf_model_path = os.path.join(base_dir, f"NFprior/models/{args.population_type}/{args.prior_name}/{args.eos_samples_name}/model.pt")
     nf_model_path = os.path.abspath(nf_model_path)

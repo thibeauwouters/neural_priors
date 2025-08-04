@@ -1,0 +1,37 @@
+000 (2578614.000.000) 2025-08-04 14:55:56 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_c
+...
+009 (2578614.000.000) 2025-08-04 14:56:20 Job was aborted.
+	via condor_rm (by user twouters)
+...
+000 (2578629.000.000) 2025-08-04 14:58:13 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_c
+...
+001 (2578629.000.000) 2025-08-04 14:58:45 Job executing on host: <145.107.5.49:9618?addrs=145.107.5.49-9618+[2a07-8500-120-e070--531]-9618&alias=wn-lot-049.nikhef.nl&noUDP&sock=startd_1940_41d2>
+	SlotName: slot1_1@wn-lot-049.nikhef.nl
+	CondorScratchDir = "/scratch/condor_execute/dir_792127"
+	Cpus = 64
+	Disk = 16780524
+	GPUs = 0
+	Memory = 16384
+...
+006 (2578629.000.000) 2025-08-04 14:58:59 Image size of job updated: 239884
+	235  -  MemoryUsage of job (MB)
+	239884  -  ResidentSetSize of job (KB)
+...
+006 (2578629.000.000) 2025-08-04 15:03:59 Image size of job updated: 1604968
+	1568  -  MemoryUsage of job (MB)
+	1604968  -  ResidentSetSize of job (KB)
+...
+006 (2578629.000.000) 2025-08-04 15:08:59 Image size of job updated: 1643576
+	1606  -  MemoryUsage of job (MB)
+	1643576  -  ResidentSetSize of job (KB)
+...
+006 (2578629.000.000) 2025-08-04 15:14:00 Image size of job updated: 1658372
+	1610  -  MemoryUsage of job (MB)
+	1647820  -  ResidentSetSize of job (KB)
+...
+006 (2578629.000.000) 2025-08-04 16:19:07 Image size of job updated: 1665836
+	1627  -  MemoryUsage of job (MB)
+	1665836  -  ResidentSetSize of job (KB)
+...
