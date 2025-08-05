@@ -440,8 +440,8 @@ def create_corner_plot(GW_event: str,
     
     # Save the figure
     if plot_bns or plot_nsbh or plot_default:
-        # Use old directory structure for backward compatibility
-        output_dir = os.path.join(base_path, GW_event, "figures", population_type)
+        # Use old directory structure for backward compatibility, but add EOS samples name as subdirectory
+        output_dir = os.path.join(base_path, GW_event, "figures", population_type, eos_samples_name)
         save_name = 'corner' + \
                 ('_all' if plot_all_params else '') + \
                 ('_default' if plot_default else '') + \
