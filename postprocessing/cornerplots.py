@@ -461,7 +461,9 @@ def create_corner_plot(GW_event: str,
             fixed_params = {"population_type": population_type, "source_type": source_type}
         
         base_output_dir = get_output_directory(base_path, GW_event, comparison_mode, fixed_params)
-        output_dir = os.path.join(base_output_dir, "figures")
+        # Extract the comparison subdirectory from the base output dir
+        comparison_subdir = os.path.relpath(base_output_dir, os.path.join(base_path, GW_event))
+        output_dir = os.path.join(base_path, GW_event, "figures", comparison_subdir)
         
         # Create filename based on comparison mode
         groups_str = '_'.join(sorted(samples_dict.keys()))
