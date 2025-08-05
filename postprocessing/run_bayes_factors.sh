@@ -42,6 +42,8 @@ echo ""
 echo "SOURCE TYPE COMPARISONS (fix population & EOS, compare across sources)"
 echo "----------------------------------------------------------------------"
 echo "Calculating Bayes factors for $GW_EVENT source type comparisons..."
+# For source comparisons, we fix population & EOS, but the source_type parameter is ignored
+# since the comparison mode will automatically find all available source types
 run_analysis $GW_EVENT source uniform bns radio
 run_analysis $GW_EVENT source gaussian bns radio
 run_analysis $GW_EVENT source double_gaussian bns radio

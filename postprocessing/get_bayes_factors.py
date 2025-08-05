@@ -49,8 +49,11 @@ def get_bayes_factors(gw_event: str,
             if i < j:  # Avoid duplicate comparisons
                 relative_bf[f"{group1}_vs_{group2}"] = bf_dict[group1] - bf_dict[group2]
     
-    # Save results
-    output_dir = get_output_directory(base_dir, gw_event, comparison_mode, fixed_params)
+    # Save results using same path logic as corner plots
+    base_output_dir = get_output_directory(base_dir, gw_event, comparison_mode, fixed_params)
+    # Extract the comparison subdirectory from the base output dir
+    comparison_subdir = os.path.relpath(base_output_dir, os.path.join(base_dir, gw_event))
+    output_dir = os.path.join(base_dir, gw_event, "figures", comparison_subdir)
     os.makedirs(output_dir, exist_ok=True)
     
     # Create filename based on comparison mode
