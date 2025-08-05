@@ -97,6 +97,21 @@ def collect_all_bayes_factors(base_dir: str = "../GW_runs/") -> Dict[str, Any]:
     return all_bayes_factors
 
 
+def get_jeffreys_color(log10_bf: float) -> str:
+    """Get color name for Jeffrey's scale interpretation of log10 Bayes factor."""
+    abs_bf = abs(log10_bf)
+    if abs_bf < 0.5:
+        return "jeffreysred1"  # barely worth mentioning - lightest red
+    elif abs_bf < 1.0:
+        return "jeffreysred2"  # substantial - light red
+    elif abs_bf < 1.5:
+        return "jeffreysred3"  # strong - medium red
+    elif abs_bf < 2.0:
+        return "jeffreysred4"  # very strong - dark red
+    else:
+        return "jeffreysred5"  # decisive - darkest red
+
+
 def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool = False) -> str:
     """
     Generate LaTeX table code for the Bayes factors data.
@@ -274,7 +289,9 @@ def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool =
                                 if diff == 0.0:
                                     event_cells.append(f"\\textbf{{ref.}}")  # Show actual value for maximum
                                 else:
-                                    event_cells.append(f"${diff:+.2f}$")  # Show difference with sign
+                                    # Add colored background based on Jeffrey's scale
+                                    color = get_jeffreys_color(diff)
+                                    event_cells.append(f"\\cellcolor{{{color}}}${diff:+.2f}$")  # Show difference with full cell coloring
                             else:
                                 event_cells.append(f"${bf_val:.2f}$")
                         else:
