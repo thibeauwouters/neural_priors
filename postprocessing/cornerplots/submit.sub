@@ -1,6 +1,6 @@
 Universe = vanilla
 Executable = /bin/bash
-arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/run_cornerplots.sh"
+arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/run_cornerplots.sh"
 getenv = true
 Log = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/log.log
 Error = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/err.err

@@ -358,7 +358,7 @@ def create_corner_plot(GW_event: str,
         
     if GW_event in ["GW170817", "GW190425"] and plot_hauke:
         
-        hauke_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}_result.npz"
+        hauke_posterior_filename = f"../../data/hauke/{GW_event}/{GW_event}_result.npz"
         print(f"Loading Hauke's data and adding it to the corner plot, filename: {hauke_posterior_filename}")
         hauke_data = np.load(hauke_posterior_filename)
         hauke_data = {k: hauke_data[k] for k in params_to_plot} # convert to dict
@@ -380,7 +380,7 @@ def create_corner_plot(GW_event: str,
         
     if GW_event in ["GW170817"] and plot_hauke_EM:
         
-        hauke_posterior_filename = f"../data/hauke/{GW_event}/{GW_event}+EM_result.npz"
+        hauke_posterior_filename = f"../../data/hauke/{GW_event}/{GW_event}+EM_result.npz"
         print(f"Loading Hauke's data and adding it to the corner plot, filename: {hauke_posterior_filename}")
         hauke_data = np.load(hauke_posterior_filename)
         hauke_data = {k: hauke_data[k] for k in params_to_plot} # convert to dict
@@ -403,7 +403,7 @@ def create_corner_plot(GW_event: str,
     if GW_event in ["GW170817", "GW190425"] and plot_adrian:
         
         print(f"Loading Adrian's data and adding it to the corner plot...")
-        adrian_posterior_filename = f"../data/adrian/{GW_event}/{GW_event}_result.npz"
+        adrian_posterior_filename = f"../../data/adrian/{GW_event}/{GW_event}_result.npz"
         adrian_data = np.load(adrian_posterior_filename)
         adrian_data = {k: adrian_data[k] for k in params_to_plot}
         
