@@ -486,7 +486,7 @@ def real_events():
                     #  "GW230529",
                     ]
     
-    population_types = ["uniform", "gaussian", "double_gaussian"]
+    population_types = ["uniform", "gaussian", "double_gaussian", "GW170817", "GW190425", "GW230529"]
     
     # for plot_all_params in [True, False]:
     for plot_default in [True, False]:
@@ -540,12 +540,13 @@ def main():
                         choices=['source', 'population', 'eos'],
                         help='What to compare across (default: source)')
     parser.add_argument('--population-type', type=str, default='uniform',
-                        choices=['uniform', 'gaussian', 'double_gaussian'],
+                        choices=['uniform', 'gaussian', 'double_gaussian', 'GW170817', 'GW190425', 'GW230529'],
                         help='Population type for the analysis (default: uniform)')
     parser.add_argument('--source-type', type=str, default='bns',
                         choices=['bns', 'nsbh', 'default'],
                         help='Source type for the analysis (default: bns)')
     parser.add_argument('--eos-samples-name', type=str, default='radio',
+                        choices=['radio', 'radio_chiEFT', 'radio_chiEFT_NICER'],
                         help='EOS samples name (default: radio)')
     parser.add_argument('--base-dir', type=str, default='../GW_runs/',
                         help='Base directory path (default: ../GW_runs/)')
