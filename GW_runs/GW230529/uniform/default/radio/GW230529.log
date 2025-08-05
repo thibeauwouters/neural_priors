@@ -1,0 +1,106 @@
+14:30 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW230529/uniform/default/radio
+14:30 INFO    : Using geocent_time from reference parameters: 1369419318.7460938
+14:30 INFO    : Showing the reference parameters for GW230529
+14:30 INFO    : chirp_mass: 2.0272715949909377
+14:30 INFO    : mass_ratio: 0.3699999999999999
+14:30 INFO    : symmetric_mass_ratio: 0.19713357131440137
+14:30 INFO    : a_1: 0.0
+14:30 INFO    : a_2: 0.0
+14:30 INFO    : tilt_1: 0.0
+14:30 INFO    : tilt_2: 0.0
+14:30 INFO    : phi_jl: 0.0
+14:30 INFO    : phi_12: 0.0
+14:30 INFO    : luminosity_distance: 201.0
+14:30 INFO    : phase: 1.3576488959769972
+14:30 INFO    : theta_jn: 2.323517520938953
+14:30 INFO    : psi: 0.030083409062676092
+14:30 INFO    : ra: 1.121307208346961
+14:30 INFO    : dec: 0.22562961827621178
+14:30 INFO    : lambda_1: 0.0
+14:30 INFO    : lambda_2: 0.0
+14:30 INFO    : mass_1: 3.920441829732034
+14:30 INFO    : mass_2: 1.4505634770008522
+14:30 INFO    : Geocent time is 1369419318.7460938 and duration is 128.0
+14:30 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+14:30 INFO    : Relative binning delta 0.01
+14:30 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+14:30 INFO    : Running with label GW230529 and ifo_list ['L1']
+14:30 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW230529/prior.prior
+14:30 INFO    : Using the default priors
+14:30 INFO    : Going to show priors in priors:
+14:30 INFO    :       chirp_mass: Uniform(minimum=2.02, maximum=2.04, name='chirp_mass', latex_label='$\\mathcal{M}$', unit='$M_{\\odot}$', boundary=None)
+14:30 INFO    :       mass_ratio: Uniform(minimum=0.125, maximum=1, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
+14:30 INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=500.0, cosmology='Planck15', name='luminosity_distance', latex_label='$d_L$', unit='Mpc', boundary=None)
+14:30 INFO    :       geocent_time: Uniform(minimum=1369419318.6460938, maximum=1369419318.8460937, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+14:30 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.99, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+14:30 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.99, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+14:30 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+14:30 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+14:30 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+14:30 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+14:30 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+14:30 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+14:30 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+14:30 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+14:30 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+14:30 INFO    :       lambda_1: Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
+14:30 INFO    :       lambda_2: Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
+14:30 INFO    : Running through data generation steps now
+14:30 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW230529/L-L1_GWOSC_16KHZ_R1-1369417271-4096.gwf
+14:31 INFO    : Successfully loaded L1:GWOSC-16KHZ_R1_STRAIN.
+14:31 INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+ 2.04799219e+03 2.04800000e+03]
+14:31 INFO    : Priors loaded:
+14:31 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.binary_neutron_star_frequency_sequence
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+14:31 INFO    : Using relative binning likelihood
+14:31 INFO    : Going to construct bins with:
+14:31 INFO    :   - delta: 0.01
+14:31 INFO    :   - minimum_bin_threshold: 10
+14:31 INFO    : Applying constraints on resonance frequency
+14:31 INFO    : Minimum frequency: 20.0, Maximum frequency: 2048.0
+14:31 INFO    : Percentage error on chirp mass 0.10856306033005803 and mass_ratio 0.0
+14:31 INFO    : Perturbed chirp mass and mass ratio: 2.0250707269062134 0.3699999999999999
+14:31 INFO    : Perturbed lambda_1: 200.0
+14:31 INFO    : Perturbed lambda_2: 300.0
+14:31 INFO    : Length of the original frequency array 262145
+14:31 INFO    : Frequency range for binning: 20.00 - 2048.00 Hz
+14:31 INFO    : Number of frequency bins available: 259585
+14:31 INFO    : Rerunning the binning algorithm with new and old bins:318, 10
+14:31 INFO    : Rerunning the binning algorithm with new and old bins:1156, 318
+14:31 INFO    : Rerunning the binning algorithm with new and old bins:1982, 1156
+14:31 INFO    : Rerunning the binning algorithm with new and old bins:2469, 1982
+14:31 INFO    : Rerunning the binning algorithm with new and old bins:2690, 2469
+14:31 INFO    : Rerunning the binning algorithm with new and old bins:2795, 2690
+14:31 INFO    : Rerunning the binning algorithm with new and old bins:2864, 2795
+14:31 INFO    : Rerunning the binning algorithm with new and old bins:2897, 2864
+14:32 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW230529/uniform/default/radio
+14:32 INFO    : Using geocent_time from reference parameters: 1369419318.7460938
+14:32 INFO    : Showing the reference parameters for GW230529
+14:32 INFO    : chirp_mass: 2.0272715949909377
+14:32 INFO    : mass_ratio: 0.3699999999999999
+14:32 INFO    : symmetric_mass_ratio: 0.19713357131440137
+14:32 INFO    : a_1: 0.0
+14:32 INFO    : a_2: 0.0
+14:32 INFO    : tilt_1: 0.0
+14:32 INFO    : tilt_2: 0.0
+14:32 INFO    : phi_jl: 0.0
+14:32 INFO    : phi_12: 0.0
+14:32 INFO    : luminosity_distance: 201.0
+14:32 INFO    : phase: 1.3576488959769972
+14:32 INFO    : theta_jn: 2.323517520938953
+14:32 INFO    : psi: 0.030083409062676092
+14:32 INFO    : ra: 1.121307208346961
+14:32 INFO    : dec: 0.22562961827621178
+14:32 INFO    : lambda_1: 0.0
+14:32 INFO    : lambda_2: 0.0
+14:32 INFO    : mass_1: 3.920441829732034
+14:32 INFO    : mass_2: 1.4505634770008522
+14:32 INFO    : Geocent time is 1369419318.7460938 and duration is 128.0
+14:32 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+14:32 INFO    : Relative binning delta 0.01

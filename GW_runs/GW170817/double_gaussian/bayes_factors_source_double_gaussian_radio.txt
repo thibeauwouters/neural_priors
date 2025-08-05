@@ -1,0 +1,17 @@
+Bayes Factor Analysis for GW170817 - comparing source types
+Fixed: population=double_gaussian, eos=radio
+======================================================================
+
+Absolute log Bayes factors:
+Group                   Log Bayes Factor
+----------------------------------------
+default                       522.113027
+bns                           524.654992
+nsbh                            4.104345
+
+Relative log Bayes factors:
+Comparison                ln(BF)   log10(BF)          Preference
+----------------------------------------------------------------
+default_vs_bns         -2.541966   -1.103962    BNS (strong)
+default_vs_nsbh       518.008681  224.968312    DEFAULT (decisive)
+bns_vs_nsbh           520.550647  226.072274    BNS (decisive)

@@ -8,7 +8,7 @@ def generate_dag(gw_event, output_file, relative_binning_delta=1e-3):
     """Generate DAG file for the specified GW event."""
     
     population_types = ["uniform", "gaussian", "double_gaussian"]
-    eos_samples_names = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
+    eos_samples_names = ["radio", "radio_chiEFT", "radio_chiEFT_NICER", gw_event]
     prior_names = ["bns", "nsbh"]
     
     job_counter = 0

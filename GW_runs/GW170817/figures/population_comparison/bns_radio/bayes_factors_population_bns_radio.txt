@@ -1,0 +1,21 @@
+Bayes Factor Analysis for GW170817 - comparing population types
+Fixed: source=bns, eos=radio
+======================================================================
+
+Absolute log Bayes factors:
+Group                   Log Bayes Factor
+----------------------------------------
+uniform                       522.286628
+gaussian                      525.106756
+double_gaussian               524.654992
+GW170817                      525.930129
+
+Relative log Bayes factors:
+Comparison                ln(BF)   log10(BF)          Preference
+----------------------------------------------------------------
+uniform_vs_gaussian    -2.820128   -1.224766    GAUSSIAN (strong)
+uniform_vs_double_gaussian   -2.368364   -1.028567    DOUBLE_GAUSSIAN (strong)
+uniform_vs_GW170817    -3.643500   -1.582352    GW170817 (very strong)
+gaussian_vs_double_gaussian    0.451764    0.196199    GAUSSIAN (barely worth mentioning)
+gaussian_vs_GW170817   -0.823372   -0.357586    GW170817 (barely worth mentioning)
+double_gaussian_vs_GW170817   -1.275136   -0.553785    GW170817 (substantial)

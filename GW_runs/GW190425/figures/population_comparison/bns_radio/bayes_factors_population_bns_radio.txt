@@ -1,0 +1,21 @@
+Bayes Factor Analysis for GW190425 - comparing population types
+Fixed: source=bns, eos=radio
+======================================================================
+
+Absolute log Bayes factors:
+Group                   Log Bayes Factor
+----------------------------------------
+uniform                        57.141155
+gaussian                        1.197594
+double_gaussian                55.981986
+GW190425                       61.277778
+
+Relative log Bayes factors:
+Comparison                ln(BF)   log10(BF)          Preference
+----------------------------------------------------------------
+uniform_vs_gaussian    55.943561   24.295980    UNIFORM (decisive)
+uniform_vs_double_gaussian    1.159168    0.503420    UNIFORM (substantial)
+uniform_vs_GW190425    -4.136623   -1.796512    GW190425 (very strong)
+gaussian_vs_double_gaussian  -54.784392  -23.792559    DOUBLE_GAUSSIAN (decisive)
+gaussian_vs_GW190425  -60.080184  -26.092492    GW190425 (decisive)
+double_gaussian_vs_GW190425   -5.295791   -2.299933    GW190425 (decisive)

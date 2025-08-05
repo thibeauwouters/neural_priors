@@ -1,0 +1,17 @@
+Bayes Factor Analysis for GW170817 - comparing EOS constraints
+Fixed: population=gaussian, source=bns
+======================================================================
+
+Absolute log Bayes factors:
+Group                   Log Bayes Factor
+----------------------------------------
+radio_chiEFT_NICER            524.935992
+radio                         525.106756
+radio_chiEFT                  523.891824
+
+Relative log Bayes factors:
+Comparison                ln(BF)   log10(BF)          Preference
+----------------------------------------------------------------
+radio_chiEFT_NICER_vs_radio   -0.170765   -0.074162    RADIO (barely worth mentioning)
+radio_chiEFT_NICER_vs_radio_chiEFT    1.044167    0.453476    RADIO_CHIEFT_NICER (barely worth mentioning)
+radio_vs_radio_chiEFT    1.214932    0.527638    RADIO (substantial)
