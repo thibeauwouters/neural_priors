@@ -14,7 +14,7 @@ SOURCE_TYPES=("bns" "nsbh" "default")
 EOS_SAMPLES=("radio" "radio_chiEFT" "radio_chiEFT_NICER")
 
 echo "========================================"
-echo "FLEXIBLE BAYES FACTOR ANALYSIS"
+echo "=        BAYES FACTOR ANALYSIS         ="
 echo "========================================"
 
 # Function to run a single analysis

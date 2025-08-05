@@ -5,7 +5,7 @@ Script to collect all Bayes factors from GW parameter estimation runs.
 This script scans the GW_runs directory structure and extracts Bayes factors
 from all result JSON files, creating a nested structure matching the directory
 layout and saving to all_bayes_factors.json. It also generates a LaTeX table
-showing the structure as requested.
+showing the structure.
 """
 
 import os
@@ -194,8 +194,8 @@ def generate_latex_table(bayes_factors: Dict[str, Any]) -> str:
 
 def main():
     """Main function to collect all Bayes factors and save to JSON file and LaTeX table."""
-    base_dir = "../GW_runs/"
-    output_dir = "./bayes_factors/"
+    base_dir = "../../GW_runs/"
+    output_dir = "."
     json_file = os.path.join(output_dir, "all_bayes_factors.json")
     latex_file = os.path.join(output_dir, "bayes_factors_table.tex")
     
