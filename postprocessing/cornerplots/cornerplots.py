@@ -9,7 +9,7 @@ import argparse
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
 from bilby.gw.conversion import luminosity_distance_to_redshift
-from utils import load_comparison_data, get_output_directory, construct_result_path, load_posterior_data
+from utils import load_comparison_data, construct_result_path, load_posterior_data
 
 params = {"axes.grid": True,
         # "text.usetex" : True,
@@ -95,9 +95,7 @@ def create_corner_plot(GW_event: str,
                        plot_hauke: bool = False,
                        plot_hauke_EM: bool = False,
                        plot_adrian: bool = False,
-                       prevent_bns_leakage: bool = False,
-                       plot_bns: bool = True,
-                       plot_nsbh: bool = True):
+                       prevent_bns_leakage: bool = False):
     """
     Create a corner plot comparing posterior samples across different dimensions.
     
@@ -115,43 +113,29 @@ def create_corner_plot(GW_event: str,
         plot_hauke_EM (bool): If True, include Hauke's data in the corner plot that analyzed the GW+EM dataset.
         plot_adrian (bool): If True, include Adrian's data in the corner plot.
         prevent_bns_leakage (bool): If True, prevent BNS leakage by masking samples with negative delta_lambda_tilde.
-        plot_bns (bool): If True, include BNS posterior in the corner plot.
-        plot_nsbh (bool): If True, include NSBH posterior in the corner plot.
     """
     
     injection_run = "injection" in base_path
     
-    if plot_bns or plot_nsbh or plot_default:
-        posteriors_dict = {}
-        
-        if plot_bns:
-            bns_path = construct_result_path(base_path, GW_event, population_type, "bns", eos_samples_name)
-            bns_posterior = load_posterior_data(bns_path)
-            if bns_posterior:
-                posteriors_dict["bns"] = bns_posterior
-                
-        if plot_nsbh:
-            nsbh_path = construct_result_path(base_path, GW_event, population_type, "nsbh", eos_samples_name)
-            nsbh_posterior = load_posterior_data(nsbh_path)
-            if nsbh_posterior:
-                posteriors_dict["nsbh"] = nsbh_posterior
-                
-        if plot_default:
-            default_path = construct_result_path(base_path, GW_event, population_type, "default", eos_samples_name)
-            default_posterior = load_posterior_data(default_path)
-            if default_posterior:
-                posteriors_dict["default"] = default_posterior
+    # Set up fixed parameters based on comparison mode
+    if comparison_mode == "source":
+        fixed_params = {"population_type": population_type, "eos_samples_name": eos_samples_name}
+    elif comparison_mode == "population":
+        fixed_params = {"source_type": source_type, "eos_samples_name": eos_samples_name}
+    elif comparison_mode == "eos":
+        fixed_params = {"population_type": population_type, "source_type": source_type}
     else:
-        if comparison_mode == "source":
-            fixed_params = {"population_type": population_type, "eos_samples_name": eos_samples_name}
-        elif comparison_mode == "population":
-            fixed_params = {"source_type": source_type, "eos_samples_name": eos_samples_name}
-        elif comparison_mode == "eos":
-            fixed_params = {"population_type": population_type, "source_type": source_type}
-        else:
-            raise ValueError(f"Invalid comparison mode: {comparison_mode}")
-            
-        posteriors_dict = load_comparison_data(GW_event, base_path, comparison_mode, fixed_params)
+        raise ValueError(f"Invalid comparison mode: {comparison_mode}")
+        
+    # Load comparison data
+    posteriors_dict = load_comparison_data(GW_event, base_path, comparison_mode, fixed_params)
+    
+    # Add default run if requested
+    if plot_default:
+        default_path = construct_result_path(base_path, GW_event, population_type, "default", eos_samples_name)
+        default_posterior = load_posterior_data(default_path)
+        if default_posterior:
+            posteriors_dict["default"] = default_posterior
         
     print(f"Loaded {len(posteriors_dict)} posterior datasets: {list(posteriors_dict.keys())}")
 
@@ -438,101 +422,40 @@ def create_corner_plot(GW_event: str,
         y -= dy
         plt.text(x, y, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
-    # Save the figure
-    if plot_bns or plot_nsbh or plot_default:
-        # Use old directory structure for backward compatibility, but add EOS samples name as subdirectory
-        output_dir = os.path.join(base_path, GW_event, "figures", population_type, eos_samples_name)
-        save_name = 'corner' + \
-                ('_all' if plot_all_params else '') + \
-                ('_default' if plot_default else '') + \
-                ('_bns' if plot_bns else '') + \
-                ('_nsbh' if plot_nsbh else '') + \
-                ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
-                ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
-                ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
-                ('_tilde' if convert_lambdas else '') + '.pdf'
-    else:
-        # Use new directory structure for comparison modes
-        if comparison_mode == "source":
-            fixed_params = {"population_type": population_type, "eos_samples_name": eos_samples_name}
-        elif comparison_mode == "population":
-            fixed_params = {"source_type": source_type, "eos_samples_name": eos_samples_name}
-        elif comparison_mode == "eos":
-            fixed_params = {"population_type": population_type, "source_type": source_type}
-        
-        base_output_dir = get_output_directory(base_path, GW_event, comparison_mode, fixed_params)
-        # Extract the comparison subdirectory from the base output dir
-        comparison_subdir = os.path.relpath(base_output_dir, os.path.join(base_path, GW_event))
-        output_dir = os.path.join(base_path, GW_event, "figures", comparison_subdir)
-        
-        # Create filename based on comparison mode
-        groups_str = '_'.join(sorted(samples_dict.keys()))
-        save_name = f'corner_{comparison_mode}_{groups_str}' + \
-                ('_all' if plot_all_params else '') + \
-                ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
-                ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
-                ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
-                ('_tilde' if convert_lambdas else '') + '.pdf'
+    # Save the figure using new directory structure
+    # Create subdirectory name based on fixed parameters
+    if comparison_mode == "source":
+        # Fixed: population + eos, varying: source
+        subdir_name = f"population_{fixed_params['population_type']}_eos_{fixed_params['eos_samples_name']}"
+        varying_param = "source"
+    elif comparison_mode == "population":
+        # Fixed: source + eos, varying: population  
+        subdir_name = f"source_{fixed_params['source_type']}_eos_{fixed_params['eos_samples_name']}"
+        varying_param = "population"
+    elif comparison_mode == "eos":
+        # Fixed: population + source, varying: eos
+        subdir_name = f"population_{fixed_params['population_type']}_source_{fixed_params['source_type']}"
+        varying_param = "eos"
+    
+    output_dir = os.path.join(base_path, GW_event, "figures", subdir_name)
+    
+    # Create filename: corner_{varying_param}.pdf (with modifiers)
+    save_name = f'corner_{varying_param}' + \
+            ('_all' if plot_all_params else '') + \
+            ('_default' if plot_default else '') + \
+            ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
+            ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
+            ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
+            ('_tilde' if convert_lambdas else '') + '.pdf'
     
     os.makedirs(output_dir, exist_ok=True)
-    save_name = os.path.join(output_dir, save_name)
+    full_save_path = os.path.join(output_dir, save_name)
             
-    print(f"\nSaving corner plot to {save_name}\n")
-    plt.savefig(save_name, dpi=300, bbox_inches='tight')
+    print(f"\nSaving corner plot to {full_save_path}\n")
+    plt.savefig(full_save_path, dpi=300, bbox_inches='tight')
     plt.close()
     
-def real_events():
-    
-    GW_event_list = ["GW170817",
-                    #  "GW190425",
-                    #  "GW230529",
-                    ]
-    
-    population_types = ["uniform", "gaussian", "double_gaussian", "GW170817", "GW190425", "GW230529"]
-    
-    # for plot_all_params in [True, False]:
-    for plot_default in [True, False]:
-        for plot_adrian in [False]:
-            for plot_hauke in [False]:
-                for plot_hauke_EM in [False]:
-                    for convert_lambdas in [True, False]:
-                        for GW_event in GW_event_list:
-                            for population_type in population_types:
-                                settings = dict(plot_all_params=False,
-                                                plot_default=plot_default,
-                                                convert_lambdas=convert_lambdas,
-                                                plot_hauke=plot_hauke,
-                                                plot_hauke_EM=plot_hauke_EM,
-                                                plot_adrian=plot_adrian,
-                                                population_type=population_type
-                                                )
-                                print(f"Creating corner plot for {GW_event} {population_type} with settings: {settings}")
-                                create_corner_plot(GW_event, **settings)
                             
-def injections():
-    
-    base_path_list = [#"../injections/GW170817_bns_jester/",
-                      #"../injections/GW170817_nsbh_jester/"
-                      "../injections/GW190425_design_bns_jester/",
-                      "../injections/GW190425_design_nsbh_jester/"
-                    ]
-    
-    # for plot_all_params in [True, False]:
-    for plot_default in [True, False]:
-        for convert_lambdas in [True, False]:
-            for base_path in base_path_list:
-                
-                # Get GW event id from this path
-                GW_event = base_path_list[0].split("/")[-2].split("_")[0]
-                
-                # Build settings
-                settings = dict(plot_all_params=False,
-                                plot_default=plot_default,
-                                convert_lambdas=convert_lambdas,
-                                base_path=base_path
-                                )
-                print(f"Creating corner plot for {base_path} with settings: {settings}")
-                create_corner_plot(GW_event, **settings)
                 
 def main():
     parser = argparse.ArgumentParser(description="Create corner plots for GW parameter estimation results")
@@ -568,22 +491,13 @@ def main():
                         help='Include Adrian\'s results in plot')
     parser.add_argument('--prevent-bns-leakage', action='store_true',
                         help='Prevent BNS leakage by masking negative delta_lambda_tilde')
-    parser.add_argument('--plot-bns', action='store_true', default=False,
-                        help='Include BNS posterior in plot')
-    parser.add_argument('--no-plot-bns', dest='plot_bns', action='store_false',
-                        help='Do not include BNS posterior in plot')
-    parser.add_argument('--plot-nsbh', action='store_true', default=False,
-                        help='Include NSBH posterior in plot')
-    parser.add_argument('--no-plot-nsbh', dest='plot_nsbh', action='store_false',
-                        help='Do not include NSBH posterior in plot')
     parser.add_argument('--batch-mode', action='store_true',
                         help='Run in batch mode (old behavior for testing)')
     
     args = parser.parse_args()
     
     if args.batch_mode:
-        # real_events()
-        injections()
+        print("Batch mode is deprecated. Use individual calls with comparison modes instead.")
     else:
         create_corner_plot(
             GW_event=args.gw_event,
@@ -598,9 +512,7 @@ def main():
             plot_hauke=args.plot_hauke,
             plot_hauke_EM=args.plot_hauke_em,
             plot_adrian=args.plot_adrian,
-            prevent_bns_leakage=args.prevent_bns_leakage,
-            plot_bns=args.plot_bns,
-            plot_nsbh=args.plot_nsbh
+            prevent_bns_leakage=args.prevent_bns_leakage
         )
             
 if __name__ == "__main__":

@@ -1,32 +1,41 @@
 #!/bin/bash
-# Example usage script for cornerplots.py
+# Example usage script for cornerplots.py using new comparison-only approach
 
 conda activate eos_source_classification
 
 # Set common parameters
 BASE_DIR="../GW_runs/"
 
+# Generate corner plots for each GW event using the new comparison mode approach
 for GW_EVENT in GW170817 GW190425; do
-  for EOS in radio radio_chiEFT radio_chiEFT_NICER; do
-    echo "Generating usual corner plots for $GW_EVENT with EOS $EOS..."
-    python cornerplots.py --gw-event $GW_EVENT --population-type $GW_EVENT --eos-samples-name $EOS --plot-bns --plot-nsbh --plot-hauke --convert-lambdas
-    python cornerplots.py --gw-event $GW_EVENT --population-type $GW_EVENT --eos-samples-name $EOS --plot-bns --plot-nsbh --plot-hauke --no-convert-lambdas
+  echo "Generating comparison corner plots for $GW_EVENT..."
+  
+  # Source comparison plots (fix population + eos, vary source)
+  for POPULATION in uniform gaussian double_gaussian $GW_EVENT; do
+    for EOS in radio radio_chiEFT radio_chiEFT_NICER; do
+      echo "  Source comparison: population=$POPULATION, eos=$EOS"
+      python cornerplots.py --gw-event $GW_EVENT --comparison-mode source --population-type $POPULATION --eos-samples-name $EOS --convert-lambdas --plot-hauke
+      python cornerplots.py --gw-event $GW_EVENT --comparison-mode source --population-type $POPULATION --eos-samples-name $EOS --no-convert-lambdas --plot-hauke
+    done
   done
-done
-
-for GW_EVENT in GW170817 GW190425; do
-
-  python cornerplots.py --gw-event $GW_EVENT --comparison-mode source --population-type uniform --eos-samples-name radio --convert-lambdas
-  python cornerplots.py --gw-event $GW_EVENT --comparison-mode source --population-type gaussian --eos-samples-name radio --convert-lambdas
-  python cornerplots.py --gw-event $GW_EVENT --comparison-mode source --population-type uniform --eos-samples-name radio_chiEFT --convert-lambdas
-
-  python cornerplots.py --gw-event $GW_EVENT --comparison-mode population --source-type bns --eos-samples-name radio --convert-lambdas
-  python cornerplots.py --gw-event $GW_EVENT --comparison-mode population --source-type nsbh --eos-samples-name radio --convert-lambdas
-  python cornerplots.py --gw-event $GW_EVENT --comparison-mode population --source-type bns --eos-samples-name radio_chiEFT --convert-lambdas
-
-  python cornerplots.py --gw-event $GW_EVENT --comparison-mode eos --population-type uniform --source-type bns --convert-lambdas
-  python cornerplots.py --gw-event $GW_EVENT --comparison-mode eos --population-type gaussian --source-type bns --convert-lambdas
-  python cornerplots.py --gw-event $GW_EVENT --comparison-mode eos --population-type uniform --source-type nsbh --convert-lambdas
+  
+  # Population comparison plots (fix source + eos, vary population)
+  for SOURCE in bns nsbh; do
+    for EOS in radio radio_chiEFT radio_chiEFT_NICER; do
+      echo "  Population comparison: source=$SOURCE, eos=$EOS"
+      python cornerplots.py --gw-event $GW_EVENT --comparison-mode population --source-type $SOURCE --eos-samples-name $EOS --convert-lambdas
+      python cornerplots.py --gw-event $GW_EVENT --comparison-mode population --source-type $SOURCE --eos-samples-name $EOS --no-convert-lambdas
+    done
+  done
+  
+  # EOS comparison plots (fix population + source, vary eos)
+  for POPULATION in uniform gaussian double_gaussian $GW_EVENT; do
+    for SOURCE in bns nsbh; do
+      echo "  EOS comparison: population=$POPULATION, source=$SOURCE"
+      python cornerplots.py --gw-event $GW_EVENT --comparison-mode eos --population-type $POPULATION --source-type $SOURCE --convert-lambdas
+      python cornerplots.py --gw-event $GW_EVENT --comparison-mode eos --population-type $POPULATION --source-type $SOURCE --no-convert-lambdas
+    done
+  done
 done
 
 echo ""
