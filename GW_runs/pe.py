@@ -152,7 +152,7 @@ EVENT_CONFIG = {
 
 # Check if some of the given arguments are valid
 SUPPORTED_PRIORS = ['default', 'default_nsbh', 'default_nsbh_primary', 'bns', 'nsbh', 'bbh']
-SUPPORTED_POPULATIONS = ['GW170817', 'GW190425', 'GW230529']
+SUPPORTED_POPULATIONS = ['uniform', 'gaussian', 'double_gaussian', 'GW170817', 'GW190425', 'GW230529']
 SUPPORTED_EVENTS = list(EVENT_CONFIG.keys())
 
 if args.prior_name not in SUPPORTED_PRIORS:
@@ -321,7 +321,6 @@ if args.prior_name == "default":
     priors = bilby.core.prior.PriorDict(prior_dict)
     
     # Lambdas are not in the prior files, so we add them manually here
-    logger.info("WARNING: Setting the GW170817 priors for lambda_1 to be between 0 and 2000")
     priors["lambda_1"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\Lambda_1$')
     priors["lambda_2"] = bilby.core.prior.Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\Lambda_2$')
     
@@ -423,21 +422,17 @@ elif args.GW_event == 'GW170817':
         "V1": os.path.join(data_path, "v1_psd.txt")
     }
 elif args.GW_event == 'GW230529':
-    # FIXME: not sure if this is correct?
     channels_dict = {
-        # "H1": "GDS-CALIB_STRAIN_CLEAN",
-        # "V1": "Hrec_hoft_16384Hz",
-        "L1": "L1:GWOSC-4KHZ_R1_STRAIN", # TODO: L1:GWOSC-16KHZ_R1_STRAIN for the 16 kHz data
+        "L1": "L1:GWOSC-16KHZ_R1_STRAIN",
     }
-    # FIXME: maybe change to the 16 kHz data?
     frame_files = {
-        "L1": os.path.join(data_path, "L-L1_GWOSC_4KHZ_R1-1369417271-4096.gwf"),
+        "L1": os.path.join(data_path, "L-L1_GWOSC_16KHZ_R1-1369417271-4096.gwf"),
     }
     psd_files = {
-        "L1": os.path.join(data_path, "L1_psd.dat"),
+        "L1": os.path.join(data_path, "psd_4096.dat"),
     }
 else:
-    raise ValueError("Need to get the data still for GW230529")
+    raise ValueError("GW event not recognized. Please provide one of 'GW170817', 'GW190425', or 'GW230529'.")
 
 # Load the data into the ifos:
 for ifo in ifos:
@@ -493,7 +488,7 @@ if args.dry_run:
     logger.info(f"  - Output directory: {full_outdir}")
     logger.info(f"  - Interferometers: {[ifo.name for ifo in ifos]}")
     logger.info(f"  - Duration: {duration}s")
-    logger.info(f"  - Minimum frequency: {event_config["minimum_frequency"],}Hz")
+    logger.info(f"  - Minimum frequency: {event_config['minimum_frequency']}Hz")
     logger.info(f"  - Approximant: {approximant}")
     logger.info(f"  - npool: {args.npool}")
     logger.info("DRY RUN: All checks passed. Ready for actual sampling.")
