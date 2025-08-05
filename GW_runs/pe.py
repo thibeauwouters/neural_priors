@@ -126,17 +126,23 @@ EVENT_CONFIG = {
     'GW170817': {
         'ifo_list': ['H1', 'L1', 'V1'],
         'duration': 128.0,
-        'minimum_frequency': 23.1
+        'minimum_frequency': 23.1,
+        'maximum_frequency': 2048.0,
+        'sampling_frequency': 2*2048.0
     },
     'GW190425': {
         'ifo_list': ['L1', 'V1'],
         'duration': 128.0,
-        'minimum_frequency': 20.0
+        'minimum_frequency': 20.0,
+        'maximum_frequency': 2048.0,
+        'sampling_frequency': 2*2048.0
     },
     'GW230529': {
         'ifo_list': ['L1'],
         'duration': 128.0,
-        'minimum_frequency': 20.0
+        'minimum_frequency': 20.0,
+        'maximum_frequency': 1792.0,
+        'sampling_frequency': 2*2048.0
     }
 }
 
@@ -213,7 +219,6 @@ if args.GW_event == 'GW170817' and args.GW170817_HV:
     event_config['ifo_list'] = ['H1', 'V1']
 ifo_list = event_config['ifo_list']
 duration = event_config['duration']
-minimum_frequency = event_config['minimum_frequency']
 
 # Use geocent_time from reference parameters if available, otherwise from config
 if 'geocent_time' in reference_parameters:
@@ -248,21 +253,19 @@ reference_parameters['duration'] = duration
 # Other fixed kwargs
 # TODO: do we want fmin and fmax to be set here from the per-event config?
 approximant = args.waveform_model
-sampling_frequency = 2*2048.0
-reference_frequency = 20.0
 
 logger.info(f"Using waveform: {approximant}")
 logger.info(f"Relative binning delta {args.relative_binning_delta}")
 
 waveform_arguments = dict(
     waveform_approximant=approximant, 
-    reference_frequency=reference_frequency,
-    minimum_frequency=minimum_frequency,
-    maximum_frequency=0.5*sampling_frequency)
+    reference_frequency=event_config["minimum_frequency"],
+    minimum_frequency=event_config["minimum_frequency"],
+    maximum_frequency=event_config["maximum_frequency"])
 
 waveform_generator = bilby.gw.WaveformGenerator(
     duration=duration,
-    sampling_frequency=sampling_frequency,
+    sampling_frequency=event_config["sampling_frequency"],
     start_time=start_time,
     frequency_domain_source_model=bilby.gw.source.lal_binary_neutron_star,                    
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters,
@@ -275,8 +278,8 @@ bilby.core.utils.random.seed(args.seed)
 ifos = bilby.gw.detector.InterferometerList(ifo_list)
 # Make sure the minimum/maximum frequency is set correctly
 for ifo in ifos:
-    ifo.minimum_frequency=minimum_frequency
-    ifo.maximum_frequency=0.5*sampling_frequency
+    ifo.minimum_frequency=event_config["minimum_frequency"]
+    ifo.maximum_frequency=event_config["maximum_frequency"]
 
 # TODO: this needs to be moved to a common utils file, so that we can use it in the NF prior training script as well
 # This is to easily and flexibly import the necessary classes below, also for NFs
@@ -440,7 +443,7 @@ else:
 for ifo in ifos:
     ifo.set_strain_data_from_frame_file(
         frame_files[ifo.name],
-        sampling_frequency,
+        event_config["sampling_frequency"],
         duration,
         start_time=start_time,
         channel=channels_dict[ifo.name])
@@ -457,7 +460,7 @@ logger.info("Priors loaded:")
 ### LIKELIHOOD
 sampling_waveform_generator = bilby.gw.WaveformGenerator(
     duration=duration,
-    sampling_frequency=sampling_frequency,
+    sampling_frequency=event_config["sampling_frequency"],
     start_time=start_time,
     frequency_domain_source_model=bilby.gw.source.binary_neutron_star_frequency_sequence,
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters,
@@ -490,7 +493,7 @@ if args.dry_run:
     logger.info(f"  - Output directory: {full_outdir}")
     logger.info(f"  - Interferometers: {[ifo.name for ifo in ifos]}")
     logger.info(f"  - Duration: {duration}s")
-    logger.info(f"  - Minimum frequency: {minimum_frequency}Hz")
+    logger.info(f"  - Minimum frequency: {event_config["minimum_frequency"],}Hz")
     logger.info(f"  - Approximant: {approximant}")
     logger.info(f"  - npool: {args.npool}")
     logger.info("DRY RUN: All checks passed. Ready for actual sampling.")
@@ -515,7 +518,7 @@ else:
                                            check_point_delta_t=3600,
                                            dlogz=0.1,
                                            print_method='interval-60',
-                                           sample = 'acceptance-walk',
+                                           sample='acceptance-walk',
                                            )
                 result.plot_corner(priors = True)
                 logger.info("✓ Test sampling completed successfully within timeout!")
