@@ -174,7 +174,7 @@ def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool =
     latex_lines.append("\\begin{tabular}{|l|l|l|c|c|c|}")
     latex_lines.append("\\hline")
     latex_lines.append("\\textbf{Population} & \\textbf{Source} & \\textbf{EOS Constraints} & \\textbf{GW170817} & \\textbf{GW190425} & \\textbf{GW230529} \\\\")
-    latex_lines.append("\\hline")
+    latex_lines.append("\\hline\\hline")
     
     # Generate table rows
     for pop_type_display in population_types_display:
@@ -296,7 +296,11 @@ def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool =
             if not pop_first_row:
                 latex_lines.append("\\cline{2-6}")
         
-        latex_lines.append("\\hline")
+        latex_lines.append("\\hline\\hline")
+    
+    # Replace the last double hline with single hline
+    if latex_lines and latex_lines[-1] == "\\hline\\hline":
+        latex_lines[-1] = "\\hline"
     
     # Close table
     latex_lines.append("\\end{tabular}")
