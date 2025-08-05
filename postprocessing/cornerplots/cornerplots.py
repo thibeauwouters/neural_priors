@@ -44,12 +44,16 @@ default_corner_kwargs = dict(bins=40,
                         truth_color = "black",
                         save=False)
 
+# Some constants for colors
 DEFAULT_COLOR = 'blue'
 BNS_COLOR = 'green'
 NSBH_COLOR = 'red'
 HAUKE_COLOR = 'orange'
 HAUKE_EM_COLOR = 'purple'
 ADRIAN_COLOR = 'black'
+
+# A constant to determine whether we want to print verbose output, in this case, only (for now) the quantiles of lambda_tilde and delta_lambda_tilde posteriors
+VERBOSE = False
 
 LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
               "mass_ratio": r"$q$",
@@ -88,7 +92,7 @@ def create_corner_plot(GW_event: str,
                        population_type: str = "uniform",
                        source_type: str = "bns", 
                        eos_samples_name: str = "radio",
-                       base_path: str = "../GW_runs/",
+                       base_path: str = "../../GW_runs/",
                        plot_all_params: bool = False,
                        plot_default: bool = False,
                        convert_lambdas: bool = True,
@@ -145,7 +149,7 @@ def create_corner_plot(GW_event: str,
                         'a_1', 'a_2', 'tilt_1', 'tilt_2', 'phi_12', 'phi_jl', 
                         'dec', 'ra', 'theta_jn', 'psi', 'phase', 'lambda_1', 'lambda_2']
     else:
-        params_to_plot = ['chirp_mass', 'mass_ratio', 'geocent_time', 'lambda_1', 'lambda_2']
+        params_to_plot = ['chirp_mass', 'mass_ratio', 'luminosity_distance', 'geocent_time', 'lambda_1', 'lambda_2']
         
     # If we convert lambdas, then we need to convert them to lambda_tilde and delta_lambda_tilde
     if convert_lambdas:
@@ -178,28 +182,29 @@ def create_corner_plot(GW_event: str,
                 posteriors_dict[key] = posterior
                 
                 # Print the 95% quantiles for lambda_tilde and delta_lambda_tilde
-                print(f"\n{key} posterior quantiles:")
-                med = np.median(posterior['lambda_tilde'])
-                low, high = arviz.hdi(np.array(posterior['lambda_tilde']), hdi_prob=0.95)
-                low = med - low
-                high = high - med
-                
-                # Round to 2 digits
-                med = np.round(med, 2)
-                low = np.round(low, 2)
-                high = np.round(high, 2)
-                print(f"   lambda_tilde: {med}-{low}+{high}")
-                
-                med = np.median(posterior['delta_lambda_tilde'])
-                low, high = arviz.hdi(np.array(posterior['delta_lambda_tilde']), hdi_prob=0.95)
-                low = med - low
-                high = high - med
-                
-                # Round to 2 digits
-                med = np.round(med, 2)
-                low = np.round(low, 2)
-                high = np.round(high, 2)
-                print(f"   delta_lambda_tilde: {med}-{low}+{high}")
+                if VERBOSE:
+                    print(f"\n{key} posterior quantiles:")
+                    med = np.median(posterior['lambda_tilde'])
+                    low, high = arviz.hdi(np.array(posterior['lambda_tilde']), hdi_prob=0.95)
+                    low = med - low
+                    high = high - med
+                    
+                    # Round to 2 digits
+                    med = np.round(med, 2)
+                    low = np.round(low, 2)
+                    high = np.round(high, 2)
+                    print(f"   lambda_tilde: {med}-{low}+{high}")
+                    
+                    med = np.median(posterior['delta_lambda_tilde'])
+                    low, high = arviz.hdi(np.array(posterior['delta_lambda_tilde']), hdi_prob=0.95)
+                    low = med - low
+                    high = high - med
+                    
+                    # Round to 2 digits
+                    med = np.round(med, 2)
+                    low = np.round(low, 2)
+                    high = np.round(high, 2)
+                    print(f"   delta_lambda_tilde: {med}-{low}+{high}")
             
             else:
                 raise ValueError("lambda_1 and lambda_2 must be present in the posterior to convert to lambda_tilde and delta_lambda_tilde.")
@@ -450,6 +455,7 @@ def create_corner_plot(GW_event: str,
     
     os.makedirs(output_dir, exist_ok=True)
     full_save_path = os.path.join(output_dir, save_name)
+    full_save_path = os.path.abspath(full_save_path)
             
     print(f"\nSaving corner plot to {full_save_path}\n")
     plt.savefig(full_save_path, dpi=300, bbox_inches='tight')
@@ -564,8 +570,8 @@ def main():
     parser.add_argument('--eos-samples-name', type=str, default='radio',
                         choices=['radio', 'radio_chiEFT', 'radio_chiEFT_NICER'],
                         help='EOS samples name (default: radio)')
-    parser.add_argument('--base-dir', type=str, default='../GW_runs/',
-                        help='Base directory path (default: ../GW_runs/)')
+    parser.add_argument('--base-dir', type=str, default='../../GW_runs/',
+                        help='Base directory path (default: ../../GW_runs/)')
     parser.add_argument('--plot-all-params', action='store_true',
                         help='Plot all parameters instead of subset')
     parser.add_argument('--plot-default', action='store_true',
