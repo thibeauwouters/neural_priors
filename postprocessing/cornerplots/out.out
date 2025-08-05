@@ -1,61 +1,38 @@
 Generating comparison corner plots for GW170817...
   Source comparison: population=uniform, eos=radio
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
+Loaded 3 posterior datasets: ['bns', 'nsbh', 'default']
+
+Saving corner plot to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/figures/population_uniform_eos_radio/corner_source_tilde.pdf
+
+Loaded 3 posterior datasets: ['nsbh', 'default', 'bns']
+
+Saving corner plot to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/figures/population_uniform_eos_radio/corner_source.pdf
+
   Source comparison: population=uniform, eos=radio_chiEFT
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
+Loaded 2 posterior datasets: ['nsbh', 'bns']
+
+Saving corner plot to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/figures/population_uniform_eos_radio_chiEFT/corner_source_tilde.pdf
+
+Loaded 2 posterior datasets: ['bns', 'nsbh']
+
+Saving corner plot to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/figures/population_uniform_eos_radio_chiEFT/corner_source.pdf
+
   Source comparison: population=uniform, eos=radio_chiEFT_NICER
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
+Loaded 2 posterior datasets: ['nsbh', 'bns']
+
+Saving corner plot to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/figures/population_uniform_eos_radio_chiEFT_NICER/corner_source_tilde.pdf
+
+Loaded 2 posterior datasets: ['nsbh', 'bns']
+
+Saving corner plot to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/figures/population_uniform_eos_radio_chiEFT_NICER/corner_source.pdf
+
   Source comparison: population=gaussian, eos=radio
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
+Loaded 3 posterior datasets: ['nsbh', 'default', 'bns']
+
+Saving corner plot to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/figures/population_gaussian_eos_radio/corner_source_tilde.pdf
+
+Loaded 3 posterior datasets: ['bns', 'nsbh', 'default']
+
+Saving corner plot to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/figures/population_gaussian_eos_radio/corner_source.pdf
+
   Source comparison: population=gaussian, eos=radio_chiEFT
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-  Source comparison: population=gaussian, eos=radio_chiEFT_NICER
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-  Source comparison: population=double_gaussian, eos=radio
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-  Source comparison: population=double_gaussian, eos=radio_chiEFT
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...
-  Source comparison: population=double_gaussian, eos=radio_chiEFT_NICER
-Loaded 0 posterior datasets: []
-Loading Hauke's data and adding it to the corner plot, filename: ../../data/hauke/GW170817/GW170817_result.npz
-Replacing geocent_time with dummy values for Hauke...

@@ -1,14 +1,36 @@
-000 (2581803.000.000) 2025-08-05 15:18:47 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+000 (2582288.000.000) 2025-08-05 15:40:28 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
 ...
-001 (2581803.000.000) 2025-08-05 15:19:16 Job executing on host: <145.107.4.122:9618?addrs=145.107.4.122-9618+[2a07-8500-120-e070--7a]-9618&alias=wn-sate-076.nikhef.nl&noUDP&sock=startd_2219_a0be>
-	SlotName: slot1_20@wn-sate-076.nikhef.nl
-	CondorScratchDir = "/scratch/condor_execute/dir_2030931"
+001 (2582288.000.000) 2025-08-05 15:41:17 Job executing on host: <145.107.4.141:9618?addrs=145.107.4.141-9618+[2a07-8500-120-e070--8d]-9618&alias=wn-cuyp-002.nikhef.nl&noUDP&sock=startd_1174_d846>
+	SlotName: slot1_3@wn-cuyp-002.nikhef.nl
+	AvailableGPUs = {  }
+	CondorScratchDir = "/scratch/condor_execute/dir_3612927"
 	Cpus = 1
-	Disk = 2099770
+	Disk = 2098176
 	GPUs = 0
 	Memory = 4096
 ...
-006 (2581803.000.000) 2025-08-05 15:19:29 Image size of job updated: 344112
-	337  -  MemoryUsage of job (MB)
-	344112  -  ResidentSetSize of job (KB)
+006 (2582288.000.000) 2025-08-05 15:41:30 Image size of job updated: 388308
+	380  -  MemoryUsage of job (MB)
+	388308  -  ResidentSetSize of job (KB)
+...
+006 (2582288.000.000) 2025-08-05 15:46:30 Image size of job updated: 474440
+	380  -  MemoryUsage of job (MB)
+	388308  -  ResidentSetSize of job (KB)
+...
+004 (2582288.000.000) 2025-08-05 15:47:27 Job was evicted.
+	(0) CPU times
+		Usr 0 00:05:43, Sys 0 00:00:04  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     0.99        1         1 
+	   Disk (KB)            :  1500     2097152   2098176 
+	   GPUs                 :                           0 
+	   Memory (MB)          :   380        4096      4096 
+	   TimeExecute (s)      :   370                       
+	   TimeSlotBusy (s)     :   371                       
+...
+009 (2582288.000.000) 2025-08-05 15:47:27 Job was aborted.
+	via condor_rm (by user twouters)
 ...
