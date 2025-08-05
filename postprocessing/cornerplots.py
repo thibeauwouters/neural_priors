@@ -441,7 +441,7 @@ def create_corner_plot(GW_event: str,
     # Save the figure
     if plot_bns or plot_nsbh or plot_default:
         # Use old directory structure for backward compatibility
-        output_dir = os.path.join(base_path, GW_event, population_type, "figures")
+        output_dir = os.path.join(base_path, GW_event, "figures", population_type)
         save_name = 'corner' + \
                 ('_all' if plot_all_params else '') + \
                 ('_default' if plot_default else '') + \
@@ -460,7 +460,8 @@ def create_corner_plot(GW_event: str,
         elif comparison_mode == "eos":
             fixed_params = {"population_type": population_type, "source_type": source_type}
         
-        output_dir = get_output_directory(base_path, GW_event, comparison_mode, fixed_params)
+        base_output_dir = get_output_directory(base_path, GW_event, comparison_mode, fixed_params)
+        output_dir = os.path.join(base_output_dir, "figures")
         
         # Create filename based on comparison mode
         groups_str = '_'.join(sorted(samples_dict.keys()))
