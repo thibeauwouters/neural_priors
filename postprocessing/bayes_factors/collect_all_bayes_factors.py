@@ -179,12 +179,6 @@ def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool =
         population_types_display = ["uniform", "gaussian", "double_gaussian"]
     gw_event_populations = ["GW170817", "GW190425", "GW230529"]
     
-    # Table header - wider format with events as columns
-    latex_lines.append("\\begin{table*}[htbp]")
-    latex_lines.append("\\centering")
-    latex_lines.append("\\caption{Bayes Factors for Gravitational Wave Events}")
-    latex_lines.append("\\label{tab:bayes_factors}")
-    
     # Create column specification: Population | Source | EOS | GW170817 | GW190425 | GW230529
     latex_lines.append("\\begin{tabular}{|l|l|l|c|c|c|}")
     latex_lines.append("\\hline")
@@ -321,7 +315,6 @@ def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool =
     
     # Close table
     latex_lines.append("\\end{tabular}")
-    latex_lines.append("\\end{table*}")
     
     return "\n".join(latex_lines)
 
