@@ -4,7 +4,8 @@ Script to collect all Bayes factors from GW parameter estimation runs.
 
 This script scans the GW_runs directory structure and extracts Bayes factors
 from all result JSON files, creating a nested structure matching the directory
-layout and saving to all_bayes_factors.json.
+layout and saving to all_bayes_factors.json. It also generates a LaTeX table
+showing the structure as requested.
 """
 
 import os
@@ -93,17 +94,125 @@ def collect_all_bayes_factors(base_dir: str = "../GW_runs/") -> Dict[str, Any]:
     return all_bayes_factors
 
 
+def generate_latex_table(bayes_factors: Dict[str, Any]) -> str:
+    """
+    Generate LaTeX table code for the Bayes factors data.
+    
+    Args:
+        bayes_factors: Nested dictionary with Bayes factors data
+        
+    Returns:
+        String containing LaTeX table code
+    """
+    latex_lines = []
+    
+    # Table header
+    latex_lines.append("\\begin{table}[htbp]")
+    latex_lines.append("\\centering")
+    latex_lines.append("\\caption{Bayes Factors for Gravitational Wave Events}")
+    latex_lines.append("\\label{tab:bayes_factors}")
+    latex_lines.append("\\begin{tabular}{|l|l|l|l|l|}")
+    latex_lines.append("\\hline")
+    latex_lines.append("\\textbf{Population} & \\textbf{Source} & \\textbf{EOS Constraints} & \\textbf{Event} & \\textbf{Log Bayes Factor} \\\\")
+    latex_lines.append("\\hline")
+    
+    # Fixed options for consistent ordering
+    gw_events = ["GW170817", "GW190425", "GW230529"]
+    population_types = ["uniform", "gaussian", "double_gaussian", "GW170817", "GW190425", "GW230529"]
+    source_types = ["bns", "nsbh", "default"]
+    eos_samples_names = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
+    
+    # Generate table rows
+    for pop_type in population_types:
+        pop_first_row = True
+        pop_row_count = 0
+        
+        # Count total rows for this population to use multirow
+        for event in gw_events:
+            if event in bayes_factors and pop_type in bayes_factors[event]:
+                for source_type in source_types:
+                    if source_type in bayes_factors[event][pop_type]:
+                        for eos_type in eos_samples_names:
+                            if eos_type in bayes_factors[event][pop_type][source_type]:
+                                bf_val = bayes_factors[event][pop_type][source_type][eos_type]
+                                if bf_val != 0.0:  # Only count non-zero entries
+                                    pop_row_count += 1
+        
+        if pop_row_count == 0:
+            continue
+            
+        for event in gw_events:
+            if event not in bayes_factors or pop_type not in bayes_factors[event]:
+                continue
+                
+            for source_type in source_types:
+                if source_type not in bayes_factors[event][pop_type]:
+                    continue
+                    
+                source_first_row = True
+                source_row_count = sum(1 for eos_type in eos_samples_names 
+                                     if eos_type in bayes_factors[event][pop_type][source_type] 
+                                     and bayes_factors[event][pop_type][source_type][eos_type] != 0.0)
+                
+                if source_row_count == 0:
+                    continue
+                    
+                for eos_type in eos_samples_names:
+                    if eos_type not in bayes_factors[event][pop_type][source_type]:
+                        continue
+                        
+                    bf_val = bayes_factors[event][pop_type][source_type][eos_type]
+                    if bf_val == 0.0:  # Skip zero entries (missing data)
+                        continue
+                    
+                    # Format the row
+                    pop_cell = f"\\multirow{{{pop_row_count}}}{{*}}{{{pop_type}}}" if pop_first_row else ""
+                    source_cell = f"\\multirow{{{source_row_count}}}{{*}}{{{source_type.upper()}}}" if source_first_row else ""
+                    eos_cell = eos_type.replace("_", "\\_")
+                    event_cell = event
+                    bf_cell = f"{bf_val:.2f}"
+                    
+                    latex_lines.append(f"{pop_cell} & {source_cell} & {eos_cell} & {event_cell} & {bf_cell} \\\\")
+                    
+                    if not (pop_first_row and source_first_row):
+                        latex_lines.append("\\cline{3-5}")
+                    
+                    pop_first_row = False
+                    source_first_row = False
+                
+                if not pop_first_row:
+                    latex_lines.append("\\cline{2-5}")
+        
+        latex_lines.append("\\hline")
+    
+    # Close table
+    latex_lines.append("\\end{tabular}")
+    latex_lines.append("\\end{table}")
+    
+    return "\n".join(latex_lines)
+
+
 def main():
-    """Main function to collect all Bayes factors and save to JSON file."""
+    """Main function to collect all Bayes factors and save to JSON file and LaTeX table."""
     base_dir = "../GW_runs/"
-    output_file = "./all_bayes_factors.json"
+    output_dir = "./bayes_factors/"
+    json_file = os.path.join(output_dir, "all_bayes_factors.json")
+    latex_file = os.path.join(output_dir, "bayes_factors_table.tex")
+    
+    # Create output directory
+    os.makedirs(output_dir, exist_ok=True)
     
     print(f"Scanning directory structure in: {base_dir}")
     bayes_factors = collect_all_bayes_factors(base_dir)
     
-    print(f"\nSaving results to: {output_file}")
-    with open(output_file, 'w') as f:
+    print(f"\nSaving JSON results to: {json_file}")
+    with open(json_file, 'w') as f:
         json.dump(bayes_factors, f, indent=2)
+    
+    print(f"Generating LaTeX table and saving to: {latex_file}")
+    latex_table = generate_latex_table(bayes_factors)
+    with open(latex_file, 'w') as f:
+        f.write(latex_table)
     
     print("Done!")
     print(f"\nSummary:")
