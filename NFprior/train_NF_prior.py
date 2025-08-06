@@ -37,7 +37,9 @@ import jax.random as jr
 from flowjax.flows import masked_autoregressive_flow, coupling_flow
 from flowjax.flows import block_neural_autoregressive_flow
 from flowjax.train import fit_to_data
-from flowjax.distributions import Normal
+from flowjax.distributions import Normal, Transformed
+from flowjax import bijections as bij
+from paramax import non_trainable
 jax_devices = jax.devices()
 print(f"JAX: devices available: {jax_devices}")
 import equinox as eqx
@@ -216,6 +218,13 @@ parser.add_argument("--validation-split-fraction",
                     type=float, 
                     default=0.2, 
                     help="Fraction of data to use for validation (default: 0.2)")
+parser.add_argument("--constrain-flowjax-dist", 
+                    action="store_true", 
+                    help="Use constrained distributions in flowjax training (default: True)")
+parser.add_argument("--no-constrain-flowjax-dist", 
+                    dest="constrain_flowjax_dist", 
+                    action="store_false")
+parser.set_defaults(constrain_flowjax_dist=True)
 parser.add_argument("--setup-submission", 
                     action="store_true", 
                     help="Setup .sub file for cluster submission instead of training")
@@ -254,7 +263,8 @@ class NFPriorCreator:
                  nn_depth: int = 1,
                  nn_block_dim: int = 8,
                  flow_layers: int = 1,
-                 validation_split_fraction: float = 0.2
+                 validation_split_fraction: float = 0.2,
+                 constrain_flowjax_dist: bool = True
                  ):
         """
         Initialize the NFPriorCreator class with the necessary parameters.
@@ -328,6 +338,7 @@ class NFPriorCreator:
         self.scale_input = scale_input
         self.num_bins = num_bins
         self.validation_split_fraction = validation_split_fraction
+        self.constrain_flowjax_dist = constrain_flowjax_dist
         
         # Store the NF kwargs here to dump later on
         self.nf_kwargs = {"n_transforms": self.n_transforms,
@@ -729,11 +740,22 @@ class NFPriorCreator:
                 
         self.x = np.array(x).T
         self.x_val = np.array(x_val).T
+        
+        # Validate parameter bounds if using constrained flowjax distribution
+        if self.use_flowjax and self.constrain_flowjax_dist:
+            self._validate_parameter_bounds()
                 
         # Show some stuff
         print("np.shape(self.x)")
         print(np.shape(self.x))
             
+        # Disable scaling when using constrained flowjax distributions
+        # The bijections handle parameter scaling internally
+        if self.use_flowjax and self.constrain_flowjax_dist and self.scale_input:
+            print("WARNING: Disabling MinMaxScaler when using constrained flowjax distributions")
+            print("The bijections handle parameter scaling internally to respect bounds")
+            self.scale_input = False
+        
         if self.scale_input:
             print(f"Using MinMaxScaler to scale the input data x")
             scaler = MinMaxScaler()
@@ -788,6 +810,7 @@ class NFPriorCreator:
         self.nf_kwargs["use_flowjax"] = str(self.use_flowjax)
         self.nf_kwargs["use_tilde"] = str(self.use_tilde)
         self.nf_kwargs["use_component_masses"] = str(self.use_component_masses)
+        self.nf_kwargs["constrain_flowjax_dist"] = str(self.constrain_flowjax_dist)
         
         print(f"Saving the model kwargs to {save_path}")
         with open(save_path, "w") as f:
@@ -867,57 +890,213 @@ class NFPriorCreator:
         self.plot_loss(np.array(train_losses), np.array(val_losses))
         return flow
     
+    def _create_parameter_bijections(self):
+        """
+        Create bijections for parameter constraints based on the data structure.
+        Returns a bijection that transforms from unbounded space to constrained parameter space.
+        
+        Constraints:
+        - mass_ratio (q): [0.1, 1.0] 
+        - lambda_1, lambda_2: > 0
+        - chirp_mass: unbounded (identity)
+        - luminosity_distance: > 0 (for GW events)
+        """
+        bijection_list = []
+        param_names = self.nf_kwargs["names"]
+        
+        for i, name in enumerate(param_names):
+            if "mass_ratio" in name:
+                # Map from R to [0.1, 1.0]
+                # Use sigmoid to map R -> [0,1], then scale/shift to [0.1, 1.0]
+                # f(x) = 0.1 + 0.9 * sigmoid(x)
+                scale_shift = bij.Affine(loc=0.1, scale=0.9)
+                bijection_list.append(bij.Chain([bij.Sigmoid(shape=()), scale_shift]))
+                print(f"Applied mass_ratio constraint [0.1, 1.0] to parameter {i}: {name}")
+                
+            elif "lambda" in name and name != "delta_lambda_tilde":
+                # Map from R to (0, inf) using softplus
+                bijection_list.append(bij.SoftPlus(shape=()))
+                print(f"Applied lambda constraint > 0 to parameter {i}: {name}")
+                
+            elif name == "delta_lambda_tilde":
+                # delta_lambda_tilde can be negative, so leave unbounded
+                bijection_list.append(bij.Identity(shape=()))
+                print(f"Applied identity (unbounded) to parameter {i}: {name}")
+                
+            elif "luminosity_distance" in name:
+                # Luminosity distance must be positive
+                bijection_list.append(bij.SoftPlus(shape=()))
+                print(f"Applied luminosity_distance constraint > 0 to parameter {i}: {name}")
+                
+            else:
+                # For chirp_mass and other unbounded parameters
+                bijection_list.append(bij.Identity(shape=()))
+                print(f"Applied identity (unbounded) to parameter {i}: {name}")
+        
+        # Stack all bijections together
+        return bij.Stack(bijection_list)
+    
+    def _validate_parameter_bounds(self):
+        """
+        Validate that training data respects the parameter bounds that will be enforced.
+        Issues warnings or clips data if bounds are violated.
+        """
+        param_names = self.nf_kwargs["names"]
+        
+        for i, name in enumerate(param_names):
+            train_vals = self.x[:, i]
+            val_vals = self.x_val[:, i] if self.x_val.shape[1] > i else None
+            
+            if "mass_ratio" in name:
+                # Check mass_ratio bounds [0.1, 1.0]
+                train_violations = (train_vals < 0.1) | (train_vals > 1.0)
+                if np.any(train_violations):
+                    n_violations = np.sum(train_violations)
+                    print(f"WARNING: {n_violations}/{len(train_vals)} training samples violate mass_ratio bounds [0.1, 1.0]")
+                    print(f"  Range in data: [{np.min(train_vals):.4f}, {np.max(train_vals):.4f}]")
+                    # Clip to bounds with small epsilon for numerical stability
+                    self.x[:, i] = np.clip(train_vals, 0.1 + 1e-6, 1.0 - 1e-6)
+                    
+                if val_vals is not None:
+                    val_violations = (val_vals < 0.1) | (val_vals > 1.0)
+                    if np.any(val_violations):
+                        n_val_violations = np.sum(val_violations)
+                        print(f"WARNING: {n_val_violations}/{len(val_vals)} validation samples violate mass_ratio bounds")
+                        self.x_val[:, i] = np.clip(val_vals, 0.1 + 1e-6, 1.0 - 1e-6)
+                        
+            elif "lambda" in name and name != "delta_lambda_tilde":
+                # Check lambda bounds > 0
+                train_violations = train_vals <= 0
+                if np.any(train_violations):
+                    n_violations = np.sum(train_violations)
+                    print(f"WARNING: {n_violations}/{len(train_vals)} training samples violate {name} bounds > 0")
+                    print(f"  Range in data: [{np.min(train_vals):.4e}, {np.max(train_vals):.4e}]")
+                    # Clip to small positive value
+                    self.x[:, i] = np.clip(train_vals, 1e-6, None)
+                    
+                if val_vals is not None:
+                    val_violations = val_vals <= 0
+                    if np.any(val_violations):
+                        n_val_violations = np.sum(val_violations)
+                        print(f"WARNING: {n_val_violations}/{len(val_vals)} validation samples violate {name} bounds > 0")
+                        self.x_val[:, i] = np.clip(val_vals, 1e-6, None)
+                        
+            elif "luminosity_distance" in name:
+                # Check luminosity distance bounds > 0
+                train_violations = train_vals <= 0
+                if np.any(train_violations):
+                    n_violations = np.sum(train_violations)
+                    print(f"WARNING: {n_violations}/{len(train_vals)} training samples violate luminosity_distance bounds > 0")
+                    self.x[:, i] = np.clip(train_vals, 1e-6, None)
+                    
+                if val_vals is not None:
+                    val_violations = val_vals <= 0
+                    if np.any(val_violations):
+                        n_val_violations = np.sum(val_violations)
+                        print(f"WARNING: {n_val_violations}/{len(val_vals)} validation samples violate luminosity_distance bounds > 0")
+                        self.x_val[:, i] = np.clip(val_vals, 1e-6, None)
+        
+        print("Parameter bounds validation completed")
+    
+    def _clip_data_for_constraints(self, x_data):
+        """
+        Clip data for numerical stability when applying constraints.
+        Following flowjax documentation example: clip near boundaries.
+        """
+        param_names = self.nf_kwargs["names"]
+        x_clipped = x_data.copy()
+        
+        for i, name in enumerate(param_names):
+            if "mass_ratio" in name:
+                # Clip mass_ratio to [0.1 + eps, 1.0 - eps]
+                x_clipped = x_clipped.at[:, i].set(
+                    jnp.clip(x_data[:, i], 0.1 + 1e-7, 1.0 - 1e-7)
+                )
+                
+            elif "lambda" in name and name != "delta_lambda_tilde":
+                # Clip lambdas to [eps, inf)
+                x_clipped = x_clipped.at[:, i].set(
+                    jnp.clip(x_data[:, i], 1e-7, None)
+                )
+                
+            elif "luminosity_distance" in name:
+                # Clip luminosity distance to [eps, inf)
+                x_clipped = x_clipped.at[:, i].set(
+                    jnp.clip(x_data[:, i], 1e-7, None)
+                )
+        
+        return x_clipped
+    
     def _train_flowjax(self):
         """
-        Train an unconditional normalizing flow using flowJAX.
+        Train an unconditional normalizing flow using flowJAX with optional parameter constraints.
+        Following Option 2 from flowjax documentation: transform data to unbounded space for training.
         """
-        # Create base distribution
+        # Always create unbounded flow and base distribution
         base_dist = Normal(jnp.zeros(self.nf_kwargs["n_inputs"]))
         
-        # Initialize flow
+        # Initialize keys
         key = jr.key(42)
-        # TODO: decide whether we want to be flexible here and restore this piece of code, or rather deprecate coupling and instead hard-code BNAF?
-        # if self.nf_kwargs["n_inputs"] == 1:
-        #     # For 1D, use masked autoregressive flow
-        #     print("Using masked_autoregressive_flow for unconditional 1D distribution")
-        #     self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
-        #     flow = masked_autoregressive_flow(
-        #         key=key,
-        #         base_dist=base_dist,
-        #         flow_layers=self.n_transforms,
-        #         nn_width=self.n_neurons,
-        #         nn_depth=self.nn_depth
-        #     )
+        key, subkey = jr.split(key)
+        
         print("Using block_neural_autoregressive_flow for flowJAX unconditional distribution")
         self.nf_kwargs["model_type"] = "block_neural_autoregressive_flow"
-        flow = block_neural_autoregressive_flow(
-            key=key,
+        unbounded_flow = block_neural_autoregressive_flow(
+            key=subkey,
             base_dist=base_dist,
             nn_depth=self.nn_depth,
             nn_block_dim=self.nn_block_dim,
             flow_layers=self.flow_layers,
         )
         
-        # Train the flow with validation data
-        train_key = jr.key(123)
+        # Prepare training data
         x_train_data = jnp.array(self.x, dtype=jnp.float32)
-        x_val_data = jnp.array(self.x_val, dtype=jnp.float32)
         
-        print(f"Training flowJAX unconditional model on data shape: {x_train_data.shape}")
-        print(f"Validation data shape: {x_val_data.shape}")
+        if self.constrain_flowjax_dist:
+            print("Using constrained training approach (Option 2): transform data to unbounded space")
+            # Create parameter bijections for constraints
+            param_bijection = self._create_parameter_bijections()
+            
+            # Clip data for numerical stability (following documentation example)
+            x_train_clipped = self._clip_data_for_constraints(x_train_data)
+            
+            # Transform data to unbounded space using inverse bijection
+            print("Transforming training data to unbounded space")
+            x_train_unbounded = jax.vmap(param_bijection.inverse)(x_train_clipped)
+            
+            # Train unbounded flow on transformed data
+            key, subkey = jr.split(key)
+            flow_trained, losses = fit_to_data(
+                key=subkey,
+                dist=unbounded_flow,
+                data=x_train_unbounded,
+                learning_rate=self.learning_rate,
+                max_epochs=self.num_epochs,
+                batch_size=self.batch_size,
+                max_patience=self.max_patience,
+                val_prop=self.validation_split_fraction
+            )
+            
+            # Apply constraints post-training (non-trainable ensures constraint params aren't optimized)
+            print("Applying constraints to trained flow")
+            flow = Transformed(flow_trained, non_trainable(param_bijection))
+            print(f"Created constrained flow with bijection: {param_bijection}")
+        else:
+            print("Using unconstrained training (original behavior)")
+            # Train directly on original data
+            key, subkey = jr.split(key)
+            flow, losses = fit_to_data(
+                key=subkey,
+                dist=unbounded_flow,
+                data=x_train_data,
+                learning_rate=self.learning_rate,
+                max_epochs=self.num_epochs,
+                batch_size=self.batch_size,
+                max_patience=self.max_patience,
+                val_prop=self.validation_split_fraction
+            )
         
-        flow, losses = fit_to_data(
-            key=train_key,
-            dist=flow,
-            data=x_train_data,
-            # x_val=x_val_data, # TODO: figure out
-            learning_rate=self.learning_rate,
-            max_epochs=self.num_epochs,
-            batch_size=self.batch_size,
-            max_patience=self.max_patience,
-            val_prop=self.validation_split_fraction
-        )
-        
+        print(f"Training flowJAX model on data shape: {x_train_data.shape}")
         self.plot_loss(np.array(losses["train"]), np.array(losses["val"]))
         return flow
     
@@ -987,6 +1166,8 @@ class NFPriorCreator:
                         training_args.append("--no-use-flowjax")
                     elif key == 'scale_input' and not value:
                         training_args.append("--no-scale-input")
+                    elif key == 'constrain_flowjax_dist' and not value:
+                        training_args.append("--no-constrain-flowjax-dist")
             else:
                 # Handle non-boolean arguments
                 training_args.extend([arg_name, str(value)])

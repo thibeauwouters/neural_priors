@@ -1,26 +1,23 @@
 #!/bin/bash
 
-# Improved hyperparameters for better flowjax BNAF performance:
-# --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-
-python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type bns --eos-samples-name radio --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type bns --eos-samples-name radio_chiEFT --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type bns --eos-samples-name radio_chiEFT_NICER --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type bns --eos-samples-name radio --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type bns --eos-samples-name radio_chiEFT --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type bns --eos-samples-name radio_chiEFT_NICER --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type bns --eos-samples-name radio --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type bns --eos-samples-name radio_chiEFT --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type bns --eos-samples-name radio_chiEFT_NICER --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type nsbh --eos-samples-name radio --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type nsbh --eos-samples-name radio_chiEFT --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type nsbh --eos-samples-name radio_chiEFT_NICER --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type nsbh --eos-samples-name radio --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type nsbh --eos-samples-name radio_chiEFT --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type nsbh --eos-samples-name radio --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --nn-depth 4 --nn-block-dim 24 --flow-layers 4 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type bns --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type bns --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type bns --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type bns --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type bns --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type bns --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type bns --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type bns --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type bns --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type nsbh --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type nsbh --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type nsbh --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type nsbh --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type nsbh --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type nsbh --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
+python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
 
 
 # ### GW170817 ###

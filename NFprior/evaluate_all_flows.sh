@@ -15,7 +15,7 @@ else
 fi
 
 # Iterate over all subdirectories in models (each is a population type)
-for POPULATION_TYPE in "$MODELS_BASE_PATH"/*; do
+for POPULATION_TYPE in "$MODELS_BASE_PATH"/uniform "$MODELS_BASE_PATH"/gaussian "$MODELS_BASE_PATH"/double_gaussian; do
     if [ -d "$POPULATION_TYPE" ]; then
         POPULATION_NAME=$(basename "$POPULATION_TYPE")
         
