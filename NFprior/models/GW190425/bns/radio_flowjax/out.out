@@ -4,7 +4,7 @@ torch: Current CUDA device: 0
 Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
 Training a normalizing flow for population =  GW190425 and bns sources
 Using a smaller learning rate 0.0005 for flowJAX training, as it is more stable with this value.
-Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 5, 'nn_block_dim': 8, 'names': ['chirp_mass', 'mass_ratio', 'lambda_1', 'lambda_2', 'luminosity_distance'], 'n_inputs': 5}
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'names': ['chirp_mass', 'mass_ratio', 'lambda_1', 'lambda_2', 'luminosity_distance'], 'n_inputs': 5}
 Everything for this model will be saved to ./models/GW190425/bns/radio_flowjax
 Using flowJAX, so setting validation_split_fraction to 0.01 (no validation split)
 Starting training with the following parameters:
@@ -27,16 +27,16 @@ Loaded priors: {'chirp_mass': Uniform(minimum=1.485, maximum=1.49, name='chirp_m
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.5448051346286555, 2.4134091114219123]
-  m2: range = [1.1057122663792605, 1.7036597108484388]
-  mass_ratio: range = [0.5000062153332184, 0.9999994653615125]
-  lambda_1: range = [2.4777398049978956, 1125.1121097589996]
-  lambda_2: range = [45.67428261424375, 4985.8273815774255]
-  lambda_tilde: range = [37.16620554166088, 1193.3581531384257]
-  delta_lambda_tilde: range = [8.638487397041289e-05, 294.8198220194698]
-  chirp_mass_source: range = [1.3440856124507727, 1.4865549909994893]
-  chirp_mass: range = [1.4850000302968733, 1.4899999726417958]
-  luminosity_distance: range = [8.582966646995482, 499.99951041251506]
+  m1: range = [1.545369388804502, 2.4210697130427077]
+  m2: range = [1.105254558052401, 1.6952671238795165]
+  mass_ratio: range = [0.500001136499185, 0.9999967378022092]
+  lambda_1: range = [2.4777398049978956, 1115.4027508047566]
+  lambda_2: range = [42.864675662132235, 5093.304034956182]
+  lambda_tilde: range = [33.057617250761865, 1165.8101643002474]
+  delta_lambda_tilde: range = [0.0007739547579603102, 285.11639699455657]
+  chirp_mass_source: range = [1.3441054339195004, 1.483799281353737]
+  chirp_mass: range = [1.4850000473943805, 1.4899999136818711]
+  luminosity_distance: range = [6.487913661447477, 499.9998683316635]
 Saving to ./models/GW190425/bns/radio_flowjax/training_data.npz:
 Saving to ./models/GW190425/bns/radio_flowjax/training_data.npz DONE
 Using detector-frame chirp mass from the GW event and mass ratio (Mc_det, q) for training
@@ -54,7 +54,7 @@ Using block_neural_autoregressive_flow for flowJAX unconditional distribution
 Training flowJAX unconditional model on data shape: (198000, 5)
 Validation data shape: (2000, 5)
 Saving the training loss plot to ./models/GW190425/bns/radio_flowjax/training_loss.pdf
-Training done. Took around 10.93 minutes
+Training done. Took around 2.57 minutes
 Saving the flowJAX model to ./models/GW190425/bns/radio_flowjax/model.eqx
 Saving the model kwargs to ./models/GW190425/bns/radio_flowjax/model_kwargs.json
 DONE training!

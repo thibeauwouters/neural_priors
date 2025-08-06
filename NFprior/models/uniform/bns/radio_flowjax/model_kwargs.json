@@ -2,7 +2,8 @@
     "n_transforms": 4,
     "n_neurons": 64,
     "n_blocks_per_transform": 1,
-    "nn_depth": 5,
+    "nn_depth": 1,
+    "flow_layers": 1,
     "nn_block_dim": 8,
     "names": [
         "chirp_mass_source",
