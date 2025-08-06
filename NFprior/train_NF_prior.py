@@ -30,16 +30,16 @@ import torch
 from torch import optim
 from torch.utils.data import DataLoader, TensorDataset
 
-# ### flowjax imports
-# import jax
-# import jax.numpy as jnp
-# import jax.random as jr
-# from flowjax.flows import masked_autoregressive_flow, coupling_flow
-# from flowjax.flows import block_neural_autoregressive_flow
-# from flowjax.train import fit_to_data
-# from flowjax.distributions import Normal
-# jax_devices = jax.devices()
-# print(f"JAX: devices available: {jax_devices}")
+### flowjax imports
+import jax
+import jax.numpy as jnp
+import jax.random as jr
+from flowjax.flows import masked_autoregressive_flow, coupling_flow
+from flowjax.flows import block_neural_autoregressive_flow
+from flowjax.train import fit_to_data
+from flowjax.distributions import Normal
+jax_devices = jax.devices()
+print(f"JAX: devices available: {jax_devices}")
 import equinox as eqx
 
 import tqdm
@@ -368,6 +368,13 @@ class NFPriorCreator:
             os.makedirs(self.outdir)
             print(f"Created output directory {self.outdir}")
         print(f"Everything for this model will be saved to {self.outdir}")
+        
+        # FIXME: this is suboptimal, but turns out flowJAX has its own support for train-validation split! Use the default there
+        # NOTE: I still have to figure out a nice modular way to do logic branching for the train-validation split step if flowJAX is/is not used, but for now, a hacky way is to throw away part of the data to avoid errors and use the "train data" as all data in case flowJAX is used. Need to update this later on.
+        
+        if self.use_flowjax:
+            self.validation_split_fraction = 0.01
+            print(f"Using flowJAX, so setting validation_split_fraction to {self.validation_split_fraction} (no validation split)")
     
     def load_eos_samples_from_file(self) -> tuple[np.array, np.array, np.array]:
         """
@@ -656,14 +663,18 @@ class NFPriorCreator:
         if self.is_gw_event:
             # If we have GW event data, also include the luminosity distance
             arrays_to_split.append(data["luminosity_distance"])
-        split_result = train_test_split(*arrays_to_split, test_size=self.validation_split_fraction, random_state=42)
+        split_result = train_test_split(*arrays_to_split,
+                                        test_size=self.validation_split_fraction,
+                                        train_size=1.0-self.validation_split_fraction,
+                                        random_state=42)
         
         # Unpack results
         self.train_mass_1, self.val_mass_1 = split_result[0], split_result[1]
         self.train_mass_2, self.val_mass_2 = split_result[2], split_result[3]
         self.train_lambda_1, self.val_lambda_1 = split_result[4], split_result[5]
         self.train_lambda_2, self.val_lambda_2 = split_result[6], split_result[7]
-        self.train_dL, self.val_dL = split_result[8], split_result[9]
+        if self.is_gw_event:
+            self.train_dL, self.val_dL = split_result[8], split_result[9]
         
         print(f"Training samples: {len(self.train_mass_1)}, Validation samples: {len(self.val_mass_1)}")
         
@@ -849,54 +860,56 @@ class NFPriorCreator:
         """
         Train an unconditional normalizing flow using flowJAX.
         """
-        raise NotImplementedError("Unconditional flowJAX training not trusted enough yet, and we will stick to the .")
-    
-    # TODO: clean up this code and train it
-    #     # Create base distribution
-    #     base_dist = Normal(jnp.zeros(self.n_inputs))
+        # Create base distribution
+        base_dist = Normal(jnp.zeros(self.nf_kwargs["n_inputs"]))
         
-    #     # Initialize flow
-    #     key = jr.key(42)
-    #     if self.n_inputs == 1:
-    #         # For 1D, use masked autoregressive flow
-    #         print("Using masked_autoregressive_flow for unconditional 1D distribution")
-    #         self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
-    #         flow = masked_autoregressive_flow(
-    #             key=key,
-    #             base_dist=base_dist,
-    #             flow_layers=self.n_transforms,
-    #             nn_width=self.n_neurons,
-    #             nn_depth=self.n_blocks_per_transform
-    #         )
-    #     else:
-    #         # For >1D, use coupling flow
-    #         print("Using coupling_flow for unconditional >1D distribution")
-    #         self.nf_kwargs["model_type"] = "coupling_flow"
-    #         flow = coupling_flow(
-    #             key=key,
-    #             base_dist=base_dist,
-    #             flow_layers=self.n_transforms,
-    #             nn_width=self.n_neurons,
-    #             nn_depth=self.n_blocks_per_transform
-    #         )
+        # Initialize flow
+        key = jr.key(42)
+        if self.nf_kwargs["n_inputs"] == 1:
+            # For 1D, use masked autoregressive flow
+            print("Using masked_autoregressive_flow for unconditional 1D distribution")
+            self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
+            flow = masked_autoregressive_flow(
+                key=key,
+                base_dist=base_dist,
+                flow_layers=self.n_transforms,
+                nn_width=self.n_neurons,
+                nn_depth=self.nn_depth
+            )
+        else:
+            # For >1D, use coupling flow
+            print("Using coupling_flow for unconditional >1D distribution")
+            self.nf_kwargs["model_type"] = "coupling_flow"
+            flow = coupling_flow(
+                key=key,
+                base_dist=base_dist,
+                flow_layers=self.n_transforms,
+                nn_width=self.n_neurons,
+                nn_depth=self.nn_depth
+            )
         
-    #     # Train the flow
-    #     train_key = jr.key(123)
-    #     x_data = jnp.array(self.x, dtype=jnp.float32)
+        # Train the flow with validation data
+        train_key = jr.key(123)
+        x_train_data = jnp.array(self.x, dtype=jnp.float32)
+        x_val_data = jnp.array(self.x_val, dtype=jnp.float32)
         
-    #     print(f"Training flowJAX unconditional model on data shape: {x_data.shape}")
-    #     flow, losses = fit_to_data(
-    #         key=train_key,
-    #         dist=flow,
-    #         data=x_data,
-    #         learning_rate=self.learning_rate,
-    #         max_epochs=self.num_epochs,
-    #         batch_size=self.batch_size,
-    #         patience=self.max_patience
-    #     )
+        print(f"Training flowJAX unconditional model on data shape: {x_train_data.shape}")
+        print(f"Validation data shape: {x_val_data.shape}")
         
-    #     self.plot_loss(np.array(losses))
-    #     return flow
+        flow, losses = fit_to_data(
+            key=train_key,
+            dist=flow,
+            data=x_train_data,
+            # x_val=x_val_data, # TODO: figure out
+            learning_rate=self.learning_rate,
+            max_epochs=self.num_epochs,
+            batch_size=self.batch_size,
+            max_patience=self.max_patience,
+            val_prop=self.validation_split_fraction
+        )
+        
+        self.plot_loss(np.array(losses["train"]), np.array(losses["val"]))
+        return flow
     
     def plot_loss(self, train_loss: np.array, val_loss: np.array = None) -> None:
         
