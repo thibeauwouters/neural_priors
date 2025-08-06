@@ -644,7 +644,7 @@ class CheckerUnconditional(Checker):
                     base_dist=base_dist,
                     flow_layers=nf_kwargs["n_transforms"],
                     nn_width=nf_kwargs["n_neurons"],
-                    nn_depth=nf_kwargs["n_blocks_per_transform"]
+                    nn_depth=nf_kwargs["nn_depth"]
                 )
             elif model_type == "masked_autoregressive_flow":
                 flow = masked_autoregressive_flow(
@@ -652,7 +652,7 @@ class CheckerUnconditional(Checker):
                     base_dist=base_dist,
                     flow_layers=nf_kwargs["n_transforms"],
                     nn_width=nf_kwargs["n_neurons"],
-                    nn_depth=nf_kwargs["n_blocks_per_transform"]
+                    nn_depth=nf_kwargs["nn_depth"]
                 )
             else:
                 raise ValueError(f"Unsupported flowJAX model type: {model_type}")
@@ -726,18 +726,27 @@ class CheckerUnconditional(Checker):
         if self.nf_kwargs.get("use_tilde", "False") == "False" and self.nf_kwargs.get("source_type", "bns") == "bns":
             print("\nChecking if lambda_1 < lambda_2 for all generated samples...")
             
-            print(np.min(nf_samples[:, -2]), np.max(nf_samples[:, -2]))
-            print(np.min(nf_samples[:, -1]), np.max(nf_samples[:, -1]))
-            
-            ok_samples = nf_samples[:, -2] < nf_samples[:, -1]
-            percentage_ok = np.sum(ok_samples) / len(ok_samples) * 100
-            print(f"Percentage of samples with lambda_1 < lambda_2: {percentage_ok:.2f}%")
+            # Find indices of lambda_1 and lambda_2 in the parameter names
+            parameter_names = self.nf_kwargs.get("names", [])
+            if "lambda_1" in parameter_names and "lambda_2" in parameter_names:
+                lambda_1_idx = parameter_names.index("lambda_1")
+                lambda_2_idx = parameter_names.index("lambda_2")
+                
+                print(f"lambda_1 range: [{np.min(nf_samples[:, lambda_1_idx]):.3f}, {np.max(nf_samples[:, lambda_1_idx]):.3f}]")
+                print(f"lambda_2 range: [{np.min(nf_samples[:, lambda_2_idx]):.3f}, {np.max(nf_samples[:, lambda_2_idx]):.3f}]")
+                
+                ok_samples = nf_samples[:, lambda_1_idx] < nf_samples[:, lambda_2_idx]
+                percentage_ok = np.sum(ok_samples) / len(ok_samples) * 100
+                print(f"Percentage of samples with lambda_1 < lambda_2: {percentage_ok:.2f}%")
+            else:
+                print("Could not find lambda_1 and lambda_2 in parameter names - skipping constraint check")
     
     def get_parameter_labels(self, parameter_names):
         """Get parameter labels based on parameterization flags and parameter names."""
         translation_dict = {"chirp_mass": r"$M_c$ [M$_\odot$]",
                             "chirp_mass_source": r"$M_c^{\rm{source}}$ [M$_\odot$]",
                             "q": r"$q$",
+                            "mass_ratio": r"$q$",
                             "lambda_1": r"$\Lambda_1$",
                             "lambda_2": r"$\Lambda_2$",
                             "lambda_tilde": r"$\tilde{\Lambda}$",
@@ -895,13 +904,41 @@ class CheckerUnconditional(Checker):
         print(f"Constructing training samples for parameters: {parameter_names}")
         
         # FIXME: this is a small typo/bug and is now fixed, but old NFs might not have this yet
-        if "mass_ratio" in parameter_names:
-            parameter_names[parameter_names.index("mass_ratio")] = "q"
+        # Handle backwards compatibility between 'q' and 'mass_ratio'
+        parameter_names = parameter_names.copy()  # Don't modify original list
+        for i, param_name in enumerate(parameter_names):
+            if param_name == "mass_ratio" and "mass_ratio" not in self.training_data:
+                if "q" in self.training_data:
+                    parameter_names[i] = "q"
+                elif "m1" in self.training_data and "m2" in self.training_data:
+                    # We'll handle this case below
+                    pass
+                else:
+                    raise KeyError(f"Cannot find mass ratio parameter. Expected 'mass_ratio' but found neither 'q' nor 'm1'/'m2' in training data keys: {list(self.training_data.keys())}")
+            elif param_name == "q" and "q" not in self.training_data:
+                if "mass_ratio" in self.training_data:
+                    parameter_names[i] = "mass_ratio"
+                elif "m1" in self.training_data and "m2" in self.training_data:
+                    # We'll handle this case below
+                    pass
+                else:
+                    raise KeyError(f"Cannot find mass ratio parameter. Expected 'q' but found neither 'mass_ratio' nor 'm1'/'m2' in training data keys: {list(self.training_data.keys())}")
         
         # Build training samples by iterating over the parameter names in order
         training_columns = []
         for param_name in parameter_names:
-            training_columns.append(self.training_data[param_name])
+            if param_name in self.training_data:
+                training_columns.append(self.training_data[param_name])
+            elif param_name == "mass_ratio" and "m1" in self.training_data and "m2" in self.training_data:
+                # Calculate mass_ratio = m2/m1 on the fly
+                mass_ratio = self.training_data["m2"] / self.training_data["m1"]
+                training_columns.append(mass_ratio)
+            elif param_name == "q" and "m1" in self.training_data and "m2" in self.training_data:
+                # Calculate q = m2/m1 on the fly
+                q = self.training_data["m2"] / self.training_data["m1"]
+                training_columns.append(q)
+            else:
+                raise KeyError(f"Parameter '{param_name}' not found in training data and cannot be computed from available data. Available keys: {list(self.training_data.keys())}")
         
         result = np.column_stack(training_columns)
         print(f"Training samples shape: {result.shape}")
@@ -915,7 +952,7 @@ def main():
     parser.add_argument("model_path", help="Path to the model directory")
     parser.add_argument("--test-only", action="store_true", 
                        help="Only test if model can generate samples (quick test)")
-    parser.add_argument("--n-samples", type=int, default=10000,
+    parser.add_argument("--n-samples", type=int, default=10_000,
                        help="Number of samples to generate for evaluation")
     parser.add_argument("--n-test-samples", type=int, default=100,
                        help="Number of samples for quick test")
