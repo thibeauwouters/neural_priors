@@ -1,0 +1,60 @@
+JAX: devices available: [CudaDevice(id=0)]
+torch: CUDA is available. Number of devices: 1
+torch: Current CUDA device: 0
+Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
+Training a normalizing flow for population =  GW190425 and nsbh sources
+Using a smaller learning rate 0.0005 for flowJAX training, as it is more stable with this value.
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 5, 'nn_block_dim': 8, 'names': ['chirp_mass', 'mass_ratio', 'lambda_2', 'luminosity_distance'], 'n_inputs': 4}
+Everything for this model will be saved to ./models/GW190425/nsbh/radio_chiEFT_flowjax
+Using flowJAX, so setting validation_split_fraction to 0.01 (no validation split)
+Starting training with the following parameters:
+Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
+Number of good samples:  0.954
+create_data is following GW_event source type: GW190425
+Parsed prior bounds:
+  Chirp mass: 1.485 - 1.49
+  Mass ratio: 0.5 - 1.0
+  Luminosity distance: 1.0 - 500.0
+Loaded priors: {'chirp_mass': Uniform(minimum=1.485, maximum=1.49, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None), 'mass_ratio': Uniform(minimum=0.5, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None), 'luminosity_distance': bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=500.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)}
+0/200000
+20000/200000
+40000/200000
+60000/200000
+80000/200000
+100000/200000
+120000/200000
+140000/200000
+160000/200000
+180000/200000
+Create data will save the following data:
+  m1: range = [1.5455175126351934, 2.419214228035703]
+  m2: range = [1.104770028699173, 1.6953584139320472]
+  mass_ratio: range = [0.5000001523692384, 0.9999994324380281]
+  lambda_1: range = [2.6880234384856263, 1055.6878077267763]
+  lambda_2: range = [38.80475830728113, 5113.606548022799]
+  lambda_tilde: range = [31.77502484850557, 1140.43942412682]
+  delta_lambda_tilde: range = [-1.2258166646851958, 287.00067179707776]
+  chirp_mass_source: range = [1.3441309799034706, 1.487294341441052]
+  chirp_mass: range = [1.485000056403583, 1.4899999981460352]
+  luminosity_distance: range = [6.711984424922951, 499.9984592674945]
+Saving to ./models/GW190425/nsbh/radio_chiEFT_flowjax/training_data.npz:
+Saving to ./models/GW190425/nsbh/radio_chiEFT_flowjax/training_data.npz DONE
+Using detector-frame chirp mass from the GW event and mass ratio (Mc_det, q) for training
+Using component parameterization for lambdas (lambda_1, lambda_2)
+Training samples: 198000, Validation samples: 2000
+Creating the training data arrays
+NSBH and training on lambda_2 (3D)
+Including luminosity distance in training data
+np.shape(self.x)
+(198000, 4)
+Using MinMaxScaler to scale the input data x
+Saved sklearn scaler to ./models/GW190425/nsbh/radio_chiEFT_flowjax/scaler.gz
+Going to start training for flowJAX . . .
+Using coupling_flow for unconditional >1D distribution
+Training flowJAX unconditional model on data shape: (198000, 4)
+Validation data shape: (2000, 4)
+Saving the training loss plot to ./models/GW190425/nsbh/radio_chiEFT_flowjax/training_loss.pdf
+Training done. Took around 1.82 minutes
+Saving the flowJAX model to ./models/GW190425/nsbh/radio_chiEFT_flowjax/model.eqx
+Saving the model kwargs to ./models/GW190425/nsbh/radio_chiEFT_flowjax/model_kwargs.json
+DONE training!

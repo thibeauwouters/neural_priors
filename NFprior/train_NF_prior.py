@@ -308,6 +308,9 @@ class NFPriorCreator:
         self.use_component_masses = use_component_masses
 
         self.num_epochs = num_epochs
+        if learning_rate >= 1e-3 and self.use_flowjax:
+            learning_rate = 5e-4
+            print(f"Using a smaller learning rate {learning_rate} for flowJAX training, as it is more stable with this value.")
         self.learning_rate = learning_rate
         self.max_patience = max_patience
         self.n_transforms = n_transforms

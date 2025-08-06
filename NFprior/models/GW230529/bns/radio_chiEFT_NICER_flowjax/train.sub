@@ -1,0 +1,16 @@
+Universe = vanilla
+Executable = /data/gravwav/twouters/miniconda3/envs/eos_source_classification/bin/python
+arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py --population-type GW230529 --source-type bns --eos-samples-name radio_chiEFT_NICER --no-use-tilde --no-use-component-masses --N-samples-training 200000 --N-samples-plot 10000 --m-max-BH 5.0 --no-take-log-lambda --use-flowjax --scale-input --num-epochs 1000 --learning-rate 0.001 --batch-size 1024 --max-patience 100 --n-transforms 4 --n-neurons 64 --n-blocks-per-transform 1 --num-bins 10 --nn-depth 5 --nn-block-dim 8 --validation-split-fraction 0.2"
+getenv = true
+Log = ./models/GW230529/bns/radio_chiEFT_NICER_flowjax/log.log
+Error = ./models/GW230529/bns/radio_chiEFT_NICER_flowjax/err.err
+Output = ./models/GW230529/bns/radio_chiEFT_NICER_flowjax/out.out
+request_memory = 16GB
+request_cpus = 1
+request_disk = 16GB
+request_gpus = 1
+requirements = regexp("L40S", TARGET.GPUs_DeviceName)
++USeOS = "el9"
++JobCategory = "long"
++MaxWallTime = 345600
+Queue 1
