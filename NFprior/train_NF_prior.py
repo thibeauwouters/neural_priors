@@ -332,7 +332,7 @@ class NFPriorCreator:
         if "GW" in self.population_type:
             self.is_gw_event = True
         else:
-            self.is_gw_event = True
+            self.is_gw_event = False
         
         # Set names based on parameterization
         if self.use_component_masses:
