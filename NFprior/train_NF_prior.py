@@ -361,10 +361,6 @@ class NFPriorCreator:
                 Please set either scale_input=False or take_log_lambda=False.\
                 Recommended to use scaling and not log transformation for training (empirically gave best results).")
         
-        # Check flowJAX availability if requested
-        if self.use_flowjax and not globals().get('jax'):
-            raise ImportError("flowJAX requested but JAX/flowJAX not available. Install flowJAX or set use_flowjax=False")
-        
         # Make an outdir based on the given name etc, so that everything is stored in one directory for later on
         backend_suffix = "_flowjax" if self.use_flowjax else ""
         self.outdir = os.path.join("./models/", self.population_type, self.source_type, f"{self.eos_samples_name}{backend_suffix}")
