@@ -30,9 +30,10 @@ def collect_all_bayes_factors(base_dir: str = "../GW_runs/") -> Dict[str, Any]:
         base_dir (str): Base directory path (should be ../GW_runs/)
         
     Returns:
-        Dict with nested structure matching directory layout
+        Dict with nested structure matching directory layout plus log_evidence_err values
     """
     all_bayes_factors = {}
+    log_evidence_errors = []
     
     if not os.path.exists(base_dir):
         print(f"Base directory {base_dir} does not exist")
@@ -86,6 +87,12 @@ def collect_all_bayes_factors(base_dir: str = "../GW_runs/") -> Dict[str, Any]:
                                 result_data = json.load(f)
                                 bayes_factor = result_data.get("log_bayes_factor", 0.0)
                                 all_bayes_factors[gw_event][population_type][source_type][eos_type] = bayes_factor
+                                
+                                # Collect log_evidence_err if available
+                                log_evidence_err = result_data.get("log_evidence_err")
+                                if log_evidence_err is not None:
+                                    log_evidence_errors.append(log_evidence_err)
+                                
                                 print(f"        Found Bayes factor: {bayes_factor}")
                         except (json.JSONDecodeError, KeyError, FileNotFoundError) as e:
                             print(f"        Error reading {result_file}: {e}. Setting to 0.0")
@@ -93,6 +100,10 @@ def collect_all_bayes_factors(base_dir: str = "../GW_runs/") -> Dict[str, Any]:
                     else:
                         print(f"        Result file not found: {result_file}. Setting to 0.0")
                         all_bayes_factors[gw_event][population_type][source_type][eos_type] = 0.0
+    
+    # Add log_evidence_errors to the output dictionary
+    all_bayes_factors["log_evidence_errors"] = log_evidence_errors
+    print(f"Collected {len(log_evidence_errors)} log_evidence_err values")
     
     return all_bayes_factors
 
@@ -112,12 +123,14 @@ def get_jeffreys_color(log10_bf: float) -> str:
         return "jeffreysred5"  # decisive - darkest red
 
 
-def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool = False) -> str:
+def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool = False, source_first: bool = False) -> str:
     """
     Generate LaTeX table code for the Bayes factors data.
     
     Args:
         bayes_factors: Nested dictionary with Bayes factors data
+        include_gw_event: Include GW-event specific population priors
+        source_first: Organize table with source types first, then population types
         
     Returns:
         String containing LaTeX table code
@@ -157,6 +170,20 @@ def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool =
                         if bf_val != 0.0:
                             event_max_values[event] = max(event_max_values[event], bf_val)
     
+    # Choose table layout based on source_first flag
+    if source_first:
+        return generate_source_first_table(bayes_factors, event_max_values, include_gw_event, 
+                                          population_types_display, gw_event_populations)
+    else:
+        return generate_population_first_table(bayes_factors, event_max_values, include_gw_event,
+                                              population_types_display, gw_event_populations)
+
+
+def generate_population_first_table(bayes_factors, event_max_values, include_gw_event, 
+                                   population_types_display, gw_event_populations):
+    """Generate table with population first, then source, then EOS."""
+    latex_lines = []
+    
     # Translation dict for human-readable names
     population_translations = {
         "uniform": "Uniform",
@@ -177,7 +204,6 @@ def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool =
         population_types_display = ["uniform", "gaussian", "double_gaussian", "gw_event"]
     else:
         population_types_display = ["uniform", "gaussian", "double_gaussian"]
-    gw_event_populations = ["GW170817", "GW190425", "GW230529"]
     
     # Create column specification: Population | Source | EOS | GW170817 | GW190425 | GW230529
     latex_lines.append("\\begin{tabular}{|l|l|l|c|c|c|}")
@@ -319,19 +345,198 @@ def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool =
     return "\n".join(latex_lines)
 
 
+def generate_source_first_table(bayes_factors, event_max_values, include_gw_event,
+                               population_types_display, gw_event_populations):
+    """Generate table with source first, then population, then EOS."""
+    latex_lines = []
+    
+    # Translation dict for human-readable names
+    population_translations = {
+        "uniform": "Uniform",
+        "gaussian": "Gaussian", 
+        "double_gaussian": "Double Gaussian",
+        "gw_event": "GW-event"
+    }
+    
+    # EOS incremental formatting
+    eos_translations = {
+        "radio": "Radio",
+        "radio_chiEFT": "+\\chiEFT",
+        "radio_chiEFT_NICER": "+NICER"
+    }
+    
+    # Group population types for display
+    if include_gw_event:
+        population_types_display = ["uniform", "gaussian", "double_gaussian", "gw_event"]
+    else:
+        population_types_display = ["uniform", "gaussian", "double_gaussian"]
+    
+    # Create column specification: Source | Population | EOS | GW170817 | GW190425 | GW230529
+    latex_lines.append("\\begin{tabular}{|l|l|l|c|c|c|}")
+    latex_lines.append("\\hline")
+    latex_lines.append("\\textbf{Source} & \\textbf{Population} & \\textbf{EOS Constraints} & \\textbf{GW170817} & \\textbf{GW190425} & \\textbf{GW230529} \\\\")
+    latex_lines.append("\\hline\\hline")
+    
+    # Generate table rows - source first
+    for source_type in SOURCE_TYPES:
+        source_first_row = True
+        source_row_count = 0
+        
+        # Count total rows for this source type to use multirow
+        for pop_type_display in population_types_display:
+            if pop_type_display == "gw_event" and include_gw_event:
+                pop_types_to_check = gw_event_populations
+            elif pop_type_display == "gw_event":
+                continue  # Skip if gw_event not included
+            else:
+                pop_types_to_check = [pop_type_display]
+                
+            for eos_type in EOS_SAMPLES_NAMES:
+                # Check if this combination has any data across events
+                has_data = any(
+                    event in bayes_factors and 
+                    any(pop_type in bayes_factors[event] and 
+                        source_type in bayes_factors[event][pop_type] and 
+                        eos_type in bayes_factors[event][pop_type][source_type] and
+                        bayes_factors[event][pop_type][source_type][eos_type] != 0.0
+                        for pop_type in pop_types_to_check)
+                    for event in GW_EVENTS
+                )
+                if has_data:
+                    source_row_count += 1
+        
+        if source_row_count == 0:
+            continue
+            
+        for pop_type_display in population_types_display:
+            pop_first_row = True
+            pop_row_count = 0
+            
+            # Determine which population types to check for this display type
+            if pop_type_display == "gw_event" and include_gw_event:
+                pop_types_to_check = gw_event_populations
+            elif pop_type_display == "gw_event":
+                continue  # Skip if gw_event not included
+            else:
+                pop_types_to_check = [pop_type_display]
+            
+            # Count rows for this population type
+            for eos_type in EOS_SAMPLES_NAMES:
+                has_data = any(
+                    event in bayes_factors and 
+                    any(pop_type in bayes_factors[event] and 
+                        source_type in bayes_factors[event][pop_type] and 
+                        eos_type in bayes_factors[event][pop_type][source_type] and
+                        bayes_factors[event][pop_type][source_type][eos_type] != 0.0
+                        for pop_type in pop_types_to_check)
+                    for event in GW_EVENTS
+                )
+                if has_data:
+                    pop_row_count += 1
+            
+            if pop_row_count == 0:
+                continue
+                
+            for eos_type in EOS_SAMPLES_NAMES:
+                # Check if this combination has any data across events
+                has_data = any(
+                    event in bayes_factors and 
+                    any(pop_type in bayes_factors[event] and 
+                        source_type in bayes_factors[event][pop_type] and 
+                        eos_type in bayes_factors[event][pop_type][source_type] and
+                        bayes_factors[event][pop_type][source_type][eos_type] != 0.0
+                        for pop_type in pop_types_to_check)
+                    for event in GW_EVENTS
+                )
+                
+                if not has_data:
+                    continue
+                
+                # Format the row - note order change: source, population, eos
+                source_cell = f"\\multirow{{{source_row_count}}}{{*}}{{{source_type.upper()}}}" if source_first_row else ""
+                pop_cell = f"\\multirow{{{pop_row_count}}}{{*}}{{{population_translations[pop_type_display]}}}" if pop_first_row else ""
+                eos_cell = eos_translations[eos_type]
+                
+                # Get Bayes factors for each event
+                event_cells = []
+                for event in GW_EVENTS:
+                    # For gw_event population, use the event name as the key
+                    # For other populations, use the display type as the key
+                    if pop_type_display == "gw_event" and include_gw_event:
+                        pop_key = event  # Use event name (GW170817, etc.) as the population key
+                    elif pop_type_display == "gw_event":
+                        continue  # Skip if gw_event not included
+                    else:
+                        pop_key = pop_type_display
+                    
+                    if (event in bayes_factors and 
+                        pop_key in bayes_factors[event] and 
+                        source_type in bayes_factors[event][pop_key] and 
+                        eos_type in bayes_factors[event][pop_key][source_type]):
+                        bf_val = bayes_factors[event][pop_key][source_type][eos_type]
+                        if bf_val != 0.0:
+                            # Show difference from maximum value in this column
+                            max_val = event_max_values[event]
+                            if max_val != float('-inf'):
+                                diff = bf_val - max_val
+                                if diff == 0.0:
+                                    event_cells.append(f"\\textbf{{ref.}}")  # Show actual value for maximum
+                                else:
+                                    # Add colored background based on Jeffrey's scale
+                                    color = get_jeffreys_color(diff)
+                                    event_cells.append(f"\\cellcolor{{{color}}}${diff:+.2f}$")  # Show difference with full cell coloring
+                            else:
+                                event_cells.append(f"${bf_val:.2f}$")
+                        else:
+                            event_cells.append("--")
+                    else:
+                        event_cells.append("--")
+                
+                latex_lines.append(f"{source_cell} & {pop_cell} & {eos_cell} & {' & '.join(event_cells)} \\\\")
+                
+                # Add line between radio and +chiEFT
+                if eos_type == "radio":
+                    latex_lines.append("\\cline{3-6}")
+                elif not (source_first_row and pop_first_row):
+                    latex_lines.append("\\cline{3-6}")
+                
+                source_first_row = False
+                pop_first_row = False
+            
+            if not source_first_row:
+                latex_lines.append("\\cline{2-6}")
+        
+        latex_lines.append("\\hline\\hline")
+    
+    # Replace the last double hline with single hline
+    if latex_lines and latex_lines[-1] == "\\hline\\hline":
+        latex_lines[-1] = "\\hline"
+    
+    # Close table
+    latex_lines.append("\\end{tabular}")
+    
+    return "\n".join(latex_lines)
+
+
 def convert_bayes_factors_to_log10(bayes_factors: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Convert all Bayes factors from natural log to log10.
+    Convert all Bayes factors and log evidence errors from natural log to log10.
     
     Args:
-        bayes_factors: Nested dictionary with Bayes factors data
+        bayes_factors: Nested dictionary with Bayes factors data and log_evidence_errors
         
     Returns:
-        Dict with converted Bayes factors
+        Dict with converted Bayes factors and log evidence errors
     """
     converted = {}
     
     for event in bayes_factors:
+        # Handle the log_evidence_errors entry separately
+        if event == "log_evidence_errors":
+            # Convert log evidence errors from ln to log10
+            converted[event] = [err / np.log(10) for err in bayes_factors[event]]
+            continue
+            
         converted[event] = {}
         for population in bayes_factors[event]:
             converted[event][population] = {}
@@ -361,6 +566,8 @@ def main():
                         help='Convert Bayes factors from ln to log10 (default: True)')
     parser.add_argument('--include-gw-event', action='store_true', default=False,
                         help='Include GW-event specific population priors in table (default: False)')
+    parser.add_argument('--source-first', action='store_true', default=True,
+                        help='Organize table with source types first, then population types (default: False)')
     
     args = parser.parse_args()
     
@@ -388,13 +595,23 @@ def main():
         with open(json_file, 'r') as f:
             bayes_factors = json.load(f)
         
+        # Print mean log evidence error before conversion
+        if "log_evidence_errors" in bayes_factors and bayes_factors["log_evidence_errors"]:
+            mean_ln_err = np.mean(bayes_factors["log_evidence_errors"])
+            print(f"Mean log evidence error (ln): {mean_ln_err:.4f}")
+        
         # Convert to log10 if requested
         if args.convert_to_log10:
             print("WARNING: Converting Bayes factors from ln to log10")
             bayes_factors = convert_bayes_factors_to_log10(bayes_factors)
+            
+            # Print mean log evidence error after conversion
+            if "log_evidence_errors" in bayes_factors and bayes_factors["log_evidence_errors"]:
+                mean_log10_err = np.mean(bayes_factors["log_evidence_errors"])
+                print(f"Mean log evidence error (log10): {mean_log10_err:.4f}")
         
-        print(f"Generating LaTeX table and saving to: {latex_file}")
-        latex_table = generate_latex_table(bayes_factors, include_gw_event=args.include_gw_event)
+        print(f"Generating LaTeX table and saving to: {latex_file}. Source_first = {args.source_first}")
+        latex_table = generate_latex_table(bayes_factors, include_gw_event=args.include_gw_event, source_first=args.source_first)
         with open(latex_file, 'w') as f:
             f.write(latex_table)
         
