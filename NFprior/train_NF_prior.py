@@ -202,12 +202,16 @@ parser.add_argument("--num-bins",
                     help="Number of bins for spline flows")
 parser.add_argument("--nn-depth", 
                     type=int, 
-                    default=5, 
+                    default=1, 
                     help="Depth of flowJAX network")
 parser.add_argument("--nn-block-dim", 
                     type=int, 
                     default=8, 
                     help="Block dimension of flowJAX network")
+parser.add_argument("--flow-layers", 
+                    type=int, 
+                    default=1, 
+                    help="Number of flow layers (for flowJAX)")
 parser.add_argument("--validation-split-fraction", 
                     type=float, 
                     default=0.2, 
@@ -247,8 +251,9 @@ class NFPriorCreator:
                  n_blocks_per_transform: int = 4,
                  num_bins: int = 10,
                  # flowJAX-specific training arguments:
-                 nn_depth: int = 5,
+                 nn_depth: int = 1,
                  nn_block_dim: int = 8,
+                 flow_layers: int = 1,
                  validation_split_fraction: float = 0.2
                  ):
         """
@@ -316,6 +321,7 @@ class NFPriorCreator:
         self.n_transforms = n_transforms
         self.n_neurons = n_neurons
         self.nn_depth = nn_depth
+        self.flow_layers = flow_layers
         self.nn_block_dim = nn_block_dim
         self.batch_size = batch_size
         self.n_blocks_per_transform = n_blocks_per_transform
@@ -328,6 +334,7 @@ class NFPriorCreator:
                           "n_neurons": self.n_neurons,
                           "n_blocks_per_transform": self.n_blocks_per_transform,
                           "nn_depth": self.nn_depth,
+                          "flow_layers": self.flow_layers,
                           "nn_block_dim": self.nn_block_dim
                           }
         
@@ -885,9 +892,9 @@ class NFPriorCreator:
         flow = block_neural_autoregressive_flow(
             key=key,
             base_dist=base_dist,
-            flow_layers=self.n_transforms,
             nn_depth=self.nn_depth,
             nn_block_dim=self.nn_block_dim,
+            flow_layers=self.flow_layers,
         )
         
         # Train the flow with validation data
@@ -1025,7 +1032,7 @@ class NFPriorCreator:
                     text=True, 
                     check=True
                 )
-                print(f"Job submitted successfully!")
+                print(f"Job submitted successfully!\n\n\n")
             except Exception as e:
                 print(f"Error submitting job: {e}")
                 return 1
