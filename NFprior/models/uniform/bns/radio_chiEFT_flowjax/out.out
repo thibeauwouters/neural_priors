@@ -21,14 +21,14 @@ Number of good samples:  0.954
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.0068232351777704, 3.351882976152418]
-  m2: range = [1.0000094378891, 3.102207788849133]
-  mass_ratio: range = [0.33295831665108055, 0.9999988933611177]
-  lambda_1: range = [2.663455975215623, 6351.111558682314]
-  lambda_2: range = [3.6545733785432297, 7982.753701669969]
-  lambda_tilde: range = [3.6074335814213456, 6641.59067437767]
-  delta_lambda_tilde: range = [-5.373401778279931, 545.3627188104892]
-  chirp_mass_source: range = [0.8748439375689734, 2.80019067211342]
+  m1: range = [1.00231933298294, 3.3014560195634814]
+  m2: range = [1.0000002484793316, 3.1335539270349986]
+  mass_ratio: range = [0.31975914737362787, 0.9999991791593931]
+  lambda_1: range = [2.5464837103269082, 7321.097391932244]
+  lambda_2: range = [4.321751675685635, 8050.945533455332]
+  lambda_tilde: range = [3.882667022609489, 7520.8579184171585]
+  delta_lambda_tilde: range = [-0.958416382653986, 561.6287234796044]
+  chirp_mass_source: range = [0.8721102600647008, 2.783179844949818]
 Saving to ./models/uniform/bns/radio_chiEFT_flowjax/training_data.npz:
 Saving to ./models/uniform/bns/radio_chiEFT_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -41,11 +41,11 @@ np.shape(self.x)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/bns/radio_chiEFT_flowjax/scaler.gz
 Going to start training for flowJAX . . .
-Using coupling_flow for unconditional >1D distribution
+Using block_neural_autoregressive_flow for flowJAX unconditional distribution
 Training flowJAX unconditional model on data shape: (198000, 4)
 Validation data shape: (2000, 4)
 Saving the training loss plot to ./models/uniform/bns/radio_chiEFT_flowjax/training_loss.pdf
-Training done. Took around 3.55 minutes
+Training done. Took around 11.95 minutes
 Saving the flowJAX model to ./models/uniform/bns/radio_chiEFT_flowjax/model.eqx
 Saving the model kwargs to ./models/uniform/bns/radio_chiEFT_flowjax/model_kwargs.json
 DONE training!

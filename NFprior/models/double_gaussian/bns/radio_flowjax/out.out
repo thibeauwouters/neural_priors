@@ -21,14 +21,14 @@ Number of good samples:  0.9601
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.1470710991777424, 2.765741356804123]
-  m2: range = [0.8660047718484373, 2.4271296897470043]
-  mass_ratio: range = [0.4250810345748501, 0.9999988599244455]
-  lambda_1: range = [2.4777398049978956, 3157.5530109091706]
-  lambda_2: range = [3.8506878730247767, 9176.420992725685]
-  lambda_tilde: range = [3.853755531076489, 3593.580261977554]
-  delta_lambda_tilde: range = [-4.099175938947243, 730.6948711996157]
-  chirp_mass_source: range = [0.9351451021848045, 2.200022114880173]
+  m1: range = [1.1527038683807778, 2.710565144084259]
+  m2: range = [0.8481797374865943, 2.339871962974642]
+  mass_ratio: range = [0.4388921823165758, 0.9999990354044167]
+  lambda_1: range = [2.4777398049978956, 3147.664477798992]
+  lambda_2: range = [3.7944826301059384, 11954.719540470704]
+  lambda_tilde: range = [3.794627482203821, 3788.6919341358803]
+  delta_lambda_tilde: range = [-3.354819104484571, 861.3384986699532]
+  chirp_mass_source: range = [0.9121763493997862, 2.1035119014934422]
 Saving to ./models/double_gaussian/bns/radio_flowjax/training_data.npz:
 Saving to ./models/double_gaussian/bns/radio_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -41,11 +41,11 @@ np.shape(self.x)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/double_gaussian/bns/radio_flowjax/scaler.gz
 Going to start training for flowJAX . . .
-Using coupling_flow for unconditional >1D distribution
+Using block_neural_autoregressive_flow for flowJAX unconditional distribution
 Training flowJAX unconditional model on data shape: (198000, 4)
 Validation data shape: (2000, 4)
 Saving the training loss plot to ./models/double_gaussian/bns/radio_flowjax/training_loss.pdf
-Training done. Took around 3.32 minutes
+Training done. Took around 11.36 minutes
 Saving the flowJAX model to ./models/double_gaussian/bns/radio_flowjax/model.eqx
 Saving the model kwargs to ./models/double_gaussian/bns/radio_flowjax/model_kwargs.json
 DONE training!

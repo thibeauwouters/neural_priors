@@ -868,28 +868,27 @@ class NFPriorCreator:
         
         # Initialize flow
         key = jr.key(42)
-        if self.nf_kwargs["n_inputs"] == 1:
-            # For 1D, use masked autoregressive flow
-            print("Using masked_autoregressive_flow for unconditional 1D distribution")
-            self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
-            flow = masked_autoregressive_flow(
-                key=key,
-                base_dist=base_dist,
-                flow_layers=self.n_transforms,
-                nn_width=self.n_neurons,
-                nn_depth=self.nn_depth
-            )
-        else:
-            # For >1D, use coupling flow
-            print("Using coupling_flow for unconditional >1D distribution")
-            self.nf_kwargs["model_type"] = "coupling_flow"
-            flow = coupling_flow(
-                key=key,
-                base_dist=base_dist,
-                flow_layers=self.n_transforms,
-                nn_width=self.n_neurons,
-                nn_depth=self.nn_depth
-            )
+        # TODO: decide whether we want to be flexible here and restore this piece of code, or rather deprecate coupling and instead hard-code BNAF?
+        # if self.nf_kwargs["n_inputs"] == 1:
+        #     # For 1D, use masked autoregressive flow
+        #     print("Using masked_autoregressive_flow for unconditional 1D distribution")
+        #     self.nf_kwargs["model_type"] = "masked_autoregressive_flow"
+        #     flow = masked_autoregressive_flow(
+        #         key=key,
+        #         base_dist=base_dist,
+        #         flow_layers=self.n_transforms,
+        #         nn_width=self.n_neurons,
+        #         nn_depth=self.nn_depth
+        #     )
+        print("Using block_neural_autoregressive_flow for flowJAX unconditional distribution")
+        self.nf_kwargs["model_type"] = "block_neural_autoregressive_flow"
+        flow = block_neural_autoregressive_flow(
+            key=key,
+            base_dist=base_dist,
+            flow_layers=self.n_transforms,
+            nn_depth=self.nn_depth,
+            nn_block_dim=self.nn_block_dim,
+        )
         
         # Train the flow with validation data
         train_key = jr.key(123)

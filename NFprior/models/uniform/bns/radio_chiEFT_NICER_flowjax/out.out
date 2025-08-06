@@ -21,14 +21,14 @@ Number of good samples:  0.9882
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.0019955796956408, 3.4242246618582386]
-  m2: range = [1.000001092543417, 3.257778606285626]
-  mass_ratio: range = [0.319212274886816, 0.9999997353947766]
-  lambda_1: range = [2.2476116408933184, 5686.656372949752]
-  lambda_2: range = [4.17772468822021, 7722.980113841279]
-  lambda_tilde: range = [3.974909855023807, 5712.962095169095]
-  delta_lambda_tilde: range = [-2.365987989515874, 511.4285409138464]
-  chirp_mass_source: range = [0.8717394269968347, 2.8444364952853003]
+  m1: range = [1.003390414444709, 3.376414885151361]
+  m2: range = [1.000004673832787, 3.12256696183998]
+  mass_ratio: range = [0.33755326352237397, 0.9999985687208421]
+  lambda_1: range = [2.230852280009985, 5208.53363420847]
+  lambda_2: range = [3.08845773744887, 7463.5675003625065]
+  lambda_tilde: range = [2.891165804850956, 5689.269768551884]
+  delta_lambda_tilde: range = [-0.6702597259805387, 498.3764344320417]
+  chirp_mass_source: range = [0.8723610866485697, 2.7224363995169227]
 Saving to ./models/uniform/bns/radio_chiEFT_NICER_flowjax/training_data.npz:
 Saving to ./models/uniform/bns/radio_chiEFT_NICER_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -41,11 +41,11 @@ np.shape(self.x)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/bns/radio_chiEFT_NICER_flowjax/scaler.gz
 Going to start training for flowJAX . . .
-Using coupling_flow for unconditional >1D distribution
+Using block_neural_autoregressive_flow for flowJAX unconditional distribution
 Training flowJAX unconditional model on data shape: (198000, 4)
 Validation data shape: (2000, 4)
 Saving the training loss plot to ./models/uniform/bns/radio_chiEFT_NICER_flowjax/training_loss.pdf
-Training done. Took around 3.73 minutes
+Training done. Took around 13.25 minutes
 Saving the flowJAX model to ./models/uniform/bns/radio_chiEFT_NICER_flowjax/model.eqx
 Saving the model kwargs to ./models/uniform/bns/radio_chiEFT_NICER_flowjax/model_kwargs.json
 DONE training!

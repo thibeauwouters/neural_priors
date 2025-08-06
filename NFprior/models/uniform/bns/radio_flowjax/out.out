@@ -21,14 +21,14 @@ Number of good samples:  0.9601
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.0031056493807464, 3.6799749755135442]
-  m2: range = [1.0000079248686424, 3.3617922190016403]
-  mass_ratio: range = [0.31819302513184616, 0.9999980595036785]
-  lambda_1: range = [2.7234061026517895, 6273.88859301357]
-  lambda_2: range = [2.9731498750127856, 8219.705155904876]
-  lambda_tilde: range = [2.9617794013335663, 6523.3422843352355]
-  delta_lambda_tilde: range = [9.302444269447161e-05, 521.4888692045208]
-  chirp_mass_source: range = [0.8727146238594647, 2.932612489342372]
+  m1: range = [1.001091066578914, 3.4862082849817826]
+  m2: range = [1.0000015703430207, 3.3142504288015866]
+  mass_ratio: range = [0.3290225042110218, 0.9999966259607596]
+  lambda_1: range = [2.722079730980682, 7026.690960881038]
+  lambda_2: range = [4.393506739704694, 8233.348442803066]
+  lambda_tilde: range = [3.887297694670813, 7226.752990669322]
+  delta_lambda_tilde: range = [-4.341529653129182, 518.7166613653648]
+  chirp_mass_source: range = [0.8712492816111653, 2.933855831663978]
 Saving to ./models/uniform/bns/radio_flowjax/training_data.npz:
 Saving to ./models/uniform/bns/radio_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -41,11 +41,11 @@ np.shape(self.x)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/bns/radio_flowjax/scaler.gz
 Going to start training for flowJAX . . .
-Using coupling_flow for unconditional >1D distribution
+Using block_neural_autoregressive_flow for flowJAX unconditional distribution
 Training flowJAX unconditional model on data shape: (198000, 4)
 Validation data shape: (2000, 4)
 Saving the training loss plot to ./models/uniform/bns/radio_flowjax/training_loss.pdf
-Training done. Took around 2.93 minutes
+Training done. Took around 9.87 minutes
 Saving the flowJAX model to ./models/uniform/bns/radio_flowjax/model.eqx
 Saving the model kwargs to ./models/uniform/bns/radio_flowjax/model_kwargs.json
 DONE training!

@@ -11,7 +11,7 @@
         "luminosity_distance"
     ],
     "n_inputs": 4,
-    "model_type": "coupling_flow",
+    "model_type": "block_neural_autoregressive_flow",
     "source_type": "nsbh",
     "N_samples_training": 200000,
     "m_max_BH": 5.0,

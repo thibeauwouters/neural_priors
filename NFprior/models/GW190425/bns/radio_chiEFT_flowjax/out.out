@@ -27,16 +27,16 @@ Loaded priors: {'chirp_mass': Uniform(minimum=1.485, maximum=1.49, name='chirp_m
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.545363958857492, 2.425535255831219]
-  m2: range = [1.1061887044171257, 1.6912786883494877]
-  mass_ratio: range = [0.5000015242346819, 0.999992595893361]
-  lambda_1: range = [2.675383033817586, 1107.918358937145]
-  lambda_2: range = [36.72101344230627, 4868.012592567279]
-  lambda_tilde: range = [31.655057223238245, 1123.5802358779115]
-  delta_lambda_tilde: range = [-2.9152584015115948, 297.18717114175354]
-  chirp_mass_source: range = [1.3440837629667022, 1.486476415361389]
-  chirp_mass: range = [1.4850000164279955, 1.489999911667337]
-  luminosity_distance: range = [6.848617269616126, 499.9992137392238]
+  m1: range = [1.5458272831370719, 2.4320643190345668]
+  m2: range = [1.1059585782418733, 1.6981130330384764]
+  mass_ratio: range = [0.5000001634270661, 0.9999978746913197]
+  lambda_1: range = [2.629843725459263, 1098.814974422128]
+  lambda_2: range = [36.818699891378266, 5119.837960012092]
+  lambda_tilde: range = [31.0605794867218, 1137.56235625898]
+  delta_lambda_tilde: range = [-2.7686750045509108, 280.0252386637711]
+  chirp_mass_source: range = [1.344101056500861, 1.4858636499788902]
+  chirp_mass: range = [1.4850000291404641, 1.4899999808174642]
+  luminosity_distance: range = [8.074914246130069, 499.99765795168423]
 Saving to ./models/GW190425/bns/radio_chiEFT_flowjax/training_data.npz:
 Saving to ./models/GW190425/bns/radio_chiEFT_flowjax/training_data.npz DONE
 Using detector-frame chirp mass from the GW event and mass ratio (Mc_det, q) for training
@@ -50,11 +50,11 @@ np.shape(self.x)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/GW190425/bns/radio_chiEFT_flowjax/scaler.gz
 Going to start training for flowJAX . . .
-Using coupling_flow for unconditional >1D distribution
+Using block_neural_autoregressive_flow for flowJAX unconditional distribution
 Training flowJAX unconditional model on data shape: (198000, 5)
 Validation data shape: (2000, 5)
 Saving the training loss plot to ./models/GW190425/bns/radio_chiEFT_flowjax/training_loss.pdf
-Training done. Took around 5.67 minutes
+Training done. Took around 8.82 minutes
 Saving the flowJAX model to ./models/GW190425/bns/radio_chiEFT_flowjax/model.eqx
 Saving the model kwargs to ./models/GW190425/bns/radio_chiEFT_flowjax/model_kwargs.json
 DONE training!

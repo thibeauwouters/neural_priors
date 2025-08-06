@@ -1,7 +1,7 @@
 Traceback (most recent call last):
-  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 1067, in <module>
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 1066, in <module>
     exit(main() or 0)
-  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 1063, in main
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 1062, in main
     trainer.create_data()
   File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py", line 575, in create_data
     m1_list[i] = m1
