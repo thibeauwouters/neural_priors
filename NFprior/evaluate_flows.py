@@ -171,19 +171,13 @@ class CheckerBNS(Checker):
             key = jr.key(42)
             
             # Recreate the flow architecture to match training code
-            model_type = nf_kwargs.get("model_type", "block_neural_autoregressive_flow")
-            print("Loading flowJAX BNS model, model_type:", model_type)
-            if model_type != "block_neural_autoregressive_flow":
-                raise ValueError(f"Unsupported model type: {model_type}. Expected 'block_neural_autoregressive_flow' only for now.")
-            else:
-                flow = block_neural_autoregressive_flow(
-                    key=key,
-                    base_dist=base_dist,
-                    cond_dim=2,
-                    # flow_layers=self.n_transforms, # TODO: perhaps tune this, for now, use default value
-                    nn_depth=self.nf_kwargs["nn_depth"],
-                    nn_block_dim=self.nf_kwargs["nn_block_dim"]
-                )
+            flow = block_neural_autoregressive_flow(
+                key=key,
+                base_dist=base_dist,
+                nn_depth=self.nf_kwargs["nn_depth"],
+                nn_block_dim=self.nf_kwargs["nn_block_dim"],
+                flow_layers=self.nf_kwargs["flow_layers"],
+            )
             
             print(f"Loading flowJAX model from {nf_path}")
             flow = eqx.tree_deserialise_leaves(nf_path, flow)
@@ -653,6 +647,14 @@ class CheckerUnconditional(Checker):
                     flow_layers=nf_kwargs["n_transforms"],
                     nn_width=nf_kwargs["n_neurons"],
                     nn_depth=nf_kwargs["nn_depth"]
+                )
+            elif model_type == "block_neural_autoregressive_flow":
+                flow = block_neural_autoregressive_flow(
+                    key=key,
+                    base_dist=base_dist,
+                    flow_layers=nf_kwargs["flow_layers"],
+                    nn_depth=nf_kwargs["nn_depth"],
+                    nn_block_dim=nf_kwargs["nn_block_dim"]
                 )
             else:
                 raise ValueError(f"Unsupported flowJAX model type: {model_type}")
