@@ -130,3 +130,94 @@
 
 	Job terminated of its own accord at 2025-08-06T16:19:30Z with exit-code 0.
 ...
+000 (2588091.000.000) 2025-08-06 18:58:22 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+001 (2588091.000.000) 2025-08-06 18:58:45 Job executing on host: <145.107.4.168:9618?addrs=145.107.4.168-9618+[2a07-8500-120-e070--a8]-9618&alias=wn-pijl-007.nikhef.nl&noUDP&sock=startd_4419_a519>
+	SlotName: slot1_4@wn-pijl-007.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_17c4be5e_b3fe_fa20_a680_01cb012c066e }
+	CondorScratchDir = "/scratch/condor_execute/dir_44785"
+	Cpus = 1
+	Disk = 16790397
+	GPUs = 1
+	GPUs_GPU_17c4be5e_b3fe_fa20_a680_01cb012c066e = [ Id = "GPU-17c4be5e-b3fe-fa20-a680-01cb012c066e"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "17c4be5e-b3fe-fa20-a680-01cb012c066e"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "570.124.06"; DriverVersion = 12.8; DevicePciBusId = "0000:C2:00.0"; GlobalMemoryMb = 45468; MaxSupportedVersion = 12080 ]
+	Memory = 16384
+...
+006 (2588091.000.000) 2025-08-06 18:58:59 Image size of job updated: 651972
+	637  -  MemoryUsage of job (MB)
+	651972  -  ResidentSetSize of job (KB)
+...
+006 (2588091.000.000) 2025-08-06 19:04:00 Image size of job updated: 3355612
+	3277  -  MemoryUsage of job (MB)
+	3355612  -  ResidentSetSize of job (KB)
+...
+006 (2588091.000.000) 2025-08-06 19:06:53 Image size of job updated: 3731276
+	3277  -  MemoryUsage of job (MB)
+	3355612  -  ResidentSetSize of job (KB)
+...
+004 (2588091.000.000) 2025-08-06 19:06:53 Job was evicted.
+	(0) CPU times
+		Usr 0 00:06:36, Sys 0 00:00:44  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     0.81        1         1 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :     0.45        1         1 "GPU-17c4be5e-b3fe-fa20-a680-01cb012c066e"
+	   GpusMemory (MB)      : 35158                       
+	   Memory (MB)          :  3277       16384     16384 
+	   TimeExecute (s)      :   488                       
+	   TimeSlotBusy (s)     :   488                       
+...
+009 (2588091.000.000) 2025-08-06 19:06:53 Job was aborted.
+	via condor_rm (by user twouters)
+...
+000 (2588109.000.000) 2025-08-06 19:07:50 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+001 (2588109.000.000) 2025-08-06 19:08:44 Job executing on host: <145.107.4.168:9618?addrs=145.107.4.168-9618+[2a07-8500-120-e070--a8]-9618&alias=wn-pijl-007.nikhef.nl&noUDP&sock=startd_4419_a519>
+	SlotName: slot1_4@wn-pijl-007.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_17c4be5e_b3fe_fa20_a680_01cb012c066e }
+	CondorScratchDir = "/scratch/condor_execute/dir_69637"
+	Cpus = 1
+	Disk = 16790397
+	GPUs = 1
+	GPUs_GPU_17c4be5e_b3fe_fa20_a680_01cb012c066e = [ Id = "GPU-17c4be5e-b3fe-fa20-a680-01cb012c066e"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "17c4be5e-b3fe-fa20-a680-01cb012c066e"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "570.124.06"; DriverVersion = 12.8; DevicePciBusId = "0000:C2:00.0"; GlobalMemoryMb = 45468; MaxSupportedVersion = 12080 ]
+	Memory = 16384
+...
+006 (2588109.000.000) 2025-08-06 19:08:58 Image size of job updated: 660568
+	646  -  MemoryUsage of job (MB)
+	660568  -  ResidentSetSize of job (KB)
+...
+006 (2588109.000.000) 2025-08-06 19:13:58 Image size of job updated: 3389932
+	3311  -  MemoryUsage of job (MB)
+	3389932  -  ResidentSetSize of job (KB)
+...
+006 (2588109.000.000) 2025-08-06 19:18:59 Image size of job updated: 4051836
+	3957  -  MemoryUsage of job (MB)
+	4051836  -  ResidentSetSize of job (KB)
+...
+006 (2588109.000.000) 2025-08-06 19:22:19 Image size of job updated: 4484784
+	3957  -  MemoryUsage of job (MB)
+	4051836  -  ResidentSetSize of job (KB)
+...
+005 (2588109.000.000) 2025-08-06 19:22:19 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:10:54, Sys 0 00:01:12  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:10:54, Sys 0 00:01:12  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     0.81        1         1 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :     0.46        1         1 "GPU-17c4be5e-b3fe-fa20-a680-01cb012c066e"
+	   GpusMemory (MB)      : 35160                       
+	   Memory (MB)          :  3957       16384     16384 
+	   TimeExecute (s)      :   815                       
+	   TimeSlotBusy (s)     :   815                       
+
+	Job terminated of its own accord at 2025-08-06T17:22:19Z with exit-code 0.
+...

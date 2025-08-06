@@ -1,0 +1,29 @@
+{
+    "n_transforms": 4,
+    "n_neurons": 64,
+    "n_blocks_per_transform": 1,
+    "nn_depth": 4,
+    "flow_layers": 4,
+    "nn_block_dim": 24,
+    "names": [
+        "chirp_mass_source",
+        "mass_ratio",
+        "lambda_2"
+    ],
+    "n_inputs": 3,
+    "model_type": "block_neural_autoregressive_flow",
+    "source_type": "nsbh",
+    "N_samples_training": 200000,
+    "m_max_BH": 5.0,
+    "num_epochs": 2000,
+    "learning_rate": 0.0005,
+    "max_patience": 250,
+    "batch_size": 1024,
+    "num_bins": 10,
+    "eos_samples_filename": "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT_NICER/eos_samples.npz",
+    "training_filename": "./models/uniform/nsbh/radio_chiEFT_NICER_flowjax/training_data.npz",
+    "take_log_lambda": "False",
+    "use_flowjax": "True",
+    "use_tilde": "False",
+    "use_component_masses": "False"
+}

@@ -4,7 +4,7 @@ torch: Current CUDA device: 0
 Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT_NICER/eos_samples.npz
 Training a normalizing flow for population =  gaussian and bns sources
 Using a smaller learning rate 0.0005 for flowJAX training, as it is more stable with this value.
-Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], 'n_inputs': 4}
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 4, 'flow_layers': 4, 'nn_block_dim': 24, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], 'n_inputs': 4}
 Everything for this model will be saved to ./models/gaussian/bns/radio_chiEFT_NICER_flowjax
 Using flowJAX, so setting validation_split_fraction to 0.01 (no validation split)
 Starting training with the following parameters:
@@ -21,14 +21,14 @@ Number of good samples:  0.9882
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.0501431280052689, 1.766036339225388]
-  m2: range = [0.9316920870048656, 1.5724999567877016]
-  mass_ratio: range = [0.6357684034212377, 0.9999997845334175]
-  lambda_1: range = [63.157063685288804, 3233.247729917307]
-  lambda_2: range = [118.73614816541203, 6042.025693867122]
-  lambda_tilde: range = [97.34949897395074, 3846.0610200391634]
-  delta_lambda_tilde: range = [-6.182784132488845, 404.0920318284339]
-  chirp_mass_source: range = [0.895990625657581, 1.4188039145895717]
+  m1: range = [1.0787084754907172, 1.7164568066619235]
+  m2: range = [0.9216541562193394, 1.5742380263168734]
+  mass_ratio: range = [0.6187352959776328, 0.9999982865892406]
+  lambda_1: range = [76.96554983296312, 3362.1589137163855]
+  lambda_2: range = [125.43400422307778, 6810.289791793657]
+  lambda_tilde: range = [111.56596806068228, 3860.867199073024]
+  delta_lambda_tilde: range = [-8.155591827889138, 503.79533901169134]
+  chirp_mass_source: range = [0.9142465057912885, 1.392819649853938]
 Saving to ./models/gaussian/bns/radio_chiEFT_NICER_flowjax/training_data.npz:
 Saving to ./models/gaussian/bns/radio_chiEFT_NICER_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -45,7 +45,7 @@ Using block_neural_autoregressive_flow for flowJAX unconditional distribution
 Training flowJAX unconditional model on data shape: (198000, 4)
 Validation data shape: (2000, 4)
 Saving the training loss plot to ./models/gaussian/bns/radio_chiEFT_NICER_flowjax/training_loss.pdf
-Training done. Took around 3.73 minutes
+Training done. Took around 22.37 minutes
 Saving the flowJAX model to ./models/gaussian/bns/radio_chiEFT_NICER_flowjax/model.eqx
 Saving the model kwargs to ./models/gaussian/bns/radio_chiEFT_NICER_flowjax/model_kwargs.json
 DONE training!

@@ -543,7 +543,8 @@ class NFPriorCreator:
                     Lambda_1 = np.interp(m1, m, l)
                     Lambda_2 = np.interp(m2, m, l)
                 
-                elif self.population_type == "nsbh":
+                # FIXME: just 'else' is safer...
+                elif self.source_type == "nsbh":
                     # This automatically satisfies m1 >= m2
                     m1 = np.random.uniform(mtov, self.m_max_BH, 1)[0]
                     
