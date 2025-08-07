@@ -74,6 +74,9 @@ parser.add_argument('--population-type',
                     type = str,
                     default = "uniform",
                     help = "Population type for NF model path construction (e.g., uniform)")
+parser.add_argument('--use-flowjax',
+                    action = 'store_true',
+                    help = "Use FlowJAX for the NF model. If not set, will use PyTorch.")
 parser.add_argument('--waveform-model',
                     type = str,
                     default = 'IMRPhenomXP_NRTidalv3',
@@ -355,11 +358,14 @@ else:
         prior_dict.pop('luminosity_distance', None)
         
     # Path to NF model - updated to match new folder structure
-    nf_model_path = os.path.join(base_dir, f"NFprior/models/{args.population_type}/{args.prior_name}/{args.eos_samples_name}/model.pt")
+    if args.use_flowjax:
+        nf_model_path = os.path.join(base_dir, f"NFprior/models/{args.population_type}/{args.prior_name}/{args.eos_samples_name}_flowjax/model.eqx")
+    else:
+        nf_model_path = os.path.join(base_dir, f"NFprior/models/{args.population_type}/{args.prior_name}/{args.eos_samples_name}/model.pt")
     nf_model_path = os.path.abspath(nf_model_path)
     logger.info(f"Using NF model path: {nf_model_path}")
     
-    nf_kwargs_filename = nf_model_path.replace('.pt', '_kwargs.json')
+    nf_kwargs_filename = nf_model_path.replace('.pt', '_kwargs.json').replace('.eqx', '_kwargs.json')
     if os.path.exists(nf_kwargs_filename):
         with open(nf_kwargs_filename, 'r') as f:
             nf_kwargs = json.load(f)
