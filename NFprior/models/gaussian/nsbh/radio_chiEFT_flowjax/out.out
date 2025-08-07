@@ -4,7 +4,7 @@ torch: Current CUDA device: 0
 Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
 Training a normalizing flow for population =  gaussian and nsbh sources
 Using a smaller learning rate 0.0005 for flowJAX training, as it is more stable with this value.
-Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 4, 'flow_layers': 4, 'nn_block_dim': 24, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
 Everything for this model will be saved to ./models/gaussian/nsbh/radio_chiEFT_flowjax
 Using flowJAX, so setting validation_split_fraction to 0.01 (no validation split)
 Starting training with the following parameters:
@@ -21,14 +21,14 @@ Number of good samples:  0.954
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.0015623658730344, 4.999998348203297]
-  m2: range = [0.9293850646732513, 1.7185011683799272]
-  mass_ratio: range = [0.19056805922590828, 0.7822075666822191]
+  m1: range = [2.0046055792850828, 4.999998757510639]
+  m2: range = [0.8829672536144807, 1.7506182194263524]
+  mass_ratio: range = [0.19512013392428132, 0.7652917345862901]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [60.010139437906446, 5779.552971288688]
-  lambda_tilde: range = [2.4002632855733914, 515.0939889458999]
-  delta_lambda_tilde: range = [1.2254519679553795, 248.69053931219025]
-  chirp_mass_source: range = [1.216196832392663, 2.4753932285858564]
+  lambda_2: range = [44.07140556160251, 6972.82961383016]
+  lambda_tilde: range = [2.399935608026051, 561.3843202623397]
+  delta_lambda_tilde: range = [1.2287245617279172, 270.3551432791653]
+  chirp_mass_source: range = [1.2686990458736367, 2.4338901230793315]
 Saving to ./models/gaussian/nsbh/radio_chiEFT_flowjax/training_data.npz:
 Saving to ./models/gaussian/nsbh/radio_chiEFT_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -36,16 +36,47 @@ Using component parameterization for lambdas (lambda_1, lambda_2)
 Training samples: 198000, Validation samples: 2000
 Creating the training data arrays
 NSBH and training on lambda_2 (3D)
+Parameter bounds validation completed
 np.shape(self.x)
 (198000, 3)
-Using MinMaxScaler to scale the input data x
-Saved sklearn scaler to ./models/gaussian/nsbh/radio_chiEFT_flowjax/scaler.gz
+WARNING: Disabling MinMaxScaler when using constrained flowjax distributions
+The bijections handle parameter scaling internally to respect bounds
 Going to start training for flowJAX . . .
 Using block_neural_autoregressive_flow for flowJAX unconditional distribution
-Training flowJAX unconditional model on data shape: (198000, 3)
-Validation data shape: (2000, 3)
+Using constrained training approach (Option 2): transform data to unbounded space
+Applied identity (unbounded) to parameter 0: chirp_mass_source
+Applied mass_ratio constraint [0.1, 1.0] to parameter 1: mass_ratio
+Applied lambda constraint > 0 to parameter 2: lambda_2
+Transforming training data to unbounded space
+Applying constraints to trained flow
+Created constrained flow with bijection: Stack(
+  shape=(3,),
+  cond_shape=None,
+  bijections=[
+    Identity(),
+    Chain(
+      shape=(),
+      cond_shape=None,
+      bijections=(
+        Sigmoid(),
+        Affine(
+          shape=(),
+          loc=f32[],
+          scale=Parameterize(
+            fn=<PjitFunction of <function softplus at 0x14b8aef3d090>>,
+            args=(f32[],),
+            kwargs={}
+          )
+        )
+      )
+    ),
+    SoftPlus()
+  ],
+  axis=0
+)
+Training flowJAX model on data shape: (198000, 3)
 Saving the training loss plot to ./models/gaussian/nsbh/radio_chiEFT_flowjax/training_loss.pdf
-Training done. Took around 10.22 minutes
+Training done. Took around 21.49 minutes
 Saving the flowJAX model to ./models/gaussian/nsbh/radio_chiEFT_flowjax/model.eqx
 Saving the model kwargs to ./models/gaussian/nsbh/radio_chiEFT_flowjax/model_kwargs.json
 DONE training!

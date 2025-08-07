@@ -4,7 +4,7 @@ torch: Current CUDA device: 0
 Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
 Training a normalizing flow for population =  double_gaussian and nsbh sources
 Using a smaller learning rate 0.0005 for flowJAX training, as it is more stable with this value.
-Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 4, 'flow_layers': 4, 'nn_block_dim': 24, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
 Everything for this model will be saved to ./models/double_gaussian/nsbh/radio_flowjax
 Using flowJAX, so setting validation_split_fraction to 0.01 (no validation split)
 Starting training with the following parameters:
@@ -21,14 +21,14 @@ Number of good samples:  0.9601
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.002504844690283, 4.999976583072284]
-  m2: range = [0.9463863200854941, 2.674216143857368]
-  mass_ratio: range = [0.21261828740645125, 1.149234104746622]
+  m1: range = [2.0080543255869996, 4.999987171278746]
+  m2: range = [0.9144898238587361, 2.6092839963940326]
+  mass_ratio: range = [0.2090995209315014, 1.1372075409509683]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [2.5388716901955526, 5064.804182611843]
-  lambda_tilde: range = [0.28264365686402226, 421.35114660251793]
-  delta_lambda_tilde: range = [0.13892087379536544, 198.87388810876723]
-  chirp_mass_source: range = [1.3146844936483997, 3.074309369613368]
+  lambda_2: range = [2.4777398049978956, 6105.134464440333]
+  lambda_tilde: range = [0.28955513400249283, 410.69998611710434]
+  delta_lambda_tilde: range = [0.14038782083749296, 192.57169169080964]
+  chirp_mass_source: range = [1.323815352676288, 3.0397949838800047]
 Saving to ./models/double_gaussian/nsbh/radio_flowjax/training_data.npz:
 Saving to ./models/double_gaussian/nsbh/radio_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -36,16 +36,50 @@ Using component parameterization for lambdas (lambda_1, lambda_2)
 Training samples: 198000, Validation samples: 2000
 Creating the training data arrays
 NSBH and training on lambda_2 (3D)
+WARNING: 83/198000 training samples violate mass_ratio bounds [0.1, 1.0]
+  Range in data: [0.2091, 1.1372]
+WARNING: 1/2000 validation samples violate mass_ratio bounds
+Parameter bounds validation completed
 np.shape(self.x)
 (198000, 3)
-Using MinMaxScaler to scale the input data x
-Saved sklearn scaler to ./models/double_gaussian/nsbh/radio_flowjax/scaler.gz
+WARNING: Disabling MinMaxScaler when using constrained flowjax distributions
+The bijections handle parameter scaling internally to respect bounds
 Going to start training for flowJAX . . .
 Using block_neural_autoregressive_flow for flowJAX unconditional distribution
-Training flowJAX unconditional model on data shape: (198000, 3)
-Validation data shape: (2000, 3)
+Using constrained training approach (Option 2): transform data to unbounded space
+Applied identity (unbounded) to parameter 0: chirp_mass_source
+Applied mass_ratio constraint [0.1, 1.0] to parameter 1: mass_ratio
+Applied lambda constraint > 0 to parameter 2: lambda_2
+Transforming training data to unbounded space
+Applying constraints to trained flow
+Created constrained flow with bijection: Stack(
+  shape=(3,),
+  cond_shape=None,
+  bijections=[
+    Identity(),
+    Chain(
+      shape=(),
+      cond_shape=None,
+      bijections=(
+        Sigmoid(),
+        Affine(
+          shape=(),
+          loc=f32[],
+          scale=Parameterize(
+            fn=<PjitFunction of <function softplus at 0x14ea54ea9090>>,
+            args=(f32[],),
+            kwargs={}
+          )
+        )
+      )
+    ),
+    SoftPlus()
+  ],
+  axis=0
+)
+Training flowJAX model on data shape: (198000, 3)
 Saving the training loss plot to ./models/double_gaussian/nsbh/radio_flowjax/training_loss.pdf
-Training done. Took around 12.72 minutes
+Training done. Took around 28.99 minutes
 Saving the flowJAX model to ./models/double_gaussian/nsbh/radio_flowjax/model.eqx
 Saving the model kwargs to ./models/double_gaussian/nsbh/radio_flowjax/model_kwargs.json
 DONE training!

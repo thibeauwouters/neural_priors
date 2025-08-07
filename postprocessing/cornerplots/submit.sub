@@ -1,6 +1,6 @@
 Universe = vanilla
-Executable = /bin/bash
-arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/run_cornerplots.sh"
+Executable = /data/gravwav/twouters/miniconda3/envs/eos_source_classification/bin/python
+arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/cornerplots.py --run-all --gw-event GW190425"
 getenv = true
 Log = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/log.log
 Error = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/err.err

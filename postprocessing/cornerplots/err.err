@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/cornerplots.py", line 620, in <module>
+    main()
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/cornerplots.py", line 595, in main
+    run_all_corner_plots(args.gw_event)
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/cornerplots.py", line 519, in run_all_corner_plots
+    create_corner_plot(
+  File "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/postprocessing/cornerplots/cornerplots.py", line 339, in create_corner_plot
+    fig = corner.corner(samples, labels=latex_labels, truths=truths, **group_kwargs[group_name])
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/corner/corner.py", line 280, in corner
+    return arviz_corner(
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/corner/arviz_corner.py", line 136, in arviz_corner
+    fig = corner_impl(
+  File "/data/gravwav/twouters/miniconda3/envs/eos_source_classification/lib/python3.10/site-packages/corner/core.py", line 152, in corner_impl
+    raise ValueError(
+ValueError: It looks like the parameter(s) in column(s) 4 have no dynamic range. Please provide a `range` argument.

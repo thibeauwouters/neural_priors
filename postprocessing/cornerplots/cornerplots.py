@@ -463,92 +463,90 @@ def create_corner_plot(GW_event: str,
     
                             
                 
-def run_all_corner_plots():
+def run_all_corner_plots(gw_event: str = "GW170817"):
     """
-    Run all corner plots for GW170817 and GW190425 using the new comparison mode approach.
+    Run all corner plots for the given GW event using the new comparison mode approach.
     This replicates the functionality previously in run_cornerplots.sh.
     """
-    base_dir = "../GW_runs/"
-    gw_events = ["GW170817", "GW190425"]
+    base_dir = "../../GW_runs/"
     
-    for gw_event in gw_events:
-        print(f"Generating comparison corner plots for {gw_event}...")
-        
-        # Source comparison plots (fix population + eos, vary source)
-        populations = ["uniform", "gaussian", "double_gaussian", gw_event]
-        eos_types = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
-        
-        for population in populations:
-            for eos in eos_types:
-                print(f"  Source comparison: population={population}, eos={eos}")
-                # With lambda conversion
-                create_corner_plot(
-                    GW_event=gw_event,
-                    comparison_mode="source",
-                    population_type=population,
-                    eos_samples_name=eos,
-                    base_path=base_dir,
-                    convert_lambdas=True,
-                    plot_hauke=True
-                )
-                # Without lambda conversion
-                create_corner_plot(
-                    GW_event=gw_event,
-                    comparison_mode="source",
-                    population_type=population,
-                    eos_samples_name=eos,
-                    base_path=base_dir,
-                    convert_lambdas=False,
-                    plot_hauke=True
-                )
-        
-        # Population comparison plots (fix source + eos, vary population)
-        sources = ["bns", "nsbh"]
-        
+    print(f"Generating ALL comparison corner plots for {gw_event}...")
+    
+    # Source comparison plots (fix population + eos, vary source)
+    populations = ["uniform", "gaussian", "double_gaussian", gw_event]
+    eos_types = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
+    
+    for population in populations:
+        for eos in eos_types:
+            print(f"  Source comparison: population={population}, eos={eos}")
+            # With lambda conversion
+            create_corner_plot(
+                GW_event=gw_event,
+                comparison_mode="source",
+                population_type=population,
+                eos_samples_name=eos,
+                base_path=base_dir,
+                convert_lambdas=True,
+                plot_hauke=False
+            )
+            # Without lambda conversion
+            create_corner_plot(
+                GW_event=gw_event,
+                comparison_mode="source",
+                population_type=population,
+                eos_samples_name=eos,
+                base_path=base_dir,
+                convert_lambdas=False,
+                plot_hauke=False
+            )
+    
+    # Population comparison plots (fix source + eos, vary population)
+    sources = ["bns", "nsbh"]
+    
+    for source in sources:
+        for eos in eos_types:
+            print(f"  Population comparison: source={source}, eos={eos}")
+            # With lambda conversion
+            create_corner_plot(
+                GW_event=gw_event,
+                comparison_mode="population",
+                source_type=source,
+                eos_samples_name=eos,
+                base_path=base_dir,
+                convert_lambdas=True
+            )
+            # Without lambda conversion
+            create_corner_plot(
+                GW_event=gw_event,
+                comparison_mode="population",
+                source_type=source,
+                eos_samples_name=eos,
+                base_path=base_dir,
+                convert_lambdas=False
+            )
+    
+    # EOS comparison plots (fix population + source, vary eos)
+    for population in populations:
         for source in sources:
-            for eos in eos_types:
-                print(f"  Population comparison: source={source}, eos={eos}")
-                # With lambda conversion
-                create_corner_plot(
-                    GW_event=gw_event,
-                    comparison_mode="population",
-                    source_type=source,
-                    eos_samples_name=eos,
-                    base_path=base_dir,
-                    convert_lambdas=True
-                )
-                # Without lambda conversion
-                create_corner_plot(
-                    GW_event=gw_event,
-                    comparison_mode="population",
-                    source_type=source,
-                    eos_samples_name=eos,
-                    base_path=base_dir,
-                    convert_lambdas=False
-                )
-        
-        # EOS comparison plots (fix population + source, vary eos)
-        for population in populations:
-            for source in sources:
-                print(f"  EOS comparison: population={population}, source={source}")
-                # With lambda conversion
-                create_corner_plot(
-                    GW_event=gw_event,
-                    comparison_mode="eos",
-                    population_type=population,
-                    source_type=source,
-                    base_path=base_dir,
-                    convert_lambdas=True
-                )
-                # Without lambda conversion
-                create_corner_plot(
-                    GW_event=gw_event,
-                    comparison_mode="eos",
-                    population_type=population,
-                    source_type=source,
-                    base_path=base_dir,
-                    convert_lambdas=False
-                )
+            print(f"  EOS comparison: population={population}, source={source}")
+            # With lambda conversion
+            create_corner_plot(
+                GW_event=gw_event,
+                comparison_mode="eos",
+                population_type=population,
+                source_type=source,
+                base_path=base_dir,
+                convert_lambdas=True
+            )
+            # Without lambda conversion
+            create_corner_plot(
+                GW_event=gw_event,
+                comparison_mode="eos",
+                population_type=population,
+                source_type=source,
+                base_path=base_dir,
+                convert_lambdas=False
+            )
     
     print("")
     print("Corner plot generation complete!")
@@ -590,15 +588,11 @@ def main():
                         help='Prevent BNS leakage by masking negative delta_lambda_tilde')
     parser.add_argument('--run-all', action='store_true',
                         help='Run all corner plots (equivalent to the old bash script)')
-    parser.add_argument('--batch-mode', action='store_true',
-                        help='Run in batch mode (old behavior for testing)')
     
     args = parser.parse_args()
     
     if args.run_all:
-        run_all_corner_plots()
-    elif args.batch_mode:
-        print("Batch mode is deprecated. Use individual calls with comparison modes instead.")
+        run_all_corner_plots(args.gw_event)
     elif args.gw_event:
         create_corner_plot(
             GW_event=args.gw_event,
@@ -617,8 +611,10 @@ def main():
         )
     else:
         # If no specific arguments provided, run all corner plots
-        print("No specific GW event provided. Running all corner plots...")
-        run_all_corner_plots()
+        print("No specific GW event provided. Running ALL corner plots...")
+        run_all_corner_plots("GW170817")
+        run_all_corner_plots("GW190425")
+        run_all_corner_plots("GW230529")
             
 if __name__ == "__main__":
     main()

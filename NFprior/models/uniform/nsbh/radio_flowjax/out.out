@@ -4,7 +4,7 @@ torch: Current CUDA device: 0
 Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
 Training a normalizing flow for population =  uniform and nsbh sources
 Using a smaller learning rate 0.0005 for flowJAX training, as it is more stable with this value.
-Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 4, 'flow_layers': 4, 'nn_block_dim': 24, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
 Everything for this model will be saved to ./models/uniform/nsbh/radio_flowjax
 Using flowJAX, so setting validation_split_fraction to 0.01 (no validation split)
 Starting training with the following parameters:
@@ -21,14 +21,14 @@ Number of good samples:  0.9601
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.0057213688608053, 4.999987880375604]
-  m2: range = [1.000009642333946, 3.672166105852217]
-  mass_ratio: range = [0.2006662033973425, 0.9964772609639146]
+  m1: range = [2.004022376402824, 4.999976118524776]
+  m2: range = [1.0000002816004578, 3.6815657269415367]
+  mass_ratio: range = [0.20022243388307007, 0.9983957769686397]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [2.6278781431914475, 8053.410395472594]
-  lambda_tilde: range = [0.34129802133545717, 657.6909019060829]
-  delta_lambda_tilde: range = [0.16837680013285972, 320.1333603499945]
-  chirp_mass_source: range = [1.2296247451452407, 3.5124521183242523]
+  lambda_2: range = [2.434446812971852, 8377.213613259426]
+  lambda_tilde: range = [0.28310014708417125, 631.8531966256008]
+  delta_lambda_tilde: range = [0.1387864576879444, 304.22970494095773]
+  chirp_mass_source: range = [1.2338576059750563, 3.6409076310963338]
 Saving to ./models/uniform/nsbh/radio_flowjax/training_data.npz:
 Saving to ./models/uniform/nsbh/radio_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -36,16 +36,47 @@ Using component parameterization for lambdas (lambda_1, lambda_2)
 Training samples: 198000, Validation samples: 2000
 Creating the training data arrays
 NSBH and training on lambda_2 (3D)
+Parameter bounds validation completed
 np.shape(self.x)
 (198000, 3)
-Using MinMaxScaler to scale the input data x
-Saved sklearn scaler to ./models/uniform/nsbh/radio_flowjax/scaler.gz
+WARNING: Disabling MinMaxScaler when using constrained flowjax distributions
+The bijections handle parameter scaling internally to respect bounds
 Going to start training for flowJAX . . .
 Using block_neural_autoregressive_flow for flowJAX unconditional distribution
-Training flowJAX unconditional model on data shape: (198000, 3)
-Validation data shape: (2000, 3)
+Using constrained training approach (Option 2): transform data to unbounded space
+Applied identity (unbounded) to parameter 0: chirp_mass_source
+Applied mass_ratio constraint [0.1, 1.0] to parameter 1: mass_ratio
+Applied lambda constraint > 0 to parameter 2: lambda_2
+Transforming training data to unbounded space
+Applying constraints to trained flow
+Created constrained flow with bijection: Stack(
+  shape=(3,),
+  cond_shape=None,
+  bijections=[
+    Identity(),
+    Chain(
+      shape=(),
+      cond_shape=None,
+      bijections=(
+        Sigmoid(),
+        Affine(
+          shape=(),
+          loc=f32[],
+          scale=Parameterize(
+            fn=<PjitFunction of <function softplus at 0x1528cceed090>>,
+            args=(f32[],),
+            kwargs={}
+          )
+        )
+      )
+    ),
+    SoftPlus()
+  ],
+  axis=0
+)
+Training flowJAX model on data shape: (198000, 3)
 Saving the training loss plot to ./models/uniform/nsbh/radio_flowjax/training_loss.pdf
-Training done. Took around 14.99 minutes
+Training done. Took around 20.99 minutes
 Saving the flowJAX model to ./models/uniform/nsbh/radio_flowjax/model.eqx
 Saving the model kwargs to ./models/uniform/nsbh/radio_flowjax/model_kwargs.json
 DONE training!
