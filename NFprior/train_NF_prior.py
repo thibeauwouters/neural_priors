@@ -1062,43 +1062,42 @@ class NFPriorCreator:
             # Clip data for numerical stability (following documentation example)
             x_train_clipped = self._clip_data_for_constraints(x_train_data)
             
-            # # Option 2: Transform data to unbounded space using the inverse of the bijection
-            # # Transform data to unbounded space using inverse bijection
-            # print("Transforming training data to unbounded space")
-            # x_train_unbounded = jax.vmap(to_constrained.inverse)(x_train_clipped)
+            # Option 2: Transform data to unbounded space using the inverse of the bijection
+            print("Transforming training data to unbounded space")
+            x_train_unbounded = jax.vmap(to_constrained.inverse)(x_train_clipped)
             
-            # # Train unbounded flow on transformed data
-            # key, subkey = jr.split(key)
-            # flow_trained, losses = fit_to_data(
-            #     key=subkey,
-            #     dist=unbounded_flow,
-            #     data=x_train_unbounded,
-            #     learning_rate=self.learning_rate,
-            #     max_epochs=self.num_epochs,
-            #     batch_size=self.batch_size,
-            #     max_patience=self.max_patience,
-            #     val_prop=self.validation_split_fraction
-            # )
-            # flow = Transformed(flow_trained, non_trainable(to_constrained))
-            
-            # Option 1: Transform the flow to match data support
-            flow_constrained_1 = Transformed(
-                unbounded_flow,
-                non_trainable(to_constrained) # Ensure constraint not trained!
-            )
-            
-            # Train constrained flow on original dataset
+            # Train unbounded flow on transformed data
             key, subkey = jr.split(key)
-            flow, losses = fit_to_data(
+            flow_trained, losses = fit_to_data(
                 key=subkey,
-                dist=flow_constrained_1,
-                data=x_train_clipped,
+                dist=unbounded_flow,
+                data=x_train_unbounded,
                 learning_rate=self.learning_rate,
                 max_epochs=self.num_epochs,
                 batch_size=self.batch_size,
                 max_patience=self.max_patience,
                 val_prop=self.validation_split_fraction
             )
+            flow = Transformed(flow_trained, non_trainable(to_constrained))
+            
+            # # Option 1: Transform the flow to match data support
+            # flow_constrained_1 = Transformed(
+            #     unbounded_flow,
+            #     non_trainable(to_constrained) # Ensure constraint not trained!
+            # )
+            
+            # # Train constrained flow on original dataset
+            # key, subkey = jr.split(key)
+            # flow, losses = fit_to_data(
+            #     key=subkey,
+            #     dist=flow_constrained_1,
+            #     data=x_train_clipped,
+            #     learning_rate=self.learning_rate,
+            #     max_epochs=self.num_epochs,
+            #     batch_size=self.batch_size,
+            #     max_patience=self.max_patience,
+            #     val_prop=self.validation_split_fraction
+            # )
         else:
             print("Using unconstrained training (original behavior)")
             # Train directly on original data
