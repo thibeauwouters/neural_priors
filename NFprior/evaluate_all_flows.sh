@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# Flag to only process directories containing "flowjax" in their name
-flowjax_only=true
+# Flag to skip directories containing "flowjax" in their name
+skip_flowjax=true
 
 MODELS_BASE_PATH="./models"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Evaluating all flows for all population types"
 echo "Models base path: $MODELS_BASE_PATH"
-if [ "$flowjax_only" = true ]; then
-    echo "FlowJAX only mode: ON (skipping non-flowjax directories)"
+if [ "$skip_flowjax" = true ]; then
+    echo "Skip FlowJAX mode: ON (skipping flowjax directories)"
 else
-    echo "FlowJAX only mode: OFF"
+    echo "Skip FlowJAX mode: OFF"
 fi
 
 # Iterate over all subdirectories in models (each is a population type)
@@ -40,9 +40,9 @@ for POPULATION_TYPE in "$MODELS_BASE_PATH"/uniform "$MODELS_BASE_PATH"/gaussian 
         for MODEL_DIR in $MODEL_DIRS; do
             echo "Model dir: $MODEL_DIR"
             
-            # Skip directories that don't contain "flowjax" if flag is set
-            if [ "$flowjax_only" = true ] && [[ ! "$MODEL_DIR" == *"flowjax"* ]]; then
-                echo "Skipping $MODEL_DIR (not a flowjax directory)"
+            # Skip directories that contain "flowjax" if flag is set
+            if [ "$skip_flowjax" = true ] && [[ "$MODEL_DIR" == *"flowjax"* ]]; then
+                echo "Skipping $MODEL_DIR (contains flowjax)"
                 continue
             fi
             echo ""

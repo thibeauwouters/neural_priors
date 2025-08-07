@@ -694,7 +694,7 @@ class CheckerUnconditional(Checker):
         # Load the scaler if it exists AND if scale_input was True during training
         scaler_path = os.path.join(self.path, "scaler.gz")
         scaler = None
-        scale_input = nf_kwargs.get("scale_input", "False") == "True" # FIXME: this needs to be True to ensure backwards compatibility
+        scale_input = nf_kwargs.get("scale_input", "True") == "True"
         
         if os.path.exists(scaler_path) and scale_input:
             print(f"Loading scaler from {scaler_path}")
@@ -912,6 +912,11 @@ class CheckerUnconditional(Checker):
                 # lambda_2 is last column
                 nf_samples[:, -1] = np.exp(nf_samples[:, -1])
         
+        # Print the ranges to the screen:
+        for i in range(nf_samples.shape[1]):
+            lower, upper = np.min(nf_samples[:, i]), np.max(nf_samples[:, i])
+            print(f"Parameter {i} range: [{lower:.3f}, {upper:.3f}]")
+        
         print(f"Generating {N_test_samples} samples from the NF model for testing DONE")
         return nf_samples
     
@@ -973,7 +978,7 @@ def main():
                        help="Only test if model can generate samples (quick test)")
     parser.add_argument("--n-samples", type=int, default=10_000,
                        help="Number of samples to generate for evaluation")
-    parser.add_argument("--n-test-samples", type=int, default=100,
+    parser.add_argument("--n-test-samples", type=int, default=10_000,
                        help="Number of samples for quick test")
     
     args = parser.parse_args()

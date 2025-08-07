@@ -1078,7 +1078,7 @@ class NFPriorCreator:
                 max_patience=self.max_patience,
                 val_prop=self.validation_split_fraction
             )
-            flow = Transformed(flow_trained, non_trainable(to_constrained))
+            flow = Transformed(flow_trained, to_constrained)
             
             # # Option 1: Transform the flow to match data support
             # flow_constrained_1 = Transformed(
