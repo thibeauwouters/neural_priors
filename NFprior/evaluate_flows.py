@@ -129,461 +129,473 @@ class Checker:
         else:
             raise FileNotFoundError(f"Training data not found at {training_data_path}. Please ensure the model was trained with training data saved.")
     
-class CheckerBNS(Checker):
+# class CheckerBNS(Checker):
     
-    def __init__(self, path: str, N_samples: int = 10_000, N_masses: int = 5):
-        """
-        Initialize the checker for the BNS conditional model.
+#     def __init__(self, path: str, N_samples: int = 10_000, N_masses: int = 5):
+#         """
+#         Initialize the checker for the BNS conditional model.
         
-        Args:
-            path (str): Path to the directory where the model is stored.
-            N_samples (int): Number of samples to generate for comparison for a single mass pair.
-            N_masses (int): Number of mass pairs to sample from the training data, for the conditioning part of conditional flows.
-        """
-        super().__init__(path, N_samples, N_masses)
-        self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS, self.scaler = self.load_model_and_data()
+#         Args:
+#             path (str): Path to the directory where the model is stored.
+#             N_samples (int): Number of samples to generate for comparison for a single mass pair.
+#             N_masses (int): Number of mass pairs to sample from the training data, for the conditioning part of conditional flows.
+#         """
+#         super().__init__(path, N_samples, N_masses)
+#         self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS, self.scaler = self.load_model_and_data()
     
-    def load_model_and_data(self):
-        """
-        Load the NF model and EOS data for the BNS case.
+#     def load_model_and_data(self):
+#         """
+#         Load the NF model and EOS data for the BNS case.
         
-        Returns:
-            flow: The loaded normalizing flow model (glasflow or flowJAX).
-            nf_kwargs (dict): The configuration parameters for the NF.
-            masses_EOS (np.ndarray): Masses from the EOS samples.
-            Lambdas_EOS (np.ndarray): Corresponding Lambdas from the EOS samples.
-            scaler: The MinMaxScaler used during training (None if not used).
-        """
-        nf_kwargs_path = os.path.join(self.path, "model_kwargs.json")
+#         Returns:
+#             flow: The loaded normalizing flow model (glasflow or flowJAX).
+#             nf_kwargs (dict): The configuration parameters for the NF.
+#             masses_EOS (np.ndarray): Masses from the EOS samples.
+#             Lambdas_EOS (np.ndarray): Corresponding Lambdas from the EOS samples.
+#             scaler: The MinMaxScaler used during training (None if not used).
+#         """
+#         nf_kwargs_path = os.path.join(self.path, "model_kwargs.json")
         
-        with open(nf_kwargs_path, "r") as f:
-            nf_kwargs = json.load(f)
-        self.nf_kwargs = nf_kwargs
+#         with open(nf_kwargs_path, "r") as f:
+#             nf_kwargs = json.load(f)
+#         self.nf_kwargs = nf_kwargs
         
-        # Check if this is a flowJAX model - all booleans are stored as strings
-        use_flowjax = nf_kwargs.get("use_flowjax", "False") == "True"
+#         # Check if this is a flowJAX model - all booleans are stored as strings
+#         use_flowjax = nf_kwargs.get("use_flowjax", "False") == "True"
         
-        if use_flowjax:
-            nf_path = os.path.join(self.path, "model.eqx")
+#         if use_flowjax:
+#             nf_path = os.path.join(self.path, "model.eqx")
             
-            # Create base distribution and flow structure
-            base_dist = Normal(jnp.zeros(2))
-            key = jr.key(42)
+#             # Create base distribution and flow structure
+#             base_dist = Normal(jnp.zeros(2))
+#             key = jr.key(42)
             
-            # Recreate the flow architecture to match training code
-            flow = block_neural_autoregressive_flow(
-                key=key,
-                base_dist=base_dist,
-                nn_depth=self.nf_kwargs["nn_depth"],
-                nn_block_dim=self.nf_kwargs["nn_block_dim"],
-                flow_layers=self.nf_kwargs["flow_layers"],
-            )
+#             # Recreate the flow architecture to match training code
+#             flow = block_neural_autoregressive_flow(
+#                 key=key,
+#                 base_dist=base_dist,
+#                 nn_depth=self.nf_kwargs["nn_depth"],
+#                 nn_block_dim=self.nf_kwargs["nn_block_dim"],
+#                 flow_layers=self.nf_kwargs["flow_layers"],
+#             )
             
-            print(f"Loading flowJAX model from {nf_path}")
-            flow = eqx.tree_deserialise_leaves(nf_path, flow)
+#             print(f"Loading flowJAX model from {nf_path}")
+#             flow = eqx.tree_deserialise_leaves(nf_path, flow)
             
-        else:
-            print("Loading glasflow BNS model")
-            nf_path = os.path.join(self.path, "model.pt")
+#         else:
+#             print("Loading glasflow BNS model")
+#             nf_path = os.path.join(self.path, "model.pt")
             
-            flow = CouplingNSF(
-                n_inputs=nf_kwargs["n_inputs"],
-                n_transforms=nf_kwargs["n_transforms"],
-                n_neurons=nf_kwargs["n_neurons"],
-                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
-                num_bins=nf_kwargs["num_bins"]
-            )
+#             flow = CouplingNSF(
+#                 n_inputs=nf_kwargs["n_inputs"],
+#                 n_transforms=nf_kwargs["n_transforms"],
+#                 n_neurons=nf_kwargs["n_neurons"],
+#                 n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
+#                 num_bins=nf_kwargs["num_bins"]
+#             )
             
-            print(f"Loading glasflow model from {nf_path}")
-            flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
-            flow.eval()
-            flow.compile()
+#             print(f"Loading glasflow model from {nf_path}")
+#             flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
+#             flow.eval()
+#             flow.compile()
         
-        # Load the EOS posterior samples from jester from which we have created the training data
-        eos_samples_filename = nf_kwargs["eos_samples_filename"]
-        print(f"Comparing against the EOS samples taken from {eos_samples_filename}")
-        data = np.load(eos_samples_filename)
-        masses_EOS, Lambdas_EOS = data["masses_EOS"], data["Lambdas_EOS"]
+#         # Load the EOS posterior samples from jester from which we have created the training data
+#         eos_samples_filename = nf_kwargs["eos_samples_filename"]
+#         print(f"Comparing against the EOS samples taken from {eos_samples_filename}")
+#         data = np.load(eos_samples_filename)
+#         masses_EOS, Lambdas_EOS = data["masses_EOS"], data["Lambdas_EOS"]
         
-        # Load the scaler if it exists
-        scaler_path = os.path.join(self.path, "scaler.gz")
-        scaler = None
-        if os.path.exists(scaler_path):
-            print(f"Loading scaler from {scaler_path}")
-            scaler = joblib.load(scaler_path)
-        else:
-            print("No scaler found - assuming input was not scaled during training")
+#         # Load the scaler if it exists AND if scale_input was True during training
+#         scaler_path = os.path.join(self.path, "scaler.gz")
+#         scaler = None
+#         scale_input = nf_kwargs.get("scale_input", "False") # FIXME: putting False for  # Default to True for backwards compatibility
         
-        return flow, nf_kwargs, masses_EOS, Lambdas_EOS, scaler
+#         print(f"DEBUG: scale_input = {scale_input}")
+        
+#         if os.path.exists(scaler_path) and scale_input:
+#             print(f"Loading scaler from {scaler_path}")
+#             scaler = joblib.load(scaler_path)
+#         else:
+#             if os.path.exists(scaler_path) and not scale_input:
+#                 print("Scaler file exists but scale_input=False - not using scaler")
+#             else:
+#                 print("No scaler found - assuming input was not scaled during training")
+        
+#         return flow, nf_kwargs, masses_EOS, Lambdas_EOS, scaler
 
-    def check_conditional_bns_model(self):
-        """
-        Load the NF model and check the 2D Lambdas distribution conditioned on the given masses.
+#     def check_conditional_bns_model(self):
+#         """
+#         Load the NF model and check the 2D Lambdas distribution conditioned on the given masses.
 
-        Args:
-            path (str): Path pointing to the directory where the model is stored.
-            m1_value (float): Mass 1 value to condition on.
-            m2_value (float): Mass 2 value to condition on.
-        """
+#         Args:
+#             path (str): Path pointing to the directory where the model is stored.
+#             m1_value (float): Mass 1 value to condition on.
+#             m2_value (float): Mass 2 value to condition on.
+#         """
         
-        mass_1 = np.linspace(1.25, 2.0, self.N_masses)
-        mass_2 = np.linspace(1.0, 2.0, self.N_masses)
+#         mass_1 = np.linspace(1.25, 2.0, self.N_masses)
+#         mass_2 = np.linspace(1.0, 2.0, self.N_masses)
 
-        m1_grid, m2_grid = np.meshgrid(mass_1, mass_2)
+#         m1_grid, m2_grid = np.meshgrid(mass_1, mass_2)
 
-        # Ensure m1 >= m2
-        mask = m2_grid <= m1_grid
-        mass_grid = np.column_stack((
-            m1_grid[mask].ravel(),
-            m2_grid[mask].ravel()
-        ))
+#         # Ensure m1 >= m2
+#         mask = m2_grid <= m1_grid
+#         mass_grid = np.column_stack((
+#             m1_grid[mask].ravel(),
+#             m2_grid[mask].ravel()
+#         ))
 
-        print(f"mass_grid: len = {len(mass_grid)}")
-        print(mass_grid)
+#         print(f"mass_grid: len = {len(mass_grid)}")
+#         print(mass_grid)
         
-        # Do the check for each pair:
-        for m1_value, m2_value in tqdm.tqdm(mass_grid, desc="Checking BNS conditional model"):
-            self.check_single_bns(m1_value, m2_value)
+#         # Do the check for each pair:
+#         for m1_value, m2_value in tqdm.tqdm(mass_grid, desc="Checking BNS conditional model"):
+#             self.check_single_bns(m1_value, m2_value)
     
-    def check_single_bns(self, m1_value: float, m2_value: float):
-        """
-        Check the conditional BNS model by sampling from the training data and the NF.
-        Args:
-            m1_value (float): Mass 1 value to condition on.
-            m2_value (float): Mass 2 value to condition on.
-        """
-        # Check parameterization flags
-        use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
-        use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
+#     def check_single_bns(self, m1_value: float, m2_value: float):
+#         """
+#         Check the conditional BNS model by sampling from the training data and the NF.
+#         Args:
+#             m1_value (float): Mass 1 value to condition on.
+#             m2_value (float): Mass 2 value to condition on.
+#         """
+#         # Check parameterization flags
+#         use_tilde = self.nf_kwargs.get("use_tilde", "False") == "True"
+#         use_component_masses = self.nf_kwargs.get("use_component_masses", "True") == "True"
         
-        # Load the training samples based on parameterization
-        if use_tilde:
-            # For tilde parameterization, we need to create lambda_tilde and delta_lambda_tilde
-            lambda_tilde_train = np.zeros(self.N_samples)
-            delta_lambda_tilde_train = np.zeros(self.N_samples)
-        else:
-            # For component parameterization, use lambda_1 and lambda_2
-            lambda_1_train = np.zeros(self.N_samples)
-            lambda_2_train = np.zeros(self.N_samples)
+#         # Load the training samples based on parameterization
+#         if use_tilde:
+#             # For tilde parameterization, we need to create lambda_tilde and delta_lambda_tilde
+#             lambda_tilde_train = np.zeros(self.N_samples)
+#             delta_lambda_tilde_train = np.zeros(self.N_samples)
+#         else:
+#             # For component parameterization, use lambda_1 and lambda_2
+#             lambda_1_train = np.zeros(self.N_samples)
+#             lambda_2_train = np.zeros(self.N_samples)
         
-        counter = 0
+#         counter = 0
         
-        # Create the validation set from the EOS samples
-        while counter < self.N_samples:
-            idx = np.random.choice(len(self.masses_EOS), 1)
-            m, l = self.masses_EOS[idx][0], self.Lambdas_EOS[idx][0]
+#         # Create the validation set from the EOS samples
+#         while counter < self.N_samples:
+#             idx = np.random.choice(len(self.masses_EOS), 1)
+#             m, l = self.masses_EOS[idx][0], self.Lambdas_EOS[idx][0]
             
-            # Interpolate on the given masses to get the corresponding Lambdas
-            lambda_1_value = np.interp(m1_value, m, l)
-            lambda_2_value = np.interp(m2_value, m, l)
+#             # Interpolate on the given masses to get the corresponding Lambdas
+#             lambda_1_value = np.interp(m1_value, m, l)
+#             lambda_2_value = np.interp(m2_value, m, l)
             
-            # Sanity check it:
-            if lambda_1_value < 0.0 or lambda_2_value < 0.0:
-                continue
-            else:
-                if use_tilde:
-                    # Convert to tilde parameters
-                    from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
-                    lambda_tilde_value = lambda_1_lambda_2_to_lambda_tilde(lambda_1_value, lambda_2_value, m1_value, m2_value)
-                    delta_lambda_tilde_value = lambda_1_lambda_2_to_delta_lambda_tilde(lambda_1_value, lambda_2_value, m1_value, m2_value)
+#             # Sanity check it:
+#             if lambda_1_value < 0.0 or lambda_2_value < 0.0:
+#                 continue
+#             else:
+#                 if use_tilde:
+#                     # Convert to tilde parameters
+#                     from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
+#                     lambda_tilde_value = lambda_1_lambda_2_to_lambda_tilde(lambda_1_value, lambda_2_value, m1_value, m2_value)
+#                     delta_lambda_tilde_value = lambda_1_lambda_2_to_delta_lambda_tilde(lambda_1_value, lambda_2_value, m1_value, m2_value)
                     
-                    lambda_tilde_train[counter] = lambda_tilde_value
-                    delta_lambda_tilde_train[counter] = delta_lambda_tilde_value
-                else:
-                    lambda_1_train[counter] = lambda_1_value
-                    lambda_2_train[counter] = lambda_2_value
-                counter += 1
+#                     lambda_tilde_train[counter] = lambda_tilde_value
+#                     delta_lambda_tilde_train[counter] = delta_lambda_tilde_value
+#                 else:
+#                     lambda_1_train[counter] = lambda_1_value
+#                     lambda_2_train[counter] = lambda_2_value
+#                 counter += 1
         
-        # Create training samples array based on parameterization        
-        if use_tilde:
-            training_samples = np.array([lambda_tilde_train, delta_lambda_tilde_train]).T
-        else:
-            training_samples = np.array([lambda_1_train, lambda_2_train]).T
+#         # Create training samples array based on parameterization        
+#         if use_tilde:
+#             training_samples = np.array([lambda_tilde_train, delta_lambda_tilde_train]).T
+#         else:
+#             training_samples = np.array([lambda_1_train, lambda_2_train]).T
             
-        # Condition on those masses to sample from the conditional NF
-        nf_samples = []
-        use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
+#         # Condition on those masses to sample from the conditional NF
+#         nf_samples = []
+#         use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
         
-        # Prepare conditioning variables based on mass parameterization
-        if use_component_masses:
-            # For component mass parameterization, condition on m1 and m2
-            conditioning_vars = [m1_value, m2_value]
-        else:
-            # For chirp mass/mass ratio parameterization, condition on Mc and q
-            from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
-            mc_cond = component_masses_to_chirp_mass(m1_value, m2_value)
-            q_cond = component_masses_to_mass_ratio(m1_value, m2_value)
-            conditioning_vars = [mc_cond, q_cond]
+#         # Prepare conditioning variables based on mass parameterization
+#         if use_component_masses:
+#             # For component mass parameterization, condition on m1 and m2
+#             conditioning_vars = [m1_value, m2_value]
+#         else:
+#             # For chirp mass/mass ratio parameterization, condition on Mc and q
+#             from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
+#             mc_cond = component_masses_to_chirp_mass(m1_value, m2_value)
+#             q_cond = component_masses_to_mass_ratio(m1_value, m2_value)
+#             conditioning_vars = [mc_cond, q_cond]
         
-        if use_flowjax:
-            # flowJAX sampling
-            key = jr.key(123)
+#         if use_flowjax:
+#             # flowJAX sampling
+#             key = jr.key(123)
 
-            u_jax = jnp.array([conditioning_vars], dtype=jnp.float32)
+#             u_jax = jnp.array([conditioning_vars], dtype=jnp.float32)
 
-            # Generate N_samples random keys
-            keys = jr.split(key, self.N_samples)
+#             # Generate N_samples random keys
+#             keys = jr.split(key, self.N_samples)
 
-            # Define a single sample function
-            @jax.jit
-            def sample_fn(sample_key):
-                val = self.flow.sample(sample_key, (1,), condition=u_jax).flatten()
-                if self.nf_kwargs["take_log_lambda"] == "True":
-                    val = np.exp(val)  # Scale back to original Lambda_2
-                return val
+#             # Define a single sample function
+#             @jax.jit
+#             def sample_fn(sample_key):
+#                 val = self.flow.sample(sample_key, (1,), condition=u_jax).flatten()
+#                 if self.nf_kwargs["take_log_lambda"] == "True":
+#                     val = np.exp(val)  # Scale back to original Lambda_2
+#                 return val
 
-            # Vectorize over keys
-            nf_samples_jax = jax.vmap(sample_fn)(keys)
+#             # Vectorize over keys
+#             nf_samples_jax = jax.vmap(sample_fn)(keys)
 
-            # Convert to numpy
-            nf_samples = np.array(nf_samples_jax)
+#             # Convert to numpy
+#             nf_samples = np.array(nf_samples_jax)
         
-        else:
-            # glasflow sampling
-            u = torch.tensor([conditioning_vars], dtype=torch.float32)
-            with torch.no_grad():
-                for _ in range(self.N_samples):
-                    value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()
-                    if self.nf_kwargs.get("take_log_lambda", "False") == "True":
-                        value = np.exp(value)  # Scale back to original Lambda_2
-                    nf_samples.append(value)
+#         else:
+#             # glasflow sampling
+#             u = torch.tensor([conditioning_vars], dtype=torch.float32)
+#             with torch.no_grad():
+#                 for _ in range(self.N_samples):
+#                     value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()
+#                     if self.nf_kwargs.get("take_log_lambda", "False") == "True":
+#                         value = np.exp(value)  # Scale back to original Lambda_2
+#                     nf_samples.append(value)
                     
-        nf_samples = np.array(nf_samples)
+#         nf_samples = np.array(nf_samples)
         
-        # Apply inverse scaling if scaler was used during training
-        if self.scaler is not None:
-            nf_samples = self.scaler.inverse_transform(nf_samples)
+#         # Apply inverse scaling if scaler was used during training
+#         if self.scaler is not None:
+#             nf_samples = self.scaler.inverse_transform(nf_samples)
         
-        # Determine range from data, use quantiles
-        param_1_nf, param_2_nf = nf_samples[:, 0], nf_samples[:, 1]
+#         # Determine range from data, use quantiles
+#         param_1_nf, param_2_nf = nf_samples[:, 0], nf_samples[:, 1]
         
-        param_1_lower, param_1_upper = np.quantile(param_1_nf, [0.01, 0.99])
-        param_2_lower, param_2_upper = np.quantile(param_2_nf, [0.01, 0.99])
+#         param_1_lower, param_1_upper = np.quantile(param_1_nf, [0.01, 0.99])
+#         param_2_lower, param_2_upper = np.quantile(param_2_nf, [0.01, 0.99])
         
-        my_range = [[param_1_lower, param_1_upper], [param_2_lower, param_2_upper]]
+#         my_range = [[param_1_lower, param_1_upper], [param_2_lower, param_2_upper]]
         
-        # Create parameter labels and filename based on parameterization
-        if use_tilde:
-            labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
-        else:
-            labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
+#         # Create parameter labels and filename based on parameterization
+#         if use_tilde:
+#             labels = [r"$\tilde{\Lambda}$", r"$\delta\tilde{\Lambda}$"]
+#         else:
+#             labels = [r"$\Lambda_1$", r"$\Lambda_2$"]
         
-        if use_component_masses:
-            name = os.path.join(self.figures_outdir, f"m1_{m1_value:.2f}_m2_{m2_value:.2f}.pdf")
-        else:
-            name = os.path.join(self.figures_outdir, f"Mc_{conditioning_vars[0]:.2f}_q_{conditioning_vars[1]:.2f}.pdf")
+#         if use_component_masses:
+#             name = os.path.join(self.figures_outdir, f"m1_{m1_value:.2f}_m2_{m2_value:.2f}.pdf")
+#         else:
+#             name = os.path.join(self.figures_outdir, f"Mc_{conditioning_vars[0]:.2f}_q_{conditioning_vars[1]:.2f}.pdf")
         
-        print(f"Saving cornerplot to {name}")
-        make_cornerplot(training_samples, nf_samples, name, my_range=my_range, labels=labels)
+#         print(f"Saving cornerplot to {name}")
+#         make_cornerplot(training_samples, nf_samples, name, my_range=my_range, labels=labels)
         
-        # # Compute the KL divergence
-        # all_samples = np.concatenate([training_samples.flatten(), nf_samples.flatten()])
-        # min_value, max_value = np.min(all_samples), np.max(all_samples)
+#         # # Compute the KL divergence
+#         # all_samples = np.concatenate([training_samples.flatten(), nf_samples.flatten()])
+#         # min_value, max_value = np.min(all_samples), np.max(all_samples)
         
-        # p_kde = gaussian_kde(training_samples.flatten())
-        # q_kde = gaussian_kde(nf_samples.flatten())
+#         # p_kde = gaussian_kde(training_samples.flatten())
+#         # q_kde = gaussian_kde(nf_samples.flatten())
 
-        # x_grid = np.linspace(min_value, max_value, 1000)
+#         # x_grid = np.linspace(min_value, max_value, 1000)
 
-        # p_vals = p_kde(x_grid)
-        # q_vals = q_kde(x_grid)
+#         # p_vals = p_kde(x_grid)
+#         # q_vals = q_kde(x_grid)
 
-        # kl = np.sum(p_vals * np.log(p_vals / q_vals)) * (x_grid[1] - x_grid[0])
+#         # kl = np.sum(p_vals * np.log(p_vals / q_vals)) * (x_grid[1] - x_grid[0])
 
-        # print("kl")        
-        # print(kl)        
+#         # print("kl")        
+#         # print(kl)        
 
-class CheckerNSBH(Checker):
-    """
-    Checker for the NSBH conditional model.
-    """
+# class CheckerNSBH(Checker):
+#     """
+#     Checker for the NSBH conditional model.
+#     """
     
-    def __init__(self, path: str, N_samples: int = 10_000, N_masses: int = 5):
-        """
-        Initialize the checker for the NSBH conditional model.
+#     def __init__(self, path: str, N_samples: int = 10_000, N_masses: int = 5):
+#         """
+#         Initialize the checker for the NSBH conditional model.
         
-        Args:
-            path (str): Path to the directory where the model is stored.
-            N_samples (int): Number of samples to generate for comparison for a single mass pair.
-            N_masses (int): Number of mass pairs to sample from the training data.
-        """
-        super().__init__(path, N_samples, N_masses)
+#         Args:
+#             path (str): Path to the directory where the model is stored.
+#             N_samples (int): Number of samples to generate for comparison for a single mass pair.
+#             N_masses (int): Number of mass pairs to sample from the training data.
+#         """
+#         super().__init__(path, N_samples, N_masses)
         
-        # Load the model and data
-        self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS, self.scaler = self.load_model_and_data()
+#         # Load the model and data
+#         self.flow, self.nf_kwargs, self.masses_EOS, self.Lambdas_EOS, self.scaler = self.load_model_and_data()
         
-    def load_model_and_data(self):
-        """
-        Load the NF model and EOS data for the NSBH case.
+#     def load_model_and_data(self):
+#         """
+#         Load the NF model and EOS data for the NSBH case.
         
-        Returns:
-            flow: The loaded normalizing flow model (glasflow or flowJAX).
-            nf_kwargs (dict): The configuration parameters for the NF.
-            masses_EOS (np.ndarray): Masses from the EOS samples.
-            Lambdas_EOS (np.ndarray): Corresponding Lambdas from the EOS samples.
-            scaler: The MinMaxScaler used during training (None if not used).
-        """
-        nf_kwargs_path = os.path.join(self.path, "model_kwargs.json")
+#         Returns:
+#             flow: The loaded normalizing flow model (glasflow or flowJAX).
+#             nf_kwargs (dict): The configuration parameters for the NF.
+#             masses_EOS (np.ndarray): Masses from the EOS samples.
+#             Lambdas_EOS (np.ndarray): Corresponding Lambdas from the EOS samples.
+#             scaler: The MinMaxScaler used during training (None if not used).
+#         """
+#         nf_kwargs_path = os.path.join(self.path, "model_kwargs.json")
         
-        with open(nf_kwargs_path, "r") as f:
-            nf_kwargs = json.load(f)
+#         with open(nf_kwargs_path, "r") as f:
+#             nf_kwargs = json.load(f)
         
-        # Check if this is a flowJAX model
-        use_flowjax = nf_kwargs.get("use_flowjax", "False") == "True"
+#         # Check if this is a flowJAX model
+#         use_flowjax = nf_kwargs.get("use_flowjax", "False") == "True"
         
-        if use_flowjax:
-            print("Loading flowJAX NSBH model")
-            nf_path = os.path.join(self.path, "model.eqx")
+#         if use_flowjax:
+#             print("Loading flowJAX NSBH model")
+#             nf_path = os.path.join(self.path, "model.eqx")
             
-            # Create base distribution and flow structure for 1D
-            base_dist = Normal(jnp.zeros(1))
-            key = jr.key(42)
+#             # Create base distribution and flow structure for 1D
+#             base_dist = Normal(jnp.zeros(1))
+#             key = jr.key(42)
             
-            # Recreate the flow architecture
-            flow = masked_autoregressive_flow(
-                key=key,
-                base_dist=base_dist,
-                cond_dim=1,
-                flow_layers=nf_kwargs["n_transforms"],
-                nn_width=nf_kwargs["n_neurons"],
-                nn_depth=nf_kwargs["n_blocks_per_transform"]
-            )
+#             # Recreate the flow architecture
+#             flow = masked_autoregressive_flow(
+#                 key=key,
+#                 base_dist=base_dist,
+#                 cond_dim=1,
+#                 flow_layers=nf_kwargs["n_transforms"],
+#                 nn_width=nf_kwargs["n_neurons"],
+#                 nn_depth=nf_kwargs["n_blocks_per_transform"]
+#             )
             
-            print(f"Loading flowJAX NSBH model from {nf_path}")
-            flow = eqx.tree_deserialise_leaves(nf_path, flow)
+#             print(f"Loading flowJAX NSBH model from {nf_path}")
+#             flow = eqx.tree_deserialise_leaves(nf_path, flow)
             
-        else:
-            print("Loading glasflow NSBH model")
-            nf_path = os.path.join(self.path, "model.pt")
+#         else:
+#             print("Loading glasflow NSBH model")
+#             nf_path = os.path.join(self.path, "model.pt")
             
-            flow = CouplingNSF(
-                n_inputs=nf_kwargs["n_inputs"],
-                n_transforms=nf_kwargs["n_transforms"],
-                n_neurons=nf_kwargs["n_neurons"],
-                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
-                num_bins=nf_kwargs["num_bins"]
-            )
-            print(f"Loading glasflow NSBH model from {nf_path}")
-            flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
-            flow.eval()
-            flow.compile()
+#             flow = CouplingNSF(
+#                 n_inputs=nf_kwargs["n_inputs"],
+#                 n_transforms=nf_kwargs["n_transforms"],
+#                 n_neurons=nf_kwargs["n_neurons"],
+#                 n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
+#                 num_bins=nf_kwargs["num_bins"]
+#             )
+#             print(f"Loading glasflow NSBH model from {nf_path}")
+#             flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
+#             flow.eval()
+#             flow.compile()
         
-        print(f"NSBH model loaded successfully")
+#         print(f"NSBH model loaded successfully")
         
-        # Load the EOS posterior samples from jester from which we have created the training data
-        eos_samples_filename = nf_kwargs["eos_samples_filename"]
-        print(f"Comparing against the EOS samples taken from {eos_samples_filename}")
-        data = np.load(eos_samples_filename)
-        masses_EOS, Lambdas_EOS = data["masses_EOS"], data["Lambdas_EOS"]
+#         # Load the EOS posterior samples from jester from which we have created the training data
+#         eos_samples_filename = nf_kwargs["eos_samples_filename"]
+#         print(f"Comparing against the EOS samples taken from {eos_samples_filename}")
+#         data = np.load(eos_samples_filename)
+#         masses_EOS, Lambdas_EOS = data["masses_EOS"], data["Lambdas_EOS"]
         
-        # Load the scaler if it exists
-        scaler_path = os.path.join(self.path, "scaler.gz")
-        scaler = None
-        if os.path.exists(scaler_path):
-            print(f"Loading scaler from {scaler_path}")
-            scaler = joblib.load(scaler_path)
-        else:
-            print("No scaler found - assuming input was not scaled during training")
+#         # Load the scaler if it exists AND if scale_input was True during training
+#         scaler_path = os.path.join(self.path, "scaler.gz")
+#         scaler = None
+#         scale_input = nf_kwargs.get("scale_input", "True") == "True"  # Default to True for backwards compatibility
         
-        return flow, nf_kwargs, masses_EOS, Lambdas_EOS, scaler
+#         if os.path.exists(scaler_path) and scale_input:
+#             print(f"Loading scaler from {scaler_path}")
+#             scaler = joblib.load(scaler_path)
+#         else:
+#             if os.path.exists(scaler_path) and not scale_input:
+#                 print("Scaler file exists but scale_input=False - not using scaler")
+#             else:
+#                 print("No scaler found - assuming input was not scaled during training")
+        
+#         return flow, nf_kwargs, masses_EOS, Lambdas_EOS, scaler
     
-    def check_conditional_nsbh_model(self):
-        """
-        Iterate over an array of m2 values and check the conditional NSBH model.
-        """
-        # Generate a grid of m2 values
-        m2_values = np.linspace(1.0, 2.0, self.N_masses)
+#     def check_conditional_nsbh_model(self):
+#         """
+#         Iterate over an array of m2 values and check the conditional NSBH model.
+#         """
+#         # Generate a grid of m2 values
+#         m2_values = np.linspace(1.0, 2.0, self.N_masses)
 
-        for m2_value in tqdm.tqdm(m2_values, desc="Checking NSBH conditional model"):
-            self.check_single_nsbh(m2_value)
+#         for m2_value in tqdm.tqdm(m2_values, desc="Checking NSBH conditional model"):
+#             self.check_single_nsbh(m2_value)
     
-    def check_single_nsbh(self, m2_value: float = 1.4):
-        """
-        Load the NSBH conditional NF model and compare Lambda_2 marginal distributions.
+#     def check_single_nsbh(self, m2_value: float = 1.4):
+#         """
+#         Load the NSBH conditional NF model and compare Lambda_2 marginal distributions.
         
-        Args:
-            m2_value (float): Mass 2 value (NS mass) to condition on.
-        """
-        # Generate training data Lambda_2 values for the given m2_value
-        lambda_2_train = np.zeros(self.N_samples)
+#         Args:
+#             m2_value (float): Mass 2 value (NS mass) to condition on.
+#         """
+#         # Generate training data Lambda_2 values for the given m2_value
+#         lambda_2_train = np.zeros(self.N_samples)
         
-        counter = 0
+#         counter = 0
         
-        while counter < self.N_samples:
-            idx = np.random.choice(len(self.masses_EOS), 1)
-            m, l = self.masses_EOS[idx][0], self.Lambdas_EOS[idx][0]
-            lambda_2_value = np.interp(m2_value, m, l)
+#         while counter < self.N_samples:
+#             idx = np.random.choice(len(self.masses_EOS), 1)
+#             m, l = self.masses_EOS[idx][0], self.Lambdas_EOS[idx][0]
+#             lambda_2_value = np.interp(m2_value, m, l)
             
-            # Check if not negative:
-            if lambda_2_value < 0:
-                continue
+#             # Check if not negative:
+#             if lambda_2_value < 0:
+#                 continue
             
-            lambda_2_train[counter] = lambda_2_value
-            counter += 1
-        # Generate samples from the conditional NF
-        nf_samples = []
-        use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
+#             lambda_2_train[counter] = lambda_2_value
+#             counter += 1
+#         # Generate samples from the conditional NF
+#         nf_samples = []
+#         use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
         
-        if use_flowjax:
-            # flowJAX sampling
-            key = jr.key(123)
-            u_jax = jnp.array([[m2_value]], dtype=jnp.float32)
+#         if use_flowjax:
+#             # flowJAX sampling
+#             key = jr.key(123)
+#             u_jax = jnp.array([[m2_value]], dtype=jnp.float32)
             
-            for _ in range(self.N_samples):
-                key, sample_key = jr.split(key)
-                try:
-                    # Try different context parameter names
-                    value = self.flow.sample(sample_key, (1,), context=u_jax).flatten()[0]
-                except:
-                    try:
-                        value = self.flow.sample(sample_key, (1,), conditional=u_jax).flatten()[0]
-                    except:
-                        # Fallback - sample without conditioning
-                        value = self.flow.sample(sample_key, (1,)).flatten()[0]
+#             for _ in range(self.N_samples):
+#                 key, sample_key = jr.split(key)
+#                 try:
+#                     # Try different context parameter names
+#                     value = self.flow.sample(sample_key, (1,), context=u_jax).flatten()[0]
+#                 except:
+#                     try:
+#                         value = self.flow.sample(sample_key, (1,), conditional=u_jax).flatten()[0]
+#                     except:
+#                         # Fallback - sample without conditioning
+#                         value = self.flow.sample(sample_key, (1,)).flatten()[0]
                         
-                value = float(value)
-                if self.nf_kwargs["take_log_lambda"] == "True":
-                    value = np.exp(value)
-                nf_samples.append(value)
-        else:
-            # glasflow sampling  
-            u = torch.tensor([[m2_value]], dtype=torch.float32)  # Conditional input
-            with torch.no_grad():
-                for _ in range(self.N_samples):
-                    value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()[0]
-                    if self.nf_kwargs.get("take_log_lambda", "False") == "True":
-                        value = np.exp(value)  # Scale back to original Lambda_2
-                    nf_samples.append(value)
+#                 value = float(value)
+#                 if self.nf_kwargs["take_log_lambda"] == "True":
+#                     value = np.exp(value)
+#                 nf_samples.append(value)
+#         else:
+#             # glasflow sampling  
+#             u = torch.tensor([[m2_value]], dtype=torch.float32)  # Conditional input
+#             with torch.no_grad():
+#                 for _ in range(self.N_samples):
+#                     value = self.flow.sample(1, conditional=u).cpu().numpy().flatten()[0]
+#                     if self.nf_kwargs.get("take_log_lambda", "False") == "True":
+#                         value = np.exp(value)  # Scale back to original Lambda_2
+#                     nf_samples.append(value)
                     
-        nf_samples = np.array(nf_samples)
+#         nf_samples = np.array(nf_samples)
         
-        # Apply inverse scaling if scaler was used during training
-        if self.scaler is not None:
-            nf_samples = self.scaler.inverse_transform(nf_samples.reshape(-1, 1)).flatten()
+#         # Apply inverse scaling if scaler was used during training
+#         if self.scaler is not None:
+#             nf_samples = self.scaler.inverse_transform(nf_samples.reshape(-1, 1)).flatten()
         
-        # Compare the marginal distributions
-        plt.figure(figsize=(10, 6))
-        # Plot histograms
-        lambda_2_lower, lambda_2_upper = np.quantile(lambda_2_train, [0.01, 0.99])
-        bins = np.linspace(lambda_2_lower, lambda_2_upper, 50)
-        plt.hist(lambda_2_train, bins=bins, alpha=0.7, density=True,
-                 label='Training Data', color='blue', edgecolor='black')
-        plt.hist(nf_samples, bins=bins, alpha=0.7, density=True,
-                 label='NF Samples', color='red', edgecolor='black')
+#         # Compare the marginal distributions
+#         plt.figure(figsize=(10, 6))
+#         # Plot histograms
+#         lambda_2_lower, lambda_2_upper = np.quantile(lambda_2_train, [0.01, 0.99])
+#         bins = np.linspace(lambda_2_lower, lambda_2_upper, 50)
+#         plt.hist(lambda_2_train, bins=bins, alpha=0.7, density=True,
+#                  label='Training Data', color='blue', edgecolor='black')
+#         plt.hist(nf_samples, bins=bins, alpha=0.7, density=True,
+#                  label='NF Samples', color='red', edgecolor='black')
         
-        plt.xlabel(r'$\Lambda_2$')
-        plt.ylabel('Density')
+#         plt.xlabel(r'$\Lambda_2$')
+#         plt.ylabel('Density')
         
-        plt.title(f'NSBH Conditional Prior: $p(\Lambda_2 | m_2 = {m2_value:.1f} M_\odot)$')
-        plt.legend()
-        plt.grid(True, alpha=0.3)
+#         plt.title(f'NSBH Conditional Prior: $p(\Lambda_2 | m_2 = {m2_value:.1f} M_\odot)$')
+#         plt.legend()
+#         plt.grid(True, alpha=0.3)
         
-        # Save the plot
-        name = os.path.join(self.figures_outdir, f"m2_{m2_value:.2f}.pdf")
-        plt.savefig(name, bbox_inches="tight")
-        plt.close()
+#         # Save the plot
+#         name = os.path.join(self.figures_outdir, f"m2_{m2_value:.2f}.pdf")
+#         plt.savefig(name, bbox_inches="tight")
+#         plt.close()
         
-        # TODO: KL divergence calculation
+#         # TODO: KL divergence calculation
 
 class CheckerUnconditional(Checker):
     """
@@ -679,14 +691,19 @@ class CheckerUnconditional(Checker):
             flow.eval()
             flow.compile()
         
-        # Load the scaler if it exists
+        # Load the scaler if it exists AND if scale_input was True during training
         scaler_path = os.path.join(self.path, "scaler.gz")
         scaler = None
-        if os.path.exists(scaler_path):
+        scale_input = nf_kwargs.get("scale_input", "False") == "True" # FIXME: this needs to be True to ensure backwards compatibility
+        
+        if os.path.exists(scaler_path) and scale_input:
             print(f"Loading scaler from {scaler_path}")
             scaler = joblib.load(scaler_path)
         else:
-            print("No scaler found - assuming input was not scaled during training")
+            if os.path.exists(scaler_path) and not scale_input:
+                print("Scaler file exists but scale_input=False - not using scaler")
+            else:
+                print("No scaler found - assuming input was not scaled during training")
         
         return flow, nf_kwargs, scaler
     

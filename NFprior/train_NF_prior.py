@@ -803,6 +803,7 @@ class NFPriorCreator:
         self.nf_kwargs["learning_rate"] = self.learning_rate
         self.nf_kwargs["max_patience"] = self.max_patience
         self.nf_kwargs["batch_size"] = self.batch_size
+        self.nf_kwargs["scale_input"] = self.scale_input
         self.nf_kwargs["num_bins"] = self.num_bins
         self.nf_kwargs["eos_samples_filename"] = self.eos_samples_filename
         self.nf_kwargs["training_filename"] = self.training_filename
@@ -905,7 +906,7 @@ class NFPriorCreator:
         param_names = self.nf_kwargs["names"]
         
         for i, name in enumerate(param_names):
-            if "mass_ratio" in name:
+            if "mass_ratio" in name or "q" in name:
                 # Map from R to [0.1, 1.0]
                 # Use sigmoid to map R -> [0,1], then scale/shift to [0.1, 1.0]
                 # f(x) = 0.1 + 0.9 * sigmoid(x)
@@ -998,7 +999,7 @@ class NFPriorCreator:
         
         print("Parameter bounds validation completed")
     
-    def _clip_data_for_constraints(self, x_data):
+    def _clip_data_for_constraints(self, x_data, eps:float=1e-7):
         """
         Clip data for numerical stability when applying constraints.
         Following flowjax documentation example: clip near boundaries.
@@ -1007,22 +1008,22 @@ class NFPriorCreator:
         x_clipped = x_data.copy()
         
         for i, name in enumerate(param_names):
-            if "mass_ratio" in name:
+            if "mass_ratio" in name or "q" in name:
                 # Clip mass_ratio to [0.1 + eps, 1.0 - eps]
                 x_clipped = x_clipped.at[:, i].set(
-                    jnp.clip(x_data[:, i], 0.1 + 1e-7, 1.0 - 1e-7)
+                    jnp.clip(x_data[:, i], 0.1 + eps, 1.0 - eps)
                 )
                 
             elif "lambda" in name and name != "delta_lambda_tilde":
                 # Clip lambdas to [eps, inf)
                 x_clipped = x_clipped.at[:, i].set(
-                    jnp.clip(x_data[:, i], 1e-7, None)
+                    jnp.clip(x_data[:, i], eps, None)
                 )
                 
             elif "luminosity_distance" in name:
                 # Clip luminosity distance to [eps, inf)
                 x_clipped = x_clipped.at[:, i].set(
-                    jnp.clip(x_data[:, i], 1e-7, None)
+                    jnp.clip(x_data[:, i], eps, None)
                 )
         
         return x_clipped
@@ -1054,33 +1055,50 @@ class NFPriorCreator:
         
         if self.constrain_flowjax_dist:
             print("Using constrained training approach (Option 2): transform data to unbounded space")
-            # Create parameter bijections for constraints
-            param_bijection = self._create_parameter_bijections()
+            # Create parameter bijections for constraints: this goes from unbounded to constrained space
+            to_constrained = self._create_parameter_bijections()
+            print(f"Created constrained flow with bijection: {to_constrained}")
             
             # Clip data for numerical stability (following documentation example)
             x_train_clipped = self._clip_data_for_constraints(x_train_data)
             
-            # Transform data to unbounded space using inverse bijection
-            print("Transforming training data to unbounded space")
-            x_train_unbounded = jax.vmap(param_bijection.inverse)(x_train_clipped)
+            # # Option 2: Transform data to unbounded space using the inverse of the bijection
+            # # Transform data to unbounded space using inverse bijection
+            # print("Transforming training data to unbounded space")
+            # x_train_unbounded = jax.vmap(to_constrained.inverse)(x_train_clipped)
             
-            # Train unbounded flow on transformed data
+            # # Train unbounded flow on transformed data
+            # key, subkey = jr.split(key)
+            # flow_trained, losses = fit_to_data(
+            #     key=subkey,
+            #     dist=unbounded_flow,
+            #     data=x_train_unbounded,
+            #     learning_rate=self.learning_rate,
+            #     max_epochs=self.num_epochs,
+            #     batch_size=self.batch_size,
+            #     max_patience=self.max_patience,
+            #     val_prop=self.validation_split_fraction
+            # )
+            # flow = Transformed(flow_trained, non_trainable(to_constrained))
+            
+            # Option 1: Transform the flow to match data support
+            flow_constrained_1 = Transformed(
+                unbounded_flow,
+                non_trainable(to_constrained) # Ensure constraint not trained!
+            )
+            
+            # Train constrained flow on original dataset
             key, subkey = jr.split(key)
-            flow_trained, losses = fit_to_data(
+            flow, losses = fit_to_data(
                 key=subkey,
-                dist=unbounded_flow,
-                data=x_train_unbounded,
+                dist=flow_constrained_1,
+                data=x_train_clipped,
                 learning_rate=self.learning_rate,
                 max_epochs=self.num_epochs,
                 batch_size=self.batch_size,
                 max_patience=self.max_patience,
                 val_prop=self.validation_split_fraction
             )
-            
-            # Apply constraints post-training (non-trainable ensures constraint params aren't optimized)
-            print("Applying constraints to trained flow")
-            flow = Transformed(flow_trained, non_trainable(param_bijection))
-            print(f"Created constrained flow with bijection: {param_bijection}")
         else:
             print("Using unconstrained training (original behavior)")
             # Train directly on original data
