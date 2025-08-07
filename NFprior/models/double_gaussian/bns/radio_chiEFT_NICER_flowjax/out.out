@@ -21,14 +21,14 @@ Number of good samples:  0.9882
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.134362274416663, 2.7320199468730926]
-  m2: range = [0.9098326719781757, 2.377506862867255]
-  mass_ratio: range = [0.4365759462841935, 0.9999996819658888]
-  lambda_1: range = [2.9612717138223696, 2529.152557845583]
-  lambda_2: range = [3.233318916387428, 5701.1464400652185]
-  lambda_tilde: range = [3.235995631787568, 2854.402899255401]
-  delta_lambda_tilde: range = [-4.013503702990976, 408.2135356177753]
-  chirp_mass_source: range = [0.9569258978358942, 2.0792446325797984]
+  m1: range = [1.1494105757844966, 2.6988902522521347]
+  m2: range = [0.9206114777600645, 2.333223370242534]
+  mass_ratio: range = [0.46262420221091005, 0.9999990615455724]
+  lambda_1: range = [2.945880062453524, 3399.2022421760444]
+  lambda_2: range = [4.21612508595392, 6134.879963916901]
+  lambda_tilde: range = [4.216641839529826, 3474.185226584837]
+  delta_lambda_tilde: range = [-5.9047602645449135, 358.31766492827796]
+  chirp_mass_source: range = [0.9386782792188576, 2.084673053839856]
 Saving to ./models/double_gaussian/bns/radio_chiEFT_NICER_flowjax/training_data.npz:
 Saving to ./models/double_gaussian/bns/radio_chiEFT_NICER_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -48,8 +48,6 @@ Applied identity (unbounded) to parameter 0: chirp_mass_source
 Applied mass_ratio constraint [0.1, 1.0] to parameter 1: mass_ratio
 Applied lambda constraint > 0 to parameter 2: lambda_1
 Applied lambda constraint > 0 to parameter 3: lambda_2
-Transforming training data to unbounded space
-Applying constraints to trained flow
 Created constrained flow with bijection: Stack(
   shape=(4,),
   cond_shape=None,
@@ -64,7 +62,7 @@ Created constrained flow with bijection: Stack(
           shape=(),
           loc=f32[],
           scale=Parameterize(
-            fn=<PjitFunction of <function softplus at 0x1509226e1090>>,
+            fn=<PjitFunction of <function softplus at 0x14a03b8d1090>>,
             args=(f32[],),
             kwargs={}
           )
@@ -78,7 +76,7 @@ Created constrained flow with bijection: Stack(
 )
 Training flowJAX model on data shape: (198000, 4)
 Saving the training loss plot to ./models/double_gaussian/bns/radio_chiEFT_NICER_flowjax/training_loss.pdf
-Training done. Took around 25.58 minutes
+Training done. Took around 25.39 minutes
 Saving the flowJAX model to ./models/double_gaussian/bns/radio_chiEFT_NICER_flowjax/model.eqx
 Saving the model kwargs to ./models/double_gaussian/bns/radio_chiEFT_NICER_flowjax/model_kwargs.json
 DONE training!

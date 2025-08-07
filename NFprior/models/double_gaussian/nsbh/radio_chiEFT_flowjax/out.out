@@ -21,14 +21,14 @@ Number of good samples:  0.954
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.0026791948955274, 4.999999788848395]
-  m2: range = [0.8502692418201399, 2.834685988835479]
-  mass_ratio: range = [0.2119756044757527, 1.2135741452679367]
+  m1: range = [2.0028361955692002, 4.999974242887819]
+  m2: range = [0.8511806568331727, 2.685203446031651]
+  mass_ratio: range = [0.19754440025615919, 1.1659315487641677]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [2.629843725459263, 7610.867616049998]
-  lambda_tilde: range = [0.2799096008122404, 496.86009634481417]
-  delta_lambda_tilde: range = [0.13806810401875413, 236.66428271133856]
-  chirp_mass_source: range = [1.2695486608587943, 3.19214145610888]
+  lambda_2: range = [2.727065191146386, 5638.34656728533]
+  lambda_tilde: range = [0.2701724423020794, 510.2676068759085]
+  delta_lambda_tilde: range = [0.13303801681740202, 246.64514997311528]
+  chirp_mass_source: range = [1.296608497085128, 3.0989861314084193]
 Saving to ./models/double_gaussian/nsbh/radio_chiEFT_flowjax/training_data.npz:
 Saving to ./models/double_gaussian/nsbh/radio_chiEFT_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -36,9 +36,9 @@ Using component parameterization for lambdas (lambda_1, lambda_2)
 Training samples: 198000, Validation samples: 2000
 Creating the training data arrays
 NSBH and training on lambda_2 (3D)
-WARNING: 88/198000 training samples violate mass_ratio bounds [0.1, 1.0]
-  Range in data: [0.2120, 1.2136]
-WARNING: 2/2000 validation samples violate mass_ratio bounds
+WARNING: 81/198000 training samples violate mass_ratio bounds [0.1, 1.0]
+  Range in data: [0.1975, 1.1590]
+WARNING: 1/2000 validation samples violate mass_ratio bounds
 Parameter bounds validation completed
 np.shape(self.x)
 (198000, 3)
@@ -50,8 +50,6 @@ Using constrained training approach (Option 2): transform data to unbounded spac
 Applied identity (unbounded) to parameter 0: chirp_mass_source
 Applied mass_ratio constraint [0.1, 1.0] to parameter 1: mass_ratio
 Applied lambda constraint > 0 to parameter 2: lambda_2
-Transforming training data to unbounded space
-Applying constraints to trained flow
 Created constrained flow with bijection: Stack(
   shape=(3,),
   cond_shape=None,
@@ -66,7 +64,7 @@ Created constrained flow with bijection: Stack(
           shape=(),
           loc=f32[],
           scale=Parameterize(
-            fn=<PjitFunction of <function softplus at 0x152f210d5090>>,
+            fn=<PjitFunction of <function softplus at 0x151f09da5090>>,
             args=(f32[],),
             kwargs={}
           )
@@ -79,7 +77,7 @@ Created constrained flow with bijection: Stack(
 )
 Training flowJAX model on data shape: (198000, 3)
 Saving the training loss plot to ./models/double_gaussian/nsbh/radio_chiEFT_flowjax/training_loss.pdf
-Training done. Took around 31.48 minutes
+Training done. Took around 19.00 minutes
 Saving the flowJAX model to ./models/double_gaussian/nsbh/radio_chiEFT_flowjax/model.eqx
 Saving the model kwargs to ./models/double_gaussian/nsbh/radio_chiEFT_flowjax/model_kwargs.json
 DONE training!
