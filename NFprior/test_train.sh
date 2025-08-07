@@ -1,2 +1,4 @@
-# Test constrained flowjax training
-python train_NF_prior.py --population-type uniform --source-type bns --eos-samples-name radio --no-use-tilde --no-use-component-masses --N-samples-training 1000 --N-samples-plot 1000 --m-max-BH 5.0 --no-take-log-lambda --use-flowjax --scale-input --num-epochs 10 --learning-rate 0.001 --batch-size 512 --max-patience 10 --nn-depth 1 --nn-block-dim 8 --flow-layers 1 --validation-split-fraction 0.2 --constrain-flowjax-dist
+# # Test constrained flowjax training
+# python train_NF_prior.py --population-type uniform --source-type bns --eos-samples-name radio --no-use-tilde --no-use-component-masses --N-samples-training 1000 --N-samples-plot 1000 --m-max-BH 5.0 --no-take-log-lambda --use-flowjax --scale-input --num-epochs 10 --learning-rate 0.001 --batch-size 512 --max-patience 10 --nn-depth 1 --nn-block-dim 8 --flow-layers 1 --validation-split-fraction 0.2 --constrain-flowjax-dist
+
+python train_NF_prior.py --population-type uniform --source-type bns --eos-samples-name radio --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 10 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16 --N-samples-training 1000 --N-samples-plot 1000

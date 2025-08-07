@@ -1,49 +1,47 @@
+JAX: devices available: [CudaDevice(id=0)]
 torch: CUDA is available. Number of devices: 1
 torch: Current CUDA device: 0
-Starting training with the following parameters:
-    - population_type: uniform
-    - source_type: nsbh
-    - eos_samples_name: radio_chiEFT
-    - use_tilde: False
-    - use_component_masses: False
-    - N_samples_training: 200000
-    - N_samples_plot: 10000
-    - m_max_BH: 5.0
-    - take_log_lambda: False
-    - use_flowjax: False
-    - scale_input: True
-    - num_epochs: 1000
-    - learning_rate: 0.001
-    - batch_size: 1024
-    - max_patience: 100
-    - n_transforms: 4
-    - n_neurons: 64
-    - n_blocks_per_transform: 1
-    - num_bins: 10
-    - nn_depth: 5
-    - nn_block_dim: 8
-    - validation_split_fraction: 0.2
-Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/../data/eos/radio_chiEFT/eos_samples.npz
+Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
 Training a normalizing flow for population =  uniform and nsbh sources
-Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 5, 'nn_block_dim': 8, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 256, 'n_blocks_per_transform': 6, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
 Everything for this model will be saved to ./models/uniform/nsbh/radio_chiEFT
-Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/../data/eos/radio_chiEFT/eos_samples.npz
+Starting training with the following parameters:
+Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
 Number of good samples:  0.954
-Saving training data to ./models/uniform/nsbh/radio_chiEFT/training_data.npz
-Saving training data DONE
-Using chirp mass and mass ratio (Mc, q) for training
+0/200000
+20000/200000
+40000/200000
+60000/200000
+80000/200000
+100000/200000
+120000/200000
+140000/200000
+160000/200000
+180000/200000
+Create data will save the following data:
+  m1: range = [2.0033546972068232, 4.999998450805684]
+  m2: range = [1.0000073662610964, 3.280742855920941]
+  mass_ratio: range = [0.20017760831640224, 0.9993445524335675]
+  lambda_1: range = [0.0001, 0.0001]
+  lambda_2: range = [2.752719037712384, 8064.202532283225]
+  lambda_tilde: range = [0.31182223914741825, 709.8717362309808]
+  delta_lambda_tilde: range = [0.1529076805019559, 342.717808309137]
+  chirp_mass_source: range = [1.224749242967771, 3.4003812361198644]
+Saving to ./models/uniform/nsbh/radio_chiEFT/training_data.npz:
+Saving to ./models/uniform/nsbh/radio_chiEFT/training_data.npz DONE
+Using source-frame chirp mass and mass ratio (Mc, q) for training
 Using component parameterization for lambdas (lambda_1, lambda_2)
 Training samples: 160000, Validation samples: 40000
-We are training NSBH
-NSBH: training lambda_2
+Creating the training data arrays
+NSBH and training on lambda_2 (3D)
 np.shape(self.x)
 (160000, 3)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/nsbh/radio_chiEFT/scaler.gz
 Going to start training for glasflow . . .
-Early stopping triggered at epoch 400
+Early stopping triggered at epoch 688
 Saving the training loss plot to ./models/uniform/nsbh/radio_chiEFT/training_loss.pdf
-Training done. Took around 40.91 minutes
+Training done. Took around 82.34 minutes
 Saving the model weights to ./models/uniform/nsbh/radio_chiEFT/model.pt
 Saving the model kwargs to ./models/uniform/nsbh/radio_chiEFT/model_kwargs.json
 DONE training!

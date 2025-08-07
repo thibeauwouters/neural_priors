@@ -1,48 +1,47 @@
+JAX: devices available: [CudaDevice(id=0)]
 torch: CUDA is available. Number of devices: 1
 torch: Current CUDA device: 0
-Starting training with the following parameters:
-    - population_type: gaussian
-    - source_type: bns
-    - eos_samples_name: radio_chiEFT_NICER
-    - use_tilde: False
-    - use_component_masses: False
-    - N_samples_training: 200000
-    - N_samples_plot: 10000
-    - m_max_BH: 5.0
-    - take_log_lambda: False
-    - use_flowjax: False
-    - scale_input: True
-    - num_epochs: 1000
-    - learning_rate: 0.001
-    - batch_size: 1024
-    - max_patience: 100
-    - n_transforms: 4
-    - n_neurons: 64
-    - n_blocks_per_transform: 1
-    - num_bins: 10
-    - nn_depth: 5
-    - nn_block_dim: 8
-    - validation_split_fraction: 0.2
-Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/../data/eos/radio_chiEFT_NICER/eos_samples.npz
+Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT_NICER/eos_samples.npz
 Training a normalizing flow for population =  gaussian and bns sources
-Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 64, 'n_blocks_per_transform': 1, 'nn_depth': 5, 'nn_block_dim': 8, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], 'n_inputs': 4}
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 256, 'n_blocks_per_transform': 6, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], 'n_inputs': 4}
 Everything for this model will be saved to ./models/gaussian/bns/radio_chiEFT_NICER
-Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/../data/eos/radio_chiEFT_NICER/eos_samples.npz
+Starting training with the following parameters:
+Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT_NICER/eos_samples.npz
 Number of good samples:  0.9882
-Saving training data to ./models/gaussian/bns/radio_chiEFT_NICER/training_data.npz
-Saving training data DONE
-Using chirp mass and mass ratio (Mc, q) for training
+0/200000
+20000/200000
+40000/200000
+60000/200000
+80000/200000
+100000/200000
+120000/200000
+140000/200000
+160000/200000
+180000/200000
+Create data will save the following data:
+  m1: range = [1.0693725596480488, 1.7495168963276808]
+  m2: range = [0.8902794618106376, 1.6030127749650434]
+  mass_ratio: range = [0.6443034731129255, 0.9999998181175285]
+  lambda_1: range = [50.05297342783989, 3557.162355874082]
+  lambda_2: range = [123.6729798726385, 7537.746964429642]
+  lambda_tilde: range = [118.5185327582376, 3890.502684103742]
+  delta_lambda_tilde: range = [-8.306051402504627, 584.9840470492767]
+  chirp_mass_source: range = [0.8922812678701143, 1.4081012646249529]
+Saving to ./models/gaussian/bns/radio_chiEFT_NICER/training_data.npz:
+Saving to ./models/gaussian/bns/radio_chiEFT_NICER/training_data.npz DONE
+Using source-frame chirp mass and mass ratio (Mc, q) for training
 Using component parameterization for lambdas (lambda_1, lambda_2)
 Training samples: 160000, Validation samples: 40000
-We are training for BNS
+Creating the training data arrays
+4D training data model for bns
 np.shape(self.x)
 (160000, 4)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/gaussian/bns/radio_chiEFT_NICER/scaler.gz
 Going to start training for glasflow . . .
-Early stopping triggered at epoch 609
+Early stopping triggered at epoch 1033
 Saving the training loss plot to ./models/gaussian/bns/radio_chiEFT_NICER/training_loss.pdf
-Training done. Took around 61.49 minutes
+Training done. Took around 132.46 minutes
 Saving the model weights to ./models/gaussian/bns/radio_chiEFT_NICER/model.pt
 Saving the model kwargs to ./models/gaussian/bns/radio_chiEFT_NICER/model_kwargs.json
 DONE training!

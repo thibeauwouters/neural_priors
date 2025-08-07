@@ -211,3 +211,84 @@
 
 	Job terminated of its own accord at 2025-07-30T15:16:24Z with exit-code 0.
 ...
+000 (2588212.000.000) 2025-08-07 16:34:48 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+001 (2588212.000.000) 2025-08-07 16:34:59 Job executing on host: <145.107.4.167:9618?addrs=145.107.4.167-9618+[2a07-8500-120-e070--a7]-9618&alias=wn-pijl-006.nikhef.nl&noUDP&sock=startd_4304_c3b5>
+	SlotName: slot1_2@wn-pijl-006.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_feb79665_637f_7d00_0944_9b688d6e2aa4 }
+	CondorScratchDir = "/scratch/condor_execute/dir_2457349"
+	Cpus = 1
+	Disk = 16790397
+	GPUs = 1
+	GPUs_GPU_feb79665_637f_7d00_0944_9b688d6e2aa4 = [ Id = "GPU-feb79665-637f-7d00-0944-9b688d6e2aa4"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "feb79665-637f-7d00-0944-9b688d6e2aa4"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "570.124.06"; DriverVersion = 12.8; DevicePciBusId = "0000:02:00.0"; GlobalMemoryMb = 45468; MaxSupportedVersion = 12080 ]
+	Memory = 16384
+...
+006 (2588212.000.000) 2025-08-07 16:35:13 Image size of job updated: 604996
+	591  -  MemoryUsage of job (MB)
+	604996  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 16:40:13 Image size of job updated: 1321656
+	1290  -  MemoryUsage of job (MB)
+	1319972  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 16:45:14 Image size of job updated: 1321656
+	1290  -  MemoryUsage of job (MB)
+	1320196  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 16:50:15 Image size of job updated: 1321656
+	1290  -  MemoryUsage of job (MB)
+	1320200  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 16:55:15 Image size of job updated: 1329832
+	1299  -  MemoryUsage of job (MB)
+	1329832  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 17:00:16 Image size of job updated: 1374480
+	1343  -  MemoryUsage of job (MB)
+	1374480  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 17:05:16 Image size of job updated: 1550412
+	1515  -  MemoryUsage of job (MB)
+	1550412  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 17:10:16 Image size of job updated: 1560024
+	1524  -  MemoryUsage of job (MB)
+	1560024  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 17:15:17 Image size of job updated: 1560040
+	1524  -  MemoryUsage of job (MB)
+	1560040  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 17:25:17 Image size of job updated: 1561996
+	1526  -  MemoryUsage of job (MB)
+	1561996  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 17:45:19 Image size of job updated: 1564224
+	1528  -  MemoryUsage of job (MB)
+	1564224  -  ResidentSetSize of job (KB)
+...
+006 (2588212.000.000) 2025-08-07 18:30:22 Image size of job updated: 1564240
+	1528  -  MemoryUsage of job (MB)
+	1564224  -  ResidentSetSize of job (KB)
+...
+005 (2588212.000.000) 2025-08-07 18:30:22 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 01:54:58, Sys 0 00:00:16  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 01:54:58, Sys 0 00:00:16  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :     0.12        1         1 "GPU-feb79665-637f-7d00-0944-9b688d6e2aa4"
+	   GpusMemory (MB)      :  1362                       
+	   Memory (MB)          :  1528       16384     16384 
+	   TimeExecute (s)      :  6923                       
+	   TimeSlotBusy (s)     :  6923                       
+
+	Job terminated of its own accord at 2025-08-07T16:30:22Z with exit-code 0.
+...
