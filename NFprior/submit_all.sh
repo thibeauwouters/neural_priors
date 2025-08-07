@@ -1,45 +1,20 @@
 #!/bin/bash
 
-python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type bns --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type bns --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type bns --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type bns --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type bns --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type bns --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type bns --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type bns --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type bns --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type nsbh --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type nsbh --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type uniform --source-type nsbh --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type nsbh --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type nsbh --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type nsbh --eos-samples-name radio --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-# python train_NF_prior.py --submit --use-flowjax --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --batch-size 256 --learning-rate 1e-3 --max-patience 250 --num-epochs 2000
-
-
-# ### GW170817 ###
-# python train_NF_prior.py --submit --use-flowjax --population-type GW170817 --source-type bns --eos-samples-name radio
-# python train_NF_prior.py --submit --use-flowjax --population-type GW170817 --source-type bns --eos-samples-name radio_chiEFT
-# python train_NF_prior.py --submit --use-flowjax --population-type GW170817 --source-type bns --eos-samples-name radio_chiEFT_NICER
-# python train_NF_prior.py --submit --use-flowjax --population-type GW170817 --source-type nsbh --eos-samples-name radio
-# python train_NF_prior.py --submit --use-flowjax --population-type GW170817 --source-type nsbh --eos-samples-name radio_chiEFT
-# python train_NF_prior.py --submit --use-flowjax --population-type GW170817 --source-type nsbh --eos-samples-name radio_chiEFT_NICER
-
-# ### GW190425 ###
-# python train_NF_prior.py --submit --use-flowjax --population-type GW190425 --source-type bns --eos-samples-name radio
-# python train_NF_prior.py --submit --use-flowjax --population-type GW190425 --source-type bns --eos-samples-name radio_chiEFT
-# python train_NF_prior.py --submit --use-flowjax --population-type GW190425 --source-type bns --eos-samples-name radio_chiEFT_NICER
-# python train_NF_prior.py --submit --use-flowjax --population-type GW190425 --source-type nsbh --eos-samples-name radio
-# python train_NF_prior.py --submit --use-flowjax --population-type GW190425 --source-type nsbh --eos-samples-name radio_chiEFT
-# python train_NF_prior.py --submit --use-flowjax --population-type GW190425 --source-type nsbh --eos-samples-name radio_chiEFT_NICER
-
-# ### GW230529 ###
-# python train_NF_prior.py --submit --use-flowjax --population-type GW230529 --source-type bns --eos-samples-name radio
-# python train_NF_prior.py --submit --use-flowjax --population-type GW230529 --source-type bns --eos-samples-name radio_chiEFT
-# python train_NF_prior.py --submit --use-flowjax --population-type GW230529 --source-type bns --eos-samples-name radio_chiEFT_NICER
-# python train_NF_prior.py --submit --use-flowjax --population-type GW230529 --source-type nsbh --eos-samples-name radio
-# python train_NF_prior.py --submit --use-flowjax --population-type GW230529 --source-type nsbh --eos-samples-name radio_chiEFT
-# python train_NF_prior.py --submit --use-flowjax --population-type GW230529 --source-type nsbh --eos-samples-name radio_chiEFT_NICER
+python train_NF_prior.py --submit --population-type uniform --source-type bns --eos-samples-name radio --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type uniform --source-type bns --eos-samples-name radio_chiEFT --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type uniform --source-type bns --eos-samples-name radio_chiEFT_NICER --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type gaussian --source-type bns --eos-samples-name radio --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type gaussian --source-type bns --eos-samples-name radio_chiEFT --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type gaussian --source-type bns --eos-samples-name radio_chiEFT_NICER --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type double_gaussian --source-type bns --eos-samples-name radio --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type double_gaussian --source-type bns --eos-samples-name radio_chiEFT --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type double_gaussian --source-type bns --eos-samples-name radio_chiEFT_NICER --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type uniform --source-type nsbh --eos-samples-name radio --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type uniform --source-type nsbh --eos-samples-name radio_chiEFT --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type uniform --source-type nsbh --eos-samples-name radio_chiEFT_NICER --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type gaussian --source-type nsbh --eos-samples-name radio --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type gaussian --source-type nsbh --eos-samples-name radio_chiEFT --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type double_gaussian --source-type nsbh --eos-samples-name radio --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16
+python train_NF_prior.py --submit --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --batch-size 1024 --learning-rate 5e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16

@@ -16,6 +16,7 @@ from scipy.special import kl_div
 from scipy.stats import gaussian_kde, chisquare
 
 from glasflow.flows.nsf import CouplingNSF
+from bilby.gw.conversion import component_masses_to_chirp_mass
 
 ### flowjax imports
 import jax
@@ -961,6 +962,10 @@ class CheckerUnconditional(Checker):
                 # Calculate q = m2/m1 on the fly
                 q = self.training_data["m2"] / self.training_data["m1"]
                 training_columns.append(q)
+            elif param_name == "chirp_mass_source" and "m1" in self.training_data and "m2" in self.training_data:
+                # Calculate chirp_mass_source from component masses using bilby
+                chirp_mass_source = component_masses_to_chirp_mass(self.training_data["m1"], self.training_data["m2"])
+                training_columns.append(chirp_mass_source)
             else:
                 raise KeyError(f"Parameter '{param_name}' not found in training data and cannot be computed from available data. Available keys: {list(self.training_data.keys())}")
         
