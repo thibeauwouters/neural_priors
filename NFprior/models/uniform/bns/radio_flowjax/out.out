@@ -21,14 +21,14 @@ Number of good samples:  0.9601
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.0019807413112816, 3.6799824554222957]
-  m2: range = [1.0000008260280235, 3.395078085782989]
-  mass_ratio: range = [0.32986313359513997, 0.9999947204554892]
-  lambda_1: range = [2.5522286944770336, 5697.50992562157]
-  lambda_2: range = [5.040312386014468, 7997.479051737537]
-  lambda_tilde: range = [4.326617673808561, 5995.967158841322]
-  delta_lambda_tilde: range = [0.0002437026915867743, 508.4406813657141]
-  chirp_mass_source: range = [0.8722702557837431, 2.9611430567993233]
+  m1: range = [1.0007685139458866, 3.6818031840050525]
+  m2: range = [1.0000033023394568, 3.1135499295306968]
+  mass_ratio: range = [0.30529808684062043, 0.9999981881011276]
+  lambda_1: range = [2.4684303535602785, 6059.811996677294]
+  lambda_2: range = [3.928974780545865, 8285.181958704112]
+  lambda_tilde: range = [3.7010700492213, 6422.0961368244525]
+  delta_lambda_tilde: range = [7.984846977362684e-05, 514.8121927077008]
+  chirp_mass_source: range = [0.8710721334595757, 2.829722421183461]
 Saving to ./models/uniform/bns/radio_flowjax/training_data.npz:
 Saving to ./models/uniform/bns/radio_flowjax/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -62,7 +62,7 @@ Created constrained flow with bijection: Stack(
           shape=(),
           loc=f32[],
           scale=Parameterize(
-            fn=<PjitFunction of <function softplus at 0x14d7902c9090>>,
+            fn=<PjitFunction of <function softplus at 0x1475eb29d120>>,
             args=(f32[],),
             kwargs={}
           )
@@ -74,9 +74,10 @@ Created constrained flow with bijection: Stack(
   ],
   axis=0
 )
+Transforming training data to unbounded space
 Training flowJAX model on data shape: (198000, 4)
 Saving the training loss plot to ./models/uniform/bns/radio_flowjax/training_loss.pdf
-Training done. Took around 39.15 minutes
+Training done. Took around 22.14 minutes
 Saving the flowJAX model to ./models/uniform/bns/radio_flowjax/model.eqx
 Saving the model kwargs to ./models/uniform/bns/radio_flowjax/model_kwargs.json
 DONE training!
