@@ -3,45 +3,46 @@ torch: CUDA is available. Number of devices: 1
 torch: Current CUDA device: 0
 Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
 Training a normalizing flow for population =  uniform and bns sources
-Before training, we built the following NF kwargs: {'n_transforms': 3, 'n_neurons': 128, 'n_blocks_per_transform': 3, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'glasflow_type': 'MaskedAffineAutoregressiveFlow', 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], 'n_inputs': 4}
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 128, 'n_blocks_per_transform': 2, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'glasflow_type': 'CouplingNSF', 'batch_norm_within_blocks': True, 'batch_norm_between_transforms': False, 'activation': 'relu', 'dropout_probability': 0.0, 'linear_transform': 'permutation', 'tail_bound': 5.0, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], 'n_inputs': 4}
 Everything for this model will be saved to ./models/uniform/bns/radio
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
 Number of good samples:  0.9601
-0/50000
-5000/50000
-10000/50000
-15000/50000
-20000/50000
-25000/50000
-30000/50000
-35000/50000
-40000/50000
-45000/50000
+0/200000
+20000/200000
+40000/200000
+60000/200000
+80000/200000
+100000/200000
+120000/200000
+140000/200000
+160000/200000
+180000/200000
 Create data will save the following data:
-  m1: range = [1.005437167649891, 3.440813469426861]
-  m2: range = [1.0000063832694885, 3.332137935885805]
-  mass_ratio: range = [0.34119832125303484, 0.999984882398129]
-  lambda_1: range = [2.8409324222747716, 5835.9390673338785]
-  lambda_2: range = [5.080397582505615, 8201.566015760052]
-  lambda_tilde: range = [4.687498208521933, 5942.700003379861]
-  delta_lambda_tilde: range = [0.002489142710063708, 505.47491518400375]
-  chirp_mass_source: range = [0.8743556295295573, 2.912774178337903]
+  m1: range = [1.0021052680193692, 3.5748356560846473]
+  m2: range = [1.0000002129482193, 3.340173631475704]
+  mass_ratio: range = [0.3370134197483975, 0.9999984981842838]
+  lambda_1: range = [2.7459748860936934, 6899.657199480148]
+  lambda_2: range = [4.222364277542011, 8413.952424389512]
+  lambda_tilde: range = [3.6096844177185723, 6946.729924791555]
+  delta_lambda_tilde: range = [0.00012030289667117298, 538.7150617583577]
+  chirp_mass_source: range = [0.8718864774339641, 3.0078524004359117]
 Saving to ./models/uniform/bns/radio/training_data.npz:
 Saving to ./models/uniform/bns/radio/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
 Using component parameterization for lambdas (lambda_1, lambda_2)
-Training samples: 40000, Validation samples: 10000
+Training samples: 160000, Validation samples: 40000
 Creating the training data arrays
 4D training data model for bns
 np.shape(self.x)
-(40000, 4)
+(160000, 4)
 Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/bns/radio/scaler.gz
 Going to start training for glasflow . . .
-Early stopping triggered at epoch 1213
+Only RELU supported for now
+Early stopping triggered at epoch 656
 Saving the training loss plot to ./models/uniform/bns/radio/training_loss.pdf
-Training done. Took around 12.17 minutes
+Training done. Took around 76.98 minutes
 Saving the model weights to ./models/uniform/bns/radio/model.pt
 Saving the model kwargs to ./models/uniform/bns/radio/model_kwargs.json
 DONE training!

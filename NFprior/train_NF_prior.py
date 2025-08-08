@@ -243,7 +243,7 @@ parser.add_argument("--batch-norm-within-blocks",
 parser.add_argument("--no-batch-norm-within-blocks", 
                     dest="batch_norm_within_blocks", 
                     action="store_false")
-parser.set_defaults(batch_norm_within_blocks=True)
+parser.set_defaults(batch_norm_within_blocks=False)
 parser.add_argument("--batch-norm-between-transforms", 
                     action="store_true", 
                     help="Enable batch norm between transforms")
