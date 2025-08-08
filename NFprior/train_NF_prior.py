@@ -770,9 +770,17 @@ class NFPriorCreator:
         
         if self.scale_input:
             print(f"Using MinMaxScaler to scale the input data x")
+    
+            # Combine training and validation data for fitting the scaler. I should have actually fitted the scaler before train-test split, but this will work as well
+            x_combined = np.vstack([self.x, self.x_val])
+            
+            # Fit scaler on combined data
             scaler = MinMaxScaler()
-            self.x = scaler.fit_transform(self.x)
-            self.x_val = scaler.transform(self.x_val)  # Apply same scaling to validation
+            scaler.fit(x_combined)
+            
+            # Transform both datasets using the same scaler
+            self.x = scaler.transform(self.x)
+            self.x_val = scaler.transform(self.x_val)
             
             # Save the scaler to a file we can unpickle later on
             scaler_savename = os.path.join(self.outdir, "scaler.gz")
