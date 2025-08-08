@@ -262,8 +262,8 @@ parser.add_argument("--dropout-probability",
                     help="Dropout probability (default: 0.0)")
 parser.add_argument("--linear-transform", 
                     type=str, 
-                    default=None, 
-                    choices=["permutation", "lu", "svd"], 
+                    default="None",
+                    choices=["permutation", "lu", "svd", "None"],
                     help="Linear transform to apply before each coupling transform")
 parser.add_argument("--tail-bound", 
                     type=float, 
@@ -315,7 +315,7 @@ class NFPriorCreator:
                  batch_norm_between_transforms: bool = False,
                  activation: str = "relu",
                  dropout_probability: float = 0.0,
-                 linear_transform: str = None,
+                 linear_transform: str = "None",
                  tail_bound: float = 5.0
                  ):
         """
@@ -396,6 +396,9 @@ class NFPriorCreator:
         self.batch_norm_between_transforms = batch_norm_between_transforms
         self.activation = activation
         self.dropout_probability = dropout_probability
+        # TODO: a bit hacky
+        if linear_transform == "None":
+            linear_transform = None
         self.linear_transform = linear_transform
         self.tail_bound = tail_bound
         

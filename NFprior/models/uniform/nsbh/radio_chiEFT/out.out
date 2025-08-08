@@ -3,7 +3,7 @@ torch: CUDA is available. Number of devices: 1
 torch: Current CUDA device: 0
 Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
 Training a normalizing flow for population =  uniform and nsbh sources
-Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 128, 'n_blocks_per_transform': 2, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'glasflow_type': 'CouplingNSF', 'batch_norm_within_blocks': True, 'batch_norm_between_transforms': False, 'activation': 'relu', 'dropout_probability': 0.0, 'linear_transform': 'permutation', 'tail_bound': 5.0, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 256, 'n_blocks_per_transform': 3, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'glasflow_type': 'CouplingNSF', 'batch_norm_within_blocks': False, 'batch_norm_between_transforms': False, 'activation': 'relu', 'dropout_probability': 0.0, 'linear_transform': None, 'tail_bound': 5.0, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_2'], 'n_inputs': 3}
 Everything for this model will be saved to ./models/uniform/nsbh/radio_chiEFT
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
@@ -19,14 +19,14 @@ Number of good samples:  0.954
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.0100731324271877, 4.999998650095709]
-  m2: range = [1.0000006943025834, 3.2332201757391457]
-  mass_ratio: range = [0.20046350963908893, 0.999005697424228]
+  m1: range = [2.002338920342599, 4.999979626658218]
+  m2: range = [1.0000019021875883, 3.340865400816567]
+  mass_ratio: range = [0.20052637551354593, 0.9962410014011149]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [2.6393553018594678, 8021.5692665101715]
-  lambda_tilde: range = [0.3031407972601644, 683.95573467588]
-  delta_lambda_tilde: range = [0.14964979843658055, 331.2503819433284]
-  chirp_mass_source: range = [1.2329489308466506, 3.353129506224561]
+  lambda_2: range = [2.738002250016114, 8070.754886413845]
+  lambda_tilde: range = [0.2997886236814979, 744.7905759558724]
+  delta_lambda_tilde: range = [0.14851299765526293, 359.4189683403687]
+  chirp_mass_source: range = [1.233704654545498, 3.5104488992851715]
 Saving to ./models/uniform/nsbh/radio_chiEFT/training_data.npz:
 Saving to ./models/uniform/nsbh/radio_chiEFT/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/nsbh/radio_chiEFT/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 513
+Early stopping triggered at epoch 1175
 Saving the training loss plot to ./models/uniform/nsbh/radio_chiEFT/training_loss.pdf
-Training done. Took around 61.16 minutes
+Training done. Took around 134.19 minutes
 Saving the model weights to ./models/uniform/nsbh/radio_chiEFT/model.pt
 Saving the model kwargs to ./models/uniform/nsbh/radio_chiEFT/model_kwargs.json
 DONE training!

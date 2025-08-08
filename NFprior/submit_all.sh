@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Common parameters for CouplingNSF architecture and training methods
-COMMON_ARGS="--submit --batch-size 1024 --learning-rate 1e-4 --max-patience 100 --num-epochs 2000 --n-neurons 128 --n-blocks-per-transform 2 --num-bins 4 --N-samples-training 200000 --batch-norm-within-blocks --linear-transform permutation"
+COMMON_ARGS="--submit --batch-size 1024 --learning-rate 1e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 3 --num-bins 8 --N-samples-training 200000"
 
 # Arrays for iteration
 POPULATIONS=("uniform" "gaussian" "double_gaussian")
