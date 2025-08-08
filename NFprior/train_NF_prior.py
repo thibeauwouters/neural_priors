@@ -10,6 +10,7 @@ import os
 import argparse
 import numpy as np
 import json
+import torch.nn.functional as F
 
 ### bilby imports
 from bilby.core.prior.analytical import Uniform
@@ -234,6 +235,40 @@ parser.add_argument("--no-constrain-flowjax-dist",
                     dest="constrain_flowjax_dist", 
                     action="store_false")
 parser.set_defaults(constrain_flowjax_dist=True)
+
+# CouplingNSF-specific hyperparameters
+parser.add_argument("--batch-norm-within-blocks", 
+                    action="store_true", 
+                    help="Enable batch normalization within each residual block")
+parser.add_argument("--no-batch-norm-within-blocks", 
+                    dest="batch_norm_within_blocks", 
+                    action="store_false")
+parser.set_defaults(batch_norm_within_blocks=True)
+parser.add_argument("--batch-norm-between-transforms", 
+                    action="store_true", 
+                    help="Enable batch norm between transforms")
+parser.add_argument("--no-batch-norm-between-transforms", 
+                    dest="batch_norm_between_transforms", 
+                    action="store_false")
+parser.set_defaults(batch_norm_between_transforms=False)
+parser.add_argument("--activation", 
+                    type=str, 
+                    default="relu", 
+                    choices=["relu", "gelu", "silu", "tanh"], 
+                    help="Activation function to use (default: relu)")
+parser.add_argument("--dropout-probability", 
+                    type=float, 
+                    default=0.0, 
+                    help="Dropout probability (default: 0.0)")
+parser.add_argument("--linear-transform", 
+                    type=str, 
+                    default=None, 
+                    choices=["permutation", "lu", "svd"], 
+                    help="Linear transform to apply before each coupling transform")
+parser.add_argument("--tail-bound", 
+                    type=float, 
+                    default=5.0, 
+                    help="Tail bound for splines (default: 5.0)")
 parser.add_argument("--setup-submission", 
                     action="store_true", 
                     help="Setup .sub file for cluster submission instead of training")
@@ -274,7 +309,14 @@ class NFPriorCreator:
                  nn_block_dim: int = 8,
                  flow_layers: int = 1,
                  validation_split_fraction: float = 0.2,
-                 constrain_flowjax_dist: bool = True
+                 constrain_flowjax_dist: bool = True,
+                 # CouplingNSF-specific arguments:
+                 batch_norm_within_blocks: bool = False,
+                 batch_norm_between_transforms: bool = False,
+                 activation: str = "relu",
+                 dropout_probability: float = 0.0,
+                 linear_transform: str = None,
+                 tail_bound: float = 5.0
                  ):
         """
         Initialize the NFPriorCreator class with the necessary parameters.
@@ -350,6 +392,12 @@ class NFPriorCreator:
         self.glasflow_type = glasflow_type
         self.validation_split_fraction = validation_split_fraction
         self.constrain_flowjax_dist = constrain_flowjax_dist
+        self.batch_norm_within_blocks = batch_norm_within_blocks
+        self.batch_norm_between_transforms = batch_norm_between_transforms
+        self.activation = activation
+        self.dropout_probability = dropout_probability
+        self.linear_transform = linear_transform
+        self.tail_bound = tail_bound
         
         # Store the NF kwargs here to dump later on
         self.nf_kwargs = {"n_transforms": self.n_transforms,
@@ -358,7 +406,13 @@ class NFPriorCreator:
                           "nn_depth": self.nn_depth,
                           "flow_layers": self.flow_layers,
                           "nn_block_dim": self.nn_block_dim,
-                          "glasflow_type": self.glasflow_type
+                          "glasflow_type": self.glasflow_type,
+                          "batch_norm_within_blocks": self.batch_norm_within_blocks,
+                          "batch_norm_between_transforms": self.batch_norm_between_transforms,
+                          "activation": self.activation,
+                          "dropout_probability": self.dropout_probability,
+                          "linear_transform": self.linear_transform,
+                          "tail_bound": self.tail_bound
                           }
         
         # Set whether this is specific for a GW event
@@ -832,6 +886,13 @@ class NFPriorCreator:
         self.nf_kwargs["use_tilde"] = str(self.use_tilde)
         self.nf_kwargs["use_component_masses"] = str(self.use_component_masses)
         self.nf_kwargs["constrain_flowjax_dist"] = str(self.constrain_flowjax_dist)
+        # Save CouplingNSF-specific hyperparameters as strings for JSON serialization
+        self.nf_kwargs["batch_norm_within_blocks"] = str(self.batch_norm_within_blocks)
+        self.nf_kwargs["batch_norm_between_transforms"] = str(self.batch_norm_between_transforms)
+        self.nf_kwargs["activation"] = str(self.activation)
+        self.nf_kwargs["dropout_probability"] = self.dropout_probability
+        self.nf_kwargs["linear_transform"] = str(self.linear_transform) if self.linear_transform else "None"
+        self.nf_kwargs["tail_bound"] = self.tail_bound
         
         print(f"Saving the model kwargs to {save_path}")
         with open(save_path, "w") as f:
@@ -846,12 +907,21 @@ class NFPriorCreator:
         # Initialize the flow model based on glasflow_type
         self.nf_kwargs["model_type"] = self.glasflow_type
         
+        # TODO: Support for other activation functions is future work
+        print("Only RELU supported for now")
+        
         if self.glasflow_type == "CouplingNSF":
             flow = CouplingNSF(n_inputs=self.nf_kwargs["n_inputs"],
                                n_transforms=self.n_transforms,
                                n_neurons=self.n_neurons,
                                n_blocks_per_transform=self.n_blocks_per_transform,
-                               num_bins=self.num_bins
+                               num_bins=self.num_bins,
+                               batch_norm_within_blocks=self.batch_norm_within_blocks,
+                               batch_norm_between_transforms=self.batch_norm_between_transforms,
+                               activation=F.relu, # TODO: hardcoded for now
+                               dropout_probability=self.dropout_probability,
+                               linear_transform=self.linear_transform,
+                               tail_bound=self.tail_bound
             )
         elif self.glasflow_type == "MaskedPiecewiseRationalQuadraticAutoregressiveFlow":
             flow = MaskedPiecewiseRationalQuadraticAutoregressiveFlow(

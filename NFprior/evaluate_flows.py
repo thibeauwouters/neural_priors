@@ -684,27 +684,57 @@ class CheckerUnconditional(Checker):
             glasflow_type = nf_kwargs.get("glasflow_type", "CouplingNSF")
             
             if glasflow_type == "CouplingNSF":
+                # TODO: Support for other activation functions is future work
+                import torch.nn.functional as F
+                
+                # Load CouplingNSF-specific hyperparameters with defaults for backward compatibility
+                batch_norm_within_blocks = nf_kwargs.get("batch_norm_within_blocks", "False") == "True"
+                batch_norm_between_transforms = nf_kwargs.get("batch_norm_between_transforms", "False") == "True"
+                dropout_probability = float(nf_kwargs.get("dropout_probability", 0.0))
+                linear_transform = nf_kwargs.get("linear_transform", "None")
+                linear_transform = None if linear_transform == "None" else linear_transform
+                tail_bound = float(nf_kwargs.get("tail_bound", 5.0))
+                
                 flow = CouplingNSF(
                     n_inputs=n_inputs,
                     n_transforms=nf_kwargs["n_transforms"],
                     n_neurons=nf_kwargs["n_neurons"],
                     n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
-                    num_bins=nf_kwargs["num_bins"]
+                    num_bins=nf_kwargs["num_bins"],
+                    batch_norm_within_blocks=batch_norm_within_blocks,
+                    batch_norm_between_transforms=batch_norm_between_transforms,
+                    activation=F.relu,  # Hardcoded to ReLU for now
+                    dropout_probability=dropout_probability,
+                    linear_transform=linear_transform,
+                    tail_bound=tail_bound
                 )
             elif glasflow_type == "MaskedPiecewiseRationalQuadraticAutoregressiveFlow":
+                # Load hyperparameters with defaults for backward compatibility
+                dropout_probability = float(nf_kwargs.get("dropout_probability", 0.0))
+                linear_transform = nf_kwargs.get("linear_transform", "None")
+                linear_transform = None if linear_transform == "None" else linear_transform
+                tail_bound = float(nf_kwargs.get("tail_bound", 5.0))
+                
                 flow = MaskedPiecewiseRationalQuadraticAutoregressiveFlow(
                     n_inputs=n_inputs,
                     n_transforms=nf_kwargs["n_transforms"],
                     n_neurons=nf_kwargs["n_neurons"],
                     n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
                     num_bins=nf_kwargs["num_bins"]
+                    # Note: These flows may not support all CouplingNSF hyperparameters
                 )
             elif glasflow_type == "MaskedAffineAutoregressiveFlow":
+                # Load hyperparameters with defaults for backward compatibility
+                dropout_probability = float(nf_kwargs.get("dropout_probability", 0.0))
+                linear_transform = nf_kwargs.get("linear_transform", "None")
+                linear_transform = None if linear_transform == "None" else linear_transform
+                
                 flow = MaskedAffineAutoregressiveFlow(
                     n_inputs=n_inputs,
                     n_transforms=nf_kwargs["n_transforms"],
                     n_neurons=nf_kwargs["n_neurons"],
                     n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"]
+                    # Note: This flow may not support all CouplingNSF hyperparameters
                 )
             else:
                 raise ValueError(f"Unsupported glasflow model type: {glasflow_type}")
