@@ -1,0 +1,96 @@
+\section{Monotonic rational-quadratic transforms}
+\label{appendix:monotonic-rq-transforms}
+
+\subsection{Parameterization of the spline}
+\label{appendix:rq-transform-forward}
+We here include an outline of the method of \citet{gregory:1982:rationalquadratic} which closely matches the original paper. 
+Let $ \curlybr{\roundbr{x^{(k)}, y^{(k)}}}_{k=0}^{K} $ be a given set of knot points in the plane which satisfy
+\begin{align}
+&(x^{(0)}, y^{(0)}) = (-B, -B), \\ &(x^{(K)}, y^{(K)}) = (B, B), \\
+&x^{(k)} < x^{(k+1)} \,\text{ and }\, y^{(k)} < y^{(k+1)} \quad\text{for all } k=0, \dots, K-1.
+\end{align}
+Let $ \curlybr{\delta^{(k)}}_{k=0}^{K} $ be the non-negative derivative values at these knot points (we take $ \delta^{(0)} = \delta^{(K)} = 1 $ so that the spline matches the derivative of the linear tails). 
+Given these quantities, the algorithm of \citet{gregory:1982:rationalquadratic} defines a monotonic rational-quadratic spline which passes through each knot and has the given derivative value at each knot as follows:
+\begin{enumerate}
+    \item Let $ w^{(k)} = x^{(k + 1)} - x^{(k)} $ be the bin widths, and $ s^{(k)} = \roundbr{y^{(k + 1)} - y^{(k)}}/w^{(k)} $ be the slopes of the lines joining the co-ordinates. 
+    \item For $ x \in \squarebr{x^{(k)}, x^{(k + 1)}} $, let $ \xi = \roundbr{x - x^{(k)}}/w^{(k)} $, so that $ \xi \in [0, 1] $. 
+    \item Then, for $ x \in \squarebr{x^{(k)}, x^{(k + 1)}} $, $ k = 0, \ldots, K-1 $, define 
+    \begin{align}
+        g(x) = \frac{\alpha^{(k)}(\xi)}{ \beta^{(k)}(\xi)},
+        \label{eq:rq-spline-appendix}
+    \end{align}
+    where
+    \begin{align}
+        \alpha^{(k)}(\xi) &= s^{(k)} y^{(k + 1)} \xi^{2} + \squarebr{y^{(k)} \delta^{(k + 1)} + y^{(k + 1)} \delta^{(k)}} \xi (1 - \xi) + s^{(k)} y^{(k)} (1 - \xi)^{2}, \\
+        \beta^{(k)}(\xi) &= s^{(k)} \xi^{2} + \squarebr{\delta^{(k + 1)} + \delta^{(k)}} \xi (1 - \xi) + s^{(k)} (1 - \xi)^{2}. \label{eqn:betafn}
+    \end{align}
+\end{enumerate}
+\citet{gregory:1982:rationalquadratic} note that $ \beta^{(k)}(\xi) $ can be rewritten as
+\begin{align}
+    \beta^{(k)}(\xi) = s^{(k)} + \squarebr{\delta^{(k + 1)} + \delta^{(k)} - 2 s^{(k)}} \xi (1 - \xi),
+\end{align}
+so that the quotient can be written as
+\begin{align}
+    \frac{\alpha^{(k)}(\xi)}{\beta^{(k)}(\xi)} = y^{(k)} + \frac{(y^{(k + 1)} - y^{(k)}) \squarebr{s^{(k)} \xi^{2} + \delta^{(k)} \xi (1 - \xi)}}{s^{(k)} + \squarebr{\delta^{(k + 1)} + \delta^{(k)} - 2 s^{(k)}} \xi (1 - \xi)},
+    \label{eq:rq-numerical-definition}
+\end{align}
+which is less prone to numerical issues, especially for small values of $ s^{(k)} $. \citet{gregory:1982:rationalquadratic} show that the spline defined by \cref{eq:rq-spline-appendix} interpolates between the given knots, satisfies the derivative constraints at the knot points, and is monotonic on each bin. 
+Rational-quadratic functions also provide flexibility over previous approaches:
+it is not possible to match arbitrary values and derivatives of a function at two boundary
+knots with a quadratic polynomial, or a monotonic segment of a cubic polynomial.
+
+\subsection{Computing the derivative}
+\label{appendix-rq-transform-derivative}
+The derivative of \cref{eq:rq-spline-appendix} is given by the quotient rule:
+\begin{align}
+	\frac{\diff}{\diff x} \squarebr{ \frac{\alpha^{(k)}(\xi)}{\beta^{(k)}(\xi)} } = \frac{\diff}{\diff \xi} \squarebr{ \frac{\alpha^{(k)}(\xi)}{\beta^{(k)}(\xi)} } \frac{\diff \xi}{\diff x} = \frac{1}{w^{(k)}} \frac{\beta^{(k)}(\xi) \frac{\diff }{\diff \xi} \squarebr{\alpha^{(k)}(\xi)} - \alpha^{(k)}(\xi) \frac{\diff}{\diff \xi} \squarebr{\beta^{(k)}(\xi)}}{\squarebr{\beta^{(k)}(\xi)}^{2}}.
+\end{align}
+It can be shown that
+\begin{align}
+	 \beta^{(k)}(\xi) \frac{\diff \alpha^{(k)}(\xi)}{\diff \xi} - \alpha^{(k)}(\xi) \frac{\diff \beta^{(k)}(\xi)}{\diff \xi} = w^{(k)} \roundbr{s^{(k)}}^{2} \squarebr{ \delta^{(k + 1)} \xi^{2} + 2 s^{(k)} \xi (1 - \xi) + \delta^{(k)} (1 - \xi)^{2} },
+\end{align}
+so that 
+\begin{align}
+	\frac{\diff}{\diff x} \squarebr{ \frac{\alpha^{(k)}(\xi)}{\beta^{(k)}(\xi)} } =  \frac{\roundbr{s^{(k)}}^{2} \squarebr{ \delta^{(k + 1)} \xi^{2} + 2 s^{(k)} \xi (1 - \xi) + \delta^{(k)} (1 - \xi)^{2} }}{\squarebr{s^{(k)} + \squarebr{\delta^{(k + 1)} + \delta^{(k)} - 2 s^{(k)}} \xi (1 - \xi)}^{2}}.
+	\label{eq:rq-derivative-appendix}
+\end{align}
+Since the rational-quadratic transform is monotonic and acts elementwise, the logarithm of the absolute value of the determinant of its Jacobian is given by a sum of the logarithm of \cref{eq:rq-derivative-appendix} for each transformed $ x $.
+
+\subsection{Computing the inverse}
+\label{appendix-rq-transform-inverse}
+Computing the inverse of a monotonic rational-quadratic transformation when the value to invert lies in the tails is trivial. 
+The problem of inversion is thus reduced to computing the inverse of the monotonic rational-quadratic spline. 
+Consider a rational-quadratic function 
+\begin{align}
+    y = \frac{\alpha(\xi(x))}{\beta(\xi(x))} = \frac{\alpha_{0} + \alpha_{1} \xi(x) + \alpha_{2} \xi(x)^{2}}{\beta_{0} + \beta_{1} \xi(x) + \beta_{2} \xi(x)^{2}},
+\end{align}
+which arises as the result of the algorithm outlined in \cref{appendix:rq-transform-forward}.
+The coefficients are such that the function is monotonically-increasing in its associated bin. Inverting the function involves solving a quadratic equation:
+\begin{align}
+        q(x) &= \alpha(\xi(x)) - y\beta(\xi(x)) \label{eqn:quadform1}\\
+        &= a\xi(x)^2 + b\xi(x) + c \;=\; 0, \label{eqn:quadform2}
+\end{align}
+where the coefficients depend on the target output $y$:
+\begin{align}
+	a = \alpha_{2} - \beta_{2} y, \quad b = \alpha_{1} - \beta_{1} y, \quad c = \alpha_{0} - \beta_{0} y.
+\end{align}
+Only one of the two solutions lies in the function's associated bin. To identify the solution in general, we
+identify that along the line of corresponding $(x,y)$ values, $q(x)\!=\!0$ and so $\frac{\mathrm{d}q}{\mathrm{d}x}\!=\!0$, where
+\begin{align}
+    \frac{\mathrm{d}q}{\mathrm{d}x} &= \frac{\partial q}{\partial x} + \frac{\partial q}{\partial y}\frac{\partial y}{\partial x} \\
+    &= \frac{\partial q}{\partial x} - \underbrace{\beta(\xi(x))}_{>0}\underbrace{\frac{\partial y}{\partial x}}_{>0} = 0. \label{eqn:qcondition}
+\end{align}
+We substituted a partial derivative of \cref{eqn:quadform1}, noted \cref{eqn:betafn} is positive, and noted that the spline $y(x)$ is monotonic and increasing.
+To satisfy \cref{eqn:qcondition}, $\frac{\partial q}{\partial x}\!>\!0$, which corresponds to this solution to \cref{eqn:quadform2}:
+\begin{align}
+    \xi(x) = \frac{- b + \sqrt{ b^{2} - 4 a c}}{2 a} = \frac{2c}{- b - \sqrt{ b^{2} - 4 a c}},
+\end{align}
+where the first form is more commonly quoted, but the second form is numerically more precise when $4ac$ is small.
+
+We can rearrange \cref{eq:rq-numerical-definition} to show
+\begin{align}
+	a &=  \roundbr{y^{(k + 1)} - y^{(k)}} \squarebr{s^{(k)} - \delta^{(k)}} + \roundbr{ y - y^{(k)} } \squarebr{\delta^{(k + 1)} + \delta^{(k)} - 2 s^{(k)}},\\
+	b &= \roundbr{y^{(k + 1)} - y^{(k)}} \delta^{(k)} -  \roundbr{ y - y^{(k)} } \squarebr{\delta^{(k + 1)} + \delta^{(k)} - 2 s^{(k)}},\\
+	c &= - s^{(k)} \roundbr{ y - y^{(k)} },
+\end{align}
+which yields $ \xi(x) $, which we can then use to determine the inverse $ x $.

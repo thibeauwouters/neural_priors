@@ -1,0 +1,372 @@
+\begin{thebibliography}{61}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Blinn(2007)]{blinn2007solve}
+J.~F. Blinn.
+\newblock How to solve a cubic equation, part 5: Back to numerics.
+\newblock \emph{IEEE Computer Graphics and Applications}, 27\penalty0
+  (3):\penalty0 78--89, 2007.
+
+\bibitem[Burda et~al.(2016)Burda, Grosse, and Salakhutdinov]{burda:2016:iwae}
+Y.~Burda, R.~B. Grosse, and R.~Salakhutdinov.
+\newblock Importance weighted autoencoders.
+\newblock \emph{International Conference on Learning Representations}, 2016.
+
+\bibitem[Chen et~al.(2018)Chen, Rubanova, Bettencourt, and
+  Duvenaud]{Chen:2018:neural_odes}
+R.~T.~Q. Chen, Y.~Rubanova, J.~Bettencourt, and D.~K. Duvenaud.
+\newblock Neural ordinary differential equations.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2018.
+
+\bibitem[Chen and Gopinath(2001)]{chen:2000:gaussianization}
+S.~S. Chen and R.~A. Gopinath.
+\newblock {G}aussianization.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2001.
+
+\bibitem[Cohen et~al.(2017)Cohen, Afshar, Tapson, and van
+  Schaik]{cohen2017emnist}
+G.~Cohen, S.~Afshar, J.~Tapson, and A.~van Schaik.
+\newblock {EMNIST}: an extension of {MNIST} to handwritten letters.
+\newblock \emph{arXiv:1702.05373}, 2017.
+
+\bibitem[De~Cao et~al.(2019)De~Cao, Titov, and Aziz]{DeCao:2019:bnaf}
+N.~De~Cao, I.~Titov, and W.~Aziz.
+\newblock Block neural autoregressive flow.
+\newblock \emph{Conference on Uncertainty in Artificial Intelligence}, 2019.
+
+\bibitem[Dheeru and Karra~Taniskidou(2017)]{dua:2017:uci}
+D.~Dheeru and E.~Karra~Taniskidou.
+\newblock {UCI} machine learning repository, 2017.
+\newblock URL \url{http://archive.ics.uci.edu/ml}.
+
+\bibitem[Dillon et~al.(2017)Dillon, Langmore, Tran, Brevdo, Vasudevan, Moore,
+  Patton, Alemi, Hoffman, and Saurous]{dillon2017tensorflowdistributions}
+J.~V. Dillon, I.~Langmore, D.~Tran, E.~Brevdo, S.~Vasudevan, D.~Moore,
+  B.~Patton, A.~Alemi, M.~Hoffman, and R.~A. Saurous.
+\newblock Tensor{F}low {D}istributions.
+\newblock \emph{arXiv preprint arXiv:1711.10604}, 2017.
+
+\bibitem[Dinh et~al.(2015)Dinh, Krueger, and Bengio]{Dinh:2015:nice}
+L.~Dinh, D.~Krueger, and Y.~Bengio.
+\newblock {NICE}: {N}on-linear independent components estimation.
+\newblock \emph{International Conference on Learning Representations, Workshop
+  track}, 2015.
+
+\bibitem[Dinh et~al.(2017)Dinh, Sohl-Dickstein, and Bengio]{Dinh:2017:rnvp}
+L.~Dinh, J.~Sohl-Dickstein, and S.~Bengio.
+\newblock Density estimation using {R}eal {NVP}.
+\newblock \emph{International Conference on Learning Representations}, 2017.
+
+\bibitem[Durkan et~al.(2019)Durkan, Bekasov, Murray, and
+  Papamakarios]{Durkan:2019:cubicsplineflows}
+C.~Durkan, A.~Bekasov, I.~Murray, and G.~Papamakarios.
+\newblock Cubic-spline flows.
+\newblock \emph{Workshop on Invertible Neural Networks and Normalizing Flows,
+  International Conference on Machine Learning}, 2019.
+
+\bibitem[Elidan(2013)]{elidan:2013:copulas}
+G.~Elidan.
+\newblock Copulas in machine learning.
+\newblock \emph{Copulae in Mathematical and Quantitative Finance}, 2013.
+
+\bibitem[Germain et~al.(2015)Germain, Gregor, Murray, and
+  Larochelle]{germain2015made}
+M.~Germain, K.~Gregor, I.~Murray, and H.~Larochelle.
+\newblock {MADE}: Masked autoencoder for distribution estimation.
+\newblock \emph{International Conference on Machine Learning}, 2015.
+
+\bibitem[Gomez et~al.(2017)Gomez, Ren, Urtasun, and Grosse]{Gomez:2017:revnet}
+A.~N. Gomez, M.~Ren, R.~Urtasun, and R.~B. Grosse.
+\newblock The reversible residual network: {B}ackpropagation without storing
+  activations.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem[Goodfellow et~al.(2014)Goodfellow, Pouget-Abadie, Mirza, Xu,
+  Warde-Farley, Ozair, Courville, and Bengio]{goodfellow:2014:gan}
+I.~Goodfellow, J.~Pouget-Abadie, M.~Mirza, B.~Xu, D.~Warde-Farley, S.~Ozair,
+  A.~Courville, and Y.~Bengio.
+\newblock Generative adversarial nets.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2014.
+
+\bibitem[Grathwohl et~al.(2018)Grathwohl, Chen, Bettencourt, Sutskever, and
+  Duvenaud]{Grathwohl:2018:ffjord}
+W.~Grathwohl, R.~T.~Q. Chen, J.~Bettencourt, I.~Sutskever, and D.~K. Duvenaud.
+\newblock {FFJORD}: {F}ree-form continuous dynamics for scalable reversible
+  generative models.
+\newblock \emph{International Conference on Learning Representations}, 2018.
+
+\bibitem[Gregory and Delbourgo(1982)]{gregory:1982:rationalquadratic}
+J.~Gregory and R.~Delbourgo.
+\newblock Piecewise rational quadratic interpolation to monotonic data.
+\newblock \emph{IMA Journal of Numerical Analysis}, 2\penalty0 (2):\penalty0
+  123--130, 1982.
+
+\bibitem[He et~al.(2016{\natexlab{a}})He, Zhang, Ren, and Sun]{he2016deep}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun.
+\newblock Deep residual learning for image recognition.
+\newblock \emph{IEEE Conference on Computer Vision and Pattern Recognition},
+  2016{\natexlab{a}}.
+
+\bibitem[He et~al.(2016{\natexlab{b}})He, Zhang, Ren, and Sun]{he2016preact}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun.
+\newblock Identity mappings in deep residual networks.
+\newblock \emph{European Conference on Computer Vision}, 2016{\natexlab{b}}.
+
+\bibitem[Ho et~al.(2019)Ho, Chen, Srinivas, Duan, and Abbeel]{Ho:2019:flowpp}
+J.~Ho, X.~Chen, A.~Srinivas, Y.~Duan, and P.~Abbeel.
+\newblock Flow++: Improving flow-based generative models with variational
+  dequantization and architecture design.
+\newblock \emph{International Conference on Machine Learning}, 2019.
+
+\bibitem[Hoogeboom et~al.(2019)Hoogeboom, van~den Berg, and
+  Welling]{Hoogeboom:2019:emerging}
+E.~Hoogeboom, R.~van~den Berg, and M.~Welling.
+\newblock Emerging convolutions for generative normalizing flows.
+\newblock \emph{International Conference on Machine Learning}, 2019.
+
+\bibitem[Huang et~al.(2018)Huang, Krueger, Lacoste, and
+  Courville]{Huang:2018:naf}
+C.-W. Huang, D.~Krueger, A.~Lacoste, and A.~Courville.
+\newblock Neural autoregressive flows.
+\newblock \emph{International Conference on Machine Learning}, 2018.
+
+\bibitem[Hutchinson(1990)]{hutchinson:1990:trace}
+M.~F. Hutchinson.
+\newblock A stochastic estimator of the trace of the influence matrix for
+  {L}aplacian smoothing splines.
+\newblock \emph{Communications in Statistics - Simulation and Computation},
+  19\penalty0 (2):\penalty0 433--450, 1990.
+
+\bibitem[Ioffe and Szegedy(2015)]{ioffe:2015:batchnorm}
+S.~Ioffe and C.~Szegedy.
+\newblock Batch normalization: Accelerating deep network training by reducing
+  internal covariate shift.
+\newblock \emph{International Conference on Machine Learning}, 2015.
+
+\bibitem[Jaini et~al.(2019)Jaini, Selby, and Yu]{jaini:2019:sosflow}
+P.~Jaini, K.~A. Selby, and Y.~Yu.
+\newblock Sum-of-squares polynomial flow.
+\newblock \emph{International Conference on Machine Learning}, 2019.
+
+\bibitem[Kim et~al.(2018)Kim, Lee, Song, and Yoon]{Kim:2018:FloWaveNet}
+S.~Kim, S.-g. Lee, J.~Song, and S.~Yoon.
+\newblock {F}lo{W}ave{N}et: {A} generative flow for raw audio.
+\newblock \emph{arXiv:1811.02155}, 2018.
+
+\bibitem[Kingma and Ba(2014)]{kingma:2014:adam}
+D.~P. Kingma and J.~Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock \emph{International Conference on Learning Representations}, 2014.
+
+\bibitem[Kingma and Dhariwal(2018)]{Kingma:2018:glow}
+D.~P. Kingma and P.~Dhariwal.
+\newblock {G}low: {G}enerative flow with invertible $1\times 1$ convolutions.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2018.
+
+\bibitem[Kingma and Welling(2014)]{Kingma:2014:vae}
+D.~P. Kingma and M.~Welling.
+\newblock Auto-encoding variational {B}ayes.
+\newblock \emph{International Conference on Learning Representations}, 2014.
+
+\bibitem[Kingma et~al.(2016)Kingma, Salimans, Jozefowicz, Chen, Sutskever, and
+  Welling]{Kingma:2016:iaf}
+D.~P. Kingma, T.~Salimans, R.~Jozefowicz, X.~Chen, I.~Sutskever, and
+  M.~Welling.
+\newblock Improved variational inference with inverse autoregressive flow.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2016.
+
+\bibitem[Krizhevsky and Hinton(2009)]{krizhevsky:2009:cifar10}
+A.~Krizhevsky and G.~Hinton.
+\newblock Learning multiple layers of features from tiny images.
+\newblock \emph{Master's thesis, Department of Computer Science, University of
+  Toronto}, 2009.
+
+\bibitem[Kumar et~al.(2019)Kumar, Babaeizadeh, Erhan, Finn, Levine, Dinh, and
+  Kingma]{Kumar:2019:VideoFlow}
+M.~Kumar, M.~Babaeizadeh, D.~Erhan, C.~Finn, S.~Levine, L.~Dinh, and D.~Kingma.
+\newblock Video{F}low: {A} flow-based generative model for video.
+\newblock \emph{arXiv:1903.01434}, 2019.
+
+\bibitem[LeCun et~al.(1998)LeCun, Bottou, Bengio, and
+  Haffner]{lecun:1998:mnist}
+Y.~LeCun, L.~Bottou, Y.~Bengio, and P.~Haffner.
+\newblock Gradient-based learning applied to document recognition.
+\newblock \emph{Proceedings of the IEEE}, 86\penalty0 (11):\penalty0
+  2278--2324, 1998.
+
+\bibitem[Loaiza-Ganem et~al.(2017)Loaiza-Ganem, Gao, and
+  Cunningham]{Ganem:2017:max_entropy_flows}
+G.~Loaiza-Ganem, Y.~Gao, and J.~P. Cunningham.
+\newblock Maximum entropy flow networks.
+\newblock \emph{International Conference on Learning Representations}, 2017.
+
+\bibitem[Loshchilov and Hutter(2017)]{loshchilov:2016:sgdr}
+I.~Loshchilov and F.~Hutter.
+\newblock {SGDR}: Stochastic gradient descent with warm restarts.
+\newblock \emph{International Conference on Learning Representations}, 2017.
+
+\bibitem[Louizos and Welling(2017)]{Louizos:2017:bnn}
+C.~Louizos and M.~Welling.
+\newblock Multiplicative normalizing flows for variational {B}ayesian neural
+  networks.
+\newblock \emph{International Conference on Machine Learning}, 2017.
+
+\bibitem[MacKay et~al.(2018)MacKay, Vicol, Ba, and Grosse]{MacKay:2018:revrnn}
+M.~MacKay, P.~Vicol, J.~Ba, and R.~B. Grosse.
+\newblock Reversible recurrent neural networks.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2018.
+
+\bibitem[Martin et~al.(2001)Martin, Fowlkes, Tal, and Malik]{martin:2001:bsds}
+D.~Martin, C.~Fowlkes, D.~Tal, and J.~Malik.
+\newblock A database of human segmented natural images and its application to
+  evaluating segmentation algorithms and measuring ecological statistics.
+\newblock \emph{International Conference on Computer Vision}, 2001.
+
+\bibitem[M\"{u}ller et~al.(2018)M\"{u}ller, McWilliams, Rousselle, Gross, and
+  Nov\'{a}k]{Muller:2018:nis}
+T.~M\"{u}ller, B.~McWilliams, F.~Rousselle, M.~Gross, and J.~Nov\'{a}k.
+\newblock Neural importance sampling.
+\newblock \emph{arXiv:1808.03856}, 2018.
+
+\bibitem[Nash and Durkan(2019)]{nash2019aem}
+C.~Nash and C.~Durkan.
+\newblock Autoregressive energy machines.
+\newblock \emph{International Conference on Machine Learning}, 2019.
+
+\bibitem[Oliva et~al.(2018)Oliva, Dubey, Zaheer, P{\'o}czos, Salakhutdinov,
+  Xing, and Schneider]{oliva2018tan}
+J.~B. Oliva, A.~Dubey, M.~Zaheer, B.~P{\'o}czos, R.~Salakhutdinov, E.~P. Xing,
+  and J.~Schneider.
+\newblock Transformation autoregressive networks.
+\newblock \emph{International Conference on Machine Learning}, 2018.
+
+\bibitem[Papamakarios(2018)]{Papamakarios:2018:maf_datasets}
+G.~Papamakarios.
+\newblock Preprocessed datasets for {MAF} experiments, 2018.
+\newblock URL \url{https://doi.org/10.5281/zenodo.1161203}.
+
+\bibitem[Papamakarios et~al.(2017)Papamakarios, Pavlakou, and
+  Murray]{Papamakarios:2017:maf}
+G.~Papamakarios, T.~Pavlakou, and I.~Murray.
+\newblock Masked autoregressive flow for density estimation.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem[Papamakarios et~al.(2019)Papamakarios, Sterratt, and
+  Murray]{Papamakarios:2019:snl}
+G.~Papamakarios, D.~C. Sterratt, and I.~Murray.
+\newblock Sequential neural likelihood: Fast likelihood-free inference with
+  autoregressive flows.
+\newblock \emph{International Conference on Artificial Intelligence and
+  Statistics}, 2019.
+
+\bibitem[Prenger et~al.(2018)Prenger, Valle, and
+  Catanzaro]{Prenger:2018:WaveGlow}
+R.~Prenger, R.~Valle, and B.~Catanzaro.
+\newblock {W}ave{G}low: {A} flow-based generative network for speech synthesis.
+\newblock \emph{arXiv:1811.00002}, 2018.
+
+\bibitem[Rezende and Mohamed(2015)]{Rezende:2015:flows}
+D.~J. Rezende and S.~Mohamed.
+\newblock Variational inference with normalizing flows.
+\newblock \emph{International Conference on Machine Learning}, 2015.
+
+\bibitem[Rezende and Viola(2018)]{rezende:2018:taming}
+D.~J. Rezende and F.~Viola.
+\newblock Taming {VAE}s.
+\newblock \emph{arXiv:1810.00597}, 2018.
+
+\bibitem[Rezende et~al.(2014)Rezende, Mohamed, and Wierstra]{Rezende:2014:vae}
+D.~J. Rezende, S.~Mohamed, and D.~Wierstra.
+\newblock Stochastic backpropagation and approximate inference in deep
+  generative models.
+\newblock \emph{International Conference on Machine Learning}, 2014.
+
+\bibitem[Russakovsky et~al.(2015)Russakovsky, Deng, Su, Krause, Satheesh, Ma,
+  Huang, Karpathy, Khosla, Bernstein, Berg, and
+  Fei-Fei]{russakovsky:2015:imagenet}
+O.~Russakovsky, J.~Deng, H.~Su, J.~Krause, S.~Satheesh, S.~Ma, Z.~Huang,
+  A.~Karpathy, A.~Khosla, M.~Bernstein, A.~C. Berg, and L.~Fei-Fei.
+\newblock {I}mage{N}et large scale visual recognition challenge.
+\newblock \emph{International Journal of Computer Vision}, 115\penalty0
+  (3):\penalty0 211--252, 2015.
+
+\bibitem[Salimans et~al.(2017)Salimans, Karpathy, Chen, and
+  Kingma]{salimans2017pixelcnn++}
+T.~Salimans, A.~Karpathy, X.~Chen, and D.~P. Kingma.
+\newblock Pixel{CNN}++: Improving the {P}ixel{CNN} with discretized logistic
+  mixture likelihood and other modifications.
+\newblock \emph{International Conference on Learning Representations}, 2017.
+
+\bibitem[Salman et~al.(2018)Salman, Yadollahpour, Fletcher, and
+  Batmanghelich]{Salman:2018:diffeomorphic}
+H.~Salman, P.~Yadollahpour, T.~Fletcher, and K.~Batmanghelich.
+\newblock Deep diffeomorphic normalizing flows.
+\newblock \emph{arXiv:1810.03256}, 2018.
+
+\bibitem[Snelson et~al.(2004)Snelson, Rasmussen, and
+  Ghahramani]{snelson:2003:warpedgp}
+E.~Snelson, C.~E. Rasmussen, and Z.~Ghahramani.
+\newblock Warped {G}aussian processes.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2004.
+
+\bibitem[Srivastava et~al.(2014)Srivastava, Hinton, Krizhevsky, Sutskever, and
+  Salakhutdinov]{srivastava:2014:dropout}
+N.~Srivastava, G.~Hinton, A.~Krizhevsky, I.~Sutskever, and R.~Salakhutdinov.
+\newblock Dropout: A simple way to prevent neural networks from overfitting.
+\newblock \emph{The Journal of Machine Learning Research}, 15\penalty0
+  (1):\penalty0 1929--1958, 2014.
+
+\bibitem[Steffen(1990)]{steffen1990simple}
+M.~Steffen.
+\newblock A simple method for monotonic interpolation in one dimension.
+\newblock \emph{Astronomy and Astrophysics}, 239:\penalty0 443, 1990.
+
+\bibitem[Tomczak and Welling(2016)]{Tomczak:2016:householder}
+J.~M. Tomczak and M.~Welling.
+\newblock Improving variational auto-encoders using {H}ouseholder flow.
+\newblock \emph{arXiv:1611.09630}, 2016.
+
+\bibitem[Uria et~al.(2013)Uria, Murray, and Larochelle]{uria2013rnade}
+B.~Uria, I.~Murray, and H.~Larochelle.
+\newblock {RNADE}: The real-valued neural autoregressive density-estimator.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2013.
+
+\bibitem[van~den Berg et~al.(2018)van~den Berg, Hasenclever, Tomczak, and
+  Welling]{Berg:2018:sylvester}
+R.~van~den Berg, L.~Hasenclever, J.~M. Tomczak, and M.~Welling.
+\newblock {S}ylvester normalizing flows for variational inference.
+\newblock \emph{Conference on Uncertainty in Artificial Intelligence}, 2018.
+
+\bibitem[van~den Oord et~al.(2016{\natexlab{a}})van~den Oord, Dieleman, Zen,
+  Simonyan, Vinyals, Graves, Kalchbrenner, Senior, and
+  Kavukcuoglu]{van2016wavenet}
+A.~van~den Oord, S.~Dieleman, H.~Zen, K.~Simonyan, O.~Vinyals, A.~Graves,
+  N.~Kalchbrenner, A.~Senior, and K.~Kavukcuoglu.
+\newblock {W}ave{N}et: A generative model for raw audio.
+\newblock \emph{ISCA Speech Synthesis Workshop}, 2016{\natexlab{a}}.
+
+\bibitem[van~den Oord et~al.(2016{\natexlab{b}})van~den Oord, Kalchbrenner,
+  Espeholt, Kavukcuoglu, Vinyals, and Graves]{van2016pixelcnn}
+A.~van~den Oord, N.~Kalchbrenner, L.~Espeholt, K.~Kavukcuoglu, O.~Vinyals, and
+  A.~Graves.
+\newblock Conditional image generation with {P}ixel{CNN} decoders.
+\newblock \emph{Advances in Neural Information Processing Systems},
+  2016{\natexlab{b}}.
+
+\bibitem[van~den Oord et~al.(2016{\natexlab{c}})van~den Oord, Kalchbrenner, and
+  Kavukcuoglu]{oord2016pixelrnn}
+A.~van~den Oord, N.~Kalchbrenner, and K.~Kavukcuoglu.
+\newblock Pixel recurrent neural networks.
+\newblock \emph{International Conference on Machine Learning},
+  2016{\natexlab{c}}.
+
+\bibitem[Ziegler and Rush(2019)]{Ziegler:2019:latent_flows}
+Z.~M. Ziegler and A.~M. Rush.
+\newblock Latent normalizing flows for discrete sequences.
+\newblock \emph{arXiv:1901.10548}, 2019.
+
+\end{thebibliography}

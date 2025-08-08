@@ -695,7 +695,8 @@ class CheckerUnconditional(Checker):
         # Load the scaler if it exists AND if scale_input was True during training
         scaler_path = os.path.join(self.path, "scaler.gz")
         scaler = None
-        scale_input = nf_kwargs.get("scale_input", "True") == "True"
+        # scale_input = nf_kwargs.get("scale_input", "True") == "True" # FIXME: this is broken a bit
+        scale_input = True
         
         if os.path.exists(scaler_path) and scale_input:
             print(f"Loading scaler from {scaler_path}")
@@ -972,6 +973,116 @@ class CheckerUnconditional(Checker):
         result = np.column_stack(training_columns)
         print(f"Training samples shape: {result.shape}")
         return result
+    
+    def compute_kl_divergence(self, training_samples, nf_samples, n_bins=50):
+        """
+        Compute KL divergence between training data and NF samples for each parameter.
+        
+        Args:
+            training_samples: Training data samples
+            nf_samples: NF generated samples  
+            n_bins: Number of bins for histogram estimation
+            
+        Returns:
+            dict: KL divergences for each parameter and overall
+        """
+        kl_divergences = {}
+        parameter_names = self.nf_kwargs.get("names", [f"param_{i}" for i in range(training_samples.shape[1])])
+        
+        # Overall multivariate KL using Gaussian KDE
+        try:
+            train_kde = gaussian_kde(training_samples.T)
+            nf_kde = gaussian_kde(nf_samples.T)
+            
+            # Sample points for evaluation
+            n_eval = 1000
+            eval_samples = training_samples[np.random.choice(len(training_samples), n_eval, replace=False)]
+            
+            train_density = train_kde(eval_samples.T)
+            nf_density = nf_kde(eval_samples.T) 
+            
+            # Add small epsilon to avoid log(0)
+            eps = 1e-10
+            train_density = np.maximum(train_density, eps)
+            nf_density = np.maximum(nf_density, eps)
+            
+            overall_kl = np.mean(kl_div(train_density, nf_density))
+            kl_divergences['overall_kde'] = overall_kl
+            
+        except Exception as e:
+            print(f"Warning: Could not compute overall KL divergence with KDE: {e}")
+            kl_divergences['overall_kde'] = np.nan
+        
+        # Per-parameter KL divergences using histograms
+        for i, param_name in enumerate(parameter_names):
+            try:
+                train_param = training_samples[:, i]
+                nf_param = nf_samples[:, i]
+                
+                # Use same range for both histograms
+                param_min = min(train_param.min(), nf_param.min())
+                param_max = max(train_param.max(), nf_param.max())
+                bins = np.linspace(param_min, param_max, n_bins + 1)
+                
+                train_hist, _ = np.histogram(train_param, bins=bins, density=True)
+                nf_hist, _ = np.histogram(nf_param, bins=bins, density=True)
+                
+                # Normalize to get probabilities
+                train_prob = train_hist / train_hist.sum()
+                nf_prob = nf_hist / nf_hist.sum()
+                
+                # Add small epsilon to avoid log(0)
+                eps = 1e-10
+                train_prob = np.maximum(train_prob, eps)
+                nf_prob = np.maximum(nf_prob, eps)
+                
+                kl_div_param = np.sum(kl_div(train_prob, nf_prob))
+                kl_divergences[param_name] = kl_div_param
+                
+            except Exception as e:
+                print(f"Warning: Could not compute KL divergence for {param_name}: {e}")
+                kl_divergences[param_name] = np.nan
+        
+        return kl_divergences
+    
+    def compute_sample_quality_metrics(self, training_samples, nf_samples):
+        """
+        Compute various sample quality metrics beyond KL divergence.
+        
+        Args:
+            training_samples: Training data samples
+            nf_samples: NF generated samples
+            
+        Returns:
+            dict: Various quality metrics
+        """
+        metrics = {}
+        parameter_names = self.nf_kwargs.get("names", [f"param_{i}" for i in range(training_samples.shape[1])])
+        
+        for i, param_name in enumerate(parameter_names):
+            try:
+                train_param = training_samples[:, i]
+                nf_param = nf_samples[:, i]
+                
+                # Kolmogorov-Smirnov test
+                from scipy.stats import ks_2samp
+                ks_stat, ks_pvalue = ks_2samp(train_param, nf_param)
+                
+                # Mean and std comparison
+                train_mean, train_std = np.mean(train_param), np.std(train_param)
+                nf_mean, nf_std = np.mean(nf_param), np.std(nf_param)
+                
+                metrics[f'{param_name}_ks_stat'] = ks_stat
+                metrics[f'{param_name}_ks_pvalue'] = ks_pvalue
+                metrics[f'{param_name}_mean_diff'] = abs(train_mean - nf_mean)
+                metrics[f'{param_name}_std_diff'] = abs(train_std - nf_std)
+                metrics[f'{param_name}_mean_rel_error'] = abs(train_mean - nf_mean) / abs(train_mean)
+                metrics[f'{param_name}_std_rel_error'] = abs(train_std - nf_std) / abs(train_std)
+                
+            except Exception as e:
+                print(f"Warning: Could not compute quality metrics for {param_name}: {e}")
+        
+        return metrics
 
 def main():
     import argparse
@@ -999,6 +1110,11 @@ def main():
             
             print(f"✓ Success - Shape: {samples.shape}")
             print(f"  Ranges: {[f'[{samples[:, i].min():.3f}, {samples[:, i].max():.3f}]' for i in range(samples.shape[1])]}")
+            
+            # Print 0.01 and 0.99 quantiles
+            for i in range(samples.shape[1]):
+                lower, upper = np.quantile(samples[:, i], [0.01, 0.99])
+                print(f"Parameter {i} quantiles: [{lower:.3f}, {upper:.3f}]")
             
             # Check for issues
             if np.any(np.isnan(samples)) or np.any(np.isinf(samples)):

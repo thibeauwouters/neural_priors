@@ -1,0 +1,28 @@
+\section{Related Work}
+
+\paragraph{Invertible linear transformations} 
+Invertible linear transformations have found significant use in normalizing flows. 
+Glow \citep{Kingma:2018:glow} replaces the permutation operation of RealNVP with an LU-decomposed linear transformation interpreted as a $ 1 \!\times\! 1 $ convolution, yielding superior performance for image modeling. 
+WaveGlow \citep{Prenger:2018:WaveGlow} and FloWaveNet \citep{Kim:2018:FloWaveNet} have also successfully adapted Glow for generative modeling of audio. 
+Expanding on the invertible $ 1 \!\times\! 1 $ convolution presented in Glow, \citet{Hoogeboom:2019:emerging} propose the \emph{emerging convolution}, based on composing autoregressive convolutions in a manner analogous to an LU-decomposition, and the \emph{periodic convolution}, which uses multiplication in the Fourier domain to perform convolution. 
+\citet{Hoogeboom:2019:emerging} also introduce linear transformations based on the QR-decomposition, where the orthogonal matrix is parameterized by a sequence of Householder transformations \citep{Tomczak:2016:householder}. 
+
+\paragraph{Invertible elementwise transformations} 
+Outside of those discussed in \cref{sec:invertible-elementwise-transformations}, there has been much recent work in developing more flexible invertible elementwise transformations for normalizing flows. 
+Flow++ \citep{Ho:2019:flowpp} uses the CDF of  a mixture of logistic distributions as a monotonic transformation in coupling layers, but requires bisection search to compute an inverse, since a closed form is not available. 
+Non-linear squared flow \citep{Ziegler:2019:latent_flows} adds an inverse-quadratic perturbation to an affine transformation in an autoregressive flow, which is invertible under certain restrictions of the parameterization. 
+Computing this inverse requires solving a cubic polynomial, and the overall transform is less flexible than a monotonic rational-quadratic spline. 
+Sum-of-squares polynomial flow \citep[SOS,][]{jaini:2019:sosflow} parameterizes a monotonic transformation by specifying the coefficients of a polynomial of some chosen degree which can be written as a sum of squares. 
+For low-degree polynomials, an analytic inverse may be available, but the method would require an iterative solution in general.
+
+Neural autoregressive flow \citep[NAF,][]{Huang:2018:naf} replaces the affine transformation in MAF by parameterizing a monotonic neural network for each dimension. 
+This greatly enhances the flexibility of the transformation, but the resulting model is again not analytically invertible. 
+Block neural autoregressive flow \citep[Block-NAF,][]{DeCao:2019:bnaf} directly fits an autoregressive monotonic neural network end-to-end rather than parameterizing a sequence for each dimension as in NAF, but is also not analytically invertible.
+
+\paragraph{Continuous-time flows} 
+Rather than constructing a normalizing flow as a series of discrete steps, it is also possible to use a \emph{continuous-time flow}, where the transformation from noise $\bfu$ to data $\bfx$ is described by an ordinary differential equation. 
+Deep diffeomorphic flow \citep{Salman:2018:diffeomorphic} is one such instance, where the model is trained by backpropagation through an Euler integrator, and the Jacobian is computed approximately using a truncated power series and Hutchinson's trace estimator \citep{hutchinson:1990:trace}. 
+Neural ordinary differential equations \citep[Neural ODEs,][]{Chen:2018:neural_odes} define an additional ODE which describes the trajectory of the flow's gradient, avoiding the need to backpropagate through an ODE solver. 
+A third ODE can be used to track the evolution of the log density, and the entire system can be solved with a suitable integrator. 
+The resulting continuous-time flow is known as FFJORD \citep{Grathwohl:2018:ffjord}. 
+Like flows based on coupling layers, FFJORD is also invertible in `one pass', but here this term refers to solving a system of ODEs, rather than performing a single neural-network pass. 

@@ -1,0 +1,101 @@
+\documentclass{article}
+
+% use this flag to anonymize the paper
+\newif\ifanonymize
+\anonymizefalse
+
+% if you need to pass options to natbib, use:
+\PassOptionsToPackage{numbers, sort}{natbib}
+% before loading neurips_2019
+
+\ifanonymize
+    \usepackage{neurips_2019}
+\else
+    % to compile a preprint version:
+    %\usepackage[preprint]{neurips_2019}
+    % to compile a camera-ready version:
+    \usepackage[final]{neurips_2019}
+\fi
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{macros}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{afterpage}
+\usepackage{filecontents}
+\usepackage{soul}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% bibliography
+\setcitestyle{numbers}
+\setcitestyle{square}
+\setcitestyle{comma}
+\bibliographystyle{abbrvnat}
+\setlength{\bibsep}{4pt plus 2pt minus 2pt}
+
+\title{Neural Spline Flows}
+
+\author{
+  Conor Durkan\thanks{Equal contribution} \quad Artur Bekasov\footnotemark[1] \quad Iain Murray \quad George Papamakarios \\
+  School of Informatics, 
+  University of Edinburgh \\
+  \texttt{\{conor.durkan, artur.bekasov, i.murray, g.papamakarios\}@ed.ac.uk}
+}
+
+% macros
+\newcommand{\george}[1]{\textcolor{blue}{George: #1}}
+\newcommand{\iain}[1]{\textcolor{magenta}{Iain: #1}}
+\newcommand{\conor}[1]{\textcolor{teal}{Conor: #1}}
+\newcommand{\artur}[1]{\textcolor{violet}{Artur: #1}}
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+A normalizing flow models a complex probability density as an invertible transformation of a simple base density. 
+Flows based on either coupling or autoregressive transforms both offer exact density evaluation and sampling, but rely on the parameterization of an easily invertible elementwise transformation, whose choice determines the flexibility of these models.
+Building upon recent work, we propose a fully-differentiable module based on monotonic rational-quadratic splines, which enhances the flexibility of both coupling and autoregressive transforms while retaining analytic invertibility. 
+We demonstrate that neural spline flows improve density estimation, variational inference, and generative modeling of images. 
+\end{abstract}
+
+% sections
+\input{sections/01-introduction.tex}
+\input{sections/02-background.tex}
+\input{sections/03-method.tex}
+\input{sections/04-related-work.tex}
+\input{sections/05-experiments.tex}
+\input{sections/06-conclusion.tex}
+
+\ifanonymize
+\else
+\input{sections/acknowledgements.tex}
+\fi
+
+\newpage
+
+{\small
+\bibliography{bibliography}
+}
+
+\newpage
+%{\Large\bfseries Appendix for Neural Spline Flows}
+\appendix
+%\setcounter{page}{1} 
+\input{sections/a-appendix.tex}
+\input{sections/b-appendix.tex}
+\input{sections/c-appendix.tex}
+
+\end{document}

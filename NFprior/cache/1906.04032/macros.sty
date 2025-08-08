@@ -1,0 +1,100 @@
+\usepackage{amsmath,amsfonts,mathtools,bm}
+\usepackage[framemethod=tikz]{mdframed}
+
+% misc
+\newcommand{\dth}{$ d $\textsuperscript{th} }
+\newcommand{\boldpar}[1]{\textbf{#1.}}
+\newcommand{\bigo}[1]{\mathcal{O}\roundbr{#1}}
+
+% bold fonts for math symbols
+\newcommand{\bfx}{\mathbf{x}} % x (input variable)
+\newcommand{\bfy}{\mathbf{y}} % y (target variable)
+\newcommand{\bfz}{\mathbf{z}} % z (latent variable)
+\newcommand{\bfc}{\mathbf{c}} % c (context variable)
+\newcommand{\bfb}{\mathbf{b}} % b (bias in neural network)
+\newcommand{\bfr}{\mathbf{r}} % r
+\newcommand{\bfs}{\mathbf{s}} % s
+\newcommand{\bfa}{\mathbf{a}} % 
+\newcommand{\bfu}{\mathbf{u}} % 
+\newcommand{\bff}{\mathbf{f}} % a vector-valued function
+\newcommand{\bfg}{\mathbf{g}} % a vector-valued function
+\newcommand{\bfh}{\mathbf{h}} % a vector-valued function or vector
+\newcommand{\bfw}{\mathbf{w}} % a vector-valued function or vector
+
+
+\newcommand{\bfD}{\mathbf{D}} % D (dataset)
+\newcommand{\curlyD}{\mathcal{D}} % D (curly dataset)
+
+\newcommand{\bftheta}{\bm{\theta}} % generic model parameters
+\newcommand{\bfphi}{\bm{\phi}} % variational parameters
+\newcommand{\bfgamma}{\bm{\gamma}} % generic vector parameters
+\newcommand{\bfepsilon}{\bm{\epsilon}}
+\newcommand{\bfmu}{\bm{\mu}} % \mu (mean of multivariate Gaussian)
+\newcommand{\bfsigma}{\bm{\sigma}} % \sigma (diagonal vector of covariance of multivariate Gaussian)
+\newcommand{\bfSigma}{\bm{\Sigma}} % \Sigma (covariance of multivariate Gaussian)
+
+\newcommand{\bfA}{\bm{A}} % A (multipurpose matrix)
+\newcommand{\bfW}{\mathbf{W}} % W (weight matrix)
+\newcommand{\bfM}{\mathbf{M}} % M (masking matrix)
+\newcommand{\bfL}{\mathbf{L}} % L (lower-triangular matrix)
+\newcommand{\bfU}{\mathbf{U}} % U (upper-triangular matrix)
+\newcommand{\bfP}{\mathbf{P}} % P (permutation matrix)
+
+% parameterized distributions
+\newcommand{\ptheta}{p_{\bm{\theta}}}
+\newcommand{\qphi}{q_{\bm{\phi}}}
+
+% Element sets
+\newcommand{\N}{\mathbb{N}} % naturals
+\newcommand{\Z}{\mathbb{Z}} % integers
+\newcommand{\R}{\mathbb{R}} % reals
+
+%Distributions
+\newcommand{\normal}{\mathcal{N}} % Gaussian
+\newcommand{\unif}{\mathcal{U}} % Uniform 
+\newcommand{\g}{\,\vert\,} % conditioning
+
+% Expectation & Variance
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+
+% Likelihood
+\newcommand{\calL}{\mathcal{L}}
+
+% Energy
+\newcommand{\fancyE}{\mathcal{E}}
+
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+
+% KL Divergence 
+\DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
+  #1\;\delimsize\|\;#2%
+}
+\newcommand{\infdiv}{D_{KL}\infdivx}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% Matrix Operators
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\diag}{diag}
+\newcommand\inv[1]{#1\raisebox{1.15ex}{$\scriptscriptstyle-\!1$}}
+
+% argmax/min
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% brackets
+\newcommand{\roundbr}[1]{\mathopen{}\left(#1\right)\mathclose{}}
+\newcommand{\squarebr}[1]{\mathopen{}\left[#1\right]\mathclose{}}
+\newcommand{\curlybr}[1]{\mathopen{}\left\lbrace#1\right\rbrace\mathclose{}}
+\newcommand{\vertbr}[1]{\mathopen{}\left|#1\right|\mathclose{}}
+
+% environments
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+\definecolor{mycolor}{rgb}{0.122, 0.435, 0.698}
+\newmdenv[innerlinewidth=0.5pt, roundcorner=4pt,linecolor=black,innerleftmargin=6pt,
+innerrightmargin=6pt,innertopmargin=6pt,innerbottommargin=6pt]{mybox}
+
+\makeatletter
+\def\blfootnote{\xdef\@thefnmark{}\@footnotetext}
+\makeatother

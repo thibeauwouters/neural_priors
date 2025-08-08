@@ -1,0 +1,146 @@
+\section{Experimental details}
+\label{appendix:experimental-details}
+
+\subsection{Tabular density estimation}
+\label{appendix:experimental-details-tabular-density-estimation}
+
+Model selection is performed using the standard validation splits for these datasets.
+We clip the norm of gradients to the range $ [-5, 5] $, and find this helps stabilize training.
+We modify MAF by replacing permutations with invertible linear layers.
+Hyperparameter settings are shown for coupling flows in \cref{tab:experimental-details-density-estimation-coupling} and autoregressive flows in \cref{tab:experimental-details-density-estimation-autoregressive}.
+We include the dimensionality and number of training data points in each table for reference. 
+For higher dimensional datasets such as Hepmass and BSDS300, we found increasing the number of coupling layers beneficial. 
+This was not necessary for Miniboone, where overfitting was an issue due to the low number of data points.
+
+\begin{table*}[!ht]
+	\caption{Hyperparameters for density-estimation results using coupling layers in \cref{sec:tabular-density-estimation}.}
+	\label{tab:experimental-details-density-estimation-coupling}
+    \vspace*{-0.1in}
+	\begin{center}
+		\begin{small}
+			\begin{sc}
+				\begin{tabular}{lccccc}
+					\toprule
+					& Power & Gas & Hepmass & Miniboone & BSDS300 \\ 
+					\midrule
+					Dimension & 6 & 8 & 21 & 43 & 63 \\
+					Train data points & 1,615,917 & 852,174 & 315,123 & 29,556 & 1,000,000 \\
+					\midrule
+					Batch size & 512 & 512 & 256 & 128 & 512 \\
+					Training steps & 400,000 & 400,000 & 400,000 & 200,000 & 400,000 \\
+					Learning rate & 0.0005 & 0.0005 & 0.0005 & 0.0003 & 0.0005 \\
+					Flow steps & 10 & 10 & 20 & 10 & 20 \\
+					Residual blocks & 2 & 2 & 1 & 1 & 1 \\
+					Hidden features & 256 & 256 & 128 & 32 & 128 \\
+					Bins & 8 & 8 & 8 & 4 & 8 \\
+					Dropout & 0.0 & 0.1 & 0.2 & 0.2 & 0.2 \\
+					\bottomrule
+				\end{tabular}
+			\end{sc}
+		\end{small}
+	\end{center}
+\end{table*}
+
+\begin{table*}[!h]
+	\caption{Hyperparameters for density-estimation results using autoregressive layers in \cref{sec:tabular-density-estimation}.}
+	\label{tab:experimental-details-density-estimation-autoregressive}
+	\vspace*{-0.1in}
+	\begin{center}
+		\begin{small}
+			\begin{sc}
+				\begin{tabular}{lccccc}
+					\toprule
+					& Power & Gas & Hepmass & Miniboone & BSDS300 \\ 
+					\midrule
+					Dimension & 6 & 8 & 21 & 43 & 63 \\
+					Train data points & 1,615,917 & 852,174 & 315,123 & 29,556 & 1,000,000 \\
+					\midrule
+					Batch size & 512 & 512 & 512 & 64 & 512 \\
+					Training steps & 400,000 & 400,000 & 400,000 & 250,000 & 400,000 \\
+					Learning rate & 0.0005 & 0.0005 & 0.0005 & 0.0003 & 0.0005 \\
+					Flow steps & 10 & 10 & 10 & 10 & 10 \\
+					Residual blocks & 2 & 2 & 2 & 1 & 2 \\
+					Hidden features & 256 & 256 & 256 & 64 & 512 \\
+					Bins & 8 & 8 & 8 & 4 & 8 \\
+					Dropout & 0.0 & 0.1 & 0.2 & 0.2 & 0.2 \\
+					\bottomrule
+				\end{tabular}
+			\end{sc}
+		\end{small}
+	\end{center}
+\end{table*}
+
+\begin{table*}[!h]
+	\caption{Validation log likelihood (in nats) for UCI datasets and BSDS300, with error bars corresponding to two standard deviations.}
+	\label{tab:uci-results-validation}
+        \vspace*{-0.1in}
+	\begin{center}
+		\begin{small}
+			\begin{sc}
+				\begin{tabular}{lccccc}
+					\toprule
+					Model & POWER & GAS & HEPMASS & MINIBOONE & BSDS300 \\ 
+					\midrule
+					RQ-NSF (C) & $ 0.65 \pm 0.01 $ & $ 13.08 \pm 0.02 $ & $ -14.75 \pm 0.06 $ & $ \hphantom{0}{-9.03} \pm 0.43 $ & $ 172.51 \pm 0.60 $  \\
+					RQ-NSF (AR) & $ 0.67 \pm 0.01 $ & $ 13.08 \pm 0.02 $ & $ -13.82 \pm 0.05 $ & $ \hphantom{0}{-8.63} \pm 0.41 $ & $ 172.5 \pm 0.59 $ \\
+					\bottomrule
+				\end{tabular}
+			\end{sc}
+		\end{small}
+	\end{center}
+	\vspace{-1.0em}
+\end{table*}
+
+\subsection{Improving the variational autoencoder}
+We use the Adam optimizer \citep{kingma:2014:adam} with default hyperparameters, annealing an initial learning rate of $ 0.0005 $ to $ 0 $ using a cosine schedule \citep{loshchilov:2016:sgdr} over $ 150{,}000 $ training steps with batch size $ 256 $. 
+We use a `warm-up' phase for the KL divergence term of the loss, where the multiplier for this term is initialized to $ 0.5 $ and linearly increased to $ 1 $ over the first $ 10\% $ of training. 
+This modification initially reduces the penalty incurred by the approximate posterior in deviating from the prior, and similar schemes have been shown to improve VAE training dynamics \citep{rezende:2018:taming}. 
+Model selection is performed using a held-out validation set of $ 10{,}000 $ samples for MNIST, and $ 20{,}000 $ samples for EMNIST\@.
+
+We use 32 latent features, and residual nets use 2 blocks, with 64 latent features for coupling layers, and 128 latent features for autoregressive layers. 
+Both coupling and autoregressive flows use 10 steps. 
+As with the tabular density-estimation experiments, we modify IAF \citep{Kingma:2016:iaf} and MAF \citep{Papamakarios:2017:maf} by replacing permutations with invertible linear layers using an LU-decomposition. 
+All NSF models use 8 bins. 
+The encoder and decoder architectures are set up exactly as described by \citet{nash2019aem}, and are similar to those used in IAF \citep{Kingma:2016:iaf} and NAF \citep{Huang:2018:naf}. 
+
+Conditioning the approximate posterior distribution $ q(\bfz \g \bfx) $ follows a multi-stage procedure. 
+First, the encoder computes a context vector $ \bfh $ of dimension $ 64 $ as a function of the input $ \bfx $. 
+This vector is then mapped to the mean and diagonal covariance of a Gaussian distribution in the latent space. 
+Then, $ \bfh $ is also given as input to the residual nets in each of the flow's coupling or autoregressive layers, where it is concatenated with the input $ \bfz $, mapped to the required number of hidden features, and also used to modulate the additive update of each residual block with a sigmoid gate. 
+We found this scheme to work well across experiments.
+
+\subsection{Generative modeling of images}
+
+For image-modeling experiments we use a Glow-like model architecture introduced by \citet[Section~3]{Kingma:2018:glow}.
+This involves stacking multiple steps for each level in the multi-scale architecture of \citet{Dinh:2017:rnvp}, where each step consists of an actnorm layer, an invertible $1\times1$ convolution and a coupling transform. For our RQ-NSF (C) model,
+we make the following modifications to the original Glow model: we replace affine coupling transforms with rational-quadratic coupling transforms, we go back to residual convolutional networks as used in RealNVP \cite{Dinh:2017:rnvp}, and we use an additional $1\times 1$ convolution at the end of each level of transforms. The basline model is the same as RQ-NSF (C), except that it uses affine coupling transforms instead of rational-quadratic ones.
+For CIFAR-10 experiments we do not factor out dimensions at the end of each level, but still use the squeezing operation to trade spatial resolution for depth.
+
+For all experiments we use 3 residual blocks and batch normalization \citep{ioffe:2015:batchnorm} in the residual networks which parameterize the coupling transforms. We use 7 steps per level for all experiments, resulting in a total of 21 coupling transforms for CIFAR-10, and 28 coupling transform for ImageNet64 (Glow models used by \citet{Kingma:2018:glow} use 96 and 192 affine coupling transforms for CIFAR-10 and ImageNet64 respectively).
+
+We use the Adam \citep{kingma:2014:adam} optimizer with default $\beta_1$ and $\beta_2$ values. An initial learning rate of 0.0005 is annealed to 0 following a cosine schedule \citep{loshchilov:2016:sgdr}. We train for $100{,}000$ steps for 5-bit experiments, and for $200{,}000$ steps for 8-bit experiments.
+To track the performance of our models, we split off 1\% of the training data to use as a development set. Due to the resource requirements of the experiments, we perform a limited manual hyper-parameter exploration. Final values are reported in \cref{tab:experimental-details-images}.
+
+We use a single NVIDIA Tesla P100 GPU card per CIFAR-10 experiment, and two such cards per ImageNet64 experiment. Training for $200{,}000$ steps takes about $5$ days with this setup.
+
+\begin{table*}[h!]
+	\caption{Hyperparameters for generative image-modeling results in \cref{sec:gen_image_modeling}.}
+	\label{tab:experimental-details-images}
+	\vspace*{-0.1in}
+	\begin{center}
+		\begin{small}
+			\begin{sc}
+				\begin{tabular}{lcccccc}
+					\toprule
+					Dataset && Batch Size & Levels & Hidden Channels & Bins & Dropout \\ 
+					\midrule
+					CIFAR-10 & 5-bit & 512 & 3 & 64 & 2 & 0.2\\
+					& 8-bit & 512 & 3 & 96 & 4 & 0.2\\
+					ImageNet64 & 5-bit & 256 & 4 & 96 & 8 & 0.1\\
+					& 8-bit & 256 & 4 & 96 & 8 & 0.0\\
+					\bottomrule
+				\end{tabular}
+			\end{sc}
+		\end{small}
+	\end{center}
+\end{table*}

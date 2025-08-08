@@ -1,0 +1,111 @@
+\section{Experiments}
+\begin{table*}[t!]
+	\caption{Test log likelihood (in nats) for UCI datasets and BSDS300, with error bars corresponding to two standard deviations. FFJORD$^\dagger$, NAF$^\dagger$, Block-NAF$^\dagger$, and SOS$^\dagger$ report error bars across repeated runs rather than across the test set. Superscript$^\star$ indicates results are taken from the existing literature. For validation results which can be used for comparison during model development, see \cref{tab:uci-results-validation} in \cref{appendix:experimental-details-tabular-density-estimation}.
+	}
+	\label{tab:uci-results}
+        \vspace*{-0.1in}
+	\begin{center}
+		\begin{small}
+			\begin{sc}
+				\begin{tabular}{lccccc}
+					\toprule
+					Model & POWER & GAS & HEPMASS & MINIBOONE & BSDS300 \\ 
+					\midrule
+					FFJORD$^{\star\dagger}$ & $ 0.46 \pm 0.01$ & $ \hphantom{0}8.59 \pm 0.12$ & $ -14.92 \pm 0.08$ & $ -10.43 \pm 0.04$ & $ 157.40 \pm 0.19$ \\
+					Glow & $ 0.42 \pm 0.01 $ & $ 12.24 \pm 0.03 $ & $ -16.99 \pm 0.02 $ & $ -10.55 \pm 0.45 $ & $ 156.95 \pm 0.28 $ \\
+					Q-NSF (C) & $ 0.64 \pm 0.01 $ & $ 12.80 \pm 0.02 $ & $ -15.35 \pm 0.02 $ & $ \hphantom{0}{-9.35} \pm 0.44 $ & $ 157.65 \pm 0.28 $ \\
+					RQ-NSF (C) & $ 0.64 \pm 0.01 $ & $ 13.09 \pm 0.02 $ & $ -14.75 \pm 0.03 $ & $ \hphantom{0}{-9.67} \pm 0.47 $ & $ 157.54 \pm 0.28 $  \\
+					\midrule
+					MAF & $ 0.45 \pm 0.01 $ & $ 12.35 \pm 0.02 $ & $ -17.03 \pm 0.02 $ & $ -10.92 \pm 0.46 $ & $ 156.95 \pm 0.28 $ \\
+					Q-NSF (AR) & $ 0.66 \pm 0.01 $ & $ 12.91 \pm 0.02 $ & $ -14.67 \pm 0.03 $ & $ \hphantom{0}{-9.72} \pm 0.47 $ & $ 157.42 \pm 0.28 $  \\
+					NAF$^{\star\dagger}$ & $0.62 \pm 0.01$ & $11.96 \pm 0.33$ & $-15.09 \pm 0.40$ & $\hphantom{0}{-8.86} \pm 0.15$ & $157.73 \pm 0.04$ \\
+					Block-NAF$^{\star\dagger}$ & $0.61 \pm 0.01$ & $12.06 \pm 0.09$ & $-14.71 \pm 0.38$ & $\hphantom{0}{-8.95} \pm 0.07$ & $157.36 \pm 0.03$ \\
+					SOS$^{\star\dagger}$ & $ 0.60 \pm 0.01 $ & $ 11.99 \pm 0.41 $ & $ -15.15 \pm 0.10 $ & $ \hphantom{0}{-8.90} \pm 0.11 $ & $ 157.48 \pm 0.41 $ \\
+					RQ-NSF (AR) & $ 0.66 \pm 0.01 $ & $ 13.09 \pm 0.02 $ & $ -14.01 \pm 0.03 $ & $ \hphantom{0}{-9.22} \pm 0.48 $ & $ 157.31 \pm 0.28 $ \\
+					\bottomrule
+				\end{tabular}
+			\end{sc}
+		\end{small}
+	\end{center}
+	\vspace{-1.0em}
+\end{table*}
+
+In our experiments, the neural network NN which computes the parameters of the elementwise transformations is a residual network \citep{he2016deep} with pre-activation  residual blocks \citep{he2016preact}. 
+For autoregressive transformations, the layers must be masked so as to preserve autoregressive structure, and so we use the ResMADE architecture outlined by \citet{nash2019aem}. 
+Preliminary results indicated only minor differences in setting the tail bound $ B $ within the range $ [1, 5] $, and so we fix a value $ B = 3 $ across experiments, and find this to work robustly.
+We also fix the number of bins $ K = 8 $ across our experiments, unless otherwise noted.
+We implement all invertible linear transformations using the LU-decomposition, where the permutation matrix $ \bfP $ is fixed at the beginning of training, and the product $ \bfL \bfU $ is initialized to the identity.
+For all non-image experiments, we define a flow `step' as the composition of an invertible linear transformation with either a coupling or autoregressive transform, and we use 10 steps per flow in all our experiments, unless otherwise noted.
+All flows use a standard-normal noise distribution.
+We use the Adam optimizer \citep{kingma:2014:adam}, and anneal the learning rate according to a cosine schedule \citep{loshchilov:2016:sgdr}. 
+In some cases, we find applying dropout \citep{srivastava:2014:dropout} in the residual blocks beneficial for regularization.
+Full experimental details are provided in \cref{appendix:experimental-details}. Code is \ifanonymize included in the supplementary material. \else available online at \url{https://github.com/bayesiains/nsf}.
+
+\subsection{Density estimation of tabular data}
+\label{sec:tabular-density-estimation}
+We first evaluate our proposed flows using a selection of datasets from the UCI machine-learning repository \cite{dua:2017:uci} and BSDS300 collection of natural images \citep{martin:2001:bsds}. 
+We follow the experimental setup and pre-processing of \citet{Papamakarios:2017:maf}, who make their data available online \citep{Papamakarios:2018:maf_datasets}.
+We also update their MAF results using our codebase with ResMADE and invertible linear layers instead of permutations, providing a stronger baseline.
+For comparison, we modify the quadratic splines of \citet{Muller:2018:nis} to match the rational-quadratic transforms, by defining them on the range $ [-B, B] $ instead of $ [0, 1] $, and adding linear tails, also matching the boundary derivatives as in the rational-quadratic case. 
+We denote this model Q-NSF\@. 
+Our results are shown in \cref{tab:uci-results}, where the mid-rule separates flows with one-pass inverse from autoregressive flows.
+We also include validation results for comparison during model development in \cref{tab:uci-results-validation} in \cref{appendix:experimental-details-tabular-density-estimation}.
+
+Both RQ-NSF (C) and RQ-NSF (AR) achieve state-of-the-art results for a normalizing flow on the Power, Gas, and Hepmass datasets, tied with Q-NSF (C) and Q-NSF (AR) on the Power dataset. 
+Moreover, RQ-NSF (C) significantly outperforms both Glow and FFJORD, achieving scores competitive with the best autoregressive models. 
+These results close the gap between autoregressive flows and flows based on coupling layers, and demonstrate that, in some cases, it may not be necessary to sacrifice one-pass sampling for density-estimation performance.
+
+
+\subsection{Improving the variational autoencoder}
+\label{sec:vae}
+
+Next, we examine our proposed flows in the context of the variational autoencoder \citep[VAE,][]{Kingma:2014:vae, Rezende:2014:vae}, where they can act as both flexible prior and approximate posterior distributions. 
+For our experiments, we use dynamically binarized versions of the MNIST dataset of handwritten digits \citep{lecun:1998:mnist}, and the EMNIST dataset variant featuring handwritten letters \citep{cohen2017emnist}.
+We measure the capacity of our flows to improve over the commonly used baseline of a standard-normal prior and diagonal-normal approximate posterior, as well as over either coupling or autoregressive distributions with affine transformations.
+Quantitative results are shown in \cref{tab:vae-results}, and image samples
+in \cref{appendix-additional-experimental-results}.
+
+All models improve significantly over the baseline, but perform very similarly otherwise, with most featuring overlapping error bars. 
+Considering the disparity in density-estimation performance in the previous section, this is likely due to flows with affine transformations being sufficient to model the latent space for these datasets, with little scope for RQ-NSF flows to demonstrate their increased flexibility. 
+Nevertheless, it is worthwhile to highlight that RQ-NSF (C) is the first class of model which can potentially match the flexibility of autoregressive models, and which requires no modification for use as either a prior or approximate posterior, due to its one-pass invertibility.
+
+\begin{table*}[t!]
+	\caption{Variational autoencoder test-set results (in nats) for the evidence lower bound (ELBO) and importance-weighted estimate of the log likelihood (computed as by \citet{burda:2016:iwae} using 1000 importance samples). Error bars correspond to two standard deviations.}
+	\label{tab:vae-results}
+        \vspace*{-0.1in}
+	\begin{center}
+		\begin{small}
+			\begin{sc}
+				\begin{tabular}{lcccc}
+					\toprule
+					& \multicolumn{2}{c}{MNIST} & \multicolumn{2}{c}{EMNIST} \\ 
+					\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+					Posterior/Prior & ELBO & $ \log p(\bfx) $ & ELBO & $ \log p(\bfx) $ \\
+					\midrule
+					Baseline & $ -85.61 \pm 0.51 $ & $ -81.31 \pm 0.43 $ & $ -125.89 \pm 0.41 $ & $ -120.88 \pm 0.38 $ \\
+					\midrule
+					Glow & $ -82.25 \pm 0.46 $ & $ -79.72 \pm 0.42 $ & $ -120.04 \pm 0.40 $ & $ -117.54 \pm 0.38 $ \\
+					RQ-NSF (C) & $ -82.08 \pm 0.46 $ & $ -79.63 \pm 0.42 $ & $ -119.74 \pm 0.40 $ & $ -117.35 \pm 0.38 $ \\
+					\midrule
+					IAF/MAF & $ -82.56 \pm 0.48 $ & $ -79.95 \pm 0.43 $ & $ -119.85 \pm 0.40 $ & $ -117.47 \pm 0.38 $ \\ 
+					RQ-NSF (AR) & $ -82.14 \pm 0.47 $ & $ -79.71 \pm 0.43 $ & $ -119.49 \pm 0.40 $ & $ -117.28 \pm 0.38 $ \\
+					\bottomrule
+				\end{tabular}
+			\end{sc}
+		\end{small}
+	\end{center}
+	\vspace{-1em}
+\end{table*}
+
+\subsection{Generative modeling of images}
+\label{sec:gen_image_modeling}
+
+Finally, we evaluate neural spline flows as generative models of images, measuring their capacity to improve upon baseline models with affine transforms.
+In this section, we focus solely on flows with a one-pass inverse in the style of RealNVP \citep{Dinh:2017:rnvp} and Glow \citep{Kingma:2018:glow}.
+We use the CIFAR-10 \citep{krizhevsky:2009:cifar10} and downsampled $64\times64$ ImageNet \citep{oord2016pixelrnn, russakovsky:2015:imagenet} datasets, with original 8-bit colour depth and with reduced 5-bit colour depth. 
+We use Glow-like architectures with either affine (in the baseline model) or rational-quadratic coupling transforms, and provide full experimental detail in \cref{appendix:experimental-details}.
+Quantitative results are shown in \cref{tab:img-results}, and samples are shown in \cref{fig:img-samples} and \cref{appendix-additional-experimental-results}.
+
+RQ-NSF (C) improves upon the affine baseline in three out of four tasks, and the improvement is most significant on the 8-bit version of ImageNet64. At the same time, RQ-NSF (C) achieves scores that are competitive with the original Glow model, while significantly reducing the number of parameters required, in some cases by almost an order of magnitude.
+\Cref{fig:img-samples} demonstrates that the model is capable of producing diverse, globally coherent samples which closely resemble real data. 
+There is potential to further improve our results by replacing the uniform dequantization used in Glow with \textit{variational dequantization}, and using more powerful networks with gating and self-attention mechanisms to parameterize the coupling transforms, both of which are explored by \citet{Ho:2019:flowpp}.
