@@ -40,3 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/bns/radio_chiEFT_NICER/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
+Early stopping triggered at epoch 1970
+Saving the training loss plot to ./models/uniform/bns/radio_chiEFT_NICER/training_loss.pdf
+Training done. Took around 221.32 minutes
+Saving the model weights to ./models/uniform/bns/radio_chiEFT_NICER/model.pt
+Saving the model kwargs to ./models/uniform/bns/radio_chiEFT_NICER/model_kwargs.json
+DONE training!
