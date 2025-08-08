@@ -26,9 +26,9 @@ from bilby.gw.conversion import (
 
 ### glasflow imports
 from glasflow.flows.nsf import CouplingNSF
-from glasflow.flows.autoregressive import MaskedPiecewiseRationalQuadraticAutoregressiveFlow
+from glasflow.flows.autoregressive import MaskedPiecewiseRationalQuadraticAutoregressiveFlow, MaskedAffineAutoregressiveFlow
 # TODO: Add support for other autoregressive flows if desired:
-# MaskedAffineAutoregressiveFlow, MaskedPiecewiseLinearAutoregressiveFlow,
+# MaskedPiecewiseLinearAutoregressiveFlow,
 # MaskedPiecewiseQuadraticAutoregressiveFlow, MaskedPiecewiseCubicAutoregressiveAutoregressiveFlow
 import torch
 from torch import optim
@@ -209,7 +209,7 @@ parser.add_argument("--num-bins",
 parser.add_argument("--glasflow-type", 
                     type=str, 
                     default="CouplingNSF", 
-                    choices=["CouplingNSF", "MaskedPiecewiseRationalQuadraticAutoregressiveFlow"],
+                    choices=["CouplingNSF", "MaskedPiecewiseRationalQuadraticAutoregressiveFlow", "MaskedAffineAutoregressiveFlow"],
                     help="Type of glasflow model to use")
 parser.add_argument("--nn-depth", 
                     type=int, 
@@ -860,6 +860,13 @@ class NFPriorCreator:
                 n_neurons=self.n_neurons,
                 n_blocks_per_transform=self.n_blocks_per_transform,
                 num_bins=self.num_bins
+            )
+        elif self.glasflow_type == "MaskedAffineAutoregressiveFlow":
+            flow = MaskedAffineAutoregressiveFlow(
+                n_inputs=self.nf_kwargs["n_inputs"],
+                n_transforms=self.n_transforms,
+                n_neurons=self.n_neurons,
+                n_blocks_per_transform=self.n_blocks_per_transform
             )
         else:
             raise ValueError(f"Unsupported glasflow_type: {self.glasflow_type}")

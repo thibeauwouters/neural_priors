@@ -16,6 +16,7 @@ from scipy.special import kl_div
 from scipy.stats import gaussian_kde, chisquare
 
 from glasflow.flows.nsf import CouplingNSF
+from glasflow.flows.autoregressive import MaskedPiecewiseRationalQuadraticAutoregressiveFlow, MaskedAffineAutoregressiveFlow
 from bilby.gw.conversion import component_masses_to_chirp_mass
 
 ### flowjax imports
@@ -679,13 +680,34 @@ class CheckerUnconditional(Checker):
             print(f"Loading glasflow unconditional model with {n_inputs} inputs")
             nf_path = os.path.join(self.path, "model.pt")
             
-            flow = CouplingNSF(
-                n_inputs=n_inputs,
-                n_transforms=nf_kwargs["n_transforms"],
-                n_neurons=nf_kwargs["n_neurons"],
-                n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
-                num_bins=nf_kwargs["num_bins"]
-            )
+            # Determine glasflow model type
+            glasflow_type = nf_kwargs.get("glasflow_type", "CouplingNSF")
+            
+            if glasflow_type == "CouplingNSF":
+                flow = CouplingNSF(
+                    n_inputs=n_inputs,
+                    n_transforms=nf_kwargs["n_transforms"],
+                    n_neurons=nf_kwargs["n_neurons"],
+                    n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
+                    num_bins=nf_kwargs["num_bins"]
+                )
+            elif glasflow_type == "MaskedPiecewiseRationalQuadraticAutoregressiveFlow":
+                flow = MaskedPiecewiseRationalQuadraticAutoregressiveFlow(
+                    n_inputs=n_inputs,
+                    n_transforms=nf_kwargs["n_transforms"],
+                    n_neurons=nf_kwargs["n_neurons"],
+                    n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"],
+                    num_bins=nf_kwargs["num_bins"]
+                )
+            elif glasflow_type == "MaskedAffineAutoregressiveFlow":
+                flow = MaskedAffineAutoregressiveFlow(
+                    n_inputs=n_inputs,
+                    n_transforms=nf_kwargs["n_transforms"],
+                    n_neurons=nf_kwargs["n_neurons"],
+                    n_blocks_per_transform=nf_kwargs["n_blocks_per_transform"]
+                )
+            else:
+                raise ValueError(f"Unsupported glasflow model type: {glasflow_type}")
             
             print(f"Loading glasflow model from {nf_path}")
             flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
