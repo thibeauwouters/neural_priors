@@ -1,5 +1,5 @@
 """
-Let's see which priors were used by Adrian for this run
+Let's see which priors were used by Hauke for these runs
 """
 import numpy as np
 import h5py
@@ -9,10 +9,12 @@ import json
 FILTER_LUMINOSITY_DISTANCE_ONLY = True
 
 GW_event_list = ["GW170817",
-#"GW190425"
+                 "GW170817+EM", 
+                 "GW190425"
                  ]
-filename_list = ["GW170817/GW170817_Pade_0_result.hdf5",
-                 "GW190425/GW190425_nrt3_0_result.hdf5"]
+filename_list = ["GW170817/GW170817_result.hdf5",
+                 "GW170817/GW170817+EM_result.hdf5",
+                 "GW190425/GW190425_result.hdf5"]
 
 for GW_event, filename in zip(GW_event_list, filename_list):
 
