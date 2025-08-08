@@ -26,6 +26,10 @@ from bilby.gw.conversion import (
 
 ### glasflow imports
 from glasflow.flows.nsf import CouplingNSF
+from glasflow.flows.autoregressive import MaskedPiecewiseRationalQuadraticAutoregressiveFlow
+# TODO: Add support for other autoregressive flows if desired:
+# MaskedAffineAutoregressiveFlow, MaskedPiecewiseLinearAutoregressiveFlow,
+# MaskedPiecewiseQuadraticAutoregressiveFlow, MaskedPiecewiseCubicAutoregressiveAutoregressiveFlow
 import torch
 from torch import optim
 from torch.utils.data import DataLoader, TensorDataset
@@ -202,6 +206,11 @@ parser.add_argument("--num-bins",
                     type=int, 
                     default=10, 
                     help="Number of bins for spline flows")
+parser.add_argument("--glasflow-type", 
+                    type=str, 
+                    default="CouplingNSF", 
+                    choices=["CouplingNSF", "MaskedPiecewiseRationalQuadraticAutoregressiveFlow"],
+                    help="Type of glasflow model to use")
 parser.add_argument("--nn-depth", 
                     type=int, 
                     default=1, 
@@ -259,6 +268,7 @@ class NFPriorCreator:
                  n_neurons: int = 128,
                  n_blocks_per_transform: int = 4,
                  num_bins: int = 10,
+                 glasflow_type: str = "CouplingNSF",
                  # flowJAX-specific training arguments:
                  nn_depth: int = 1,
                  nn_block_dim: int = 8,
@@ -337,6 +347,7 @@ class NFPriorCreator:
         self.n_blocks_per_transform = n_blocks_per_transform
         self.scale_input = scale_input
         self.num_bins = num_bins
+        self.glasflow_type = glasflow_type
         self.validation_split_fraction = validation_split_fraction
         self.constrain_flowjax_dist = constrain_flowjax_dist
         
@@ -346,7 +357,8 @@ class NFPriorCreator:
                           "n_blocks_per_transform": self.n_blocks_per_transform,
                           "nn_depth": self.nn_depth,
                           "flow_layers": self.flow_layers,
-                          "nn_block_dim": self.nn_block_dim
+                          "nn_block_dim": self.nn_block_dim,
+                          "glasflow_type": self.glasflow_type
                           }
         
         # Set whether this is specific for a GW event
@@ -818,20 +830,31 @@ class NFPriorCreator:
             json.dump(self.nf_kwargs, f, indent=4)
         print("DONE training!")
         
-    def _train_glasflow(self) -> CouplingNSF:
+    def _train_glasflow(self):
         """
         Simple wrapper around a glasflow model to train an unconditional normalizing flow on the data.
         """
         
-        # Initialize the flow model
-        self.nf_kwargs["model_type"] = "CouplingNSF"
+        # Initialize the flow model based on glasflow_type
+        self.nf_kwargs["model_type"] = self.glasflow_type
         
-        flow = CouplingNSF(n_inputs=self.nf_kwargs["n_inputs"],
-                           n_transforms=self.n_transforms,
-                           n_neurons=self.n_neurons,
-                           n_blocks_per_transform=self.n_blocks_per_transform,
-                           num_bins=self.num_bins
-        )
+        if self.glasflow_type == "CouplingNSF":
+            flow = CouplingNSF(n_inputs=self.nf_kwargs["n_inputs"],
+                               n_transforms=self.n_transforms,
+                               n_neurons=self.n_neurons,
+                               n_blocks_per_transform=self.n_blocks_per_transform,
+                               num_bins=self.num_bins
+            )
+        elif self.glasflow_type == "MaskedPiecewiseRationalQuadraticAutoregressiveFlow":
+            flow = MaskedPiecewiseRationalQuadraticAutoregressiveFlow(
+                n_inputs=self.nf_kwargs["n_inputs"],
+                n_transforms=self.n_transforms,
+                n_neurons=self.n_neurons,
+                n_blocks_per_transform=self.n_blocks_per_transform,
+                num_bins=self.num_bins
+            )
+        else:
+            raise ValueError(f"Unsupported glasflow_type: {self.glasflow_type}")
         flow.to(DEVICE)
         
         # Initialize early stopping parameters
