@@ -1,6 +1,6 @@
 Universe = vanilla
 Executable = /data/gravwav/twouters/miniconda3/envs/eos_source_classification/bin/python
-arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --no-use-tilde --no-use-component-masses --N-samples-training 200000 --N-samples-plot 10000 --m-max-BH 5.0 --no-take-log-lambda --no-use-flowjax --scale-input --num-epochs 2000 --learning-rate 0.0005 --batch-size 1024 --max-patience 250 --n-transforms 4 --n-neurons 256 --n-blocks-per-transform 6 --num-bins 16 --nn-depth 1 --nn-block-dim 8 --flow-layers 1 --validation-split-fraction 0.2 --constrain-flowjax-dist"
+arguments = "/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/train_NF_prior.py --population-type double_gaussian --source-type nsbh --eos-samples-name radio_chiEFT_NICER --no-use-tilde --no-use-component-masses --N-samples-training 50000 --N-samples-plot 10000 --m-max-BH 5.0 --no-take-log-lambda --no-use-flowjax --scale-input --num-epochs 1500 --learning-rate 0.0005 --batch-size 256 --max-patience 200 --n-transforms 3 --n-neurons 128 --n-blocks-per-transform 3 --num-bins 8 --glasflow-type MaskedPiecewiseRationalQuadraticAutoregressiveFlow --nn-depth 1 --nn-block-dim 8 --flow-layers 1 --validation-split-fraction 0.2 --constrain-flowjax-dist"
 getenv = true
 Log = ./models/double_gaussian/nsbh/radio_chiEFT_NICER/log.log
 Error = ./models/double_gaussian/nsbh/radio_chiEFT_NICER/err.err
