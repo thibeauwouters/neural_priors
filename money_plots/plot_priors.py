@@ -25,7 +25,7 @@ LABELS_DICT = {"BNS": [r"$m_1$ [M$_\odot$]", r"$m_2$ [M$_\odot$]", r"$\Lambda_1$
 
 TEX_TRANSLATION_DICT = {"m1": r"$m_1$ [M$_\odot$]",
                         "m2": r"$m_2$ [M$_\odot$]",
-                        "chirp_mass_source": r"$\mathcal{M}_c^{\rm{source}}$ [M$_\odot$]",
+                        "chirp_mass_source": r"$\mathcal{M}_c^{\rm{src}}$ [M$_\odot$]",
                         "mass_ratio": r"$q$",
                         "lambda_1": r"$\Lambda_1$",
                         "lambda_2": r"$\Lambda_2$",
@@ -33,6 +33,7 @@ TEX_TRANSLATION_DICT = {"m1": r"$m_1$ [M$_\odot$]",
                         "delta_lambda_tilde": r"$\delta \tilde{\Lambda}$"
                         }
 
+fs = 24
 params = {"axes.grid": False,
         "text.usetex" : True,
         "font.family" : "serif",
@@ -41,12 +42,12 @@ params = {"axes.grid": False,
         "axes.labelcolor" : "black",
         "axes.edgecolor" : "black",
         "font.serif" : ["Computer Modern Serif"],
-        "xtick.labelsize": 16,
-        "ytick.labelsize": 16,
-        "axes.labelsize": 16,
-        "legend.fontsize": 16,
-        "legend.title_fontsize": 16,
-        "figure.titlesize": 16}
+        "xtick.labelsize": fs,
+        "ytick.labelsize": fs,
+        "axes.labelsize": fs,
+        "legend.fontsize": fs,
+        "legend.title_fontsize": fs,
+        "figure.titlesize": fs}
 
 plt.rcParams.update(params)
 
@@ -54,8 +55,8 @@ plt.rcParams.update(params)
 default_corner_kwargs = dict(bins=40, 
                         smooth=1., 
                         show_titles=False,
-                        label_kwargs=dict(fontsize=16),
-                        title_kwargs=dict(fontsize=16), 
+                        label_kwargs=dict(fontsize=32),
+                        title_kwargs=dict(fontsize=46), 
                         # quantiles=[],
                         # levels=[0.393, 0.675, 0.95],
                         plot_density=False, 
@@ -69,8 +70,8 @@ POPULATION_NAMES = ["uniform", "gaussian", "double_gaussian"]
 SOURCE_TYPES = ["BNS", "NSBH"]
 EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
 EOS_SAMPLES_NAMES_DICT = {"radio": r"Radio",
-                         "radio_chiEFT": r"Radio+$\chi_{\rm{EFT}}$",
-                         "radio_chiEFT_NICER": r"Radio+$\chi_{\rm{EFT}}$+NICER"}
+                         "radio_chiEFT": r"+$\chi_{\rm{EFT}}$",
+                         "radio_chiEFT_NICER": r"+$\chi_{\rm{EFT}}$+NICER"}
 
 def make_conversions(data: np.ndarray) -> None:
     """
@@ -120,7 +121,8 @@ def single_plot(pop: str,
                 source_type: str,
                 convert_masses: bool=True,
                 convert_to_lambda_tilde: bool=True,
-                add_legend: bool=False) -> None:
+                add_legend: bool=False,
+                add_title: bool=False) -> None:
     
     colors = COLORS_LIST_DICT[pop]
     
@@ -167,19 +169,29 @@ def single_plot(pop: str,
                           fig=fig,
                           **default_corner_kwargs)
             
+    # Add title if requested
+    if add_title:
+        title_map = {"uniform": "Uniform", "gaussian": "Gaussian", "double_gaussian": "Double Gaussian"}
+        plt.suptitle(title_map[pop], fontsize=32)
+    
     # Put text there
     if add_legend:
-        x = 0.6
+        x = 0.55
         y = 0.85
         dy = 0.05
         for i, eos_samples_name in enumerate(EOS_SAMPLES_NAMES):
             plt.text(x, y - i * dy, 
                     EOS_SAMPLES_NAMES_DICT[eos_samples_name], 
                     color=colors[i],
-                    fontsize=26,
+                    fontsize=32,
                     transform=plt.gcf().transFigure)
     
-    plt.savefig(f"./figures/priors/{source_type}_{pop}_priors.pdf", bbox_inches="tight")
+    save_name = f"./figures/priors/{source_type}_{pop}_priors.pdf"
+    plt.savefig(save_name, bbox_inches="tight")
+    if os.path.exists("../../paper/Figures"):
+        print(f"Also saving to the Overleaf paper repo")
+        save_name = save_name.replace("./figures/priors/", "../../paper/Figures/")
+        plt.savefig(save_name, bbox_inches="tight")
     plt.close()
 
 def main():
@@ -188,7 +200,8 @@ def main():
             print(f"Plotting priors for {pop} {source_type}...")
             single_plot(pop,
                         source_type,
-                        add_legend=pop=="uniform") # only add the legend on the "uniform" population plot
+                        add_legend=pop=="uniform", # only add the legend on the "uniform" population plot
+                        add_title=False)
             
     
 if __name__ == "__main__":
