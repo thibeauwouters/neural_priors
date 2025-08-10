@@ -1,1 +1,1 @@
-python pe.py --GW-event GW230529 --population-type uniform --prior-name bns --eos-samples-name radio --n-pool 1 --minimum-bin-threshold 10
+python pe.py --GW-event GW230529 --population-type uniform --prior-name default --eos-samples-name radio --n-pool 1 --use-analytic-binning-scheme --minimum-bin-threshold 10
