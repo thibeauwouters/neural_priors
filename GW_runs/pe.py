@@ -110,6 +110,10 @@ parser.add_argument('--n-pool',
                     type = int,
                     default = 64,
                     help = "How many cores to use for the sampling.")
+parser.add_argument('--nlive',
+                    type = int,
+                    default = 4096,
+                    help = "How many live points to use for the sampling.")
 group = parser.add_mutually_exclusive_group()
 group.add_argument('--use-relative-binning',
                    dest='use_relative_binning',
@@ -521,7 +525,7 @@ else:
                                            npool=args.n_pool,
                                            verbose=True, 
                                            sampler='dynesty',
-                                           nlive=1024,
+                                           nlive=args.nlive,
                                            outdir=full_outdir,
                                            label=args.prior_name,
                                            naccept=60,
