@@ -74,6 +74,9 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 script_dir = os.path.dirname(os.path.abspath(__file__))
 EOS_DIR = os.path.join(script_dir, "..", "data", "eos")
 
+# HTCondor submission-specific argument keys
+HTCONDOR_ARGS = {'setup_submission', 'submit', 'queue'}
+
 
 def sample_ns_mass_gaussian(nb_mass_samples: int):
     """
@@ -275,6 +278,10 @@ parser.add_argument("--setup-submission",
 parser.add_argument("--submit", 
                     action="store_true", 
                     help="Setup .sub file and submit the job to cluster")
+parser.add_argument("--queue", 
+                    type=str, 
+                    default="long", 
+                    help="HTCondor queue to submit to (default: long). Use empty string to not specify a queue.")
 
     
 class NFPriorCreator:
@@ -1273,10 +1280,9 @@ class NFPriorCreator:
         # FIXME: is this still necessary given main()?
         # Build the training arguments string from current args, excluding submission-specific ones
         training_args = []
-        exclude_args = {'setup_submission', 'template_file', 'submit'}
         
         for key, value in args.items():
-            if key in exclude_args:
+            if key in HTCONDOR_ARGS:
                 continue
                 
             arg_name = f"--{key.replace('_', '-')}"
@@ -1325,9 +1331,16 @@ class NFPriorCreator:
                 # Update output file path
                 out_path = os.path.join(self.outdir, "out.out")
                 modified_lines.append(f'Output = {out_path}')
+            elif line.startswith('+JobCategory =') or line.startswith('queue'):
+                # Skip existing queue-related lines to replace them
+                continue
             else:
                 # Keep the line as is
                 modified_lines.append(line)
+        
+        # Add the queue specification if provided
+        if len(args["queue"]) > 0:  # Only add if queue is not empty
+            modified_lines.append(f'+JobCategory = "{args["queue"]}"')
         
         # Write the modified .sub file
         sub_file_path = os.path.join(self.outdir, "train.sub")
@@ -1361,10 +1374,9 @@ def main():
     # Filter out # TODO: this can likely be improved in the future
     trainer_args = {}
     submit_args = {}
-    submit_args_keys = ['setup_submission', 'template_file', 'submit']
     
     for key, value in vars(args).items():
-        if key in submit_args_keys:
+        if key in HTCONDOR_ARGS:
             submit_args[key] = value
         else:
             trainer_args[key] = value
