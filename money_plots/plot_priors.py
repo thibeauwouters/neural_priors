@@ -201,7 +201,8 @@ def main():
             single_plot(pop,
                         source_type,
                         add_legend=pop=="uniform", # only add the legend on the "uniform" population plot
-                        add_title=False)
+                        add_title=False,
+                        convert_to_lambda_tilde=False)
             
     
 if __name__ == "__main__":
