@@ -514,50 +514,22 @@ if args.dry_run:
     logger.info("DRY RUN: All checks passed. Ready for actual sampling.")
 else:
     logger.info("Starting up the sampler now . . .")
-    
-    logger.info(f"npool is set to: {args.n_pool}")
-    if args.test_sampling:
-        logger.info("Test sampling mode enabled - using 30 second timeout")
-        try:
-            with timeout(10):
-                result = bilby.run_sampler(likelihood=likelihood,
-                                           priors=priors,
-                                           npool=args.n_pool,
-                                           verbose=True, 
-                                           sampler='dynesty',
-                                           nlive=args.nlive,
-                                           outdir=full_outdir,
-                                           label=args.prior_name,
-                                           naccept=60,
-                                           check_point_plot=True,
-                                           check_point_delta_t=3600,
-                                           dlogz=0.1,
-                                           print_method='interval-60',
-                                           sample='acceptance-walk',
-                                           )
-                result.plot_corner(priors = True)
-                logger.info("✓ Test sampling completed successfully within timeout!")
-        except TimeoutError as e:
-            logger.error(f"✗ {e}")
-            logger.error("Sampling appears to be stuck or very slow. Check conditional NF implementation.")
-            sys.exit(1)
-    else:
-        result = bilby.run_sampler(likelihood=likelihood,
-                                   priors=priors,
-                                   npool=args.n_pool,
-                                   verbose=True, 
-                                   sampler='dynesty',
-                                   nlive=1024,
-                                   outdir=full_outdir,
-                                   label=args.prior_name,
-                                   naccept=60,
-                                   check_point_plot=True,
-                                   check_point_delta_t=3600,
-                                   dlogz=0.1,
-                                   print_method='interval-60',
-                                   sample = 'acceptance-walk',
-                                   )
-        result.plot_corner(priors = True)
+    result = bilby.run_sampler(likelihood=likelihood,
+                                priors=priors,
+                                npool=args.n_pool,
+                                verbose=True, 
+                                sampler='dynesty',
+                                nlive=args.nlive,
+                                outdir=full_outdir,
+                                label=args.prior_name,
+                                naccept=60,
+                                check_point_plot=True,
+                                check_point_delta_t=3600,
+                                dlogz=0.1,
+                                print_method='interval-60',
+                                sample = 'acceptance-walk',
+                                )
+    result.plot_corner(priors = True)
 
 ############ The following block is to validate the PE results #####################
 
