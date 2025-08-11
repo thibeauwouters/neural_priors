@@ -15,6 +15,7 @@ from bilby.core.prior.analytical import Uniform, Sine, Cosine, DeltaFunction
 from bilby.gw.prior import UniformComovingVolume, AlignedSpin
 from bilby.core.prior.dict import NFConditionalPrior
 from bilby.core.prior.joint import NFDist, NFPrior
+from bilby.core.prior.base import Constraint
 import argparse
 import json
 import matplotlib.pyplot as plt
@@ -133,6 +134,12 @@ group.add_argument('--no-use-analytic-binning-scheme',
                    action='store_false',
                    help='Use UU relative binning code for the construction of the bins for relative binning.')
 parser.set_defaults(use_analytic_binning_scheme=True)
+parser.add_argument('--fix-tc',
+                    action='store_true',
+                    help='Fix the coalescence time to the trigger time (only for GW170817 and GW190425)')
+parser.add_argument('--fix-sky',
+                    action='store_true', 
+                    help='Fix the sky location to known values (only for GW170817)')
 
 args = parser.parse_args()
 
@@ -182,6 +189,13 @@ if "GW" in args.population_type and args.population_type != args.GW_event:
 
 if args.GW_event not in SUPPORTED_EVENTS:
     raise ValueError(f"Invalid event provided. Please provide one of {SUPPORTED_EVENTS}")
+
+# Validate fix-tc and fix-sky options
+if args.fix_tc and args.GW_event not in ['GW170817', 'GW190425']:
+    raise ValueError(f"--fix-tc can only be used with GW170817 or GW190425, not {args.GW_event}")
+
+if args.fix_sky and args.GW_event != 'GW170817':
+    raise ValueError(f"--fix-sky can only be used with GW170817, not {args.GW_event}")
 
 
 # Auto-detect environment and set paths
@@ -330,6 +344,23 @@ modified_lines = [
 # Evaluate the prior lines in a safe namespace
 prior_dict = {}
 exec("".join(modified_lines), safe_globals, prior_dict)
+
+# TODO: decide if we want to use this or not, this might mess up the evidence calculation slightly?
+# prior_dict["mass_1"] = Constraint(name='mass_1', minimum=1.0, maximum=6.0)
+# prior_dict["mass_2"] = Constraint(name='mass_2', minimum=1.0, maximum=6.0)
+
+# Apply tc and sky fixing if requested
+if args.fix_tc:
+    logger.info(f"Fixing coalescence time to trigger time: {geocent_time}")
+    prior_dict.pop('geocent_time', None)  # Remove existing geocent_time prior if present
+    prior_dict['geocent_time'] = DeltaFunction(geocent_time, name='geocent_time', latex_label='$t_c$')
+
+if args.fix_sky:
+    logger.info("Fixing sky location to GW170817 values: dec=-0.408084, ra=3.44616")
+    prior_dict.pop('dec', None)  # Remove existing dec prior if present
+    prior_dict.pop('ra', None)   # Remove existing ra prior if present
+    prior_dict['dec'] = DeltaFunction(-0.408084, name='dec', latex_label='$\\delta$')
+    prior_dict['ra'] = DeltaFunction(3.44616, name='ra', latex_label='$\\alpha$')
 
 if args.prior_name == "default":
     logger.info("Using the default priors")
