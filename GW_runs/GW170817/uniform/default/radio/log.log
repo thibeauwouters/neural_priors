@@ -199,3 +199,45 @@
 
 	Job terminated of its own accord at 2025-07-30T21:39:36Z with exit-code 0.
 ...
+000 (2588927.000.000) 2025-08-08 17:02:13 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_s
+...
+001 (2588927.000.000) 2025-08-08 17:07:27 Job executing on host: <145.107.4.149:9618?addrs=145.107.4.149-9618+[2a07-8500-120-e070--95]-9618&alias=wn-knek-006.nikhef.nl&noUDP&sock=startd_1610_e791>
+	SlotName: slot1_1@wn-knek-006.nikhef.nl
+	CondorScratchDir = "/scratch/condor_execute/dir_2234551"
+	Cpus = 64
+	Disk = 16779840
+	GPUs = 0
+	Memory = 16384
+...
+006 (2588927.000.000) 2025-08-08 17:07:41 Image size of job updated: 821248
+	802  -  MemoryUsage of job (MB)
+	821248  -  ResidentSetSize of job (KB)
+...
+006 (2588927.000.000) 2025-08-08 17:08:56 Image size of job updated: 1484256
+	802  -  MemoryUsage of job (MB)
+	821248  -  ResidentSetSize of job (KB)
+...
+004 (2588927.000.000) 2025-08-08 17:08:56 Job was evicted.
+	(0) CPU times
+		Usr 0 00:01:30, Sys 0 00:00:21  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.00       64        64 
+	   Disk (KB)            : 17500    16777216  16779840 
+	   GPUs                 :                           0 
+	   Memory (MB)          :   802       16384     16384 
+	   TimeExecute (s)      :    89                       
+	   TimeSlotBusy (s)     :    89                       
+...
+009 (2588927.000.000) 2025-08-08 17:08:56 Job was aborted.
+	removed because <OtherJobRemoveRequirements = DAGManJobId =?= 2588908> fired when job (2588908.0) was removed
+...
+000 (2588987.000.000) 2025-08-08 17:10:05 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_s
+...
+009 (2588987.000.000) 2025-08-10 10:55:18 Job was aborted.
+	via condor_rm (by user twouters)
+...

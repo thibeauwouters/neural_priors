@@ -110,6 +110,10 @@ parser.add_argument('--n-pool',
                     type = int,
                     default = 64,
                     help = "How many cores to use for the sampling.")
+parser.add_argument('--nlive',
+                    type = int,
+                    default = 4096,
+                    help = "How many live points to use for the sampling.")
 group = parser.add_mutually_exclusive_group()
 group.add_argument('--use-relative-binning',
                    dest='use_relative_binning',
@@ -120,6 +124,15 @@ group.add_argument('--no-use-relative-binning',
                    action='store_false',
                    help='Do not use relative binning (use regular GW likelihood).')
 parser.set_defaults(use_relative_binning=True)
+group.add_argument('--use-analytic-binning-scheme',
+                   dest='use_analytic_binning_scheme',
+                   action='store_true',
+                   help='Use the analytical formula for the relative binning bin construction methods')
+group.add_argument('--no-use-analytic-binning-scheme',
+                   dest='use_analytic_binning_scheme',
+                   action='store_false',
+                   help='Use UU relative binning code for the construction of the bins for relative binning.')
+parser.set_defaults(use_analytic_binning_scheme=True)
 
 args = parser.parse_args()
 
@@ -478,7 +491,8 @@ if args.use_relative_binning:
         ref_injection=reference_parameters,
         priors=priors,
         delta=args.relative_binning_delta,
-        minimum_bin_threshold=args.minimum_bin_threshold)
+        minimum_bin_threshold=args.minimum_bin_threshold,
+        use_analytic_method=args.use_analytic_binning_scheme)
 else:
     logger.info(f"Using regular GW likelihood")
     likelihood = bilby.gw.GravitationalWaveTransient(
@@ -511,7 +525,7 @@ else:
                                            npool=args.n_pool,
                                            verbose=True, 
                                            sampler='dynesty',
-                                           nlive=1024,
+                                           nlive=args.nlive,
                                            outdir=full_outdir,
                                            label=args.prior_name,
                                            naccept=60,

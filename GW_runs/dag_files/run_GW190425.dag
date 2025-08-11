@@ -1,12 +1,38 @@
 JOB run_a /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_a GW_event="GW190425" population_type="GW190425" prior_name="bns" eos_samples_name="radio" relative_binning_delta="0.001" seed="1234"
+VARS run_a GW_event="GW190425" population_type="uniform" prior_name="bns" eos_samples_name="radio" relative_binning_delta="0.001" seed="1234"
 JOB run_b /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_b GW_event="GW190425" population_type="GW190425" prior_name="nsbh" eos_samples_name="radio" relative_binning_delta="0.001" seed="1234"
+VARS run_b GW_event="GW190425" population_type="uniform" prior_name="nsbh" eos_samples_name="radio" relative_binning_delta="0.001" seed="1234"
 JOB run_c /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_c GW_event="GW190425" population_type="GW190425" prior_name="bns" eos_samples_name="radio_chiEFT" relative_binning_delta="0.001" seed="1234"
+VARS run_c GW_event="GW190425" population_type="uniform" prior_name="bns" eos_samples_name="radio_chiEFT" relative_binning_delta="0.001" seed="1234"
 JOB run_d /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_d GW_event="GW190425" population_type="GW190425" prior_name="nsbh" eos_samples_name="radio_chiEFT" relative_binning_delta="0.001" seed="1234"
+VARS run_d GW_event="GW190425" population_type="uniform" prior_name="nsbh" eos_samples_name="radio_chiEFT" relative_binning_delta="0.001" seed="1234"
 JOB run_e /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_e GW_event="GW190425" population_type="GW190425" prior_name="bns" eos_samples_name="radio_chiEFT_NICER" relative_binning_delta="0.001" seed="1234"
+VARS run_e GW_event="GW190425" population_type="uniform" prior_name="bns" eos_samples_name="radio_chiEFT_NICER" relative_binning_delta="0.001" seed="1234"
 JOB run_f /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
-VARS run_f GW_event="GW190425" population_type="GW190425" prior_name="nsbh" eos_samples_name="radio_chiEFT_NICER" relative_binning_delta="0.001" seed="1234"
+VARS run_f GW_event="GW190425" population_type="uniform" prior_name="nsbh" eos_samples_name="radio_chiEFT_NICER" relative_binning_delta="0.001" seed="1234"
+JOB run_g /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_g GW_event="GW190425" population_type="gaussian" prior_name="bns" eos_samples_name="radio" relative_binning_delta="0.001" seed="1234"
+JOB run_h /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_h GW_event="GW190425" population_type="gaussian" prior_name="nsbh" eos_samples_name="radio" relative_binning_delta="0.001" seed="1234"
+JOB run_i /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_i GW_event="GW190425" population_type="gaussian" prior_name="bns" eos_samples_name="radio_chiEFT" relative_binning_delta="0.001" seed="1234"
+JOB run_j /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_j GW_event="GW190425" population_type="gaussian" prior_name="nsbh" eos_samples_name="radio_chiEFT" relative_binning_delta="0.001" seed="1234"
+JOB run_k /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_k GW_event="GW190425" population_type="gaussian" prior_name="bns" eos_samples_name="radio_chiEFT_NICER" relative_binning_delta="0.001" seed="1234"
+JOB run_l /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_l GW_event="GW190425" population_type="gaussian" prior_name="nsbh" eos_samples_name="radio_chiEFT_NICER" relative_binning_delta="0.001" seed="1234"
+JOB run_m /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_m GW_event="GW190425" population_type="double_gaussian" prior_name="bns" eos_samples_name="radio" relative_binning_delta="0.001" seed="1234"
+JOB run_n /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_n GW_event="GW190425" population_type="double_gaussian" prior_name="nsbh" eos_samples_name="radio" relative_binning_delta="0.001" seed="1234"
+JOB run_o /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_o GW_event="GW190425" population_type="double_gaussian" prior_name="bns" eos_samples_name="radio_chiEFT" relative_binning_delta="0.001" seed="1234"
+JOB run_p /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_p GW_event="GW190425" population_type="double_gaussian" prior_name="nsbh" eos_samples_name="radio_chiEFT" relative_binning_delta="0.001" seed="1234"
+JOB run_q /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_q GW_event="GW190425" population_type="double_gaussian" prior_name="bns" eos_samples_name="radio_chiEFT_NICER" relative_binning_delta="0.001" seed="1234"
+JOB run_r /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_r GW_event="GW190425" population_type="double_gaussian" prior_name="nsbh" eos_samples_name="radio_chiEFT_NICER" relative_binning_delta="0.001" seed="1234"
+JOB run_s /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_s GW_event="GW190425" population_type="uniform" prior_name="default" eos_samples_name="radio" relative_binning_delta="0.001" seed="1234"
