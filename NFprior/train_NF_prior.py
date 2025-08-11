@@ -418,11 +418,17 @@ class NFPriorCreator:
                           "tail_bound": self.tail_bound
                           }
         
-        # Set whether this is specific for a GW event
-        if "GW" in self.population_type:
+        # Set whether the masses will be sampled according to the intrinsic priors for a GW event
+        # NOTE: this is also the case for the comparison with Hauke's work, so we set it to True if the population type is Hauke
+        if "GW" in self.population_type or self.population_type == "hauke":
+            print(f"The masses will be sampled according to the intrinsic priors for a GW event, i.e., chirp mass and mass ratio.")
             self.is_gw_event = True
         else:
             self.is_gw_event = False
+            
+        # If we want to sample for the Hauke comparison, then the population AND eos samples name must be set to hauke
+        if self.population_type == "hauke" and self.eos_samples_name != "hauke":
+            raise ValueError("If population_type is set to 'hauke', then eos_samples_name must also be set to 'hauke'.")
         
         # Set names based on parameterization
         if self.use_component_masses:
@@ -522,6 +528,7 @@ class NFPriorCreator:
         masses_EOS, _, Lambdas_EOS = self.load_eos_samples_from_file()
         
         if self.is_gw_event:
+            # Use our own bilby priors for the GW event
             print(f"create_data is following GW_event source type: {self.population_type}")
             
             # Read the prior file and process the first three lines for the masses
