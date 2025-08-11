@@ -53,7 +53,7 @@ for POPULATION_TYPE in "$MODELS_BASE_PATH"/uniform "$MODELS_BASE_PATH"/gaussian 
             echo ""
             echo "Evaluating: $MODEL_DIR"
             echo "----------------------------------------"
-            python3 "$SCRIPT_DIR/evaluate_flows.py" "$MODEL_DIR"
+            python3 "$SCRIPT_DIR/evaluate_flows.py" "$MODEL_DIR" --n-samples 200_000
         done
     fi
 done

@@ -5,6 +5,7 @@ Evaluate the performance of the flows, by plotting some comparison cornerplots a
 import os
 import sys
 import tqdm
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 import corner
@@ -839,6 +840,11 @@ class CheckerUnconditional(Checker):
         """
         Create corner plot with parameter labels.
         """
+        print("np.shape(chains_1)")
+        print(np.shape(chains_1))
+        print("np.shape(chains_2)")
+        print(np.shape(chains_2))
+        
         # The training data:
         corner_kwargs = copy.deepcopy(default_corner_kwargs)
         hist_1d_kwargs = {"density": True, "color": "blue"}
@@ -873,6 +879,7 @@ class CheckerUnconditional(Checker):
         """
         nf_samples = []
         use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
+        start_time = time.time()
         
         if use_flowjax:
             # flowJAX sampling
@@ -889,10 +896,8 @@ class CheckerUnconditional(Checker):
         else:
             # glasflow sampling
             with torch.no_grad():
-                for _ in range(self.N_samples):
-                    value = self.flow.sample(1).cpu().numpy().flatten()
-                    nf_samples.append(value)
-            nf_samples = np.array(nf_samples)
+                nf_samples = self.flow.sample(self.N_samples).cpu().numpy()
+                nf_samples = np.array(nf_samples)
         
         # Apply inverse scaling if scaler was used during training
         if self.scaler is not None:
@@ -914,6 +919,9 @@ class CheckerUnconditional(Checker):
             elif source_type == "nsbh":
                 # lambda_2 is last column
                 nf_samples[:, -1] = np.exp(nf_samples[:, -1])
+        
+        end_time = time.time()
+        time_taken = end_time - start_time
         
         return nf_samples
     
