@@ -126,7 +126,7 @@ parser.add_argument("--source-type",
 parser.add_argument("--eos-samples-name", 
                     type=str, 
                     default="radio", 
-                    choices=["radio", "radio_chiEFT", "radio_chiEFT_NICER", ],
+                    choices=["radio", "radio_chiEFT", "radio_chiEFT_NICER", "hauke"],
                     help="EOS samples name (default: radio)")
 parser.add_argument("--use-tilde", 
                     action="store_true", 
@@ -420,16 +420,12 @@ class NFPriorCreator:
         
         # Set whether the masses will be sampled according to the intrinsic priors for a GW event
         # NOTE: this is also the case for the comparison with Hauke's work, so we set it to True if the population type is Hauke
-        if "GW" in self.population_type or self.population_type == "hauke":
+        if "GW" in self.population_type:
             print(f"The masses will be sampled according to the intrinsic priors for a GW event, i.e., chirp mass and mass ratio.")
             self.is_gw_event = True
         else:
             self.is_gw_event = False
             
-        # If we want to sample for the Hauke comparison, then the population AND eos samples name must be set to hauke
-        if self.population_type == "hauke" and self.eos_samples_name != "hauke":
-            raise ValueError("If population_type is set to 'hauke', then eos_samples_name must also be set to 'hauke'.")
-        
         # Set names based on parameterization
         if self.use_component_masses:
             mass_names = ["m_1", "m_2"]

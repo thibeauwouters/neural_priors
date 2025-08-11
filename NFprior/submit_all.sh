@@ -3,10 +3,15 @@
 # Common parameters for CouplingNSF architecture and training methods
 COMMON_ARGS="--submit --batch-size 1024 --learning-rate 1e-4 --max-patience 250 --num-epochs 2000 --n-neurons 256 --n-blocks-per-transform 3 --num-bins 8 --N-samples-training 200000"
 
+# # Arrays for iteration
+# POPULATIONS=("uniform" "gaussian" "double_gaussian")
+# SOURCES=("bns" "nsbh")
+# EOS_SAMPLES=("radio" "radio_chiEFT" "radio_chiEFT_NICER")
+
 # Arrays for iteration
-POPULATIONS=("uniform" "gaussian" "double_gaussian")
+POPULATIONS=("GW170817" "GW190425")
 SOURCES=("bns" "nsbh")
-EOS_SAMPLES=("radio" "radio_chiEFT" "radio_chiEFT_NICER")
+EOS_SAMPLES=("hauke")
 
 echo "Submitting flow training jobs..."
 for pop in "${POPULATIONS[@]}"; do
