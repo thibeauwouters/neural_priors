@@ -1331,16 +1331,18 @@ class NFPriorCreator:
                 # Update output file path
                 out_path = os.path.join(self.outdir, "out.out")
                 modified_lines.append(f'Output = {out_path}')
-            elif line.startswith('+JobCategory =') or line.startswith('queue'):
-                # Skip existing queue-related lines to replace them
+            elif line.startswith('+JobCategory ='):
+                # Skip existing JobCategory lines to replace them
                 continue
+            elif line.startswith('Queue') or line.startswith('queue'):
+                # Add JobCategory before Queue command if specified
+                if len(args["queue"]) > 0:  # Only add if queue is not empty
+                    modified_lines.append(f'+JobCategory = "{args["queue"]}"')
+                # Then add the Queue line
+                modified_lines.append(line)
             else:
                 # Keep the line as is
                 modified_lines.append(line)
-        
-        # Add the queue specification if provided
-        if len(args["queue"]) > 0:  # Only add if queue is not empty
-            modified_lines.append(f'+JobCategory = "{args["queue"]}"')
         
         # Write the modified .sub file
         sub_file_path = os.path.join(self.outdir, "train.sub")
