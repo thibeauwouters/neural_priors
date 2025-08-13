@@ -6,10 +6,20 @@
         "radio_chiEFT": 523.2896998979127,
         "radio_chiEFT_NICER": 521.4756161423646
       },
+      "bns_jacobian_correction": {
+        "radio": -18.203912401041233,
+        "radio_chiEFT": -17.911922490288177,
+        "radio_chiEFT_NICER": -17.6013134097222
+      },
       "nsbh": {
         "radio": 8.255936562759105,
         "radio_chiEFT": 11.84042722491361,
         "radio_chiEFT_NICER": 9.359911793727548
+      },
+      "nsbh_jacobian_correction": {
+        "radio": -9.644432513126917,
+        "radio_chiEFT": -9.589894783817105,
+        "radio_chiEFT_NICER": -9.32771251322099
       }
     },
     "gaussian": {
@@ -18,10 +28,20 @@
         "radio_chiEFT": 524.9667232648134,
         "radio_chiEFT_NICER": 525.1102850767688
       },
+      "bns_jacobian_correction": {
+        "radio": -15.584846784465967,
+        "radio_chiEFT": -15.625849546924393,
+        "radio_chiEFT_NICER": -15.047191092528285
+      },
       "nsbh": {
         "radio": 8.812298738255697,
         "radio_chiEFT": 9.380153779988163,
         "radio_chiEFT_NICER": 9.396729518093501
+      },
+      "nsbh_jacobian_correction": {
+        "radio": -8.449934937645352,
+        "radio_chiEFT": -8.437411159812205,
+        "radio_chiEFT_NICER": -8.07973048351121
       }
     },
     "double_gaussian": {
@@ -30,10 +50,20 @@
         "radio_chiEFT": 524.9192742644502,
         "radio_chiEFT_NICER": 524.2774110217767
       },
+      "bns_jacobian_correction": {
+        "radio": -16.443991082304017,
+        "radio_chiEFT": -16.5830995143063,
+        "radio_chiEFT_NICER": -16.223737788421538
+      },
       "nsbh": {
         "radio": 8.091413926349459,
         "radio_chiEFT": 8.427863453850678,
         "radio_chiEFT_NICER": 14.422109769884857
+      },
+      "nsbh_jacobian_correction": {
+        "radio": -8.883472969992969,
+        "radio_chiEFT": -9.671319291584025,
+        "radio_chiEFT_NICER": -9.115409444651927
       }
     },
     "GW170817": {
@@ -56,10 +86,20 @@
         "radio_chiEFT": 59.007489111797184,
         "radio_chiEFT_NICER": 58.20492152491431
       },
+      "bns_jacobian_correction": {
+        "radio": -18.203912401041233,
+        "radio_chiEFT": -17.911922490288177,
+        "radio_chiEFT_NICER": -17.6013134097222
+      },
       "nsbh": {
         "radio": 49.050451853876964,
         "radio_chiEFT": 50.32788044297608,
         "radio_chiEFT_NICER": 48.06740093855334
+      },
+      "nsbh_jacobian_correction": {
+        "radio": -9.644432513126917,
+        "radio_chiEFT": -9.589894783817105,
+        "radio_chiEFT_NICER": -9.32771251322099
       }
     },
     "gaussian": {
@@ -68,10 +108,20 @@
         "radio_chiEFT": 51.273247143366916,
         "radio_chiEFT_NICER": 5.727940589419137
       },
+      "bns_jacobian_correction": {
+        "radio": -15.584846784465967,
+        "radio_chiEFT": -15.625849546924393,
+        "radio_chiEFT_NICER": -15.047191092528285
+      },
       "nsbh": {
         "radio": 51.312136566058214,
-        "radio_chiEFT": 0.0,
+        "radio_chiEFT": 50.32685040061081,
         "radio_chiEFT_NICER": 47.5601488887707
+      },
+      "nsbh_jacobian_correction": {
+        "radio": -8.449934937645352,
+        "radio_chiEFT": -8.437411159812205,
+        "radio_chiEFT_NICER": -8.07973048351121
       }
     },
     "double_gaussian": {
@@ -80,10 +130,18 @@
         "radio_chiEFT": 57.54206606859922,
         "radio_chiEFT_NICER": 0.0
       },
+      "bns_jacobian_correction": {
+        "radio": -16.443991082304017,
+        "radio_chiEFT": -16.5830995143063
+      },
       "nsbh": {
         "radio": 46.68663731595452,
-        "radio_chiEFT": 0.0,
+        "radio_chiEFT": 50.01714633563856,
         "radio_chiEFT_NICER": 0.0
+      },
+      "nsbh_jacobian_correction": {
+        "radio": -8.883472969992969,
+        "radio_chiEFT": -9.671319291584025
       }
     },
     "GW190425": {
@@ -106,10 +164,20 @@
         "radio_chiEFT": 42.01721831818431,
         "radio_chiEFT_NICER": 42.26180353138143
       },
+      "bns_jacobian_correction": {
+        "radio": -18.203912401041233,
+        "radio_chiEFT": -17.911922490288177,
+        "radio_chiEFT_NICER": -17.6013134097222
+      },
       "nsbh": {
         "radio": 44.7834468720984,
         "radio_chiEFT": 44.86387860332187,
         "radio_chiEFT_NICER": 44.67872435940012
+      },
+      "nsbh_jacobian_correction": {
+        "radio": -9.644432513126917,
+        "radio_chiEFT": -9.589894783817105,
+        "radio_chiEFT_NICER": -9.32771251322099
       }
     },
     "gaussian": {
@@ -118,10 +186,20 @@
         "radio_chiEFT": 2.2779365431319567,
         "radio_chiEFT_NICER": 2.07220589686759
       },
+      "bns_jacobian_correction": {
+        "radio": -15.584846784465967,
+        "radio_chiEFT": -15.625849546924393,
+        "radio_chiEFT_NICER": -15.047191092528285
+      },
       "nsbh": {
         "radio": 45.00825100917776,
         "radio_chiEFT": 44.97668207528049,
         "radio_chiEFT_NICER": 44.80243926391666
+      },
+      "nsbh_jacobian_correction": {
+        "radio": -8.449934937645352,
+        "radio_chiEFT": -8.437411159812205,
+        "radio_chiEFT_NICER": -8.07973048351121
       }
     },
     "double_gaussian": {
@@ -130,10 +208,17 @@
         "radio_chiEFT": 38.67880071328946,
         "radio_chiEFT_NICER": 0.0
       },
+      "bns_jacobian_correction": {
+        "radio": -16.443991082304017,
+        "radio_chiEFT": -16.5830995143063
+      },
       "nsbh": {
         "radio": 45.01698141501267,
         "radio_chiEFT": 0.0,
         "radio_chiEFT_NICER": 0.0
+      },
+      "nsbh_jacobian_correction": {
+        "radio": -8.883472969992969
       }
     },
     "GW230529": {
@@ -178,10 +263,12 @@
     0.09823846010887023,
     0.09007676923875978,
     0.10446418823979046,
+    0.1065103248118284,
     0.10942118377435534,
     0.09476746551149813,
     0.09528618567850618,
     0.11400194346754024,
+    0.10681169991073285,
     0.09245204130542302,
     0.09285364516281397,
     0.0912148090354527,
@@ -197,5 +284,25 @@
     0.10292760298497469,
     0.1010025522339782,
     0.09327082162501962
-  ]
+  ],
+  "jacobian_corrections": {
+    "uniform_bns_radio": -18.203912401041233,
+    "uniform_bns_radio_chiEFT": -17.911922490288177,
+    "uniform_bns_radio_chiEFT_NICER": -17.6013134097222,
+    "uniform_nsbh_radio": -9.644432513126917,
+    "uniform_nsbh_radio_chiEFT": -9.589894783817105,
+    "uniform_nsbh_radio_chiEFT_NICER": -9.32771251322099,
+    "gaussian_bns_radio": -15.584846784465967,
+    "gaussian_bns_radio_chiEFT": -15.625849546924393,
+    "gaussian_bns_radio_chiEFT_NICER": -15.047191092528285,
+    "gaussian_nsbh_radio": -8.449934937645352,
+    "gaussian_nsbh_radio_chiEFT": -8.437411159812205,
+    "gaussian_nsbh_radio_chiEFT_NICER": -8.07973048351121,
+    "double_gaussian_bns_radio": -16.443991082304017,
+    "double_gaussian_bns_radio_chiEFT": -16.5830995143063,
+    "double_gaussian_bns_radio_chiEFT_NICER": -16.223737788421538,
+    "double_gaussian_nsbh_radio": -8.883472969992969,
+    "double_gaussian_nsbh_radio_chiEFT": -9.671319291584025,
+    "double_gaussian_nsbh_radio_chiEFT_NICER": -9.115409444651927
+  }
 }

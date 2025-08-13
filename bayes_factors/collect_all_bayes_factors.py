@@ -195,10 +195,10 @@ def collect_all_bayes_factors(base_dir: str = "../GW_runs/", apply_jacobian_corr
     all_bayes_factors["jacobian_corrections"] = jacobian_corrections
     print(f"Collected {len(log_evidence_errors)} log_evidence_err values")
     
-    if apply_jacobian_correction:
-        print(f"\nApplied Jacobian corrections for {len(jacobian_corrections)} model configurations:")
-        for key, correction in jacobian_corrections.items():
-            print(f"  {key}: {correction:.6f}")
+    # if apply_jacobian_correction:
+    #     print(f"\nApplied Jacobian corrections for {len(jacobian_corrections)} model configurations:")
+    #     for key, correction in jacobian_corrections.items():
+    #         print(f"  {key}: {correction:.6f}")
     
     return all_bayes_factors
 
@@ -218,7 +218,10 @@ def get_jeffreys_color(log10_bf: float) -> str:
         return "jeffreysred5"  # decisive - darkest red
 
 
-def generate_latex_table(bayes_factors: Dict[str, Any], include_gw_event: bool = False, source_first: bool = False) -> str:
+def generate_latex_table(bayes_factors: Dict[str, Any],
+                         include_gw_event: bool = False,
+                         source_first: bool = False,
+                         apply_jacobian_correction: bool = True) -> str:
     """
     Generate LaTeX table code for the Bayes factors data.
     
@@ -632,6 +635,10 @@ def convert_bayes_factors_to_log10(bayes_factors: Dict[str, Any]) -> Dict[str, A
             # Convert log evidence errors from ln to log10
             converted[event] = [err / np.log(10) for err in bayes_factors[event]]
             continue
+        
+        if event == "jacobian_corrections":
+            # TODO: not sure, skip for now
+            continue
             
         converted[event] = {}
         for population in bayes_factors[event]:
@@ -664,14 +671,14 @@ def main():
                         help='Include GW-event specific population priors in table (default: False)')
     parser.add_argument('--source-first', action='store_true', default=True,
                         help='Organize table with source types first, then population types (default: False)')
-    parser.add_argument('--apply-jacobian-correction', action='store_true', default=False,
+    parser.add_argument('--apply-jacobian-correction', action='store_true', default=True,
                         help='Apply MinMaxScaler Jacobian correction to fix NFDist normalization bug (default: False)')
-    parser.add_argument('--nf-base-dir', default='../../NFprior/models/',
-                        help='Base directory for NF models (default: ../../NFprior/models/)')
+    parser.add_argument('--nf-base-dir', default='../NFprior/models/',
+                        help='Base directory for NF models (default: ../NFprior/models/)')
     
     args = parser.parse_args()
     
-    base_dir = "../../GW_runs/"
+    base_dir = "../GW_runs/"
     output_dir = "."
     json_file = os.path.join(output_dir, "all_bayes_factors.json")
     latex_file = os.path.join(output_dir, "bayes_factors_table.tex")
@@ -718,9 +725,12 @@ def main():
             if "log_evidence_errors" in bayes_factors and bayes_factors["log_evidence_errors"]:
                 mean_log10_err = np.mean(bayes_factors["log_evidence_errors"])
                 print(f"Mean log evidence error (log10): {mean_log10_err:.4f}")
-        
+                
         print(f"Generating LaTeX table and saving to: {latex_file}. Source_first = {args.source_first}")
-        latex_table = generate_latex_table(bayes_factors, include_gw_event=args.include_gw_event, source_first=args.source_first)
+        latex_table = generate_latex_table(bayes_factors,
+                                           include_gw_event=args.include_gw_event,
+                                           source_first=args.source_first,
+                                           apply_jacobian_correction=args.apply_jacobian_correction)
         with open(latex_file, 'w') as f:
             f.write(latex_table)
         
