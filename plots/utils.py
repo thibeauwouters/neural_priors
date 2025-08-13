@@ -475,10 +475,10 @@ def load_hauke_data(gw_event: str, params_to_plot: List[str],
     
     # Construct filename
     if use_em_data:
-        filename = f"../../data/hauke/{gw_event}/{gw_event}+EM_result.npz"
+        filename = f"../data/hauke/{gw_event}/{gw_event}+EM_result.npz"
         print(f"Loading Hauke's GW+EM data from {filename}")
     else:
-        filename = f"../../data/hauke/{gw_event}/{gw_event}_result.npz"
+        filename = f"../data/hauke/{gw_event}/{gw_event}_result.npz"
         print(f"Loading Hauke's data from {filename}")
     
     if not os.path.exists(filename):
@@ -524,7 +524,7 @@ def load_adrian_data(gw_event: str, params_to_plot: List[str]) -> Optional[np.nd
         print(f"Adrian's data not available for {gw_event}")
         return None
     
-    filename = f"../../data/adrian/{gw_event}/{gw_event}_result.npz"
+    filename = f"../data/adrian/{gw_event}/{gw_event}_result.npz"
     print(f"Loading Adrian's data from {filename}")
     
     if not os.path.exists(filename):

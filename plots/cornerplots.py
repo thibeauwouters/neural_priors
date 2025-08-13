@@ -1,3 +1,14 @@
+"""
+File to create huge batches of cornerplots with various assumptions and parameters.
+This is the main entry point for generating corner plots for GW parameter estimation results.
+It allows for flexible comparison modes, population types, source types, and EOS samples.
+It also supports plotting Hauke's and Adrian's results for comparison.
+
+NOTE: this is not to produce the final corner plots for the paper, but rather to generate
+a large number of corner plots for different assumptions and parameters, which can then be used
+to analyze the impact of different choices on the results and decide what to show in the paper.
+"""
+
 import os
 import json
 import arviz
@@ -25,7 +36,7 @@ def create_corner_plot(GW_event: str,
                        population_type: str = "uniform",
                        source_type: str = "bns", 
                        eos_samples_name: str = "radio",
-                       base_path: str = "../../final_results/",
+                       base_path: str = "../final_results/",
                        plot_all_params: bool = False,
                        plot_default: bool = False,
                        convert_lambdas: bool = True,
@@ -402,7 +413,7 @@ def run_all_corner_plots(gw_event: str, args):
     Run all corner plots for the given GW event using the new comparison mode approach.
     This replicates the functionality previously in run_cornerplots.sh.
     """
-    base_dir = "../../final_results/"
+    base_dir = "../final_results/"
     
     print(f"Generating ALL comparison corner plots for {gw_event}...")
     
@@ -507,8 +518,8 @@ def main():
     parser.add_argument('--eos-samples-name', type=str, default='radio',
                         choices=['radio', 'radio_chiEFT', 'radio_chiEFT_NICER'],
                         help='EOS samples name (default: radio)')
-    parser.add_argument('--base-dir', type=str, default='../../final_results/',
-                        help='Base directory path (default: ../../final_results/)')
+    parser.add_argument('--base-dir', type=str, default='../final_results/',
+                        help='Base directory path (default: ../final_results/)')
     parser.add_argument('--plot-all-params', action='store_true',
                         help='Plot all parameters instead of subset')
     parser.add_argument('--plot-default', action='store_true',
