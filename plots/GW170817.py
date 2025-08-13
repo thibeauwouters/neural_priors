@@ -2,12 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import os
-import json
+import utils
 import arviz
 import numpy as np
-import matplotlib.pyplot as plt
-import corner
-import argparse
 
 from plot_priors import *
 
@@ -22,9 +19,16 @@ from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lamb
 from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
 from bilby.gw.conversion import luminosity_distance_to_redshift
 
-def main():
+def plot_lambda_tilde_comparisons():
     
-    exit()
+    base_dir = "../final_results/"
+    for pop in utils.POPULATION_NAMES:
+        path = construct_result_path(base_dir, "GW170817", pop, "BNS", "radio")
+        samples = load_posterior_data(path, fast_mode=True)
+        print(samples.keys())
+
+def main():
+    plot_lambda_tilde_comparisons()
     
 if __name__ == "__main__":
     main()

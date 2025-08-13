@@ -2,6 +2,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import corner
+import utils
 from bilby.gw.conversion import component_masses_to_chirp_mass
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 
@@ -38,52 +39,7 @@ default_corner_kwargs = dict(bins=40,
                         min_n_ticks=2,
                         save=False)
 
-JAX_LIGHT_BLUE = "#5e97f6"
-JAX_DARK_BLUE = "#2a56c6"
-JAX_DARK_BLUE_TINT1 = "#7f9add"
-JAX_DARK_BLUE_TINT2 = "#aabbe8"
 
-JAX_LIGHT_GREEN = "#26a69a"
-JAX_DARK_GREEN = "#00695c"
-JAX_DARK_GREEN_TINT1 = "#4d968d"
-JAX_DARK_GREEN_TINT2 = "#80b4ae"
-
-JAX_PINK = "#ea80fc"
-JAX_LIGHT_PURPLE = "#9c27b0"
-JAX_DARK_PURPLE = "#6a1c9a"
-JAX_DARK_PURPLE_TINT1 = "#9760b8"
-JAX_DARK_PURPLE_TINT2 = "#b58ecd"
-
-BLUE_COLORS = [JAX_LIGHT_BLUE, JAX_DARK_BLUE_TINT1, JAX_DARK_BLUE_TINT2]
-GREEN_COLORS = [JAX_LIGHT_GREEN, JAX_DARK_GREEN_TINT1, JAX_DARK_GREEN_TINT2]
-PURPLE_COLORS = [JAX_LIGHT_PURPLE, JAX_DARK_PURPLE_TINT1, JAX_DARK_PURPLE_TINT2]
-
-COLORS = [JAX_LIGHT_BLUE, JAX_LIGHT_GREEN, JAX_LIGHT_PURPLE]
-
-COLORS_LIST_DICT = {"uniform": COLORS,
-                    "gaussian": COLORS,
-                    "double_gaussian": COLORS}
-
-LABELS_DICT = {"BNS": [r"$m_1$ [M$_\odot$]", r"$m_2$ [M$_\odot$]", r"$\Lambda_1$", r"$\Lambda_2$"],
-               "NSBH": [r"$m_1$ [M$_\odot$]", r"$m_2$ [M$_\odot$]", r"$\Lambda_2$"]
-               }
-
-TEX_TRANSLATION_DICT = {"m1": r"$m_1$ [M$_\odot$]",
-                        "m2": r"$m_2$ [M$_\odot$]",
-                        "chirp_mass_source": r"$\mathcal{M}_c^{\rm{src}}$ [M$_\odot$]",
-                        "mass_ratio": r"$q$",
-                        "lambda_1": r"$\Lambda_1$",
-                        "lambda_2": r"$\Lambda_2$",
-                        "lambda_tilde": r"$\tilde{\Lambda}$",
-                        "delta_lambda_tilde": r"$\delta \tilde{\Lambda}$"
-                        }
-
-POPULATION_NAMES = ["uniform", "gaussian", "double_gaussian"]
-SOURCE_TYPES = ["BNS", "NSBH"]
-EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
-EOS_SAMPLES_NAMES_DICT = {"radio": r"Radio",
-                          "radio_chiEFT": r"+$\chi_{\rm{EFT}}$",
-                          "radio_chiEFT_NICER": r"+$\chi_{\rm{EFT}}$+NICER"}
 
 
 def get_training_data_path(population_name: str,
@@ -161,7 +117,7 @@ def single_plot(pop: str,
                 add_legend: bool=False,
                 add_title: bool=False) -> None:
     
-    colors = COLORS_LIST_DICT[pop]
+    colors = utils.COLORS_LIST_DICT[pop]
     
     # Determine which parameters to fetch for the plotting
     if convert_masses:
@@ -176,9 +132,9 @@ def single_plot(pop: str,
         elif source_type == "NSBH":
             lambda_keys = ["lambda_2"]
     keys = mass_keys + lambda_keys
-    labels = [TEX_TRANSLATION_DICT[key] for key in keys]
+    labels = [utils.TEX_TRANSLATION_DICT[key] for key in keys]
     
-    for i, eos_samples_name in enumerate(EOS_SAMPLES_NAMES):
+    for i, eos_samples_name in enumerate(utils.EOS_SAMPLES_NAMES):
         # Load the corner plot data
         path = get_training_data_path(pop, source_type, eos_samples_name)
         data = dict(np.load(path))
@@ -216,9 +172,9 @@ def single_plot(pop: str,
         x = 0.55
         y = 0.85
         dy = 0.05
-        for i, eos_samples_name in enumerate(EOS_SAMPLES_NAMES):
+        for i, eos_samples_name in enumerate(utils.EOS_SAMPLES_NAMES):
             plt.text(x, y - i * dy, 
-                    EOS_SAMPLES_NAMES_DICT[eos_samples_name], 
+                    utils.EOS_SAMPLES_NAMES_DICT[eos_samples_name], 
                     color=colors[i],
                     fontsize=32,
                     transform=plt.gcf().transFigure)
@@ -232,8 +188,8 @@ def single_plot(pop: str,
     plt.close()
 
 def main():
-    for pop in POPULATION_NAMES:
-        for source_type in SOURCE_TYPES:
+    for pop in utils.POPULATION_NAMES:
+        for source_type in utils.SOURCE_TYPES:
             print(f"Plotting priors for {pop} {source_type}...")
             single_plot(pop,
                         source_type,

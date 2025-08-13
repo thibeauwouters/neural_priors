@@ -11,10 +11,65 @@ import time
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any
 from bilby.gw.conversion import luminosity_distance_to_redshift
+from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
+from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
 from scipy.interpolate import interp1d
 
 # Global cosmology interpolator - loaded once and reused
 _COSMOLOGY_INTERPOLATOR = None
+
+JAX_LIGHT_BLUE = "#5e97f6"
+JAX_DARK_BLUE = "#2a56c6"
+JAX_DARK_BLUE_TINT1 = "#7f9add"
+JAX_DARK_BLUE_TINT2 = "#aabbe8"
+
+JAX_LIGHT_GREEN = "#26a69a"
+JAX_DARK_GREEN = "#00695c"
+JAX_DARK_GREEN_TINT1 = "#4d968d"
+JAX_DARK_GREEN_TINT2 = "#80b4ae"
+
+JAX_PINK = "#ea80fc"
+JAX_LIGHT_PURPLE = "#9c27b0"
+JAX_DARK_PURPLE = "#6a1c9a"
+JAX_DARK_PURPLE_TINT1 = "#9760b8"
+JAX_DARK_PURPLE_TINT2 = "#b58ecd"
+
+BLUE_COLORS = [JAX_LIGHT_BLUE, JAX_DARK_BLUE_TINT1, JAX_DARK_BLUE_TINT2]
+GREEN_COLORS = [JAX_LIGHT_GREEN, JAX_DARK_GREEN_TINT1, JAX_DARK_GREEN_TINT2]
+PURPLE_COLORS = [JAX_LIGHT_PURPLE, JAX_DARK_PURPLE_TINT1, JAX_DARK_PURPLE_TINT2]
+
+COLORS = [JAX_LIGHT_BLUE, JAX_LIGHT_GREEN, JAX_LIGHT_PURPLE]
+
+COLORS_LIST_DICT = {"uniform": COLORS,
+                    "gaussian": COLORS,
+                    "double_gaussian": COLORS}
+
+LABELS_DICT = {"BNS": [r"$m_1$ [M$_\odot$]", r"$m_2$ [M$_\odot$]", r"$\Lambda_1$", r"$\Lambda_2$"],
+               "NSBH": [r"$m_1$ [M$_\odot$]", r"$m_2$ [M$_\odot$]", r"$\Lambda_2$"]
+               }
+
+TEX_TRANSLATION_DICT = {"m1": r"$m_1$ [M$_\odot$]",
+                        "m2": r"$m_2$ [M$_\odot$]",
+                        "chirp_mass_source": r"$\mathcal{M}_c^{\rm{src}}$ [M$_\odot$]",
+                        "mass_ratio": r"$q$",
+                        "lambda_1": r"$\Lambda_1$",
+                        "lambda_2": r"$\Lambda_2$",
+                        "lambda_tilde": r"$\tilde{\Lambda}$",
+                        "delta_lambda_tilde": r"$\delta \tilde{\Lambda}$"
+                        }
+
+POPULATION_NAMES = ["uniform", "gaussian", "double_gaussian"]
+SOURCE_TYPES = ["BNS", "NSBH"]
+EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
+EOS_SAMPLES_NAMES_DICT = {"radio": r"Radio",
+                          "radio_chiEFT": r"+$\chi_{\rm{EFT}}$",
+                          "radio_chiEFT_NICER": r"+$\chi_{\rm{EFT}}$+NICER"}
+
+POPULATION_NAMES_DICT = {
+    "uniform": r"Uniform",
+    "gaussian": r"Gaussian",
+    "double_gaussian": r"Double Gaussian"
+}
 
 def load_cosmology_interpolator(interpolator_path: str = None) -> Optional[interp1d]:
     """
@@ -153,7 +208,7 @@ def construct_result_path(base_dir: str, gw_event: str, population_type: str,
                        actual_eos, f"{source_type}_result.npz")
 
 
-def load_posterior_data(result_path: str, fast_mode: bool = False) -> Optional[Dict[str, Any]]:
+def load_posterior_data(result_path: str, fast_mode: bool = True) -> Optional[Dict[str, Any]]:
     """
     Load posterior data from result file (NPZ format).
     
@@ -196,6 +251,49 @@ def convert_chirp_mass(posterior: Dict[str, Any], fast_mode: bool = False) -> No
             
         chirp_mass_source = np.array(posterior['chirp_mass_source'])
         posterior['chirp_mass'] = chirp_mass_source * (1 + z)
+        
+        # Also compute source-frame component masses
+        if 'mass_ratio' in posterior:
+            mass_1_source, mass_2_source = chirp_mass_and_mass_ratio_to_component_masses(
+                chirp_mass_source, np.array(posterior['mass_ratio']))
+            posterior['mass_1_source'] = mass_1_source
+            posterior['mass_2_source'] = mass_2_source
+
+
+def convert_lambdas(posterior: Dict[str, Any]) -> None:
+    """
+    Convert lambda_1 and lambda_2 to lambda_tilde and delta_lambda_tilde.
+    Modifies posterior dict in-place.
+    
+    Args:
+        posterior (Dict): Posterior data dictionary containing lambda_1, lambda_2, 
+                         chirp_mass, and mass_ratio
+    """
+    if all(key in posterior for key in ['lambda_1', 'lambda_2', 'chirp_mass', 'mass_ratio']):
+        # Compute component masses
+        mass_1, mass_2 = chirp_mass_and_mass_ratio_to_component_masses(
+            np.array(posterior['chirp_mass']),
+            np.array(posterior['mass_ratio'])
+        )
+        
+        # Convert to tilde parameters
+        lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(
+            np.array(posterior['lambda_1']),
+            np.array(posterior['lambda_2']),
+            mass_1,
+            mass_2
+        )
+        
+        delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(
+            np.array(posterior['lambda_1']),
+            np.array(posterior['lambda_2']),
+            mass_1,
+            mass_2
+        )
+        
+        # Add to posterior dict
+        posterior['lambda_tilde'] = lambda_tilde
+        posterior['delta_lambda_tilde'] = delta_lambda_tilde
 
 
 def get_comparison_groups(comparison_mode: str, gw_event: str, base_dir: str,
