@@ -690,6 +690,10 @@ def main():
         print(f"Scanning directory structure in: {base_dir}")
         if args.apply_jacobian_correction:
             print(f"NF models directory: {args.nf_base_dir}")
+        
+        print("apply_jacobian_correction")
+        print(args.apply_jacobian_correction)
+        
         bayes_factors = collect_all_bayes_factors(base_dir, apply_jacobian_correction=args.apply_jacobian_correction, nf_base_dir=args.nf_base_dir)
         print(f"Saving JSON results to: {json_file}")
         with open(json_file, 'w') as f:
