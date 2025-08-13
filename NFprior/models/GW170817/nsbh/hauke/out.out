@@ -1,0 +1,58 @@
+JAX: devices available: [CudaDevice(id=0)]
+torch: CUDA is available. Number of devices: 1
+torch: Current CUDA device: 0
+Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/hauke/eos_samples.npz
+Training a normalizing flow for population =  GW170817 and nsbh sources
+The masses will be sampled according to the intrinsic priors for a GW event, i.e., chirp mass and mass ratio.
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 256, 'n_blocks_per_transform': 3, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'glasflow_type': 'CouplingNSF', 'batch_norm_within_blocks': False, 'batch_norm_between_transforms': False, 'activation': 'relu', 'dropout_probability': 0.0, 'linear_transform': None, 'tail_bound': 5.0, 'names': ['chirp_mass', 'mass_ratio', 'lambda_2', 'luminosity_distance'], 'n_inputs': 4}
+Everything for this model will be saved to ./models/GW170817/nsbh/hauke
+Starting training with the following parameters:
+Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/hauke/eos_samples.npz
+Number of good samples:  0.96605
+create_data is following GW_event source type: GW170817
+Parsed prior bounds:
+  Chirp mass: 1.18 - 1.21
+  Mass ratio: 0.125 - 1.0
+  Luminosity distance: 1.0 - 75.0
+Loaded priors: {'chirp_mass': Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None), 'mass_ratio': Uniform(minimum=0.125, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None), 'luminosity_distance': bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)}
+0/200000
+20000/200000
+40000/200000
+60000/200000
+80000/200000
+100000/200000
+120000/200000
+140000/200000
+160000/200000
+180000/200000
+Create data will save the following data:
+  m1: range = [1.3352804183366571, 4.273592136098921]
+  m2: range = [0.5192266694179958, 1.3841681839320483]
+  mass_ratio: range = [0.12500141204083431, 0.9999847616612321]
+  lambda_1: range = [2.2581447644566524, 21113.34329589181]
+  lambda_2: range = [143.01248500309637, 342128.7278957438]
+  lambda_tilde: range = [6.962929344320681, 48782.114903099566]
+  delta_lambda_tilde: range = [0.006744114300633608, 22178.952448558237]
+  chirp_mass_source: range = [1.1606028974742866, 1.2085306588837332]
+  chirp_mass: range = [1.1800000080277018, 1.2099999171159994]
+  luminosity_distance: range = [1.5875258856307621, 74.99989772420666]
+Saving to ./models/GW170817/nsbh/hauke/training_data.npz:
+Saving to ./models/GW170817/nsbh/hauke/training_data.npz DONE
+Using detector-frame chirp mass from the GW event and mass ratio (Mc_det, q) for training
+Using component parameterization for lambdas (lambda_1, lambda_2)
+Training samples: 160000, Validation samples: 40000
+Creating the training data arrays
+NSBH and training on lambda_2 (3D)
+Including luminosity distance in training data
+np.shape(self.x)
+(160000, 4)
+Using MinMaxScaler to scale the input data x
+Saved sklearn scaler to ./models/GW170817/nsbh/hauke/scaler.gz
+Going to start training for glasflow . . .
+Only RELU supported for now
+Early stopping triggered at epoch 736
+Saving the training loss plot to ./models/GW170817/nsbh/hauke/training_loss.pdf
+Training done. Took around 85.24 minutes
+Saving the model weights to ./models/GW170817/nsbh/hauke/model.pt
+Saving the model kwargs to ./models/GW170817/nsbh/hauke/model_kwargs.json
+DONE training!

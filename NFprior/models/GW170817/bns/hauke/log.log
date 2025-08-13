@@ -1,0 +1,89 @@
+000 (2589271.000.000) 2025-08-11 13:42:05 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+001 (2589271.000.000) 2025-08-11 13:42:23 Job executing on host: <145.107.4.167:9618?addrs=145.107.4.167-9618+[2a07-8500-120-e070--a7]-9618&alias=wn-pijl-006.nikhef.nl&noUDP&sock=startd_4304_c3b5>
+	SlotName: slot1_11@wn-pijl-006.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_b5d11d97_8330_6520_8847_fcfe487ecbb7 }
+	CondorScratchDir = "/scratch/condor_execute/dir_1548952"
+	Cpus = 1
+	Disk = 16790397
+	GPUs = 1
+	GPUs_GPU_b5d11d97_8330_6520_8847_fcfe487ecbb7 = [ Id = "GPU-b5d11d97-8330-6520-8847-fcfe487ecbb7"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "b5d11d97-8330-6520-8847-fcfe487ecbb7"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "570.124.06"; DriverVersion = 12.8; DevicePciBusId = "0000:01:00.0"; GlobalMemoryMb = 45468; MaxSupportedVersion = 12080 ]
+	Memory = 16384
+...
+006 (2589271.000.000) 2025-08-11 13:42:37 Image size of job updated: 652672
+	638  -  MemoryUsage of job (MB)
+	652672  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 13:47:38 Image size of job updated: 713444
+	696  -  MemoryUsage of job (MB)
+	711964  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 13:52:38 Image size of job updated: 1358428
+	1327  -  MemoryUsage of job (MB)
+	1358324  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 14:42:42 Image size of job updated: 1358428
+	1327  -  MemoryUsage of job (MB)
+	1358348  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 14:47:42 Image size of job updated: 1358428
+	1327  -  MemoryUsage of job (MB)
+	1358352  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 14:57:43 Image size of job updated: 1358428
+	1327  -  MemoryUsage of job (MB)
+	1358356  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 15:02:43 Image size of job updated: 1358428
+	1327  -  MemoryUsage of job (MB)
+	1358360  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 15:07:44 Image size of job updated: 1380364
+	1349  -  MemoryUsage of job (MB)
+	1380364  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 15:12:45 Image size of job updated: 1517732
+	1483  -  MemoryUsage of job (MB)
+	1517732  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 15:17:45 Image size of job updated: 1595236
+	1558  -  MemoryUsage of job (MB)
+	1595236  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 15:37:48 Image size of job updated: 1597192
+	1560  -  MemoryUsage of job (MB)
+	1597192  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 15:52:50 Image size of job updated: 1599008
+	1562  -  MemoryUsage of job (MB)
+	1599008  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 16:07:52 Image size of job updated: 1599024
+	1562  -  MemoryUsage of job (MB)
+	1599024  -  ResidentSetSize of job (KB)
+...
+006 (2589271.000.000) 2025-08-11 16:37:12 Image size of job updated: 1599040
+	1562  -  MemoryUsage of job (MB)
+	1599024  -  ResidentSetSize of job (KB)
+...
+005 (2589271.000.000) 2025-08-11 16:37:12 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 02:54:17, Sys 0 00:00:23  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 02:54:17, Sys 0 00:00:23  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            : 17500    16777216  16790397 
+	   GPUs                 :     0.11        1         1 "GPU-b5d11d97-8330-6520-8847-fcfe487ecbb7"
+	   GpusMemory (MB)      :  1318                       
+	   Memory (MB)          :  1562       16384     16384 
+	   TimeExecute (s)      : 10489                       
+	   TimeSlotBusy (s)     : 10489                       
+
+	Job terminated of its own accord at 2025-08-11T14:37:12Z with exit-code 0.
+...
