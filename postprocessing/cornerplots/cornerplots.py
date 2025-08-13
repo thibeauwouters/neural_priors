@@ -8,83 +8,16 @@ import argparse
 
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 from bilby.gw.conversion import chirp_mass_and_mass_ratio_to_component_masses
-from bilby.gw.conversion import luminosity_distance_to_redshift
-from utils import load_comparison_data, construct_result_path, load_posterior_data
+from utils import (
+    load_comparison_data, construct_result_path, load_posterior_data, load_cosmology_interpolator,
+    setup_matplotlib_style, PARAMETER_LATEX_LABELS, DEFAULT_CORNER_KWARGS, VERBOSE,
+    DEFAULT_COLOR, BNS_COLOR, NSBH_COLOR, HAUKE_COLOR, HAUKE_EM_COLOR, ADRIAN_COLOR,
+    load_hauke_data, load_adrian_data
+)
 
-params = {"axes.grid": True,
-        # "text.usetex" : True,
-        "font.family" : "serif",
-        "ytick.color" : "black",
-        "xtick.color" : "black",
-        "axes.labelcolor" : "black",
-        "axes.edgecolor" : "black",
-        # "font.serif" : ["Computer Modern Serif"],
-        "xtick.labelsize": 16,
-        "ytick.labelsize": 16,
-        "axes.labelsize": 16,
-        "legend.fontsize": 16,
-        "legend.title_fontsize": 16,
-        "figure.titlesize": 16}
+# Setup matplotlib style using utils function
+setup_matplotlib_style()
 
-plt.rcParams.update(params)
-
-# Improved corner kwargs
-default_corner_kwargs = dict(bins=40, 
-                        smooth=1., 
-                        show_titles=False,
-                        label_kwargs=dict(fontsize=16),
-                        title_kwargs=dict(fontsize=16), 
-                        # quantiles=[],
-                        # levels=[0.9],
-                        plot_density=True, 
-                        plot_datapoints=False, 
-                        fill_contours=True,
-                        max_n_ticks=4, 
-                        min_n_ticks=3,
-                        truth_color = "black",
-                        save=False)
-
-# Some constants for colors
-DEFAULT_COLOR = 'blue'
-BNS_COLOR = 'green'
-NSBH_COLOR = 'red'
-HAUKE_COLOR = 'orange'
-HAUKE_EM_COLOR = 'purple'
-ADRIAN_COLOR = 'black'
-
-# A constant to determine whether we want to print verbose output, in this case, only (for now) the quantiles of lambda_tilde and delta_lambda_tilde posteriors
-VERBOSE = False
-
-LaTeX_dict = {"chirp_mass": r"$\mathcal{M}_c$ [$M_{\odot}$]",
-              "mass_ratio": r"$q$",
-              "luminosity_distance": r"$d_L$ [Mpc]",
-              "geocent_time": r"$t_c$ [s]",
-              "a_1": r"$a_1$",
-              "a_2": r"$a_2$",
-              "tilt_1": r"$\theta_{1}$",
-              "tilt_2": r"$\theta_{2}$",
-              "phi_12": r"$\phi_{12}$",
-              "phi_jl": r"$\phi_{JL}$",
-              "dec": r"$\delta$",
-              "ra": r"$\alpha$",
-              "theta_jn": r"$\theta_{JN}$",
-              "psi": r"$\psi$",
-              "phase": r"$\phi$",
-              "lambda_1": r"$\Lambda_1$",
-              "lambda_2": r"$\Lambda_2$",
-              "lambda_tilde": r"$\tilde{\Lambda}$",
-              "delta_lambda_tilde": r"$\delta \tilde{\Lambda}$"
-              }
-
-def convert_chirp_mass(posterior: dict):
-    """
-    Convert source-frame chirp mass into detector-frame chirp mass.
-    """
-    d_L = np.array(posterior['luminosity_distance'])
-    z = luminosity_distance_to_redshift(d_L)
-    chirp_mass_source = np.array(posterior['chirp_mass_source'])
-    posterior['chirp_mass'] = chirp_mass_source * (1 + z)
-    return
     
 
 def create_corner_plot(GW_event: str,
@@ -92,14 +25,15 @@ def create_corner_plot(GW_event: str,
                        population_type: str = "uniform",
                        source_type: str = "bns", 
                        eos_samples_name: str = "radio",
-                       base_path: str = "../../GW_runs/",
+                       base_path: str = "../../final_results/",
                        plot_all_params: bool = False,
                        plot_default: bool = False,
                        convert_lambdas: bool = True,
                        plot_hauke: bool = False,
                        plot_hauke_EM: bool = False,
                        plot_adrian: bool = False,
-                       prevent_bns_leakage: bool = False):
+                       prevent_bns_leakage: bool = False,
+                       fast_plotting: bool = True):
     """
     Create a corner plot comparing posterior samples across different dimensions.
     
@@ -117,6 +51,7 @@ def create_corner_plot(GW_event: str,
         plot_hauke_EM (bool): If True, include Hauke's data in the corner plot that analyzed the GW+EM dataset.
         plot_adrian (bool): If True, include Adrian's data in the corner plot.
         prevent_bns_leakage (bool): If True, prevent BNS leakage by masking samples with negative delta_lambda_tilde.
+        fast_plotting (bool): If True, use fast cosmology interpolator for speed.
     """
     
     injection_run = "injection" in base_path
@@ -132,14 +67,18 @@ def create_corner_plot(GW_event: str,
         raise ValueError(f"Invalid comparison mode: {comparison_mode}")
         
     # Load comparison data
-    posteriors_dict = load_comparison_data(GW_event, base_path, comparison_mode, fixed_params)
+    posteriors_dict = load_comparison_data(GW_event, base_path, comparison_mode, fixed_params, fast_mode=fast_plotting)
     
     # Add default run if requested
     if plot_default:
         default_path = construct_result_path(base_path, GW_event, population_type, "default", eos_samples_name)
-        default_posterior = load_posterior_data(default_path)
+        default_posterior = load_posterior_data(default_path, fast_mode=fast_plotting)
         if default_posterior:
             posteriors_dict["default"] = default_posterior
+        
+    if len(posteriors_dict) == 0:
+        print(f"WARNING: Skipping plotting: No posteriors found for GW event {GW_event} with comparison mode {comparison_mode} and fixed parameters {fixed_params}.")
+        return
         
     print(f"Loaded {len(posteriors_dict)} posterior datasets: {list(posteriors_dict.keys())}")
 
@@ -150,6 +89,11 @@ def create_corner_plot(GW_event: str,
                         'dec', 'ra', 'theta_jn', 'psi', 'phase', 'lambda_1', 'lambda_2']
     else:
         params_to_plot = ['chirp_mass', 'mass_ratio', 'luminosity_distance', 'geocent_time', 'lambda_1', 'lambda_2']
+        
+    # Remove lambda_1 for NSBH-only runs (it's constant at 0)
+    if source_type == 'nsbh' and 'lambda_1' in params_to_plot:
+        params_to_plot.remove('lambda_1')
+        print("Removed lambda_1 from parameters to plot (NSBH source type)")
         
     # If we convert lambdas, then we need to convert them to lambda_tilde and delta_lambda_tilde
     if convert_lambdas:
@@ -213,8 +157,10 @@ def create_corner_plot(GW_event: str,
         params_to_plot.append('lambda_tilde')
         params_to_plot.append('delta_lambda_tilde')
         
-        del params_to_plot[params_to_plot.index('lambda_1')]
-        del params_to_plot[params_to_plot.index('lambda_2')]
+        if 'lambda_1' in params_to_plot:
+            del params_to_plot[params_to_plot.index('lambda_1')]
+        if 'lambda_2' in params_to_plot:
+            del params_to_plot[params_to_plot.index('lambda_2')]
         
     # Create data arrays for each posterior
     labels = []
@@ -230,7 +176,7 @@ def create_corner_plot(GW_event: str,
     for param in params_to_plot:
         if ref_posterior is not None and param in ref_posterior:
             labels.append(param)
-            latex_labels.append(LaTeX_dict.get(param, param))
+            latex_labels.append(PARAMETER_LATEX_LABELS.get(param, param))
 
     # Create data arrays for each posterior
     for key, posterior in posteriors_dict.items():
@@ -240,6 +186,36 @@ def create_corner_plot(GW_event: str,
                 data.append(posterior[param])
         if data:
             samples_dict[key] = np.array(data).T
+    
+    # Filter out parameters that are constant across all datasets
+    params_to_remove = []
+    for i, param in enumerate(labels):
+        # Get all values for this parameter across all runs
+        all_vals_list = []
+        for samples in samples_dict.values():
+            if i < samples.shape[1]:
+                all_vals_list.append(samples[:, i])
+        
+        if all_vals_list:
+            all_vals = np.concatenate(all_vals_list)
+            # If parameter has no dynamic range, mark it for removal
+            if np.std(all_vals) < 1e-10:
+                params_to_remove.append(i)
+                print(f"Removing constant parameter '{param}' from plot (std={np.std(all_vals):.2e})")
+    
+    # Remove constant parameters from labels and samples
+    if params_to_remove:
+        # Remove from labels (in reverse order to preserve indices)
+        for i in reversed(params_to_remove):
+            del labels[i]
+            del latex_labels[i]
+        
+        # Remove from samples
+        for key, samples in samples_dict.items():
+            # Remove columns corresponding to constant parameters
+            mask = np.ones(samples.shape[1], dtype=bool)
+            mask[params_to_remove] = False
+            samples_dict[key] = samples[:, mask]
     
     # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
     if 'delta_lambda_tilde' in params_to_plot and prevent_bns_leakage and 'bns' in samples_dict:
@@ -294,7 +270,7 @@ def create_corner_plot(GW_event: str,
             samples_dict['nsbh'] = nsbh_samples
         
     # Create corner plot with overlaid distributions
-    corner_kwargs_with_range = default_corner_kwargs.copy()
+    corner_kwargs_with_range = DEFAULT_CORNER_KWARGS.copy()
     use_density = True
 
     # Define colors for different groups
@@ -355,77 +331,34 @@ def create_corner_plot(GW_event: str,
         plt.text(x, y, label, fontsize=fs, color=color, ha='center', va='center', transform=plt.gcf().transFigure)
         y -= dy
     
-    # Hauke and Adrian's runs did not sample some params and had them fixed -- jitter a bit to avoid corner complaints
-    if GW_event == "GW170817":
-        params_to_dummy_replace = ["geocent_time", "phase", "ra", "dec"]
-    else:
-        params_to_dummy_replace = ["geocent_time", "phase"]
+    # External data loading for comparison (Hauke and Adrian)
+    
+    if plot_hauke:
+        hauke_samples = load_hauke_data(GW_event, params_to_plot, use_em_data=False)
+        if hauke_samples is not None:
+            hauke_kwargs = corner_kwargs_with_range.copy()
+            hauke_kwargs.update({'color': HAUKE_COLOR, 'hist_kwargs': {'color': HAUKE_COLOR, 'density': use_density}})
+            corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
+            y -= dy
+            plt.text(x, y, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
         
-    if GW_event in ["GW170817", "GW190425"] and plot_hauke:
+    if plot_hauke_EM:
+        hauke_em_samples = load_hauke_data(GW_event, params_to_plot, use_em_data=True)
+        if hauke_em_samples is not None:
+            hauke_kwargs = corner_kwargs_with_range.copy()
+            hauke_kwargs.update({'color': HAUKE_EM_COLOR, 'hist_kwargs': {'color': HAUKE_EM_COLOR, 'density': use_density}})
+            corner.corner(hauke_em_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
+            y -= dy
+            plt.text(x, y, 'Hauke (GW+EM)', fontsize=fs, color=HAUKE_EM_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
         
-        hauke_posterior_filename = f"../../data/hauke/{GW_event}/{GW_event}_result.npz"
-        print(f"Loading Hauke's data and adding it to the corner plot, filename: {hauke_posterior_filename}")
-        hauke_data = np.load(hauke_posterior_filename)
-        hauke_data = {k: hauke_data[k] for k in params_to_plot} # convert to dict
-        
-        for key in params_to_dummy_replace:
-            if key in hauke_data:
-                print(f"Replacing {key} with dummy values for Hauke...")
-                hauke_data[key] = np.random.normal(hauke_data[key], 0.01, size=len(hauke_data["chirp_mass"]))
-        
-        # Fetch the samples we want to plot
-        hauke_samples = np.array([hauke_data[param] for param in params_to_plot]).T
-        
-        # Make the cornerplot:
-        hauke_kwargs = corner_kwargs_with_range.copy()
-        hauke_kwargs.update({'color': HAUKE_COLOR, 'hist_kwargs': {'color': HAUKE_COLOR, 'density': use_density}})
-        corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
-        y -= dy
-        plt.text(x, y, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-        
-    if GW_event in ["GW170817"] and plot_hauke_EM:
-        
-        hauke_posterior_filename = f"../../data/hauke/{GW_event}/{GW_event}+EM_result.npz"
-        print(f"Loading Hauke's data and adding it to the corner plot, filename: {hauke_posterior_filename}")
-        hauke_data = np.load(hauke_posterior_filename)
-        hauke_data = {k: hauke_data[k] for k in params_to_plot} # convert to dict
-        
-        for key in params_to_dummy_replace:
-            if key in hauke_data:
-                print(f"Replacing {key} with dummy values for Hauke...")
-                hauke_data[key] = np.random.normal(hauke_data[key], 0.01, size=len(hauke_data["chirp_mass"]))
-        
-        # Fetch the samples we want to plot
-        hauke_samples = np.array([hauke_data[param] for param in params_to_plot]).T
-        
-        # Make the cornerplot:
-        hauke_kwargs = corner_kwargs_with_range.copy()
-        hauke_kwargs.update({'color': HAUKE_EM_COLOR, 'hist_kwargs': {'color': HAUKE_EM_COLOR, 'density': use_density}})
-        corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
-        y -= dy
-        plt.text(x, y, 'Hauke (GW+EM)', fontsize=fs, color=HAUKE_EM_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
-        
-    if GW_event in ["GW170817", "GW190425"] and plot_adrian:
-        
-        print(f"Loading Adrian's data and adding it to the corner plot...")
-        adrian_posterior_filename = f"../../data/adrian/{GW_event}/{GW_event}_result.npz"
-        adrian_data = np.load(adrian_posterior_filename)
-        adrian_data = {k: adrian_data[k] for k in params_to_plot}
-        
-        for key in params_to_dummy_replace:
-            if key in adrian_data:
-                print(f"Replacing {key} with dummy values for Adrian...")
-                adrian_data[key] = np.random.normal(adrian_data[key], 0.01, size=len(adrian_data["chirp_mass"]))
-        
-        # Fetch the samples we want to plot
-        adrian_samples = np.array([adrian_data[param] for param in params_to_plot]).T
-            
-        # Make the cornerplot:
-        adrian_kwargs = corner_kwargs_with_range.copy()
-        adrian_kwargs.update({'color': ADRIAN_COLOR, 'hist_kwargs': {'color': ADRIAN_COLOR, 'density': use_density}})
-        corner.corner(adrian_samples, labels=latex_labels, fig=fig, **adrian_kwargs)
-        y -= dy
-        plt.text(x, y, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+    if plot_adrian:
+        adrian_samples = load_adrian_data(GW_event, params_to_plot)
+        if adrian_samples is not None:
+            adrian_kwargs = corner_kwargs_with_range.copy()
+            adrian_kwargs.update({'color': ADRIAN_COLOR, 'hist_kwargs': {'color': ADRIAN_COLOR, 'density': use_density}})
+            corner.corner(adrian_samples, labels=latex_labels, fig=fig, **adrian_kwargs)
+            y -= dy
+            plt.text(x, y, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
     
     # Save the figure using new directory structure
     # Create subdirectory name based on fixed parameters
@@ -451,24 +384,25 @@ def create_corner_plot(GW_event: str,
             ('_hauke' if (plot_hauke and GW_event in ["GW170817", "GW190425"]) else '') + \
             ('_haukeEM' if (plot_hauke_EM and GW_event == "GW170817") else '') + \
             ('_adrian' if (plot_adrian and GW_event in ["GW170817", "GW190425"]) else '') + \
-            ('_tilde' if convert_lambdas else '') + '.pdf'
+            ('_tilde' if convert_lambdas else '') + \
+            ('_fast' if fast_plotting else '') + '.pdf'
     
     os.makedirs(output_dir, exist_ok=True)
     full_save_path = os.path.join(output_dir, save_name)
     full_save_path = os.path.abspath(full_save_path)
             
     print(f"\nSaving corner plot to {full_save_path}\n")
-    plt.savefig(full_save_path, dpi=300, bbox_inches='tight')
+    plt.savefig(full_save_path, bbox_inches='tight')
     plt.close()
     
                             
                 
-def run_all_corner_plots(gw_event: str = "GW170817"):
+def run_all_corner_plots(gw_event: str, args):
     """
     Run all corner plots for the given GW event using the new comparison mode approach.
     This replicates the functionality previously in run_cornerplots.sh.
     """
-    base_dir = "../../GW_runs/"
+    base_dir = "../../final_results/"
     
     print(f"Generating ALL comparison corner plots for {gw_event}...")
     
@@ -486,8 +420,8 @@ def run_all_corner_plots(gw_event: str = "GW170817"):
                 population_type=population,
                 eos_samples_name=eos,
                 base_path=base_dir,
-                convert_lambdas=True,
-                plot_hauke=False
+                convert_lambdas=args["convert_lambdas"],
+                plot_hauke=args["plot_hauke"]
             )
             # Without lambda conversion
             create_corner_plot(
@@ -496,8 +430,8 @@ def run_all_corner_plots(gw_event: str = "GW170817"):
                 population_type=population,
                 eos_samples_name=eos,
                 base_path=base_dir,
-                convert_lambdas=False,
-                plot_hauke=False
+                convert_lambdas=args["convert_lambdas"],
+                plot_hauke=args["plot_hauke"]
             )
     
     # Population comparison plots (fix source + eos, vary population)
@@ -553,6 +487,11 @@ def run_all_corner_plots(gw_event: str = "GW170817"):
 
 
 def main():
+    # Load cosmology interpolator once at startup for fast plotting
+    print("Initializing cosmology interpolator for fast plotting...")
+    load_cosmology_interpolator()
+    print("")
+    
     parser = argparse.ArgumentParser(description="Create corner plots for GW parameter estimation results")
     parser.add_argument('--gw-event', type=str,
                         help='GW event name (e.g., GW170817)')
@@ -568,8 +507,8 @@ def main():
     parser.add_argument('--eos-samples-name', type=str, default='radio',
                         choices=['radio', 'radio_chiEFT', 'radio_chiEFT_NICER'],
                         help='EOS samples name (default: radio)')
-    parser.add_argument('--base-dir', type=str, default='../../GW_runs/',
-                        help='Base directory path (default: ../../GW_runs/)')
+    parser.add_argument('--base-dir', type=str, default='../../final_results/',
+                        help='Base directory path (default: ../../final_results/)')
     parser.add_argument('--plot-all-params', action='store_true',
                         help='Plot all parameters instead of subset')
     parser.add_argument('--plot-default', action='store_true',
@@ -586,13 +525,17 @@ def main():
                         help='Include Adrian\'s results in plot')
     parser.add_argument('--prevent-bns-leakage', action='store_true',
                         help='Prevent BNS leakage by masking negative delta_lambda_tilde')
+    parser.add_argument('--fast-plotting', action='store_true', default=True,
+                        help='Enable fast plotting mode (use cosmology interpolator for speed)')
+    parser.add_argument('--no-fast-plotting', dest='fast_plotting', action='store_false',
+                        help='Disable fast plotting mode (use exact cosmology calculations)')
     parser.add_argument('--run-all', action='store_true',
                         help='Run all corner plots (equivalent to the old bash script)')
     
     args = parser.parse_args()
     
     if args.run_all:
-        run_all_corner_plots(args.gw_event)
+        run_all_corner_plots(args.gw_event, args.__dict__)
     elif args.gw_event:
         create_corner_plot(
             GW_event=args.gw_event,
@@ -607,14 +550,15 @@ def main():
             plot_hauke=args.plot_hauke,
             plot_hauke_EM=args.plot_hauke_em,
             plot_adrian=args.plot_adrian,
-            prevent_bns_leakage=args.prevent_bns_leakage
+            prevent_bns_leakage=args.prevent_bns_leakage,
+            fast_plotting=args.fast_plotting
         )
     else:
         # If no specific arguments provided, run all corner plots
         print("No specific GW event provided. Running ALL corner plots...")
-        run_all_corner_plots("GW170817")
-        run_all_corner_plots("GW190425")
-        run_all_corner_plots("GW230529")
+        run_all_corner_plots("GW170817", args.__dict__)
+        run_all_corner_plots("GW190425", args.__dict__)
+        run_all_corner_plots("GW230529", args.__dict__)
             
 if __name__ == "__main__":
     main()
