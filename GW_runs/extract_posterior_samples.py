@@ -13,6 +13,9 @@ import argparse
 from pathlib import Path
 import bilby
 
+import logging
+logging.getLogger('bilby').setLevel(logging.WARNING)
+
 
 def extract_posterior_from_json(json_path: str) -> dict:
     """
