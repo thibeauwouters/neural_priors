@@ -72,7 +72,7 @@ def find_json_files_recursive(directory: Path) -> list:
     return json_files
 
 
-def create_output_path(json_path: Path, base_input_dir: Path, base_output_dir: Path) -> Path:
+def create_output_path(json_path: Path, base_input_dir: Path, base_output_dir: Path, gw_event: str) -> Path:
     """
     Create output NPZ path maintaining the same directory structure.
     
@@ -80,6 +80,7 @@ def create_output_path(json_path: Path, base_input_dir: Path, base_output_dir: P
         json_path: Path to the JSON file
         base_input_dir: Base input directory (e.g., ./GW_runs/GW170817)
         base_output_dir: Base output directory (e.g., ./final_results)
+        gw_event: GW event name (e.g., GW170817)
         
     Returns:
         Path for the output NPZ file
@@ -91,8 +92,8 @@ def create_output_path(json_path: Path, base_input_dir: Path, base_output_dir: P
         # If json_path is not under base_input_dir, use the full path structure
         relative_path = json_path
     
-    # Create output path by replacing JSON with NPZ
-    output_path = base_output_dir / relative_path.with_suffix('.npz')
+    # Create output path with GW event name included, replacing JSON with NPZ
+    output_path = base_output_dir / gw_event / relative_path.with_suffix('.npz')
     
     return output_path
 
@@ -136,7 +137,7 @@ def main():
     
     for json_path in json_files:
         # Create output path
-        output_path = create_output_path(json_path, base_input_dir, base_output_dir)
+        output_path = create_output_path(json_path, base_input_dir, base_output_dir, args.gw_event)
         
         # Check if NPZ already exists
         if output_path.exists() and not args.overwrite:
