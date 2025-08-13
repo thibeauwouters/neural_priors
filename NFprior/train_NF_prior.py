@@ -11,6 +11,7 @@ import argparse
 import numpy as np
 import json
 import torch.nn.functional as F
+from scipy.optimize import root_scalar
 
 ### bilby imports
 from bilby.core.prior.analytical import Uniform
@@ -114,6 +115,72 @@ def sample_ns_mass_double_gaussian(nb_mass_samples: int):
         return mass_samples[0]
     else:
         return mass_samples
+    
+def mtov_to_mcrit(mtov: float,
+                  rtov: float,
+                  chi: float,
+                  mass: float) -> float:
+    """
+    Convert the TOV mass to critical mass using spin information. This is for a single sample. 
+    See eq (13) of https://arxiv.org/abs/1601.06083 for details
+
+    Args:
+        mtov (float): TOV mass
+        rtov (float): TOV radius
+        chi (float): Spin of NS
+        mass (float): Mass of NS
+        verbose (bool): Print the ratio of the two to see if it makes sense or not. 
+
+    Raises:
+        ValueError: If the root solver does not converge.
+
+    Returns:
+        float: The critical mass, see above paper for details.
+    """
+    
+    # Fit coefficients
+    c_2 = 4.283e-1
+    c_4 = 7.533e-1
+    
+    a = mtov 
+    b = c_2 * (mtov ** 2) * ((chi * mass) ** 2) / rtov
+    c = c_4 * (mtov ** 3) * ((chi * mass) ** 4) / (rtov ** 2)
+    
+    # Derived from the paper
+    polynomial = lambda x: x ** 5 - a * x ** 4 - b * x ** 2 - c
+    
+    # Define the range within we search for the root
+    x_range = [mtov, 2.0 * mtov]
+
+    # Find the root within the specified range
+    try: 
+        root = root_scalar(polynomial, bracket = x_range, method = "brentq")
+    except Exception as e:
+        print("Root finding did not work, my analysis:")
+        a = x_range[0]
+        b = x_range[1]
+        
+        f_a = polynomial(a)
+        f_b = polynomial(b)
+        
+        print(f"We had: f(a) = {f_a}, f(b) = {f_b} with a = {a}, b = {b}")
+        
+        # Plot the function in between:
+        x = np.linspace(a, b, 1000)
+        y = polynomial(x)
+        
+        plt.plot(x, y)
+        plt.savefig("debug/root_finding_failure.png")
+        plt.close()
+        
+        print(f"Error: {e}")
+        return None
+
+    if root.converged:
+        mcrit = root.root
+        return mcrit
+    else:
+        raise ValueError("Root finding did not converge.")
 
 parser = argparse.ArgumentParser(description="Train a normalizing flow prior on EOS samples.")
 parser.add_argument("--population-type", 
@@ -145,6 +212,13 @@ parser.add_argument("--no-use-component-masses",
                     dest="use_component_masses", 
                     action="store_false")
 parser.set_defaults(use_component_masses=False)
+parser.add_argument("--use-mcrit", 
+                    action="store_true", 
+                    help="Use the critical mass using the spin of the object a la Breu and Rezzolla's formula (https://arxiv.org/abs/1601.06083) as upper bound on the masses, instead of MTOV.")
+parser.add_argument("--no-use-mcrit", 
+                    dest="use_component_masses", 
+                    action="store_false")
+parser.set_defaults(use_mcrit=False)
 parser.add_argument("--N-samples-training", 
                     type=int, 
                     default=200_000, 
@@ -295,6 +369,7 @@ class NFPriorCreator:
                  source_type: str = "bns",
                  use_tilde: bool = False,
                  use_component_masses: bool = True,
+                 use_mcrit: bool = False,
                  N_samples_training: int = 100_000,
                  N_samples_plot: int = 10_000,
                  m_max_BH: float = 5.0,
@@ -380,6 +455,7 @@ class NFPriorCreator:
         self.use_flowjax = use_flowjax
         self.use_tilde = use_tilde
         self.use_component_masses = use_component_masses
+        self.use_mcrit = use_mcrit
 
         self.num_epochs = num_epochs
         if learning_rate >= 1e-3 and self.use_flowjax:
@@ -461,8 +537,10 @@ class NFPriorCreator:
                 Recommended to use scaling and not log transformation for training (empirically gave best results).")
         
         # Make an outdir based on the given name etc, so that everything is stored in one directory for later on
-        backend_suffix = "_flowjax" if self.use_flowjax else ""
-        self.outdir = os.path.join("./models/", self.population_type, self.source_type, f"{self.eos_samples_name}{backend_suffix}")
+        backend_suffix = "_flowjax" if self.use_flowjax else "" # if flowjax, append to the dir name
+        mcrit_suffix = "_mcrit" if self.use_mcrit else "" # if using the mcrit, append to the dir name
+        self.outdir = os.path.join("./models/", self.population_type, self.source_type, f"{self.eos_samples_name}{backend_suffix}{mcrit_suffix}")
+        
         if not os.path.exists(self.outdir):
             os.makedirs(self.outdir)
             print(f"Created output directory {self.outdir}")
@@ -528,7 +606,14 @@ class NFPriorCreator:
         # TODO: at some point, use self.population_type to change the way we generate the training data
         
         # Load the EOS samples
-        masses_EOS, _, Lambdas_EOS = self.load_eos_samples_from_file()
+        masses_EOS, radii_EOS, Lambdas_EOS = self.load_eos_samples_from_file()
+        
+        if self.use_mcrit:
+            chi1_list = np.empty(self.N_samples_training)
+            chi2_list = np.empty(self.N_samples_training)
+            
+            ratio_list = np.empty(2 * self.N_samples_training)
+            mtov_list = np.empty(2 * self.N_samples_training)
         
         if self.is_gw_event:
             # Use our own bilby priors for the GW event
@@ -611,25 +696,58 @@ class NFPriorCreator:
             if i % (self.N_samples_training // 10) == 0:
                 print(f"{i}/{self.N_samples_training}")
             idx = np.random.randint(0, len(masses_EOS))
-            m, l = masses_EOS[idx], Lambdas_EOS[idx]
+            m, r, l = masses_EOS[idx], radii_EOS[idx], Lambdas_EOS[idx]
             mtov = np.max(m)
+            if mtov != m[-1]:
+                print("I thought that the final mass value was MTOV, turns out I am wrong.")
+                print("m")
+                print(m)
+                
+                print("r")
+                print(r)
+            
+            rtov = r[-1]
+            
+            if self.use_mcrit:
+                # The NS spins are between 0.0 and 0.05
+                chi1 = np.random.uniform(0.0, 0.99, 1)[0]
+                chi2 = np.random.uniform(0.0, 0.99, 1)[0]
+                
+                chi1_list[i] = chi1
+                chi2_list[i] = chi2
+                
+                m_max_1 = mtov_to_mcrit(mtov, rtov, chi1, mass=mtov)
+                m_max_2 = mtov_to_mcrit(mtov, rtov, chi2, mass=mtov)
+                ratio_list[2*i] = m_max_1 / mtov
+                ratio_list[2*i+1] = m_max_2 / mtov
+                
+                mtov_list[2*i] = mtov
+                mtov_list[2*i+1] = mtov
+                
+            else:
+                # No spins, then both M_max are equal to MTOV
+                m_max_1 = mtov
+                m_max_2 = mtov
             
             if not self.is_gw_event:
                 if self.source_type == "bns":
                     if self.population_type == "uniform":
                         # Sample two masses uniformly between 1.0 and MTOV, and ensure m1 >= m2
-                        mass_samples = np.random.uniform(1.0, mtov, 2)
+                        m1_samp = np.random.uniform(1.0, m_max_1, 1)[0]
+                        m2_samp = np.random.uniform(1.0, m_max_2, 1)[0]
+                        
+                        mass_samples = [m1_samp, m2_samp]
                     elif self.population_type == "gaussian":
                         mass_samples = sample_ns_mass_gaussian(2)
                     elif self.population_type == "double_gaussian":
                         mass_samples = sample_ns_mass_double_gaussian(2)
                     else:
                         raise ValueError(f"Unsupported population type: {self.population_type}")
-                        
+                    
                     # Ensure that m1 >= m2
                     m1 = np.max(mass_samples)
                     m2 = np.min(mass_samples)
-                    
+                        
                     Lambda_1 = np.interp(m1, m, l)
                     Lambda_2 = np.interp(m2, m, l)
                 
@@ -701,6 +819,12 @@ class NFPriorCreator:
         if self.is_gw_event:
             save_dict["chirp_mass"] = Mc_det_list
             save_dict["luminosity_distance"] = dL_list
+            
+        if self.use_mcrit:
+            save_dict["chi_1"] = chi1_list
+            save_dict["chi_2"] = chi2_list
+            save_dict["mcrit_ratio"] = ratio_list
+            save_dict["mtov"] = mtov_list
             
         print(f"Create data will save the following data:")
         for key, value in save_dict.items():
