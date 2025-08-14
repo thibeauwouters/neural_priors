@@ -361,6 +361,11 @@ if args.fix_sky:
     prior_dict.pop('ra', None)   # Remove existing ra prior if present
     prior_dict['dec'] = DeltaFunction(-0.408084, name='dec', latex_label='$\\delta$')
     prior_dict['ra'] = DeltaFunction(3.44616, name='ra', latex_label='$\\alpha$')
+    
+# At this stage, the priors are loaded into a dict, but for NSBH, we will let the spins go up to 0.5 (not higher, since we don't trust the WF model there)
+if "nsbh" in args.prior_name:
+    logger.info("Using NSBH priors, setting spins magnitude to Uniform(0.0, 0.5) for primary object")
+    prior_dict["a_1"] = Uniform(minimum=0.0, maximum=0.5, name='a_1', latex_label='$a_1$')
 
 if args.prior_name == "default":
     logger.info("Using the default priors")

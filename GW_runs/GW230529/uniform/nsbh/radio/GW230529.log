@@ -1,0 +1,174 @@
+14:10 INFO    : We set full_outdir to /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/GW_runs/GW230529/uniform/nsbh/radio
+14:10 INFO    : Using geocent_time from reference parameters: 1369419318.7460938
+14:10 INFO    : Showing the reference parameters for GW230529
+14:10 INFO    : chirp_mass: 2.0272715949909377
+14:10 INFO    : mass_ratio: 0.3699999999999999
+14:10 INFO    : symmetric_mass_ratio: 0.19713357131440137
+14:10 INFO    : a_1: 0.0
+14:10 INFO    : a_2: 0.0
+14:10 INFO    : tilt_1: 0.0
+14:10 INFO    : tilt_2: 0.0
+14:10 INFO    : phi_jl: 0.0
+14:10 INFO    : phi_12: 0.0
+14:10 INFO    : luminosity_distance: 201.0
+14:10 INFO    : phase: 1.3576488959769972
+14:10 INFO    : theta_jn: 2.323517520938953
+14:10 INFO    : psi: 0.030083409062676092
+14:10 INFO    : ra: 1.121307208346961
+14:10 INFO    : dec: 0.22562961827621178
+14:10 INFO    : lambda_1: 0.0
+14:10 INFO    : lambda_2: 0.0
+14:10 INFO    : mass_1: 3.920441829732034
+14:10 INFO    : mass_2: 1.4505634770008522
+14:10 INFO    : Geocent time is 1369419318.7460938 and duration is 128.0
+14:10 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+14:10 INFO    : Relative binning delta 0.01
+14:10 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+14:10 INFO    : Running with label GW230529 and ifo_list ['L1']
+14:10 INFO    : Loading priors from /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/GW_runs/GW230529/prior.prior
+14:10 INFO    : Using NSBH priors, setting spins magnitude to Uniform(0.0, 0.5) for primary object
+14:10 INFO    : Sampling with an NF prior, with name nsbh
+14:10 INFO    : Using NF model path: /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt
+14:10 INFO    : Loaded NF kwargs from /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model_kwargs.json
+14:10 INFO    : Using bounds: [(0.01, 5.0), (0.125, 1.0), (0.01, 100000)] for names: ['chirp_mass_source', 'mass_ratio', 'lambda_2']
+14:10 INFO    : Using glasflow backend
+14:10 INFO    : Loading scaler from /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/scaler.gz
+14:10 INFO    : Parameter ranges from scaler:
+14:10 INFO    :   chirp_mass_source: [1.229928, 3.510894]
+14:10 INFO    :   mass_ratio: [0.200081, 0.997661]
+14:10 INFO    :   lambda_2: [2.704159, 8487.288736]
+14:10 INFO    : Loaded NFDist prior with n_dim = 3 from flow_filename = /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt
+14:10 INFO    : Going to show priors in priors:
+14:10 INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=500.0, cosmology='Planck15', name='luminosity_distance', latex_label='$d_L$', unit='Mpc', boundary=None)
+14:10 INFO    :       geocent_time: Uniform(minimum=1369419318.6460938, maximum=1369419318.8460937, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+14:10 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.5, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+14:10 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.99, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+14:10 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+14:10 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+14:10 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+14:10 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+14:10 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+14:10 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+14:10 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+14:10 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+14:10 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+14:10 INFO    :       chirp_mass_source: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_2'], flow_filename='/Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt', use_tilde='False', use_component_masses='False'), name='chirp_mass_source', latex_label='chirp_mass_source', unit=None)
+14:10 INFO    :       mass_ratio: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_2'], flow_filename='/Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt', use_tilde='False', use_component_masses='False'), name='mass_ratio', latex_label='$q$', unit=None)
+14:10 INFO    :       lambda_2: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_2'], flow_filename='/Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
+14:10 INFO    :       lambda_1: DeltaFunction(peak=0.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+14:10 INFO    : Running through data generation steps now
+14:10 INFO    : Reading data from frame file /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/data/GW230529/L-L1_GWOSC_16KHZ_R1-1369417271-4096.gwf
+14:10 INFO    : Successfully loaded L1:GWOSC-16KHZ_R1_STRAIN.
+14:10 INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+ 2.04799219e+03 2.04800000e+03]
+14:10 INFO    : Priors loaded:
+14:10 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.binary_neutron_star_frequency_sequence
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+14:10 INFO    : Using relative binning likelihood
+14:10 INFO    : Going to construct bins with:
+14:10 INFO    :   - delta: 0.01
+14:10 INFO    :   - minimum_bin_threshold: 10
+14:10 INFO    : Applying constraints on resonance frequency
+14:10 INFO    : Minimum frequency: 20.0, Maximum frequency: 2048.0
+14:10 INFO    : Percentage error on chirp mass -0.16680473213119829 and mass_ratio 0.0
+14:10 INFO    : Perturbed chirp mass and mass ratio: 2.030653179944534 0.3699999999999999
+14:10 INFO    : Perturbed lambda_1: 200.0
+14:10 INFO    : Perturbed lambda_2: 300.0
+14:10 INFO    : Length of the original frequency array 262145
+14:10 INFO    : Frequency range for binning: 20.00 - 2048.00 Hz
+14:10 INFO    : Number of frequency bins available: 259585
+14:10 INFO    : Using following powers: [-1.66666667 -0.66666667  1.          1.66666667  2.33333333
+  3.          3.33333333  4.        ]
+14:10 INFO    : Bins generated using analytic method: 3807
+14:11 INFO    : We set full_outdir to /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/GW_runs/GW230529/uniform/nsbh/radio
+14:11 INFO    : Using geocent_time from reference parameters: 1369419318.7460938
+14:11 INFO    : Showing the reference parameters for GW230529
+14:11 INFO    : chirp_mass: 2.0272715949909377
+14:11 INFO    : mass_ratio: 0.3699999999999999
+14:11 INFO    : symmetric_mass_ratio: 0.19713357131440137
+14:11 INFO    : a_1: 0.0
+14:11 INFO    : a_2: 0.0
+14:11 INFO    : tilt_1: 0.0
+14:11 INFO    : tilt_2: 0.0
+14:11 INFO    : phi_jl: 0.0
+14:11 INFO    : phi_12: 0.0
+14:11 INFO    : luminosity_distance: 201.0
+14:11 INFO    : phase: 1.3576488959769972
+14:11 INFO    : theta_jn: 2.323517520938953
+14:11 INFO    : psi: 0.030083409062676092
+14:11 INFO    : ra: 1.121307208346961
+14:11 INFO    : dec: 0.22562961827621178
+14:11 INFO    : lambda_1: 0.0
+14:11 INFO    : lambda_2: 0.0
+14:11 INFO    : mass_1: 3.920441829732034
+14:11 INFO    : mass_2: 1.4505634770008522
+14:11 INFO    : Geocent time is 1369419318.7460938 and duration is 128.0
+14:11 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+14:11 INFO    : Relative binning delta 0.01
+14:11 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+14:11 INFO    : Running with label GW230529 and ifo_list ['L1']
+14:11 INFO    : Loading priors from /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/GW_runs/GW230529/prior.prior
+14:11 INFO    : Using NSBH priors, setting spins magnitude to Uniform(0.0, 0.5) for primary object
+14:11 INFO    : Sampling with an NF prior, with name nsbh
+14:11 INFO    : Using NF model path: /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt
+14:11 INFO    : Loaded NF kwargs from /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model_kwargs.json
+14:11 INFO    : Using bounds: [(0.01, 5.0), (0.125, 1.0), (0.01, 100000)] for names: ['chirp_mass_source', 'mass_ratio', 'lambda_2']
+14:11 INFO    : Using glasflow backend
+14:11 INFO    : Loading scaler from /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/scaler.gz
+14:11 INFO    : Parameter ranges from scaler:
+14:11 INFO    :   chirp_mass_source: [1.229928, 3.510894]
+14:11 INFO    :   mass_ratio: [0.200081, 0.997661]
+14:11 INFO    :   lambda_2: [2.704159, 8487.288736]
+14:11 INFO    : Loaded NFDist prior with n_dim = 3 from flow_filename = /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt
+14:11 INFO    : Going to show priors in priors:
+14:11 INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=500.0, cosmology='Planck15', name='luminosity_distance', latex_label='$d_L$', unit='Mpc', boundary=None)
+14:11 INFO    :       geocent_time: Uniform(minimum=1369419318.6460938, maximum=1369419318.8460937, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+14:11 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.5, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+14:11 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+14:11 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+14:11 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+14:11 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+14:11 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+14:11 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+14:11 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+14:11 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+14:11 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+14:11 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+14:11 INFO    :       chirp_mass_source: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_2'], flow_filename='/Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt', use_tilde='False', use_component_masses='False'), name='chirp_mass_source', latex_label='chirp_mass_source', unit=None)
+14:11 INFO    :       mass_ratio: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_2'], flow_filename='/Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt', use_tilde='False', use_component_masses='False'), name='mass_ratio', latex_label='$q$', unit=None)
+14:11 INFO    :       lambda_2: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_2'], flow_filename='/Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/nsbh/radio/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
+14:11 INFO    :       lambda_1: DeltaFunction(peak=0.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+14:11 INFO    : Running through data generation steps now
+14:11 INFO    : Reading data from frame file /Users/Woute029/Documents/Code/projects/eos_source_classification/eos_source_classification/data/GW230529/L-L1_GWOSC_16KHZ_R1-1369417271-4096.gwf
+14:11 INFO    : Successfully loaded L1:GWOSC-16KHZ_R1_STRAIN.
+14:11 INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+ 2.04799219e+03 2.04800000e+03]
+14:11 INFO    : Priors loaded:
+14:11 INFO    : Waveform generator initiated with
+  frequency_domain_source_model: bilby.gw.source.binary_neutron_star_frequency_sequence
+  time_domain_source_model: None
+  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
+14:11 INFO    : Using relative binning likelihood
+14:11 INFO    : Going to construct bins with:
+14:11 INFO    :   - delta: 0.01
+14:11 INFO    :   - minimum_bin_threshold: 10
+14:11 INFO    : Applying constraints on resonance frequency
+14:11 INFO    : Minimum frequency: 20.0, Maximum frequency: 2048.0
+14:11 INFO    : Percentage error on chirp mass -0.16680473213119829 and mass_ratio 0.0
+14:11 INFO    : Perturbed chirp mass and mass ratio: 2.030653179944534 0.3699999999999999
+14:11 INFO    : Perturbed lambda_1: 200.0
+14:11 INFO    : Perturbed lambda_2: 300.0
+14:11 INFO    : Length of the original frequency array 262145
+14:11 INFO    : Frequency range for binning: 20.00 - 2048.00 Hz
+14:11 INFO    : Number of frequency bins available: 259585
+14:11 INFO    : Using following powers: [-1.66666667 -0.66666667  1.          1.66666667  2.33333333
+  3.          3.33333333  4.        ]
+14:11 INFO    : Bins generated using analytic method: 3807
