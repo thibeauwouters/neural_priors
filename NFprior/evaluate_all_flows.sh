@@ -45,15 +45,14 @@ for POPULATION_TYPE in "$MODELS_BASE_PATH"/uniform "$MODELS_BASE_PATH"/gaussian 
                 echo "Skipping $MODEL_DIR (contains flowjax)"
                 continue
             fi
-            echo ""
-            echo "Testing: $MODEL_DIR"
-            echo "----------------------------------------"
-            python3 "$SCRIPT_DIR/evaluate_flows.py" "$MODEL_DIR" --test-only
+
+            # First run a basic test to ensure the model can be loaded and sampled etc
+            python3 "$SCRIPT_DIR/evaluate_flows.py" "--model-path $MODEL_DIR" --test-only
 
             echo ""
             echo "Evaluating: $MODEL_DIR"
             echo "----------------------------------------"
-            python3 "$SCRIPT_DIR/evaluate_flows.py" "$MODEL_DIR" --n-samples 200_000
+            python3 "$SCRIPT_DIR/evaluate_flows.py" "--model-path $MODEL_DIR" --n-samples 200_000
         done
     fi
 done

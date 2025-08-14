@@ -13,8 +13,12 @@ import json
 import copy
 import torch
 import joblib
+import warnings
 from scipy.special import kl_div
 from scipy.stats import gaussian_kde, chisquare
+
+# Suppress sklearn version warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
 
 from glasflow.flows.nsf import CouplingNSF
 from glasflow.flows.autoregressive import MaskedPiecewiseRationalQuadraticAutoregressiveFlow, MaskedAffineAutoregressiveFlow
@@ -61,6 +65,7 @@ default_corner_kwargs = dict(bins=40,
                         truth_color = "red",
                         save=False)
 
+VERBOSE = False # whether to print more debug information or keep it short 
 
 def make_cornerplot(chains_1: np.array, 
                     chains_2: np.array,
@@ -615,9 +620,7 @@ class CheckerUnconditional(Checker):
         """
         super().__init__(path, N_samples, N_masses=0)  # N_masses not used for unconditional
         self.flow, self.nf_kwargs, self.scaler = self.load_model_and_data()
-        print(f"Loading training data")
         self.training_data = self.load_training_data()
-        print(f"Loading training data DONE")
         
     def load_model_and_data(self):
         """
@@ -678,7 +681,8 @@ class CheckerUnconditional(Checker):
             flow = eqx.tree_deserialise_leaves(nf_path, flow)
             
         else:
-            print(f"Loading glasflow unconditional model with {n_inputs} inputs")
+            if VERBOSE:
+                print(f"Loading glasflow unconditional model with {n_inputs} inputs")
             nf_path = os.path.join(self.path, "model.pt")
             
             # Determine glasflow model type
@@ -740,7 +744,8 @@ class CheckerUnconditional(Checker):
             else:
                 raise ValueError(f"Unsupported glasflow model type: {glasflow_type}")
             
-            print(f"Loading glasflow model from {nf_path}")
+            if VERBOSE:
+                print(f"Loading glasflow model from {nf_path}")
             flow.load_state_dict(torch.load(nf_path, map_location=torch.device('cpu')))
             flow.eval()
             flow.compile()
@@ -752,7 +757,8 @@ class CheckerUnconditional(Checker):
         scale_input = True
         
         if os.path.exists(scaler_path) and scale_input:
-            print(f"Loading scaler from {scaler_path}")
+            if VERBOSE:
+                print(f"Loading scaler from {scaler_path}")
             scaler = joblib.load(scaler_path)
         else:
             if os.path.exists(scaler_path) and not scale_input:
@@ -796,25 +802,57 @@ class CheckerUnconditional(Checker):
         self.make_cornerplot_with_labels(training_samples, nf_samples, name, 
                                        my_range=ranges, labels=labels)
         
-        # For non-tilde lambda models, check if lambda_1 < lambda_2 for all generated samples
-        if self.nf_kwargs.get("use_tilde", "False") == "False" and self.nf_kwargs.get("source_type", "bns") == "bns":
-            print("\nChecking if lambda_1 < lambda_2 for all generated samples...")
+        # Print parameter ranges and quantiles
+        parameter_names = self.nf_kwargs.get("names", [])
+        if VERBOSE:
+            print(f"\nParameter ranges and quantiles for {len(nf_samples)} samples:")
+        for i, param_name in enumerate(parameter_names):
+            param_values = nf_samples[:, i]
+            min_val, max_val = np.min(param_values), np.max(param_values)
+            q01, q99 = np.quantile(param_values, [0.01, 0.99])
+            if VERBOSE:
+                print(f"{param_name}: range=[{min_val:.3f}, {max_val:.3f}], quantiles=[{q01:.3f}, {q99:.3f}]")
+        
+        # Check sample validity against physical constraints
+        violations = self.check_samples_validity(nf_samples)
+        
+        # Save violations to JSON file in model directory
+        violations_json = {
+            "n_samples_generated": len(nf_samples),
+            "total_bad_samples": int(violations['total_bad_samples']),
+            "bad_percentage": float(violations['bad_percentage']),
+            "violation_details": {}
+        }
+        
+        # Add detailed violation counts
+        for key, count in violations.items():
+            if key.endswith('_out_of_bounds') or key.endswith('_negative') or key.endswith('_violation'):
+                if count > 0:
+                    percentage = (count / violations['total_samples']) * 100
+                    violations_json["violation_details"][key] = {
+                        "count": int(count),
+                        "percentage": float(percentage)
+                    }
+        
+        # Save to JSON file
+        json_path = os.path.join(self.path, "bad_samples.json")
+        with open(json_path, "w") as f:
+            json.dump(violations_json, f, indent=2)
+        
+        if violations['total_bad_samples'] > 0:
+            print(f"⚠️  Found {violations['total_bad_samples']} bad samples ({violations['bad_percentage']:.2f}%)")
             
-            # Find indices of lambda_1 and lambda_2 in the parameter names
-            parameter_names = self.nf_kwargs.get("names", [])
-            if "lambda_1" in parameter_names and "lambda_2" in parameter_names:
-                lambda_1_idx = parameter_names.index("lambda_1")
-                lambda_2_idx = parameter_names.index("lambda_2")
-                
-                print(f"lambda_1 range: [{np.min(nf_samples[:, lambda_1_idx]):.3f}, {np.max(nf_samples[:, lambda_1_idx]):.3f}]")
-                print(f"lambda_2 range: [{np.min(nf_samples[:, lambda_2_idx]):.3f}, {np.max(nf_samples[:, lambda_2_idx]):.3f}]")
-                
-                ok_samples = nf_samples[:, lambda_1_idx] < nf_samples[:, lambda_2_idx]
-                percentage_ok = np.sum(ok_samples) / len(ok_samples) * 100
-                print(f"Percentage of samples with lambda_1 < lambda_2: {percentage_ok:.2f}%")
-            else:
-                print("Could not find lambda_1 and lambda_2 in parameter names - skipping constraint check")
-    
+            # Print individual constraint violations
+            for key, count in violations.items():
+                if key.endswith('_out_of_bounds') or key.endswith('_negative') or key.endswith('_violation'):
+                    if count > 0:
+                        percentage = (count / violations['total_samples']) * 100
+                        print(f"  - {key}: {count} samples ({percentage:.2f}%)")
+        else:
+            print(f"✓ All {violations['total_samples']} samples satisfy physical constraints")
+        
+        print(f"Sample validation results saved to: {json_path}")
+        
     def get_parameter_labels(self, parameter_names):
         """Get parameter labels based on parameterization flags and parameter names."""
         translation_dict = {"chirp_mass": r"$M_c$ [M$_\odot$]",
@@ -840,11 +878,6 @@ class CheckerUnconditional(Checker):
         """
         Create corner plot with parameter labels.
         """
-        print("np.shape(chains_1)")
-        print(np.shape(chains_1))
-        print("np.shape(chains_2)")
-        print(np.shape(chains_2))
-        
         # The training data:
         corner_kwargs = copy.deepcopy(default_corner_kwargs)
         hist_1d_kwargs = {"density": True, "color": "blue"}
@@ -929,7 +962,6 @@ class CheckerUnconditional(Checker):
         """
         Generate samples from the NF model for testing purposes.
         """
-        print(f"Generating {N_test_samples} samples from the NF model for testing")
         nf_samples = []
         use_flowjax = self.nf_kwargs.get("use_flowjax", "False") == "True"
         
@@ -948,9 +980,7 @@ class CheckerUnconditional(Checker):
         else:
             # glasflow sampling
             with torch.no_grad():
-                for _ in range(N_test_samples):
-                    value = self.flow.sample(1).cpu().numpy().flatten()
-                    nf_samples.append(value)
+                nf_samples = self.flow.sample(N_test_samples).cpu().numpy()
             nf_samples = np.array(nf_samples)
         
         # Apply inverse scaling if scaler was used during training
@@ -977,9 +1007,9 @@ class CheckerUnconditional(Checker):
         # Print the ranges to the screen:
         for i in range(nf_samples.shape[1]):
             lower, upper = np.min(nf_samples[:, i]), np.max(nf_samples[:, i])
-            print(f"Parameter {i} range: [{lower:.3f}, {upper:.3f}]")
+            if VERBOSE:
+                print(f"Parameter {i} range: [{lower:.3f}, {upper:.3f}]")
         
-        print(f"Generating {N_test_samples} samples from the NF model for testing DONE")
         return nf_samples
     
     def get_training_samples(self):
@@ -987,7 +1017,6 @@ class CheckerUnconditional(Checker):
         Get training samples in the same format as NF samples by using nf_kwargs["names"].
         """
         parameter_names = self.nf_kwargs.get("names", [])
-        print(f"Constructing training samples for parameters: {parameter_names}")
         
         # FIXME: this is a small typo/bug and is now fixed, but old NFs might not have this yet
         # Handle backwards compatibility between 'q' and 'mass_ratio'
@@ -1031,7 +1060,6 @@ class CheckerUnconditional(Checker):
                 raise KeyError(f"Parameter '{param_name}' not found in training data and cannot be computed from available data. Available keys: {list(self.training_data.keys())}")
         
         result = np.column_stack(training_columns)
-        print(f"Training samples shape: {result.shape}")
         return result
     
     def compute_kl_divergence(self, training_samples, nf_samples, n_bins=50):
@@ -1105,6 +1133,72 @@ class CheckerUnconditional(Checker):
         
         return kl_divergences
     
+    def check_samples_validity(self, nf_samples):
+        """
+        Check how many NF samples violate physical bounds and constraints.
+        
+        Physical constraints checked:
+        - mass_ratio (q) in [0, 1] 
+        - lambda_1, lambda_2 > 0
+        - lambda_2 >= lambda_1 (for BNS systems)
+        
+        Args:
+            nf_samples: NF generated samples array
+            
+        Returns:
+            dict: Dictionary with violation counts and percentages
+        """
+        parameter_names = self.nf_kwargs.get("names", [])
+        n_samples = len(nf_samples)
+        violations = {}
+        
+        bad_samples_mask = np.zeros(n_samples, dtype=bool)
+        
+        # Check mass ratio constraint: q in [0, 1]
+        if "mass_ratio" in parameter_names or "q" in parameter_names:
+            q_param = "mass_ratio" if "mass_ratio" in parameter_names else "q"
+            q_idx = parameter_names.index(q_param)
+            q_values = nf_samples[:, q_idx]
+            
+            q_violations = (q_values < 0) | (q_values > 1)
+            violations[f'{q_param}_out_of_bounds'] = np.sum(q_violations)
+            bad_samples_mask |= q_violations
+        
+        # Check lambda constraints: lambda_1, lambda_2 > 0
+        lambda_params = ["lambda_1", "lambda_2"]
+        for lambda_param in lambda_params:
+            if lambda_param in parameter_names:
+                lambda_idx = parameter_names.index(lambda_param)
+                lambda_values = nf_samples[:, lambda_idx]
+                
+                lambda_violations = lambda_values <= 0
+                violations[f'{lambda_param}_negative'] = np.sum(lambda_violations)
+                bad_samples_mask |= lambda_violations
+        
+        # Check lambda ordering constraint: lambda_2 >= lambda_1 (for BNS)
+        source_type = self.nf_kwargs.get("source_type", "bns")
+        if (source_type == "bns" and 
+            "lambda_1" in parameter_names and "lambda_2" in parameter_names):
+            
+            lambda_1_idx = parameter_names.index("lambda_1")
+            lambda_2_idx = parameter_names.index("lambda_2")
+            lambda_1_values = nf_samples[:, lambda_1_idx]
+            lambda_2_values = nf_samples[:, lambda_2_idx]
+            
+            ordering_violations = lambda_2_values < lambda_1_values
+            violations['lambda_ordering_violation'] = np.sum(ordering_violations)
+            bad_samples_mask |= ordering_violations
+        
+        # Total bad samples
+        total_bad = np.sum(bad_samples_mask)
+        bad_percentage = (total_bad / n_samples) * 100
+        
+        violations['total_bad_samples'] = total_bad
+        violations['bad_percentage'] = bad_percentage
+        violations['total_samples'] = n_samples
+        
+        return violations
+    
     def compute_sample_quality_metrics(self, training_samples, nf_samples):
         """
         Compute various sample quality metrics beyond KL divergence.
@@ -1144,37 +1238,96 @@ class CheckerUnconditional(Checker):
         
         return metrics
 
+def report_bad_samples_across_flows(models_base_path="./models"):
+    """
+    Iterate over all flow directories, load bad_samples.json files, and report
+    which flows have the highest percentage of bad samples.
+    """
+    results = []
+    
+    # Find all directories containing bad_samples.json
+    for root, dirs, files in os.walk(models_base_path):
+        if "bad_samples.json" in files:
+            json_path = os.path.join(root, "bad_samples.json")
+            try:
+                with open(json_path, "r") as f:
+                    data = json.load(f)
+                
+                # Extract relevant info
+                flow_path = os.path.relpath(root, models_base_path)
+                n_samples = data.get("n_samples_generated", 0)
+                bad_percentage = data.get("bad_percentage", 0.0)
+                total_bad = data.get("total_bad_samples", 0)
+                
+                results.append({
+                    "flow_path": flow_path,
+                    "n_samples": n_samples,
+                    "bad_percentage": bad_percentage,
+                    "total_bad": total_bad
+                })
+                
+            except (json.JSONDecodeError, KeyError) as e:
+                print(f"Warning: Could not read {json_path}: {e}")
+    
+    if not results:
+        print("No bad_samples.json files found. Run full evaluations first.")
+        return
+    
+    # Sort by bad percentage (high to low)
+    results.sort(key=lambda x: x["bad_percentage"], reverse=True)
+    
+    print(f"Bad Samples Report ({len(results)} flows evaluated)")
+    print("=" * 70)
+    print(f"{'Flow Path':<40} {'N Samples':<10} {'Bad %':<8} {'Bad Count':<10}")
+    print("-" * 70)
+    
+    for result in results:
+        print(f"{result['flow_path']:<40} {result['n_samples']:<10} {result['bad_percentage']:<8.2f} {result['total_bad']:<10}")
+    
+    print("\nWorst performing flow:")
+    worst = results[0]
+    print(f"  Path: {worst['flow_path']}")
+    print(f"  Bad samples: {worst['total_bad']}/{worst['n_samples']} ({worst['bad_percentage']:.2f}%)")
+
 def main():
     import argparse
     import sys
     
     parser = argparse.ArgumentParser(description="Evaluate a normalizing flow model")
-    parser.add_argument("model_path", help="Path to the model directory")
+    parser.add_argument("--model_path", help="Path to the model directory",
+                        type=str, default="")
     parser.add_argument("--test-only", action="store_true", 
                        help="Only test if model can generate samples (quick test)")
     parser.add_argument("--n-samples", type=int, default=10_000,
                        help="Number of samples to generate for evaluation")
     parser.add_argument("--n-test-samples", type=int, default=10_000,
                        help="Number of samples for quick test")
+    parser.add_argument("--report-bad-samples", action="store_true",
+                       help="Report bad samples across all flows and exit")
     
     args = parser.parse_args()
     
     try:
-        if args.test_only:
+        if args.report_bad_samples:
+            # Report bad samples across all flows and exit
+            report_bad_samples_across_flows()
+            return True
+        elif args.test_only:
             # Quick test - just see if model can generate samples
-            print(f"Quick test for model: {args.model_path}")
             checker = CheckerUnconditional(args.model_path, N_samples=args.n_test_samples)
             
             # Try to generate samples
             samples = checker.generate_nf_samples_for_test(args.n_test_samples)
             
-            print(f"✓ Success - Shape: {samples.shape}")
-            print(f"  Ranges: {[f'[{samples[:, i].min():.3f}, {samples[:, i].max():.3f}]' for i in range(samples.shape[1])]}")
+            if VERBOSE:
+                print(f"✓ Success - Shape: {samples.shape}")
+                print(f"  Ranges: {[f'[{samples[:, i].min():.3f}, {samples[:, i].max():.3f}]' for i in range(samples.shape[1])]}")
             
             # Print 0.01 and 0.99 quantiles
             for i in range(samples.shape[1]):
                 lower, upper = np.quantile(samples[:, i], [0.01, 0.99])
-                print(f"Parameter {i} quantiles: [{lower:.3f}, {upper:.3f}]")
+                if VERBOSE:
+                    print(f"Parameter {i} quantiles: [{lower:.3f}, {upper:.3f}]")
             
             # Check for issues
             if np.any(np.isnan(samples)) or np.any(np.isinf(samples)):

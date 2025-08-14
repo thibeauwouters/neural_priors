@@ -1,0 +1,23 @@
+{
+  "n_samples_generated": 200000,
+  "total_bad_samples": 206,
+  "bad_percentage": 0.10300000000000001,
+  "violation_details": {
+    "mass_ratio_out_of_bounds": {
+      "count": 129,
+      "percentage": 0.0645
+    },
+    "lambda_1_negative": {
+      "count": 21,
+      "percentage": 0.0105
+    },
+    "lambda_2_negative": {
+      "count": 6,
+      "percentage": 0.003
+    },
+    "lambda_ordering_violation": {
+      "count": 93,
+      "percentage": 0.0465
+    }
+  }
+}
