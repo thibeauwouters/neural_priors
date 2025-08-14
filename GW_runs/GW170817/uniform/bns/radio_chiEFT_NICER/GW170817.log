@@ -1,194 +1,185 @@
-17:10 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER
-17:10 INFO    : Using geocent_time from reference parameters: 1187008882.43
-17:10 INFO    : Showing the reference parameters for GW170817
-17:10 INFO    : chirp_mass: 1.1975896
-17:10 INFO    : symmetric_mass_ratio: 0.2461001
-17:10 INFO    : a_1: 0.01890608
-17:10 INFO    : a_2: 0.04888488
-17:10 INFO    : tilt_1: 0.0
-17:10 INFO    : tilt_2: 0.0
-17:10 INFO    : phi_jl: 0.0
-17:10 INFO    : phi_12: 0.0
-17:10 INFO    : lambda_1: 100.0
-17:10 INFO    : lambda_2: 200.0
-17:10 INFO    : luminosity_distance: 40.06331818
-17:10 INFO    : phase: 5.88649652
-17:10 INFO    : theta_jn: 1.93095421
-17:10 INFO    : psi: 1.59687217
-17:10 INFO    : ra: 3.39736826
-17:10 INFO    : dec: -0.34000186
-17:10 INFO    : mass_ratio: 0.7779384106788951
-17:10 INFO    : mass_1: 1.5621553813557303
-17:10 INFO    : mass_2: 1.2152606746053602
-17:10 INFO    : Geocent time is 1187008882.43 and duration is 128.0
-17:10 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
-17:10 INFO    : Relative binning delta 0.001
-17:10 INFO    : Waveform generator initiated with
+12:56 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER
+12:56 INFO    : Using geocent_time from reference parameters: 1187008882.43
+12:56 INFO    : Showing the reference parameters for GW170817
+12:56 INFO    : chirp_mass: 1.1975896
+12:56 INFO    : symmetric_mass_ratio: 0.2461001
+12:56 INFO    : a_1: 0.01890608
+12:56 INFO    : a_2: 0.04888488
+12:56 INFO    : tilt_1: 0.0
+12:56 INFO    : tilt_2: 0.0
+12:56 INFO    : phi_jl: 0.0
+12:56 INFO    : phi_12: 0.0
+12:56 INFO    : lambda_1: 100.0
+12:56 INFO    : lambda_2: 200.0
+12:56 INFO    : luminosity_distance: 40.06331818
+12:56 INFO    : phase: 5.88649652
+12:56 INFO    : theta_jn: 1.93095421
+12:56 INFO    : psi: 1.59687217
+12:56 INFO    : ra: 3.39736826
+12:56 INFO    : dec: -0.34000186
+12:56 INFO    : mass_ratio: 0.7779384106788951
+12:56 INFO    : mass_1: 1.5621553813557303
+12:56 INFO    : mass_2: 1.2152606746053602
+12:56 INFO    : Geocent time is 1187008882.43 and duration is 128.0
+12:56 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+12:56 INFO    : Relative binning delta 0.01
+12:56 INFO    : Waveform generator initiated with
   frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
   time_domain_source_model: None
   parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
-17:10 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
-17:10 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
-17:10 INFO    : Sampling with an NF prior, with name bns
-17:10 INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt
-17:10 INFO    : Loaded NF kwargs from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model_kwargs.json
-17:10 INFO    : Using bounds: [(0.01, 5.0), (0.125, 1.0), (0.01, 100000), (0.01, 100000)] for names: ['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2']
-17:10 INFO    : Using glasflow backend
-17:10 INFO    : Loading scaler from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/scaler.gz
-17:10 INFO    : Parameter ranges from scaler:
-17:10 INFO    :   chirp_mass_source: [0.871197, 2.675429]
-17:10 INFO    :   mass_ratio: [0.321086, 1.000000]
-17:10 INFO    :   lambda_1: [2.294757, 5215.235637]
-17:10 INFO    :   lambda_2: [3.939311, 6905.757579]
-17:10 INFO    : Loaded NFDist prior with n_dim = 4 from flow_filename = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt
-17:10 INFO    : Going to show priors in priors:
-17:10 INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
-17:10 INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
-17:10 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
-17:10 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
-17:10 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
-17:10 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
-17:10 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
-17:10 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
-17:10 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
-17:10 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
-17:10 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
-17:10 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
-17:10 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
-17:10 INFO    :       chirp_mass_source: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='chirp_mass_source', latex_label='chirp_mass_source', unit=None)
-17:10 INFO    :       mass_ratio: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='mass_ratio', latex_label='$q$', unit=None)
-17:10 INFO    :       lambda_1: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
-17:10 INFO    :       lambda_2: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
-17:10 INFO    : Running through data generation steps now
-17:10 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
-17:10 INFO    : Successfully loaded H1:LOSC-STRAIN.
-17:10 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf
-17:10 INFO    : Successfully loaded L1:LOSC-STRAIN.
-17:10 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf
-17:11 INFO    : Successfully loaded V1:LOSC-STRAIN.
-17:11 INFO    : Frequency array for H1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+12:56 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+12:56 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
+12:56 INFO    : Sampling with an NF prior, with name bns
+12:56 INFO    : Using NF model path: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt
+12:56 INFO    : Loaded NF kwargs from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model_kwargs.json
+12:56 INFO    : Using bounds: [(0.01, 5.0), (0.125, 1.0), (0.01, 100000), (0.01, 100000)] for names: ['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2']
+12:56 INFO    : Using glasflow backend
+12:56 INFO    : Loading scaler from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/scaler.gz
+12:56 INFO    : Parameter ranges from scaler:
+12:56 INFO    :   chirp_mass_source: [0.871197, 2.675429]
+12:56 INFO    :   mass_ratio: [0.321086, 1.000000]
+12:56 INFO    :   lambda_1: [2.294757, 5215.235637]
+12:56 INFO    :   lambda_2: [3.939311, 6905.757579]
+12:56 INFO    : Loaded NFDist prior with n_dim = 4 from flow_filename = /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt
+12:56 INFO    : Going to show priors in priors:
+12:56 INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
+12:56 INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+12:56 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+12:56 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+12:56 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+12:56 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+12:56 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+12:56 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+12:56 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+12:56 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+12:56 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+12:56 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+12:56 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+12:56 INFO    :       chirp_mass_source: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='chirp_mass_source', latex_label='chirp_mass_source', unit=None)
+12:56 INFO    :       mass_ratio: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='mass_ratio', latex_label='$q$', unit=None)
+12:56 INFO    :       lambda_1: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+12:56 INFO    :       lambda_2: NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
+12:56 INFO    : Running through data generation steps now
+12:56 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
+12:56 INFO    : Successfully loaded H1:LOSC-STRAIN.
+12:56 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf
+12:56 INFO    : Successfully loaded L1:LOSC-STRAIN.
+12:56 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf
+12:56 INFO    : Successfully loaded V1:LOSC-STRAIN.
+12:56 INFO    : Frequency array for H1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
  2.04799219e+03 2.04800000e+03]
-17:11 INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+12:56 INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
  2.04799219e+03 2.04800000e+03]
-17:11 INFO    : Frequency array for V1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+12:56 INFO    : Frequency array for V1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
  2.04799219e+03 2.04800000e+03]
-17:11 INFO    : Priors loaded:
-17:11 INFO    : Waveform generator initiated with
+12:56 INFO    : Priors loaded:
+12:56 INFO    : Waveform generator initiated with
   frequency_domain_source_model: bilby.gw.source.binary_neutron_star_frequency_sequence
   time_domain_source_model: None
   parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
-17:11 INFO    : Using relative binning likelihood
-17:11 INFO    : Going to construct bins with:
-17:11 INFO    :   - delta: 0.001
-17:11 INFO    :   - minimum_bin_threshold: 1000
-17:11 INFO    : Applying constraints on resonance frequency
-17:11 INFO    : Minimum frequency: 23.1, Maximum frequency: 2048.0
-17:11 INFO    : Percentage error on chirp mass -0.047143516373249206 and mass_ratio 0.0
-17:11 INFO    : Perturbed chirp mass and mass ratio: 1.1981541858491602 0.7779384106788951
-17:11 INFO    : Perturbed lambda_1: 300.0
-17:11 INFO    : Perturbed lambda_2: 500.0
-17:11 INFO    : Length of the original frequency array 262145
-17:11 INFO    : Frequency range for binning: 23.10 - 2048.00 Hz
-17:11 INFO    : Number of frequency bins available: 259188
-17:11 INFO    : Using following powers: [-1.66666667 -0.66666667  1.          1.66666667  2.33333333
+12:56 INFO    : Using relative binning likelihood
+12:56 INFO    : Going to construct bins with:
+12:56 INFO    :   - delta: 0.01
+12:56 INFO    :   - minimum_bin_threshold: 1000
+12:56 INFO    : Applying constraints on resonance frequency
+12:56 INFO    : Minimum frequency: 23.1, Maximum frequency: 2048.0
+12:56 INFO    : Percentage error on chirp mass -0.047143516373249206 and mass_ratio 0.0
+12:56 INFO    : Perturbed chirp mass and mass ratio: 1.1981541858491602 0.7779384106788951
+12:56 INFO    : Perturbed lambda_1: 300.0
+12:56 INFO    : Perturbed lambda_2: 500.0
+12:56 INFO    : Length of the original frequency array 262145
+12:56 INFO    : Frequency range for binning: 23.10 - 2048.00 Hz
+12:56 INFO    : Number of frequency bins available: 259188
+12:56 INFO    : Using following powers: [-1.66666667 -0.66666667  1.          1.66666667  2.33333333
   3.          3.33333333  4.        ]
-17:11 INFO    : Bins generated using analytic method: 41953
-17:11 INFO    : Using bisection method to create the grid
-17:11 INFO    : [  23.1015625   23.109375    23.1171875 ... 2047.96875
- 2047.9921875 2048.       ]
-17:11 INFO    : Make sure ref parameters are correct {'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'a_1': 0.01890608, 'a_2': 0.04888488, 'tilt_1': 0.0, 'tilt_2': 0.0, 'phi_jl': 0.0, 'phi_12': 0.0, 'lambda_1': 100.0, 'lambda_2': 200.0, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
-17:11 INFO    : Starting up the sampler now . . .
-17:11 INFO    : npool is set to: 64
-17:11 INFO    : Running for label 'bns', output will be saved to '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER'
-17:11 INFO    : Using lal version 7.6.1
-17:11 INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
-17:11 INFO    : Using lalsimulation version 6.1.0
-17:11 INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
-17:11 INFO    : Analysis priors:
-17:11 INFO    : luminosity_distance=bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
-17:11 INFO    : geocent_time=Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
-17:11 INFO    : a_1=Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
-17:11 INFO    : a_2=Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
-17:11 INFO    : tilt_1=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
-17:11 INFO    : tilt_2=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
-17:11 INFO    : phi_12=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
-17:11 INFO    : phi_jl=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
-17:11 INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
-17:11 INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
-17:11 INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
-17:11 INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
-17:11 INFO    : phase=Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
-17:11 INFO    : chirp_mass_source=NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='chirp_mass_source', latex_label='chirp_mass_source', unit=None)
-17:11 INFO    : mass_ratio=NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='mass_ratio', latex_label='$q$', unit=None)
-17:11 INFO    : lambda_1=NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
-17:11 INFO    : lambda_2=NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
-17:11 INFO    : Analysis likelihood class: <class 'LikelihoodRB.RelBinning'>
-17:11 INFO    : Analysis likelihood noise evidence: -821024.6462931833
-17:11 INFO    : Single likelihood evaluation took 6.943e-02 s
-17:11 INFO    : Using sampler Dynesty with kwargs {'nlive': 1024, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'npdim': None, 'rstate': None, 'queue_size': 64, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'gradient': None, 'grad_args': None, 'grad_kwargs': None, 'compute_jac': False, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'fmove': 0.9, 'max_move': 100, 'update_func': None, 'ncdim': None, 'blob': False, 'save_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'n_effective': None, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x154075c1af50>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
-17:11 INFO    : Checkpoint every check_point_delta_t = 3600s
-17:11 INFO    : Using dynesty version 2.1.5
-17:11 INFO    : Using the bilby-implemented acceptance-walk sampling with an average of 60 accepted steps per MCMC and maximum length 5000
-17:11 INFO    : Setting up multiproccesing pool with 64 processes
-17:11 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle does not exist.
-17:11 INFO    : Generating initial points from the prior
-17:13 INFO    : Generating initial points from the prior DONE
-18:14 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-18:14 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-18:14 WARNING : Failed to create dynesty state plot at checkpoint
-18:14 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-18:14 WARNING : Failed to create dynesty unit state plot at checkpoint
-18:14 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-18:14 WARNING : Failed to create dynesty run plot at checkpoint
-19:14 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-20:15 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-21:16 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-21:16 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-21:16 WARNING : Failed to create dynesty state plot at checkpoint
-21:16 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-21:16 WARNING : Failed to create dynesty unit state plot at checkpoint
-21:16 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-21:16 WARNING : Failed to create dynesty run plot at checkpoint
-22:19 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-22:19 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-22:19 WARNING : Failed to create dynesty state plot at checkpoint
-22:19 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-22:19 WARNING : Failed to create dynesty unit state plot at checkpoint
-22:19 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-22:19 WARNING : Failed to create dynesty run plot at checkpoint
-23:20 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-00:22 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-01:23 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-02:25 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-03:26 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-04:28 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-05:29 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-06:31 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-07:32 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-08:34 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-09:36 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-10:41 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-11:44 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-12:45 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-13:45 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-14:46 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-15:50 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-16:51 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-17:56 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-18:57 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-19:59 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-21:01 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-22:05 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-23:09 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-00:14 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-01:04 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
-01:05 INFO    : Starting to close worker pool.
-01:05 INFO    : Finished closing worker pool.
-01:05 INFO    : Rejection sampling nested samples to obtain 4611 posterior samples
-01:05 INFO    : Sampling time: 1 day, 7:52:13.621698
-01:05 INFO    : Summary of results:
-nsamples: 4611
+12:56 INFO    : Bins generated using analytic method: 4854
+12:56 INFO    : Using bisection method to create the grid
+12:56 INFO    : [  23.1015625   23.125       23.1484375 ... 2047.703125
+ 2047.921875  2048.       ]
+12:56 INFO    : Make sure ref parameters are correct {'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'a_1': 0.01890608, 'a_2': 0.04888488, 'tilt_1': 0.0, 'tilt_2': 0.0, 'phi_jl': 0.0, 'phi_12': 0.0, 'lambda_1': 100.0, 'lambda_2': 200.0, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
+12:56 INFO    : Starting up the sampler now . . .
+12:56 INFO    : Running for label 'bns', output will be saved to '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER'
+12:56 INFO    : Using lal version 7.6.1
+12:56 INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+12:56 INFO    : Using lalsimulation version 6.1.0
+12:56 INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+12:56 INFO    : Analysis priors:
+12:56 INFO    : luminosity_distance=bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
+12:56 INFO    : geocent_time=Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+12:56 INFO    : a_1=Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+12:56 INFO    : a_2=Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+12:56 INFO    : tilt_1=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+12:56 INFO    : tilt_2=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+12:56 INFO    : phi_12=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+12:56 INFO    : phi_jl=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+12:56 INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+12:56 INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+12:56 INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+12:56 INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+12:56 INFO    : phase=Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+12:56 INFO    : chirp_mass_source=NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='chirp_mass_source', latex_label='chirp_mass_source', unit=None)
+12:56 INFO    : mass_ratio=NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='mass_ratio', latex_label='$q$', unit=None)
+12:56 INFO    : lambda_1=NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_1', latex_label='$\\Lambda_1$', unit=None)
+12:56 INFO    : lambda_2=NFPrior(dist=NFDist(names=['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], flow_filename='/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT_NICER/model.pt', use_tilde='False', use_component_masses='False'), name='lambda_2', latex_label='$\\Lambda_2$', unit=None)
+12:56 INFO    : Analysis likelihood class: <class 'LikelihoodRB.RelBinning'>
+12:56 INFO    : Analysis likelihood noise evidence: -821024.6462931833
+12:56 INFO    : Single likelihood evaluation took 1.516e-02 s
+12:56 INFO    : Using sampler Dynesty with kwargs {'nlive': 4096, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'npdim': None, 'rstate': None, 'queue_size': 64, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'gradient': None, 'grad_args': None, 'grad_kwargs': None, 'compute_jac': False, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'fmove': 0.9, 'max_move': 100, 'update_func': None, 'ncdim': None, 'blob': False, 'save_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'n_effective': None, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x1474efffec80>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
+12:56 INFO    : Checkpoint every check_point_delta_t = 3600s
+12:56 INFO    : Using dynesty version 2.1.5
+12:56 INFO    : Using the bilby-implemented acceptance-walk sampling with an average of 60 accepted steps per MCMC and maximum length 5000
+12:56 INFO    : Setting up multiproccesing pool with 64 processes
+12:56 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle does not exist.
+12:56 INFO    : Generating initial points from the prior
+12:58 INFO    : Generating initial points from the prior DONE
+13:58 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+14:59 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+15:59 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+15:59 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+15:59 WARNING : Failed to create dynesty state plot at checkpoint
+15:59 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+15:59 WARNING : Failed to create dynesty unit state plot at checkpoint
+15:59 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+15:59 WARNING : Failed to create dynesty run plot at checkpoint
+17:00 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+18:00 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+19:01 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+20:01 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+21:02 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+21:02 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+21:02 WARNING : Failed to create dynesty state plot at checkpoint
+21:02 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+21:02 WARNING : Failed to create dynesty unit state plot at checkpoint
+21:02 WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+21:02 WARNING : Failed to create dynesty run plot at checkpoint
+22:03 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+23:04 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+00:05 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+01:07 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+02:08 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+03:08 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+04:10 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+05:11 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+06:12 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+07:14 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+08:15 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+09:17 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+10:19 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+11:20 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+12:22 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+13:24 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+14:26 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+15:27 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+16:28 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+17:30 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+18:09 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/bns/radio_chiEFT_NICER/bns_resume.pickle
+18:10 INFO    : Starting to close worker pool.
+18:10 INFO    : Finished closing worker pool.
+18:10 INFO    : Rejection sampling nested samples to obtain 19421 posterior samples
+18:10 INFO    : Sampling time: 1 day, 5:12:21.082814
+18:11 INFO    : Summary of results:
+nsamples: 19421
 ln_noise_evidence: -821024.646
-ln_evidence: -820502.354 +/-  0.210
-ln_bayes_factor: 522.292 +/-  0.210
+ln_evidence: -820503.171 +/-  0.108
+ln_bayes_factor: 521.476 +/-  0.108
 

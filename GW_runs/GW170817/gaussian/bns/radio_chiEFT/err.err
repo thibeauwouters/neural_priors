@@ -149,3 +149,36 @@
 15:07 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
 15:07 bilby WARNING : Failed to create dynesty run plot at checkpoint
 16:08 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+17:09 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+18:10 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+19:11 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+20:11 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+21:13 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+22:13 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+23:15 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+00:15 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+01:17 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+02:18 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+03:19 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+04:20 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+05:22 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+06:23 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+07:24 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+08:26 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+09:27 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+10:28 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+11:30 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+12:31 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+13:33 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+14:34 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+15:04 bilby INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/gaussian/bns/radio_chiEFT/bns_resume.pickle
+15:05 bilby INFO    : Starting to close worker pool.
+15:05 bilby INFO    : Finished closing worker pool.
+15:05 bilby INFO    : Rejection sampling nested samples to obtain 19662 posterior samples
+15:05 bilby INFO    : Sampling time: 1 day, 2:58:23.843689
+15:05 bilby INFO    : Summary of results:
+nsamples: 19662
+ln_noise_evidence: -821024.646
+ln_evidence: -820499.680 +/-  0.105
+ln_bayes_factor: 524.967 +/-  0.105
+

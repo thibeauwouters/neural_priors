@@ -2,8 +2,8 @@
 
 # Define variables
 GW_event="GW230529"
-population_types=("uniform" "gaussian" "double_gaussian")     # List of population types
-eos_list=("radio" "radio_chiEFT" "radio_chiEFT_NICER")           # List of EOS options (use "default" as one of them if needed)
+population_types=("uniform" "gaussian" "double_gaussian" $GW_event)
+eos_list=("radio" "radio_chiEFT" "radio_chiEFT_NICER")
 
 echo "⚠️  WARNING: This will delete all files in:"
 for population_type in "${population_types[@]}"; do
