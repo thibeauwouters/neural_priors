@@ -8,8 +8,11 @@ def generate_dag(gw_event, output_file, relative_binning_delta=1e-3):
     """Generate DAG file for the specified GW event."""
     
     population_types = ["uniform", "gaussian", "double_gaussian"]
-    eos_samples_names = ["radio", "radio_chiEFT", "radio_chiEFT_NICER", gw_event]
-    prior_names = ["bns", "nsbh"]
+    eos_samples_names = ["radio", "radio_chiEFT"]
+    if gw_event == "GW170817":
+        prior_names = ["bns"]
+    else:
+        prior_names = ["bns", "nsbh"]
     
     job_counter = 0
     job_letters = []
@@ -52,10 +55,7 @@ if __name__ == "__main__":
     import sys
     
     if len(sys.argv) < 3 or len(sys.argv) > 4:
-        print("Usage: python generate_dag.py <GW_event> <output_file> [relative_binning_delta]")
-        print("Example: python generate_dag.py GW170817 dag_files/run_GW170817_generated.dag")
-        print("Example: python generate_dag.py GW170817 dag_files/run_GW170817_generated.dag 0.005")
-        print("Default relative_binning_delta: 1e-3")
+        print("NOTE: python generate_dag.py <GW_event> <output_file> [relative_binning_delta]")
         sys.exit(1)
     
     gw_event = sys.argv[1]
