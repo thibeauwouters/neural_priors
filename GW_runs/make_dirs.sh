@@ -9,8 +9,13 @@ top_levels=("uniform" "gaussian" "double_gaussian" "$GW_event")
 # Middle-level subdirs
 mid_subdirs=("default" "bns" "nsbh")
 
-# Lowest-level subdirs (only for bns and nsbh)
-nested_subdirs=("radio" "radio_chiEFT" "radio_chiEFT_NICER")
+# Lowest-level subdirs (base set)
+nested_subdirs=("radio" "radio_chiEFT" "radio_NICER" "radio_chiEFT_NICER")
+
+# Add radio_GW170817 for GW190425
+if [ "$GW_event" = "GW190425" ]; then
+    nested_subdirs+=("radio_GW170817")
+fi
 
 # Loop through top-levels
 for top in "${top_levels[@]}"; do
@@ -25,4 +30,4 @@ for top in "${top_levels[@]}"; do
     done
 done
 
-echo "Directory structure created successfully."
+echo "Directory structure created successfully for $GW_event."
