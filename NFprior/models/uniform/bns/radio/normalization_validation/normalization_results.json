@@ -1,0 +1,21 @@
+{
+  "model_path": "../NFprior/models/uniform/bns/radio",
+  "evidence": -18.04474484585067,
+  "evidence_error": 0.11882131150983047,
+  "prior_volume_padded": 166948948.86325565,
+  "volume_used": 80511645.86383869,
+  "volume_source": "NFDist_internal",
+  "log_normalization": 0.1591675551905638,
+  "normalization": 1.1725343944462407,
+  "normalization_error": 0.13932207453848722,
+  "tolerance": 0.2,
+  "parameter_names": [
+    "chirp_mass_source",
+    "mass_ratio",
+    "lambda_1",
+    "lambda_2"
+  ],
+  "n_parameters": 4,
+  "nlive": 1000,
+  "padding_factor": 0.1
+}
