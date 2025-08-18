@@ -13,7 +13,6 @@ import json
 import argparse
 import shutil
 import numpy as np
-import joblib
 from typing import Dict, Any
 
 # Fixed options from cornerplots.py
@@ -23,78 +22,21 @@ SOURCE_TYPES = ["bns", "nsbh"]
 EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
 
 
-def load_scaler_jacobian_correction(model_path: str) -> float:
-    """
-    Load the MinMaxScaler from a model directory and compute the Jacobian correction.
-    
-    Args:
-        model_path (str): Path to the model directory containing scaler.gz
-        
-    Returns:
-        float: Jacobian correction factor: -sum(log(data_max_ - data_min_))
-    """
-    scaler_path = os.path.join(model_path, "scaler.gz")
-    
-    if not os.path.exists(scaler_path):
-        print(f"Warning: No scaler found at {scaler_path}")
-        return 0.0
-    
-    try:
-        scaler = joblib.load(scaler_path)
-        
-        if not hasattr(scaler, 'data_min_') or not hasattr(scaler, 'data_max_'):
-            print(f"Warning: Scaler at {scaler_path} does not have expected attributes")
-            return 0.0
-        
-        # Compute Jacobian correction: -sum(log(data_max_ - data_min_))
-        data_range = scaler.data_max_ - scaler.data_min_
-        jacobian_correction = -np.sum(np.log(data_range))
-        
-        return jacobian_correction
-        
-    except Exception as e:
-        print(f"Error loading scaler from {scaler_path}: {e}")
-        return 0.0
 
 
-def get_model_path_for_run(event: str, population: str, source: str, eos: str, nf_base_dir: str = "../NFprior/models/") -> str:
-    """
-    Get the model path for a specific run configuration.
-    
-    Args:
-        event (str): GW event name
-        population (str): Population type
-        source (str): Source type (bns/nsbh)
-        eos (str): EOS type
-        nf_base_dir (str): Base directory for NF models
-        
-    Returns:
-        str: Path to the model directory
-    """
-    return os.path.join(nf_base_dir, population, source, eos)
-
-
-def collect_all_bayes_factors(base_dir: str = "../GW_runs/", apply_jacobian_correction: bool = False, nf_base_dir: str = "../NFprior/models/") -> Dict[str, Any]:
+def collect_all_bayes_factors(base_dir: str = "../GW_runs/", replace_nsbh_zeros: bool = False) -> Dict[str, Any]:
     """
     Collect all Bayes factors from the GW runs directory structure.
     
     Args:
         base_dir (str): Base directory path (should be ../GW_runs/)
-        apply_jacobian_correction (bool): Whether to apply MinMaxScaler Jacobian correction
-        nf_base_dir (str): Base directory for NF models
+        replace_nsbh_zeros (bool): Replace 0.0 values with '<-200' for GW170817 NSBH runs
         
     Returns:
         Dict with nested structure matching directory layout plus log_evidence_err values
     """
     all_bayes_factors = {}
     log_evidence_errors = []
-    jacobian_corrections = {}
-    
-    if apply_jacobian_correction:
-        print("\n=== APPLYING JACOBIAN CORRECTION FOR MINMAXSCALER BUG ===")
-        print("This corrects for the missing Jacobian determinant in NFDist._ln_prob")
-        print("Correction formula: log_evidence_corrected = log_evidence_raw + (-sum(log(data_max_ - data_min_)))")
-        print("="*70)
     
     if not os.path.exists(base_dir):
         print(f"Base directory {base_dir} does not exist")
@@ -148,57 +90,38 @@ def collect_all_bayes_factors(base_dir: str = "../GW_runs/", apply_jacobian_corr
                                 result_data = json.load(f)
                                 bayes_factor = result_data.get("log_bayes_factor", 0.0)
                                 
-                                # Load and store Jacobian correction for this specific run
-                                model_path = get_model_path_for_run(gw_event, population_type, source_type, eos_type, nf_base_dir)
-                                jacobian_key = f"{population_type}_{source_type}_{eos_type}"
                                 
-                                if jacobian_key not in jacobian_corrections:
-                                    jacobian_correction = load_scaler_jacobian_correction(model_path)
-                                    jacobian_corrections[jacobian_key] = jacobian_correction
-                                    if jacobian_correction != 0.0:
-                                        print(f"        Jacobian correction for {jacobian_key}: {jacobian_correction:.6f}")
+                                # Apply special replacement for GW170817 NSBH zero values if requested
+                                if (replace_nsbh_zeros and gw_event == "GW170817" and 
+                                    source_type == "nsbh" and bayes_factor == 0.0):
+                                    all_bayes_factors[gw_event][population_type][source_type][eos_type] = "<-200"
                                 else:
-                                    jacobian_correction = jacobian_corrections[jacobian_key]
-                                
-                                # Store the Jacobian correction for this run in the nested structure
-                                jacobian_correction_key = f"{source_type}_jacobian_correction"
-                                if jacobian_correction_key not in all_bayes_factors[gw_event][population_type]:
-                                    all_bayes_factors[gw_event][population_type][jacobian_correction_key] = {}
-                                all_bayes_factors[gw_event][population_type][jacobian_correction_key][eos_type] = jacobian_correction
-                                
-                                # Apply Jacobian correction if requested
-                                if apply_jacobian_correction and bayes_factor != 0.0:
-                                    # Apply correction to log evidence (Bayes factor is difference of log evidences)
-                                    # Since different models have different corrections, we need to track them separately
-                                    corrected_bayes_factor = bayes_factor + jacobian_correction
-                                    print(f"        Raw Bayes factor: {bayes_factor:.6f}, Corrected: {corrected_bayes_factor:.6f} (correction: {jacobian_correction:.6f})")
-                                    bayes_factor = corrected_bayes_factor
-                                
-                                all_bayes_factors[gw_event][population_type][source_type][eos_type] = bayes_factor
+                                    all_bayes_factors[gw_event][population_type][source_type][eos_type] = bayes_factor
                                 
                                 # Collect log_evidence_err if available
                                 log_evidence_err = result_data.get("log_evidence_err")
                                 if log_evidence_err is not None:
                                     log_evidence_errors.append(log_evidence_err)
                                 
-                                if not apply_jacobian_correction:
-                                    print(f"        Found Bayes factor: {bayes_factor}")
+                                print(f"        Found Bayes factor: {bayes_factor}")
                         except (json.JSONDecodeError, KeyError, FileNotFoundError) as e:
                             print(f"        Error reading {result_file}: {e}. Setting to 0.0")
-                            all_bayes_factors[gw_event][population_type][source_type][eos_type] = 0.0
+                            # Apply special replacement for GW170817 NSBH zero values if requested
+                            if (replace_nsbh_zeros and gw_event == "GW170817" and source_type == "nsbh"):
+                                all_bayes_factors[gw_event][population_type][source_type][eos_type] = "<-200"
+                            else:
+                                all_bayes_factors[gw_event][population_type][source_type][eos_type] = 0.0
                     else:
                         print(f"        Result file not found: {result_file}. Setting to 0.0")
-                        all_bayes_factors[gw_event][population_type][source_type][eos_type] = 0.0
+                        # Apply special replacement for GW170817 NSBH zero values if requested
+                        if (replace_nsbh_zeros and gw_event == "GW170817" and source_type == "nsbh"):
+                            all_bayes_factors[gw_event][population_type][source_type][eos_type] = "<-200"
+                        else:
+                            all_bayes_factors[gw_event][population_type][source_type][eos_type] = 0.0
     
-    # Add log_evidence_errors and jacobian_corrections to the output dictionary
+    # Add log_evidence_errors to the output dictionary
     all_bayes_factors["log_evidence_errors"] = log_evidence_errors
-    all_bayes_factors["jacobian_corrections"] = jacobian_corrections
     print(f"Collected {len(log_evidence_errors)} log_evidence_err values")
-    
-    # if apply_jacobian_correction:
-    #     print(f"\nApplied Jacobian corrections for {len(jacobian_corrections)} model configurations:")
-    #     for key, correction in jacobian_corrections.items():
-    #         print(f"  {key}: {correction:.6f}")
     
     return all_bayes_factors
 
@@ -220,8 +143,7 @@ def get_jeffreys_color(log10_bf: float) -> str:
 
 def generate_latex_table(bayes_factors: Dict[str, Any],
                          include_gw_event: bool = False,
-                         source_first: bool = False,
-                         apply_jacobian_correction: bool = True) -> str:
+                         source_first: bool = False) -> str:
     """
     Generate LaTeX table code for the Bayes factors data.
     
@@ -264,12 +186,14 @@ def generate_latex_table(bayes_factors: Dict[str, Any],
                         pop_key in bayes_factors[event] and 
                         source_type in bayes_factors[event][pop_key] and 
                         eos_type in bayes_factors[event][pop_key][source_type] and
-                        not source_type.endswith('_jacobian_correction')):
+                        True):
                         bf_val = bayes_factors[event][pop_key][source_type][eos_type]
                         if bf_val != 0.0:
                             event_max_values[event] = max(event_max_values[event], bf_val)
     
     # Choose table layout based on source_first flag
+    print("bayes_factors")
+    print(bayes_factors)
     if source_first:
         return generate_source_first_table(bayes_factors, event_max_values, include_gw_event, 
                                           population_types_display, gw_event_populations)
@@ -281,6 +205,7 @@ def generate_latex_table(bayes_factors: Dict[str, Any],
 def generate_population_first_table(bayes_factors, event_max_values, include_gw_event, 
                                    population_types_display, gw_event_populations):
     """Generate table with population first, then source, then EOS."""
+    
     latex_lines = []
     
     # Translation dict for human-readable names
@@ -332,7 +257,7 @@ def generate_population_first_table(bayes_factors, event_max_values, include_gw_
                     any(pop_type in bayes_factors[event] and 
                         source_type in bayes_factors[event][pop_type] and 
                         eos_type in bayes_factors[event][pop_type][source_type] and
-                        bayes_factors[event][pop_type][source_type][eos_type] != 0.0
+                        bayes_factors[event][pop_type][source_type][eos_type] not in [0.0, "<-200"]
                         for pop_type in pop_types_to_check)
                     for event in GW_EVENTS
                 )
@@ -353,7 +278,7 @@ def generate_population_first_table(bayes_factors, event_max_values, include_gw_
                     any(pop_type in bayes_factors[event] and 
                         source_type in bayes_factors[event][pop_type] and 
                         eos_type in bayes_factors[event][pop_type][source_type] and
-                        bayes_factors[event][pop_type][source_type][eos_type] != 0.0
+                        bayes_factors[event][pop_type][source_type][eos_type] not in [0.0, "<-200"]
                         for pop_type in pop_types_to_check)
                     for event in GW_EVENTS
                 )
@@ -370,7 +295,7 @@ def generate_population_first_table(bayes_factors, event_max_values, include_gw_
                     any(pop_type in bayes_factors[event] and 
                         source_type in bayes_factors[event][pop_type] and 
                         eos_type in bayes_factors[event][pop_type][source_type] and
-                        bayes_factors[event][pop_type][source_type][eos_type] != 0.0
+                        bayes_factors[event][pop_type][source_type][eos_type] not in [0.0, "<-200"]
                         for pop_type in pop_types_to_check)
                     for event in GW_EVENTS
                 )
@@ -400,7 +325,9 @@ def generate_population_first_table(bayes_factors, event_max_values, include_gw_
                         source_type in bayes_factors[event][pop_key] and 
                         eos_type in bayes_factors[event][pop_key][source_type]):
                         bf_val = bayes_factors[event][pop_key][source_type][eos_type]
-                        if bf_val != 0.0:
+                        if bf_val == "<-200":
+                            event_cells.append("$<-200$")
+                        elif bf_val != 0.0:
                             # Show difference from maximum value in this column
                             max_val = event_max_values[event]
                             if max_val != float('-inf'):
@@ -497,7 +424,7 @@ def generate_source_first_table(bayes_factors, event_max_values, include_gw_even
                     any(pop_type in bayes_factors[event] and 
                         source_type in bayes_factors[event][pop_type] and 
                         eos_type in bayes_factors[event][pop_type][source_type] and
-                        bayes_factors[event][pop_type][source_type][eos_type] != 0.0
+                        bayes_factors[event][pop_type][source_type][eos_type] not in [0.0, "<-200"]
                         for pop_type in pop_types_to_check)
                     for event in GW_EVENTS
                 )
@@ -526,7 +453,7 @@ def generate_source_first_table(bayes_factors, event_max_values, include_gw_even
                     any(pop_type in bayes_factors[event] and 
                         source_type in bayes_factors[event][pop_type] and 
                         eos_type in bayes_factors[event][pop_type][source_type] and
-                        bayes_factors[event][pop_type][source_type][eos_type] != 0.0
+                        bayes_factors[event][pop_type][source_type][eos_type] not in [0.0, "<-200"]
                         for pop_type in pop_types_to_check)
                     for event in GW_EVENTS
                 )
@@ -543,7 +470,7 @@ def generate_source_first_table(bayes_factors, event_max_values, include_gw_even
                     any(pop_type in bayes_factors[event] and 
                         source_type in bayes_factors[event][pop_type] and 
                         eos_type in bayes_factors[event][pop_type][source_type] and
-                        bayes_factors[event][pop_type][source_type][eos_type] != 0.0
+                        bayes_factors[event][pop_type][source_type][eos_type] not in [0.0, "<-200"]
                         for pop_type in pop_types_to_check)
                     for event in GW_EVENTS
                 )
@@ -573,7 +500,9 @@ def generate_source_first_table(bayes_factors, event_max_values, include_gw_even
                         source_type in bayes_factors[event][pop_key] and 
                         eos_type in bayes_factors[event][pop_key][source_type]):
                         bf_val = bayes_factors[event][pop_key][source_type][eos_type]
-                        if bf_val != 0.0:
+                        if bf_val == "<-200":
+                            event_cells.append("$<-200$")
+                        elif bf_val != 0.0:
                             # Show difference from maximum value in this column
                             max_val = event_max_values[event]
                             if max_val != float('-inf'):
@@ -636,18 +565,18 @@ def convert_bayes_factors_to_log10(bayes_factors: Dict[str, Any]) -> Dict[str, A
             converted[event] = [err / np.log(10) for err in bayes_factors[event]]
             continue
         
-        if event == "jacobian_corrections":
-            # TODO: not sure, skip for now
-            continue
-            
         converted[event] = {}
         for population in bayes_factors[event]:
             converted[event][population] = {}
+            print("bayes_factors[event][population]")
+            print(bayes_factors[event][population])
             for source in bayes_factors[event][population]:
                 converted[event][population][source] = {}
                 for eos in bayes_factors[event][population][source]:
                     bf_val = bayes_factors[event][population][source][eos]
-                    if bf_val != 0.0:
+                    if bf_val == "<-200":
+                        converted[event][population][source][eos] = bf_val  # Keep string as-is
+                    elif bf_val != 0.0:
                         # Convert from ln to log10: log10(x) = ln(x) / ln(10)
                         converted[event][population][source][eos] = bf_val / np.log(10)
                     else:
@@ -671,10 +600,8 @@ def main():
                         help='Include GW-event specific population priors in table (default: False)')
     parser.add_argument('--source-first', action='store_true', default=True,
                         help='Organize table with source types first, then population types (default: False)')
-    parser.add_argument('--apply-jacobian-correction', action='store_true', default=False,
-                        help='Apply MinMaxScaler Jacobian correction to fix NFDist normalization bug (default: False)')
-    parser.add_argument('--nf-base-dir', default='../NFprior/models/',
-                        help='Base directory for NF models (default: ../NFprior/models/)')
+    parser.add_argument('--replace-nsbh-zeros', action='store_true', default=True,
+                        help='Replace 0.0 values with "<-200" for GW170817 NSBH runs (default: False)')
     
     args = parser.parse_args()
     
@@ -688,13 +615,8 @@ def main():
     
     if args.get_JSON:
         print(f"Scanning directory structure in: {base_dir}")
-        if args.apply_jacobian_correction:
-            print(f"NF models directory: {args.nf_base_dir}")
         
-        print("apply_jacobian_correction")
-        print(args.apply_jacobian_correction)
-        
-        bayes_factors = collect_all_bayes_factors(base_dir, apply_jacobian_correction=args.apply_jacobian_correction, nf_base_dir=args.nf_base_dir)
+        bayes_factors = collect_all_bayes_factors(base_dir, replace_nsbh_zeros=args.replace_nsbh_zeros)
         print(f"Saving JSON results to: {json_file}")
         with open(json_file, 'w') as f:
             json.dump(bayes_factors, f, indent=2)
@@ -713,12 +635,6 @@ def main():
             mean_ln_err = np.mean(bayes_factors["log_evidence_errors"])
             print(f"Mean log evidence error (ln): {mean_ln_err:.4f}")
         
-        # Print Jacobian correction summary if available
-        if "jacobian_corrections" in bayes_factors and bayes_factors["jacobian_corrections"]:
-            corrections = list(bayes_factors["jacobian_corrections"].values())
-            if corrections:
-                print(f"Jacobian correction range: [{min(corrections):.6f}, {max(corrections):.6f}]")
-                print(f"Mean Jacobian correction: {np.mean(corrections):.6f}")
         
         # Convert to log10 if requested
         if args.convert_to_log10:
@@ -733,8 +649,7 @@ def main():
         print(f"Generating LaTeX table and saving to: {latex_file}. Source_first = {args.source_first}")
         latex_table = generate_latex_table(bayes_factors,
                                            include_gw_event=args.include_gw_event,
-                                           source_first=args.source_first,
-                                           apply_jacobian_correction=args.apply_jacobian_correction)
+                                           source_first=args.source_first)
         with open(latex_file, 'w') as f:
             f.write(latex_table)
         
