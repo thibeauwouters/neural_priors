@@ -1,0 +1,101 @@
+000 (2611471.000.000) 2025-08-14 21:15:39 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+001 (2611471.000.000) 2025-08-14 23:22:49 Job executing on host: <145.107.4.166:9618?addrs=145.107.4.166-9618+[2a07-8500-120-e070--a6]-9618&alias=wn-pijl-005.nikhef.nl&noUDP&sock=startd_4438_ad66>
+	SlotName: slot1_22@wn-pijl-005.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_da94fc77_f482_5768_74f3_9760484f6d37 }
+	CondorScratchDir = "/scratch/condor_execute/dir_1147345"
+	Cpus = 1
+	Disk = 16790368
+	GPUs = 1
+	GPUs_GPU_da94fc77_f482_5768_74f3_9760484f6d37 = [ Id = "GPU-da94fc77-f482-5768-74f3-9760484f6d37"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "da94fc77-f482-5768-74f3-9760484f6d37"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "570.124.06"; DriverVersion = 12.8; DevicePciBusId = "0000:C1:00.0"; GlobalMemoryMb = 45468; MaxSupportedVersion = 12080 ]
+	Memory = 16384
+...
+006 (2611471.000.000) 2025-08-14 23:23:03 Image size of job updated: 260640
+	255  -  MemoryUsage of job (MB)
+	260640  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-14 23:28:04 Image size of job updated: 1322396
+	1290  -  MemoryUsage of job (MB)
+	1320736  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-14 23:33:04 Image size of job updated: 1322396
+	1290  -  MemoryUsage of job (MB)
+	1320960  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-14 23:53:07 Image size of job updated: 1322396
+	1291  -  MemoryUsage of job (MB)
+	1320964  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 00:08:08 Image size of job updated: 1322396
+	1291  -  MemoryUsage of job (MB)
+	1320968  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 00:23:10 Image size of job updated: 1322396
+	1291  -  MemoryUsage of job (MB)
+	1320972  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 00:38:12 Image size of job updated: 1322396
+	1291  -  MemoryUsage of job (MB)
+	1320976  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 00:48:14 Image size of job updated: 1336148
+	1305  -  MemoryUsage of job (MB)
+	1336148  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 00:58:15 Image size of job updated: 1336152
+	1305  -  MemoryUsage of job (MB)
+	1336152  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 01:08:15 Image size of job updated: 1336156
+	1305  -  MemoryUsage of job (MB)
+	1336156  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 01:13:16 Image size of job updated: 1336160
+	1305  -  MemoryUsage of job (MB)
+	1336160  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 01:23:17 Image size of job updated: 1336164
+	1305  -  MemoryUsage of job (MB)
+	1336164  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 01:33:18 Image size of job updated: 1346596
+	1316  -  MemoryUsage of job (MB)
+	1346596  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 01:38:19 Image size of job updated: 1507052
+	1472  -  MemoryUsage of job (MB)
+	1507052  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 01:43:19 Image size of job updated: 1563964
+	1528  -  MemoryUsage of job (MB)
+	1563964  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 02:03:21 Image size of job updated: 1565900
+	1530  -  MemoryUsage of job (MB)
+	1565900  -  ResidentSetSize of job (KB)
+...
+006 (2611471.000.000) 2025-08-15 02:18:23 Image size of job updated: 1566500
+	1530  -  MemoryUsage of job (MB)
+	1566500  -  ResidentSetSize of job (KB)
+...
+005 (2611471.000.000) 2025-08-15 02:37:22 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 03:13:58, Sys 0 00:00:29  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 03:13:58, Sys 0 00:00:29  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            : 17500    16777216  16790368 
+	   GPUs                 :                 1         1 "GPU-da94fc77-f482-5768-74f3-9760484f6d37"
+	   GpusMemory (MB)      :  1316                       
+	   Memory (MB)          :  1530       16384     16384 
+	   TimeExecute (s)      : 11673                       
+	   TimeSlotBusy (s)     : 11674                       
+
+	Job terminated of its own accord at 2025-08-15T00:37:22Z with exit-code 0.
+...

@@ -1,0 +1,85 @@
+000 (2611470.000.000) 2025-08-14 21:15:34 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+...
+001 (2611470.000.000) 2025-08-14 23:22:49 Job executing on host: <145.107.4.166:9618?addrs=145.107.4.166-9618+[2a07-8500-120-e070--a6]-9618&alias=wn-pijl-005.nikhef.nl&noUDP&sock=startd_4438_ad66>
+	SlotName: slot1_20@wn-pijl-005.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_3e642e18_5efd_af40_3ee1_f1553d6fb7f8 }
+	CondorScratchDir = "/scratch/condor_execute/dir_1147343"
+	Cpus = 1
+	Disk = 16790368
+	GPUs = 1
+	GPUs_GPU_3e642e18_5efd_af40_3ee1_f1553d6fb7f8 = [ Id = "GPU-3e642e18-5efd-af40-3ee1-f1553d6fb7f8"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "3e642e18-5efd-af40-3ee1-f1553d6fb7f8"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "570.124.06"; DriverVersion = 12.8; DevicePciBusId = "0000:01:00.0"; GlobalMemoryMb = 45468; MaxSupportedVersion = 12080 ]
+	Memory = 16384
+...
+006 (2611470.000.000) 2025-08-14 23:23:03 Image size of job updated: 265704
+	260  -  MemoryUsage of job (MB)
+	265704  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-14 23:28:04 Image size of job updated: 1330044
+	1297  -  MemoryUsage of job (MB)
+	1328072  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-14 23:33:05 Image size of job updated: 1330044
+	1298  -  MemoryUsage of job (MB)
+	1328300  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-14 23:53:07 Image size of job updated: 1330044
+	1298  -  MemoryUsage of job (MB)
+	1328304  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-15 00:08:09 Image size of job updated: 1330044
+	1298  -  MemoryUsage of job (MB)
+	1328308  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-15 00:28:12 Image size of job updated: 1330044
+	1298  -  MemoryUsage of job (MB)
+	1328312  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-15 00:43:14 Image size of job updated: 1347472
+	1316  -  MemoryUsage of job (MB)
+	1347472  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-15 00:48:15 Image size of job updated: 1347476
+	1316  -  MemoryUsage of job (MB)
+	1347476  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-15 00:58:16 Image size of job updated: 1347480
+	1316  -  MemoryUsage of job (MB)
+	1347480  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-15 01:08:16 Image size of job updated: 1347484
+	1316  -  MemoryUsage of job (MB)
+	1347484  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-15 01:13:17 Image size of job updated: 1347488
+	1316  -  MemoryUsage of job (MB)
+	1347488  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-15 01:23:18 Image size of job updated: 1347492
+	1316  -  MemoryUsage of job (MB)
+	1347492  -  ResidentSetSize of job (KB)
+...
+006 (2611470.000.000) 2025-08-15 01:33:19 Image size of job updated: 1347496
+	1316  -  MemoryUsage of job (MB)
+	1347496  -  ResidentSetSize of job (KB)
+...
+005 (2611470.000.000) 2025-08-15 01:59:28 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 02:36:05, Sys 0 00:00:23  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 02:36:05, Sys 0 00:00:23  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            : 17500    16777216  16790368 
+	   GPUs                 :                 1         1 "GPU-3e642e18-5efd-af40-3ee1-f1553d6fb7f8"
+	   GpusMemory (MB)      :  1318                       
+	   Memory (MB)          :  1316       16384     16384 
+	   TimeExecute (s)      :  9399                       
+	   TimeSlotBusy (s)     :  9400                       
+
+	Job terminated of its own accord at 2025-08-14T23:59:28Z with exit-code 0.
+...

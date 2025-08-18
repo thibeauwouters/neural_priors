@@ -129,7 +129,7 @@ parser.add_argument("--source-type",
 parser.add_argument("--eos-samples-name", 
                     type=str, 
                     default="radio", 
-                    choices=["radio", "radio_chiEFT", "radio_chiEFT_NICER", "hauke"],
+                    choices=["radio", "radio_chiEFT", "radio_chiEFT_NICER", "radio_NICER", "radio_GW170817", "hauke"],
                     help="EOS samples name (default: radio)")
 parser.add_argument("--use-tilde", 
                     action="store_true", 
