@@ -24,13 +24,12 @@ EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
 
 
 
-def collect_all_bayes_factors(base_dir: str = "../GW_runs/", replace_nsbh_zeros: bool = False) -> Dict[str, Any]:
+def collect_all_bayes_factors(base_dir: str = "../GW_runs/") -> Dict[str, Any]:
     """
     Collect all Bayes factors from the GW runs directory structure.
     
     Args:
         base_dir (str): Base directory path (should be ../GW_runs/)
-        replace_nsbh_zeros (bool): Replace 0.0 values with '<-200' for GW170817 NSBH runs
         
     Returns:
         Dict with nested structure matching directory layout plus log_evidence_err values
@@ -89,14 +88,7 @@ def collect_all_bayes_factors(base_dir: str = "../GW_runs/", replace_nsbh_zeros:
                             with open(result_file, 'r') as f:
                                 result_data = json.load(f)
                                 bayes_factor = result_data.get("log_bayes_factor", 0.0)
-                                
-                                
-                                # Apply special replacement for GW170817 NSBH zero values if requested
-                                if (replace_nsbh_zeros and gw_event == "GW170817" and 
-                                    source_type == "nsbh" and bayes_factor == 0.0):
-                                    all_bayes_factors[gw_event][population_type][source_type][eos_type] = "<-200"
-                                else:
-                                    all_bayes_factors[gw_event][population_type][source_type][eos_type] = bayes_factor
+                                all_bayes_factors[gw_event][population_type][source_type][eos_type] = bayes_factor
                                 
                                 # Collect log_evidence_err if available
                                 log_evidence_err = result_data.get("log_evidence_err")
@@ -106,18 +98,10 @@ def collect_all_bayes_factors(base_dir: str = "../GW_runs/", replace_nsbh_zeros:
                                 print(f"        Found Bayes factor: {bayes_factor}")
                         except (json.JSONDecodeError, KeyError, FileNotFoundError) as e:
                             print(f"        Error reading {result_file}: {e}. Setting to 0.0")
-                            # Apply special replacement for GW170817 NSBH zero values if requested
-                            if (replace_nsbh_zeros and gw_event == "GW170817" and source_type == "nsbh"):
-                                all_bayes_factors[gw_event][population_type][source_type][eos_type] = "<-200"
-                            else:
-                                all_bayes_factors[gw_event][population_type][source_type][eos_type] = 0.0
+                            all_bayes_factors[gw_event][population_type][source_type][eos_type] = 0.0
                     else:
                         print(f"        Result file not found: {result_file}. Setting to 0.0")
-                        # Apply special replacement for GW170817 NSBH zero values if requested
-                        if (replace_nsbh_zeros and gw_event == "GW170817" and source_type == "nsbh"):
-                            all_bayes_factors[gw_event][population_type][source_type][eos_type] = "<-200"
-                        else:
-                            all_bayes_factors[gw_event][population_type][source_type][eos_type] = 0.0
+                        all_bayes_factors[gw_event][population_type][source_type][eos_type] = 0.0
     
     # Add log_evidence_errors to the output dictionary
     all_bayes_factors["log_evidence_errors"] = log_evidence_errors
@@ -143,7 +127,8 @@ def get_jeffreys_color(log10_bf: float) -> str:
 
 def generate_latex_table(bayes_factors: Dict[str, Any],
                          include_gw_event: bool = False,
-                         source_first: bool = False) -> str:
+                         source_first: bool = False,
+                         replace_nsbh_zeros: bool = True) -> str:
     """
     Generate LaTeX table code for the Bayes factors data.
     
@@ -151,6 +136,7 @@ def generate_latex_table(bayes_factors: Dict[str, Any],
         bayes_factors: Nested dictionary with Bayes factors data
         include_gw_event: Include GW-event specific population priors
         source_first: Organize table with source types first, then population types
+        replace_nsbh_zeros: Replace 0.0 values with '<-200' for GW170817 NSBH runs
         
     Returns:
         String containing LaTeX table code
@@ -188,7 +174,8 @@ def generate_latex_table(bayes_factors: Dict[str, Any],
                         eos_type in bayes_factors[event][pop_key][source_type] and
                         True):
                         bf_val = bayes_factors[event][pop_key][source_type][eos_type]
-                        if bf_val != 0.0:
+                        # Skip string values (like "<-200") when calculating max
+                        if bf_val != 0.0 and not isinstance(bf_val, str):
                             event_max_values[event] = max(event_max_values[event], bf_val)
     
     # Choose table layout based on source_first flag
@@ -196,14 +183,14 @@ def generate_latex_table(bayes_factors: Dict[str, Any],
     print(bayes_factors)
     if source_first:
         return generate_source_first_table(bayes_factors, event_max_values, include_gw_event, 
-                                          population_types_display, gw_event_populations)
+                                          population_types_display, gw_event_populations, replace_nsbh_zeros)
     else:
         return generate_population_first_table(bayes_factors, event_max_values, include_gw_event,
-                                              population_types_display, gw_event_populations)
+                                              population_types_display, gw_event_populations, replace_nsbh_zeros)
 
 
 def generate_population_first_table(bayes_factors, event_max_values, include_gw_event, 
-                                   population_types_display, gw_event_populations):
+                                   population_types_display, gw_event_populations, replace_nsbh_zeros=True):
     """Generate table with population first, then source, then EOS."""
     
     latex_lines = []
@@ -325,7 +312,10 @@ def generate_population_first_table(bayes_factors, event_max_values, include_gw_
                         source_type in bayes_factors[event][pop_key] and 
                         eos_type in bayes_factors[event][pop_key][source_type]):
                         bf_val = bayes_factors[event][pop_key][source_type][eos_type]
-                        if bf_val == "<-200":
+                        
+                        # Apply special replacement for GW170817 NSBH zero values if requested
+                        if (replace_nsbh_zeros and event == "GW170817" and 
+                            source_type == "nsbh" and bf_val == 0.0):
                             event_cells.append("$<-200$")
                         elif bf_val != 0.0:
                             # Show difference from maximum value in this column
@@ -372,7 +362,7 @@ def generate_population_first_table(bayes_factors, event_max_values, include_gw_
 
 
 def generate_source_first_table(bayes_factors, event_max_values, include_gw_event,
-                               population_types_display, gw_event_populations):
+                               population_types_display, gw_event_populations, replace_nsbh_zeros=True):
     """Generate table with source first, then population, then EOS."""
     latex_lines = []
     
@@ -500,7 +490,10 @@ def generate_source_first_table(bayes_factors, event_max_values, include_gw_even
                         source_type in bayes_factors[event][pop_key] and 
                         eos_type in bayes_factors[event][pop_key][source_type]):
                         bf_val = bayes_factors[event][pop_key][source_type][eos_type]
-                        if bf_val == "<-200":
+                        
+                        # Apply special replacement for GW170817 NSBH zero values if requested
+                        if (replace_nsbh_zeros and event == "GW170817" and 
+                            source_type == "nsbh" and bf_val == 0.0):
                             event_cells.append("$<-200$")
                         elif bf_val != 0.0:
                             # Show difference from maximum value in this column
@@ -616,7 +609,7 @@ def main():
     if args.get_JSON:
         print(f"Scanning directory structure in: {base_dir}")
         
-        bayes_factors = collect_all_bayes_factors(base_dir, replace_nsbh_zeros=args.replace_nsbh_zeros)
+        bayes_factors = collect_all_bayes_factors(base_dir)
         print(f"Saving JSON results to: {json_file}")
         with open(json_file, 'w') as f:
             json.dump(bayes_factors, f, indent=2)
@@ -649,7 +642,8 @@ def main():
         print(f"Generating LaTeX table and saving to: {latex_file}. Source_first = {args.source_first}")
         latex_table = generate_latex_table(bayes_factors,
                                            include_gw_event=args.include_gw_event,
-                                           source_first=args.source_first)
+                                           source_first=args.source_first,
+                                           replace_nsbh_zeros=args.replace_nsbh_zeros)
         with open(latex_file, 'w') as f:
             f.write(latex_table)
         
