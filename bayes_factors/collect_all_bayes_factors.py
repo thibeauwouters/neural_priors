@@ -181,7 +181,7 @@ def generate_latex_table(data: Dict[str, Any], replace_nsbh_zeros: bool = True) 
                     val = data[source][pop][eos].get(event, 0.0)
                     
                     if replace_nsbh_zeros and event == "GW170817" and source == "nsbh" and val == 0.0:
-                        event_cells.append("$<-200$")
+                        event_cells.append("\\cellcolor{jeffreysred5}$<-200$")
                     elif val != 0.0:
                         max_val = maxima[event]
                         if max_val != float('-inf'):
@@ -255,7 +255,7 @@ def convert_to_log10(data: Dict[str, Any]) -> Dict[str, Any]:
 def main():
     """Main function to collect Bayes factors and generate LaTeX table."""
     parser = argparse.ArgumentParser(description="Collect Bayes factors (source-first approach)")
-    parser.add_argument('--get-json', action='store_true', 
+    parser.add_argument('--get-JSON', action='store_true', 
                         help='Generate JSON file with Bayes factors')
     parser.add_argument('--make-table', action='store_true', default=True,
                         help='Generate LaTeX table (default: True)')
@@ -272,7 +272,7 @@ def main():
     json_file = "all_bayes_factors.json"
     latex_file = "bayes_factors_table.tex"
     
-    if args.get_json:
+    if args.get_JSON:
         print(f"Collecting Bayes factors from: {base_dir}")
         data = collect_bayes_factors_source_first(base_dir)
         
@@ -282,7 +282,7 @@ def main():
     
     if args.make_table:
         if not os.path.exists(json_file):
-            print(f"JSON file {json_file} not found. Run with --get-json first.")
+            print(f"JSON file {json_file} not found. Run with --get-JSON first.")
             return
         
         print(f"Loading data from: {json_file}")
