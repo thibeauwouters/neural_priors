@@ -2,13 +2,9 @@
   "GW170817": {
     "uniform": {
       "bns": {
-        "radio": 521.8861150547218,
-        "radio_chiEFT": 521.9886924553894,
+        "radio": 0.0,
+        "radio_chiEFT": 0.0,
         "radio_chiEFT_NICER": 0.0
-      },
-      "bns_jacobian_correction": {
-        "radio": -18.203912401041233,
-        "radio_chiEFT": -17.911922490288177
       },
       "nsbh": {
         "radio": 0.0,
@@ -18,13 +14,9 @@
     },
     "gaussian": {
       "bns": {
-        "radio": 525.3086508545749,
-        "radio_chiEFT": 524.8739521794569,
+        "radio": 0.0,
+        "radio_chiEFT": 0.0,
         "radio_chiEFT_NICER": 0.0
-      },
-      "bns_jacobian_correction": {
-        "radio": -15.584846784465967,
-        "radio_chiEFT": -15.625849546924393
       },
       "nsbh": {
         "radio": 0.0,
@@ -34,13 +26,9 @@
     },
     "double_gaussian": {
       "bns": {
-        "radio": 523.7867374725333,
-        "radio_chiEFT": 524.0943493183103,
+        "radio": 0.0,
+        "radio_chiEFT": 0.0,
         "radio_chiEFT_NICER": 0.0
-      },
-      "bns_jacobian_correction": {
-        "radio": -16.443991082304017,
-        "radio_chiEFT": -16.5830995143063
       },
       "nsbh": {
         "radio": 0.0,
@@ -68,18 +56,10 @@
         "radio_chiEFT": 58.77384362978999,
         "radio_chiEFT_NICER": 0.0
       },
-      "bns_jacobian_correction": {
-        "radio": -18.203912401041233,
-        "radio_chiEFT": -17.911922490288177
-      },
       "nsbh": {
         "radio": 54.87310855289423,
         "radio_chiEFT": 55.00632222048893,
         "radio_chiEFT_NICER": 0.0
-      },
-      "nsbh_jacobian_correction": {
-        "radio": -9.644432513126917,
-        "radio_chiEFT": -9.589894783817105
       }
     },
     "gaussian": {
@@ -88,18 +68,10 @@
         "radio_chiEFT": 49.789642417664176,
         "radio_chiEFT_NICER": 0.0
       },
-      "bns_jacobian_correction": {
-        "radio": -15.584846784465967,
-        "radio_chiEFT": -15.625849546924393
-      },
       "nsbh": {
         "radio": 55.31128090353192,
         "radio_chiEFT": 53.70074989139202,
         "radio_chiEFT_NICER": 0.0
-      },
-      "nsbh_jacobian_correction": {
-        "radio": -8.449934937645352,
-        "radio_chiEFT": -8.437411159812205
       }
     },
     "double_gaussian": {
@@ -108,18 +80,10 @@
         "radio_chiEFT": 57.7964508137936,
         "radio_chiEFT_NICER": 0.0
       },
-      "bns_jacobian_correction": {
-        "radio": -16.443991082304017,
-        "radio_chiEFT": -16.5830995143063
-      },
       "nsbh": {
         "radio": 53.22611492178968,
         "radio_chiEFT": 52.65647574039179,
         "radio_chiEFT_NICER": 0.0
-      },
-      "nsbh_jacobian_correction": {
-        "radio": -8.883472969992969,
-        "radio_chiEFT": -9.671319291584025
       }
     },
     "GW190425": {
@@ -142,18 +106,10 @@
         "radio_chiEFT": 13.63009176175895,
         "radio_chiEFT_NICER": 0.0
       },
-      "bns_jacobian_correction": {
-        "radio": -18.203912401041233,
-        "radio_chiEFT": -17.911922490288177
-      },
       "nsbh": {
         "radio": 45.099581156289155,
         "radio_chiEFT": 44.82648925831554,
         "radio_chiEFT_NICER": 0.0
-      },
-      "nsbh_jacobian_correction": {
-        "radio": -9.644432513126917,
-        "radio_chiEFT": -9.589894783817105
       }
     },
     "gaussian": {
@@ -162,18 +118,10 @@
         "radio_chiEFT": 1.3123685855910772,
         "radio_chiEFT_NICER": 0.0
       },
-      "bns_jacobian_correction": {
-        "radio": -15.584846784465967,
-        "radio_chiEFT": -15.625849546924393
-      },
       "nsbh": {
         "radio": 44.94546416021687,
         "radio_chiEFT": 44.95732722072326,
         "radio_chiEFT_NICER": 0.0
-      },
-      "nsbh_jacobian_correction": {
-        "radio": -8.449934937645352,
-        "radio_chiEFT": -8.437411159812205
       }
     },
     "double_gaussian": {
@@ -182,18 +130,10 @@
         "radio_chiEFT": 8.48689558934998,
         "radio_chiEFT_NICER": 0.0
       },
-      "bns_jacobian_correction": {
-        "radio": -16.443991082304017,
-        "radio_chiEFT": -16.5830995143063
-      },
       "nsbh": {
         "radio": 44.9168093138889,
         "radio_chiEFT": 45.20117336501551,
         "radio_chiEFT_NICER": 0.0
-      },
-      "nsbh_jacobian_correction": {
-        "radio": -8.883472969992969,
-        "radio_chiEFT": -9.671319291584025
       }
     },
     "GW230529": {
@@ -210,12 +150,6 @@
     }
   },
   "log_evidence_errors": [
-    0.10596228209231702,
-    0.10781504404753389,
-    0.10288438054867376,
-    0.10501203510796013,
-    0.10753859113989063,
-    0.10643959829849084,
     0.09236112802479167,
     0.09353435095727837,
     0.09740853709421675,
@@ -240,19 +174,5 @@
     0.08860669758100484,
     0.0887571968520216,
     0.09139382069835003
-  ],
-  "jacobian_corrections": {
-    "uniform_bns_radio": -18.203912401041233,
-    "uniform_bns_radio_chiEFT": -17.911922490288177,
-    "gaussian_bns_radio": -15.584846784465967,
-    "gaussian_bns_radio_chiEFT": -15.625849546924393,
-    "double_gaussian_bns_radio": -16.443991082304017,
-    "double_gaussian_bns_radio_chiEFT": -16.5830995143063,
-    "uniform_nsbh_radio": -9.644432513126917,
-    "uniform_nsbh_radio_chiEFT": -9.589894783817105,
-    "gaussian_nsbh_radio": -8.449934937645352,
-    "gaussian_nsbh_radio_chiEFT": -8.437411159812205,
-    "double_gaussian_nsbh_radio": -8.883472969992969,
-    "double_gaussian_nsbh_radio_chiEFT": -9.671319291584025
-  }
+  ]
 }
