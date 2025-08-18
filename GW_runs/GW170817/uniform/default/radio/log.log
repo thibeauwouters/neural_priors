@@ -393,3 +393,48 @@
 
 	Job terminated of its own accord at 2025-08-12T20:59:25Z with exit-code 0.
 ...
+000 (2611214.000.000) 2025-08-14 15:14:41 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_g
+...
+009 (2611214.000.000) 2025-08-14 15:16:23 Job was aborted.
+	via condor_rm (by user twouters)
+...
+000 (2611250.000.000) 2025-08-14 15:17:05 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2614_90a7>
+    DAG Node: run_g
+...
+001 (2611250.000.000) 2025-08-16 03:01:59 Job executing on host: <145.107.4.154:9618?addrs=145.107.4.154-9618+[2a07-8500-120-e070--9a]-9618&alias=wn-knek-011.nikhef.nl&noUDP&sock=startd_1660_334d>
+	SlotName: slot1_1@wn-knek-011.nikhef.nl
+	CondorScratchDir = "/scratch/condor_execute/dir_2247542"
+	Cpus = 64
+	Disk = 16779829
+	GPUs = 0
+	Memory = 16384
+...
+006 (2611250.000.000) 2025-08-16 03:02:13 Image size of job updated: 720232
+	704  -  MemoryUsage of job (MB)
+	720232  -  ResidentSetSize of job (KB)
+...
+006 (2611250.000.000) 2025-08-16 03:03:13 Image size of job updated: 1891264
+	704  -  MemoryUsage of job (MB)
+	720232  -  ResidentSetSize of job (KB)
+...
+005 (2611250.000.000) 2025-08-16 03:03:13 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:01:14, Sys 0 00:00:21  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:01:14, Sys 0 00:00:21  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :     1.08       64        64 
+	   Disk (KB)            : 17500    16777216  16779829 
+	   GPUs                 :                           0 
+	   Memory (MB)          :   704       16384     16384 
+	   TimeExecute (s)      :    74                       
+	   TimeSlotBusy (s)     :    74                       
+
+	Job terminated of its own accord at 2025-08-16T01:03:13Z with exit-code 0.
+...
