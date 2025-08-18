@@ -60,10 +60,15 @@ TEX_TRANSLATION_DICT = {"m1": r"$m_1$ [M$_\odot$]",
 
 POPULATION_NAMES = ["uniform", "gaussian", "double_gaussian"]
 SOURCE_TYPES = ["BNS", "NSBH"]
-EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
+EOS_SAMPLES_NAMES = ["radio",
+                     "radio_chiEFT",
+                     "radio_NICER",
+                     "radio_chiEFT_NICER"]
 EOS_SAMPLES_NAMES_DICT = {"radio": r"Radio",
                           "radio_chiEFT": r"+$\chi_{\rm{EFT}}$",
-                          "radio_chiEFT_NICER": r"+$\chi_{\rm{EFT}}$+NICER"}
+                          "radio_chiEFT_NICER": r"+$\chi_{\rm{EFT}}$+NICER",
+                          "radio_NICER": r"+NICER"
+                          }
 
 POPULATION_NAMES_DICT = {
     "uniform": r"Uniform",
