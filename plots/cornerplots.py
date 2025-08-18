@@ -408,25 +408,25 @@ def create_corner_plot(GW_event: str,
     
                             
                 
-def run_all_corner_plots(gw_event: str, args):
+def run_all_corner_plots(GW_event: str, args):
     """
     Run all corner plots for the given GW event using the new comparison mode approach.
     This replicates the functionality previously in run_cornerplots.sh.
     """
     base_dir = "../final_results/"
     
-    print(f"Generating ALL comparison corner plots for {gw_event}...")
+    print(f"Generating ALL comparison corner plots for {GW_event}...")
     
     # Source comparison plots (fix population + eos, vary source)
-    populations = ["uniform", "gaussian", "double_gaussian", gw_event]
-    eos_types = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
+    populations = ["uniform", "gaussian", "double_gaussian", GW_event]
+    eos_types = ["radio", "radio_chiEFT", "radio_NICER"]
     
     for population in populations:
         for eos in eos_types:
             print(f"  Source comparison: population={population}, eos={eos}")
             # With lambda conversion
             create_corner_plot(
-                GW_event=gw_event,
+                GW_event=GW_event,
                 comparison_mode="source",
                 population_type=population,
                 eos_samples_name=eos,
@@ -436,7 +436,7 @@ def run_all_corner_plots(gw_event: str, args):
             )
             # Without lambda conversion
             create_corner_plot(
-                GW_event=gw_event,
+                GW_event=GW_event,
                 comparison_mode="source",
                 population_type=population,
                 eos_samples_name=eos,
@@ -453,7 +453,7 @@ def run_all_corner_plots(gw_event: str, args):
             print(f"  Population comparison: source={source}, eos={eos}")
             # With lambda conversion
             create_corner_plot(
-                GW_event=gw_event,
+                GW_event=GW_event,
                 comparison_mode="population",
                 source_type=source,
                 eos_samples_name=eos,
@@ -462,7 +462,7 @@ def run_all_corner_plots(gw_event: str, args):
             )
             # Without lambda conversion
             create_corner_plot(
-                GW_event=gw_event,
+                GW_event=GW_event,
                 comparison_mode="population",
                 source_type=source,
                 eos_samples_name=eos,
@@ -476,7 +476,7 @@ def run_all_corner_plots(gw_event: str, args):
             print(f"  EOS comparison: population={population}, source={source}")
             # With lambda conversion
             create_corner_plot(
-                GW_event=gw_event,
+                GW_event=GW_event,
                 comparison_mode="eos",
                 population_type=population,
                 source_type=source,
@@ -485,7 +485,7 @@ def run_all_corner_plots(gw_event: str, args):
             )
             # Without lambda conversion
             create_corner_plot(
-                GW_event=gw_event,
+                GW_event=GW_event,
                 comparison_mode="eos",
                 population_type=population,
                 source_type=source,
@@ -504,7 +504,7 @@ def main():
     print("")
     
     parser = argparse.ArgumentParser(description="Create corner plots for GW parameter estimation results")
-    parser.add_argument('--gw-event', type=str,
+    parser.add_argument('--GW-event', type=str,
                         help='GW event name (e.g., GW170817)')
     parser.add_argument('--comparison-mode', type=str, default='source',
                         choices=['source', 'population', 'eos'],
@@ -546,10 +546,10 @@ def main():
     args = parser.parse_args()
     
     if args.run_all:
-        run_all_corner_plots(args.gw_event, args.__dict__)
-    elif args.gw_event:
+        run_all_corner_plots(args.GW_event, args.__dict__)
+    elif args.GW_event:
         create_corner_plot(
-            GW_event=args.gw_event,
+            GW_event=args.GW_event,
             comparison_mode=args.comparison_mode,
             population_type=args.population_type,
             source_type=args.source_type,

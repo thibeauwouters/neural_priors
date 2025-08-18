@@ -514,7 +514,7 @@ DEFAULT_CORNER_KWARGS = dict(
 )
 
 # Color constants for different plot groups
-DEFAULT_COLOR = 'blue'
+DEFAULT_COLOR = 'gray'
 BNS_COLOR = 'green'
 NSBH_COLOR = 'red'
 HAUKE_COLOR = 'orange'
