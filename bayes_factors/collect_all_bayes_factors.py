@@ -671,7 +671,7 @@ def main():
                         help='Include GW-event specific population priors in table (default: False)')
     parser.add_argument('--source-first', action='store_true', default=True,
                         help='Organize table with source types first, then population types (default: False)')
-    parser.add_argument('--apply-jacobian-correction', action='store_true', default=True,
+    parser.add_argument('--apply-jacobian-correction', action='store_true', default=False,
                         help='Apply MinMaxScaler Jacobian correction to fix NFDist normalization bug (default: False)')
     parser.add_argument('--nf-base-dir', default='../NFprior/models/',
                         help='Base directory for NF models (default: ../NFprior/models/)')
