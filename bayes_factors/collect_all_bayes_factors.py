@@ -18,7 +18,7 @@ from typing import Dict, Any
 GW_EVENTS = ["GW170817", "GW190425", "GW230529"]
 POPULATION_TYPES = ["uniform", "gaussian", "double_gaussian", "GW170817", "GW190425", "GW230529"]
 SOURCE_TYPES = ["bns", "nsbh"]
-EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_chiEFT_NICER"]
+EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_NICER", "radio_chiEFT_NICER"]
 
 # Display name mappings
 POPULATION_DISPLAY = {
@@ -30,7 +30,8 @@ POPULATION_DISPLAY = {
 EOS_DISPLAY = {
     "radio": "Radio",
     "radio_chiEFT": "+\\chiEFT",
-    "radio_chiEFT_NICER": "+NICER"
+    "radio_NICER": "+NICER",
+    "radio_chiEFT_NICER": "+\\chiEFT+NICER"
 }
 
 
