@@ -522,7 +522,7 @@ DEFAULT_CORNER_KWARGS = dict(
 DEFAULT_COLOR = 'gray'
 BNS_COLOR = 'green'
 NSBH_COLOR = 'red'
-HAUKE_COLOR = 'orange'
+HAUKE_COLOR = 'purple'
 HAUKE_EM_COLOR = 'purple'
 ADRIAN_COLOR = 'black'
 

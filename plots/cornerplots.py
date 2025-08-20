@@ -419,7 +419,7 @@ def run_all_corner_plots(GW_event: str, args):
     
     # Source comparison plots (fix population + eos, vary source)
     populations = ["uniform", "gaussian", "double_gaussian", GW_event]
-    eos_types = ["radio", "radio_chiEFT", "radio_NICER"]
+    eos_types = ["radio", "radio_chiEFT", "radio_NICER", "radio_GW170817"]
     
     for population in populations:
         for eos in eos_types:
@@ -516,7 +516,7 @@ def main():
                         choices=['bns', 'nsbh', 'default'],
                         help='Source type for the analysis (default: bns)')
     parser.add_argument('--eos-samples-name', type=str, default='radio',
-                        choices=['radio', 'radio_chiEFT', 'radio_chiEFT_NICER'],
+                        choices=['radio', 'radio_chiEFT', 'radio_NICER', 'radio_chiEFT_NICER'],
                         help='EOS samples name (default: radio)')
     parser.add_argument('--base-dir', type=str, default='../final_results/',
                         help='Base directory path (default: ../final_results/)')
