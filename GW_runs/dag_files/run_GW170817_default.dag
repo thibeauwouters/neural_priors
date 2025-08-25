@@ -1,0 +1,2 @@
+JOB run_j /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub
+VARS run_j GW_event="GW170817" population_type="uniform" prior_name="default" eos_samples_name="radio" relative_binning_delta="0.001" seed="123"

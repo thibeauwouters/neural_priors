@@ -1,268 +1,145 @@
-11:41 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio
-11:41 INFO    : Using geocent_time from reference parameters: 1187008882.43
-11:41 INFO    : Showing the reference parameters for GW170817
-11:41 INFO    : chirp_mass: 1.1975896
-11:41 INFO    : symmetric_mass_ratio: 0.2461001
-11:41 INFO    : a_1: 0.01890608
-11:41 INFO    : a_2: 0.04888488
-11:41 INFO    : tilt_1: 0.0
-11:41 INFO    : tilt_2: 0.0
-11:41 INFO    : phi_jl: 0.0
-11:41 INFO    : phi_12: 0.0
-11:41 INFO    : lambda_1: 100.0
-11:41 INFO    : lambda_2: 200.0
-11:41 INFO    : luminosity_distance: 40.06331818
-11:41 INFO    : phase: 5.88649652
-11:41 INFO    : theta_jn: 1.93095421
-11:41 INFO    : psi: 1.59687217
-11:41 INFO    : ra: 3.39736826
-11:41 INFO    : dec: -0.34000186
-11:41 INFO    : mass_ratio: 0.7779384106788951
-11:41 INFO    : mass_1: 1.5621553813557303
-11:41 INFO    : mass_2: 1.2152606746053602
-11:41 INFO    : Geocent time is 1187008882.43 and duration is 128.0
-11:41 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
-11:41 INFO    : Relative binning delta 0.01
-11:41 INFO    : Waveform generator initiated with
+18:57 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio
+18:57 INFO    : Using geocent_time from reference parameters: 1187008882.43
+18:57 INFO    : Showing the reference parameters for GW170817
+18:57 INFO    : chirp_mass: 1.1975896
+18:57 INFO    : symmetric_mass_ratio: 0.24983563445101906
+18:57 INFO    : a_1: 0.01890608
+18:57 INFO    : a_2: 0.04888488
+18:57 INFO    : tilt_1: 0.0
+18:57 INFO    : tilt_2: 0.0
+18:57 INFO    : phi_jl: 0.0
+18:57 INFO    : phi_12: 0.0
+18:57 INFO    : lambda_1: 100.0
+18:57 INFO    : lambda_2: 200.0
+18:57 INFO    : luminosity_distance: 40.06331818
+18:57 INFO    : phase: 5.88649652
+18:57 INFO    : theta_jn: 1.93095421
+18:57 INFO    : psi: 1.59687217
+18:57 INFO    : ra: 3.39736826
+18:57 INFO    : dec: -0.34000186
+18:57 INFO    : mass_ratio: 0.9500000000000001
+18:57 INFO    : mass_1: 1.4114996506355753
+18:57 INFO    : mass_2: 1.3409246681037965
+18:57 INFO    : Geocent time is 1187008882.43 and duration is 128.0
+18:57 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
+18:57 INFO    : Relative binning delta 0.01
+18:57 INFO    : Waveform generator initiated with
   frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
   time_domain_source_model: None
   parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
-11:41 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
-11:41 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
-11:41 INFO    : Using the default priors
-11:41 INFO    : Going to show priors in priors:
-11:41 INFO    :       chirp_mass: Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
-11:41 INFO    :       mass_ratio: Uniform(minimum=0.125, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
-11:41 INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
-11:41 INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
-11:41 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
-11:41 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
-11:41 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
-11:41 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
-11:41 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
-11:41 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
-11:41 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
-11:41 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
-11:41 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
-11:41 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
-11:41 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
-11:41 INFO    :       lambda_1: Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
-11:41 INFO    :       lambda_2: Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
-11:41 INFO    : Running through data generation steps now
-11:41 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
-11:42 INFO    : Successfully loaded H1:LOSC-STRAIN.
-11:42 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf
-11:42 INFO    : Successfully loaded L1:LOSC-STRAIN.
-11:42 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf
-11:42 INFO    : Successfully loaded V1:LOSC-STRAIN.
-11:42 INFO    : Frequency array for H1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+18:57 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
+18:57 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
+18:57 INFO    : Using the default priors
+18:57 INFO    : Going to show priors in priors:
+18:57 INFO    :       chirp_mass: Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
+18:57 INFO    :       mass_ratio: Uniform(minimum=0.125, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
+18:57 INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
+18:57 INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+18:57 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+18:57 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+18:57 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+18:57 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+18:57 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+18:57 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+18:57 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+18:57 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+18:57 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+18:57 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+18:57 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+18:57 INFO    :       lambda_1: Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
+18:57 INFO    :       lambda_2: Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
+18:57 INFO    : Running through data generation steps now
+18:57 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
+18:57 INFO    : Successfully loaded H1:LOSC-STRAIN.
+18:57 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf
+18:58 INFO    : Successfully loaded L1:LOSC-STRAIN.
+18:58 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf
+18:58 INFO    : Successfully loaded V1:LOSC-STRAIN.
+18:58 INFO    : Frequency array for H1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
  2.04799219e+03 2.04800000e+03]
-11:42 INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+18:58 INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
  2.04799219e+03 2.04800000e+03]
-11:42 INFO    : Frequency array for V1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
+18:58 INFO    : Frequency array for V1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
  2.04799219e+03 2.04800000e+03]
-11:42 INFO    : Priors loaded:
-11:42 INFO    : Waveform generator initiated with
+18:58 INFO    : Priors loaded:
+18:58 INFO    : Waveform generator initiated with
   frequency_domain_source_model: bilby.gw.source.binary_neutron_star_frequency_sequence
   time_domain_source_model: None
   parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
-11:42 INFO    : Using relative binning likelihood
-11:42 INFO    : Going to construct bins with:
-11:42 INFO    :   - delta: 0.01
-11:42 INFO    :   - minimum_bin_threshold: 1000
-11:42 INFO    : Applying constraints on resonance frequency
-11:42 INFO    : Minimum frequency: 23.1, Maximum frequency: 2048.0
-11:42 INFO    : Percentage error on chirp mass -0.047143516373249206 and mass_ratio 0.0
-11:42 INFO    : Perturbed chirp mass and mass ratio: 1.1981541858491602 0.7779384106788951
-11:42 INFO    : Perturbed lambda_1: 300.0
-11:42 INFO    : Perturbed lambda_2: 500.0
-11:42 INFO    : Length of the original frequency array 262145
-11:42 INFO    : Frequency range for binning: 23.10 - 2048.00 Hz
-11:42 INFO    : Number of frequency bins available: 259188
-11:42 INFO    : Using following powers: [-1.66666667 -0.66666667  1.          1.66666667  2.33333333
+18:58 INFO    : Using relative binning likelihood
+18:58 INFO    : Going to construct bins with:
+18:58 INFO    :   - delta: 0.01
+18:58 INFO    :   - minimum_bin_threshold: 1000
+18:58 INFO    : Applying constraints on resonance frequency
+18:58 INFO    : Minimum frequency: 23.1, Maximum frequency: 2048.0
+18:58 INFO    : Percentage error on chirp mass 0.10856306033005803 and mass_ratio 0.0
+18:58 INFO    : Perturbed chirp mass and mass ratio: 1.1962894600800453 0.9500000000000001
+18:58 INFO    : Perturbed lambda_1: 300.0
+18:58 INFO    : Perturbed lambda_2: 500.0
+18:58 INFO    : Length of the original frequency array 262145
+18:58 INFO    : Frequency range for binning: 23.10 - 2048.00 Hz
+18:58 INFO    : Number of frequency bins available: 259188
+18:58 INFO    : Using following powers: [-1.66666667 -0.66666667  1.          1.66666667  2.33333333
   3.          3.33333333  4.        ]
-11:42 INFO    : Bins generated using analytic method: 4854
-11:42 INFO    : Using bisection method to create the grid
-11:42 INFO    : [  23.1015625   23.125       23.1484375 ... 2047.703125
+18:58 INFO    : Bins generated using analytic method: 4854
+18:58 INFO    : Using bisection method to create the grid
+18:58 INFO    : [  23.1015625   23.125       23.1484375 ... 2047.703125
  2047.921875  2048.       ]
-11:42 INFO    : Make sure ref parameters are correct {'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'a_1': 0.01890608, 'a_2': 0.04888488, 'tilt_1': 0.0, 'tilt_2': 0.0, 'phi_jl': 0.0, 'phi_12': 0.0, 'lambda_1': 100.0, 'lambda_2': 200.0, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
-11:42 INFO    : Starting up the sampler now . . .
-11:42 INFO    : Running for label 'default', output will be saved to '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio'
-11:42 INFO    : Using lal version 7.6.1
-11:42 INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
-11:42 INFO    : Using lalsimulation version 6.1.0
-11:42 INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
-11:42 INFO    : Analysis priors:
-11:42 INFO    : chirp_mass=Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
-11:42 INFO    : mass_ratio=Uniform(minimum=0.125, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
-11:42 INFO    : luminosity_distance=bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
-11:42 INFO    : geocent_time=Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
-11:42 INFO    : a_1=Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
-11:42 INFO    : a_2=Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
-11:42 INFO    : tilt_1=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
-11:42 INFO    : tilt_2=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
-11:42 INFO    : phi_12=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
-11:42 INFO    : phi_jl=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
-11:42 INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
-11:42 INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
-11:42 INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
-11:42 INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
-11:42 INFO    : phase=Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
-11:42 INFO    : lambda_1=Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
-11:42 INFO    : lambda_2=Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
-11:42 INFO    : Analysis likelihood class: <class 'LikelihoodRB.RelBinning'>
-11:42 INFO    : Analysis likelihood noise evidence: -821024.6462931833
-11:42 INFO    : Single likelihood evaluation took 7.599e-03 s
-11:42 INFO    : Using sampler Dynesty with kwargs {'nlive': 4096, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'npdim': None, 'rstate': None, 'queue_size': 64, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'gradient': None, 'grad_args': None, 'grad_kwargs': None, 'compute_jac': False, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'fmove': 0.9, 'max_move': 100, 'update_func': None, 'ncdim': None, 'blob': False, 'save_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'n_effective': None, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x1505aaf5e3b0>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
-11:42 INFO    : Checkpoint every check_point_delta_t = 3600s
-11:42 INFO    : Using dynesty version 2.1.5
-11:42 INFO    : Using the bilby-implemented acceptance-walk sampling with an average of 60 accepted steps per MCMC and maximum length 5000
-11:42 INFO    : Setting up multiproccesing pool with 64 processes
-11:42 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle does not exist.
-11:42 INFO    : Generating initial points from the prior
-11:43 INFO    : Generating initial points from the prior DONE
-12:43 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-13:44 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-14:44 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-15:45 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-16:46 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-17:47 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-18:48 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-19:49 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-20:51 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-21:52 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-22:54 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-22:57 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
-22:58 INFO    : Starting to close worker pool.
-22:58 INFO    : Finished closing worker pool.
-22:58 INFO    : Rejection sampling nested samples to obtain 23085 posterior samples
-22:58 INFO    : Sampling time: 11:15:36.646927
-22:59 INFO    : Summary of results:
-nsamples: 23085
+18:58 INFO    : Make sure ref parameters are correct {'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.24983563445101906, 'a_1': 0.01890608, 'a_2': 0.04888488, 'tilt_1': 0.0, 'tilt_2': 0.0, 'phi_jl': 0.0, 'phi_12': 0.0, 'lambda_1': 100.0, 'lambda_2': 200.0, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.9500000000000001, 'mass_1': 1.4114996506355753, 'mass_2': 1.3409246681037965, 'geocent_time': 1187008882.43, 'duration': 128.0}
+18:58 INFO    : Starting up the sampler now . . .
+18:58 INFO    : Running for label 'default', output will be saved to '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio'
+18:58 INFO    : Using lal version 7.6.1
+18:58 INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+18:58 INFO    : Using lalsimulation version 6.1.0
+18:58 INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
+18:58 INFO    : Analysis priors:
+18:58 INFO    : chirp_mass=Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
+18:58 INFO    : mass_ratio=Uniform(minimum=0.125, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
+18:58 INFO    : luminosity_distance=bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
+18:58 INFO    : geocent_time=Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
+18:58 INFO    : a_1=Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+18:58 INFO    : a_2=Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+18:58 INFO    : tilt_1=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+18:58 INFO    : tilt_2=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+18:58 INFO    : phi_12=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+18:58 INFO    : phi_jl=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+18:58 INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+18:58 INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+18:58 INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+18:58 INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+18:58 INFO    : phase=Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
+18:58 INFO    : lambda_1=Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
+18:58 INFO    : lambda_2=Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
+18:58 INFO    : Analysis likelihood class: <class 'LikelihoodRB.RelBinning'>
+18:58 INFO    : Analysis likelihood noise evidence: -821024.6462931833
+18:58 INFO    : Single likelihood evaluation took 7.807e-03 s
+18:58 INFO    : Using sampler Dynesty with kwargs {'nlive': 4096, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'npdim': None, 'rstate': None, 'queue_size': 64, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'gradient': None, 'grad_args': None, 'grad_kwargs': None, 'compute_jac': False, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'fmove': 0.9, 'max_move': 100, 'update_func': None, 'ncdim': None, 'blob': False, 'save_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'n_effective': None, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x14dab0237b50>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
+18:58 INFO    : Checkpoint every check_point_delta_t = 3600s
+18:58 INFO    : Using dynesty version 2.1.5
+18:58 INFO    : Using the bilby-implemented acceptance-walk sampling with an average of 60 accepted steps per MCMC and maximum length 5000
+18:58 INFO    : Setting up multiproccesing pool with 64 processes
+18:58 INFO    : Resume file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle does not exist.
+18:58 INFO    : Generating initial points from the prior
+18:59 INFO    : Generating initial points from the prior DONE
+19:59 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+20:59 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+22:00 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+23:01 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+00:02 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+01:02 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+02:04 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+03:05 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+04:06 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+05:07 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+06:08 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+06:12 INFO    : Written checkpoint file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio/default_resume.pickle
+06:13 INFO    : Starting to close worker pool.
+06:13 INFO    : Finished closing worker pool.
+06:13 INFO    : Rejection sampling nested samples to obtain 23280 posterior samples
+06:13 INFO    : Sampling time: 11:14:30.490279
+06:13 INFO    : Summary of results:
+nsamples: 23280
 ln_noise_evidence: -821024.646
-ln_evidence: -820503.590 +/-  0.108
-ln_bayes_factor: 521.056 +/-  0.108
-
-03:02 INFO    : We set full_outdir to /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio
-03:02 INFO    : Using geocent_time from reference parameters: 1187008882.43
-03:02 INFO    : Showing the reference parameters for GW170817
-03:02 INFO    : chirp_mass: 1.1975896
-03:02 INFO    : symmetric_mass_ratio: 0.2461001
-03:02 INFO    : a_1: 0.01890608
-03:02 INFO    : a_2: 0.04888488
-03:02 INFO    : tilt_1: 0.0
-03:02 INFO    : tilt_2: 0.0
-03:02 INFO    : phi_jl: 0.0
-03:02 INFO    : phi_12: 0.0
-03:02 INFO    : lambda_1: 100.0
-03:02 INFO    : lambda_2: 200.0
-03:02 INFO    : luminosity_distance: 40.06331818
-03:02 INFO    : phase: 5.88649652
-03:02 INFO    : theta_jn: 1.93095421
-03:02 INFO    : psi: 1.59687217
-03:02 INFO    : ra: 3.39736826
-03:02 INFO    : dec: -0.34000186
-03:02 INFO    : mass_ratio: 0.7779384106788951
-03:02 INFO    : mass_1: 1.5621553813557303
-03:02 INFO    : mass_2: 1.2152606746053602
-03:02 INFO    : Geocent time is 1187008882.43 and duration is 128.0
-03:02 INFO    : Using waveform: IMRPhenomXP_NRTidalv3
-03:02 INFO    : Relative binning delta 0.01
-03:02 INFO    : Waveform generator initiated with
-  frequency_domain_source_model: bilby.gw.source.lal_binary_neutron_star
-  time_domain_source_model: None
-  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
-03:02 INFO    : Running with label GW170817 and ifo_list ['H1', 'L1', 'V1']
-03:02 INFO    : Loading priors from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/prior.prior
-03:02 INFO    : Using the default priors
-03:02 INFO    : Going to show priors in priors:
-03:02 INFO    :       chirp_mass: Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
-03:02 INFO    :       mass_ratio: Uniform(minimum=0.125, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
-03:02 INFO    :       luminosity_distance: bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
-03:02 INFO    :       geocent_time: Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
-03:02 INFO    :       a_1: Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
-03:02 INFO    :       a_2: Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
-03:02 INFO    :       tilt_1: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
-03:02 INFO    :       tilt_2: Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
-03:02 INFO    :       phi_12: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
-03:02 INFO    :       phi_jl: Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
-03:02 INFO    :       dec: Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
-03:02 INFO    :       ra: Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
-03:02 INFO    :       theta_jn: Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
-03:02 INFO    :       psi: Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
-03:02 INFO    :       phase: Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
-03:02 INFO    :       lambda_1: Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
-03:02 INFO    :       lambda_2: Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
-03:02 INFO    : Running through data generation steps now
-03:02 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/H-H1_LOSC_CLN_16_V1-1187007040-2048.gwf
-03:02 INFO    : Successfully loaded H1:LOSC-STRAIN.
-03:02 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/L-L1_LOSC_CLN_16_V1-1187007040-2048.gwf
-03:02 INFO    : Successfully loaded L1:LOSC-STRAIN.
-03:02 INFO    : Reading data from frame file /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf
-03:02 INFO    : Successfully loaded V1:LOSC-STRAIN.
-03:02 INFO    : Frequency array for H1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
- 2.04799219e+03 2.04800000e+03]
-03:02 INFO    : Frequency array for L1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
- 2.04799219e+03 2.04800000e+03]
-03:02 INFO    : Frequency array for V1: [0.00000000e+00 7.81250000e-03 1.56250000e-02 ... 2.04798438e+03
- 2.04799219e+03 2.04800000e+03]
-03:02 INFO    : Priors loaded:
-03:02 INFO    : Waveform generator initiated with
-  frequency_domain_source_model: bilby.gw.source.binary_neutron_star_frequency_sequence
-  time_domain_source_model: None
-  parameter_conversion: bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
-03:02 INFO    : Using relative binning likelihood
-03:02 INFO    : Going to construct bins with:
-03:02 INFO    :   - delta: 0.01
-03:02 INFO    :   - minimum_bin_threshold: 1000
-03:02 INFO    : Applying constraints on resonance frequency
-03:02 INFO    : Minimum frequency: 23.1, Maximum frequency: 2048.0
-03:02 INFO    : Percentage error on chirp mass -0.047143516373249206 and mass_ratio 0.0
-03:02 INFO    : Perturbed chirp mass and mass ratio: 1.1981541858491602 0.7779384106788951
-03:02 INFO    : Perturbed lambda_1: 300.0
-03:02 INFO    : Perturbed lambda_2: 500.0
-03:02 INFO    : Length of the original frequency array 262145
-03:02 INFO    : Frequency range for binning: 23.10 - 2048.00 Hz
-03:02 INFO    : Number of frequency bins available: 259188
-03:02 INFO    : Using following powers: [-1.66666667 -0.66666667  1.          1.66666667  2.33333333
-  3.          3.33333333  4.        ]
-03:02 INFO    : Bins generated using analytic method: 4854
-03:02 INFO    : Using bisection method to create the grid
-03:02 INFO    : [  23.1015625   23.125       23.1484375 ... 2047.703125
- 2047.921875  2048.       ]
-03:02 INFO    : Make sure ref parameters are correct {'chirp_mass': 1.1975896, 'symmetric_mass_ratio': 0.2461001, 'a_1': 0.01890608, 'a_2': 0.04888488, 'tilt_1': 0.0, 'tilt_2': 0.0, 'phi_jl': 0.0, 'phi_12': 0.0, 'lambda_1': 100.0, 'lambda_2': 200.0, 'luminosity_distance': 40.06331818, 'phase': 5.88649652, 'theta_jn': 1.93095421, 'psi': 1.59687217, 'ra': 3.39736826, 'dec': -0.34000186, 'mass_ratio': 0.7779384106788951, 'mass_1': 1.5621553813557303, 'mass_2': 1.2152606746053602, 'geocent_time': 1187008882.43, 'duration': 128.0}
-03:02 INFO    : Starting up the sampler now . . .
-03:02 INFO    : Running for label 'default', output will be saved to '/data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/GW170817/uniform/default/radio'
-03:02 INFO    : Using lal version 7.6.1
-03:02 INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
-03:02 INFO    : Using lalsimulation version 6.1.0
-03:02 INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.25.1;Id: 494fadf7ab3675a7708c6f21de0f588c68441850;;Builder: Unknown User <>;Repository status: CLEAN: All modifications committed
-03:02 INFO    : Analysis priors:
-03:02 INFO    : chirp_mass=Uniform(minimum=1.18, maximum=1.21, name='chirp_mass', latex_label='$\\mathcal{M}$', unit=None, boundary=None)
-03:02 INFO    : mass_ratio=Uniform(minimum=0.125, maximum=1.0, name='mass_ratio', latex_label='$q$', unit=None, boundary=None)
-03:02 INFO    : luminosity_distance=bilby.gw.prior.UniformComovingVolume(minimum=1.0, maximum=75.0, cosmology='Planck15', name='luminosity_distance', latex_label='$D_L$', unit='Mpc', boundary=None)
-03:02 INFO    : geocent_time=Uniform(minimum=1187008882.3300002, maximum=1187008882.53, name='geocent_time', latex_label='$t_c$', unit=None, boundary=None)
-03:02 INFO    : a_1=Uniform(minimum=0.0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
-03:02 INFO    : a_2=Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
-03:02 INFO    : tilt_1=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
-03:02 INFO    : tilt_2=Sine(minimum=0.0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
-03:02 INFO    : phi_12=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
-03:02 INFO    : phi_jl=Uniform(minimum=0.0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
-03:02 INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
-03:02 INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
-03:02 INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
-03:02 INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
-03:02 INFO    : phase=Uniform(minimum=0, maximum=6.283185307179586, name='phase', latex_label='$\\phi$', unit=None, boundary='periodic')
-03:02 INFO    : lambda_1=Uniform(minimum=0.0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
-03:02 INFO    : lambda_2=Uniform(minimum=0.0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
-03:02 INFO    : Analysis likelihood class: <class 'LikelihoodRB.RelBinning'>
-03:02 INFO    : Analysis likelihood noise evidence: -821024.6462931833
-03:02 INFO    : Single likelihood evaluation took 7.902e-03 s
-03:02 INFO    : Checkpoint every check_point_delta_t = 3600s
-03:02 WARNING : Using cached result
-03:02 INFO    : Summary of results:
-nsamples: 23085
-ln_noise_evidence: -821024.646
-ln_evidence: -820503.590 +/-  0.108
-ln_bayes_factor: 521.056 +/-  0.108
+ln_evidence: -820503.570 +/-  0.109
+ln_bayes_factor: 521.076 +/-  0.109
 

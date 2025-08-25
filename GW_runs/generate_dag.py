@@ -8,11 +8,12 @@ def generate_dag(gw_event, output_file, relative_binning_delta=1e-3):
     """Generate DAG file for the specified GW event."""
     
     population_types = ["uniform", "gaussian", "double_gaussian"]
-    eos_samples_names = ["radio", "radio_chiEFT"]
-    if gw_event == "GW170817":
-        prior_names = ["bns"]
-    else:
-        prior_names = ["bns", "nsbh"]
+    eos_samples_names = ["radio_NICER"]
+    prior_names = ["bns"]
+    if gw_event in ["GW190425", "GW230529"]:
+        prior_names.append("nsbh")
+    if gw_event == "GW190425":
+        eos_samples_names.append("radio_GW170817")
     
     job_counter = 0
     job_letters = []
@@ -34,14 +35,14 @@ def generate_dag(gw_event, output_file, relative_binning_delta=1e-3):
                 job_name = f"run_{get_job_name(job_counter)}"
                 
                 lines.append(f"JOB {job_name} /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub")
-                lines.append(f"VARS {job_name} GW_event=\"{gw_event}\" population_type=\"{population_type}\" prior_name=\"{prior_name}\" eos_samples_name=\"{eos_samples_name}\" relative_binning_delta=\"{relative_binning_delta}\" seed=\"1234\"")
+                lines.append(f"VARS {job_name} GW_event=\"{gw_event}\" population_type=\"{population_type}\" prior_name=\"{prior_name}\" eos_samples_name=\"{eos_samples_name}\" relative_binning_delta=\"{relative_binning_delta}\" seed=\"123\"")
                 
                 job_counter += 1
     
     # Add the single run with uniform, radio, default
     job_name = f"run_{get_job_name(job_counter)}"
     lines.append(f"JOB {job_name} /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/GW_runs/analysis.sub")
-    lines.append(f"VARS {job_name} GW_event=\"{gw_event}\" population_type=\"uniform\" prior_name=\"default\" eos_samples_name=\"radio\" relative_binning_delta=\"{relative_binning_delta}\" seed=\"1234\"")
+    lines.append(f"VARS {job_name} GW_event=\"{gw_event}\" population_type=\"uniform\" prior_name=\"default\" eos_samples_name=\"radio\" relative_binning_delta=\"{relative_binning_delta}\" seed=\"123\"")
     
     # Write to file
     with open(output_file, 'w') as f:

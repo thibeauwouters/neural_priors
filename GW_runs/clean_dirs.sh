@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define variables
-GW_event="GW190425"
+GW_event="GW170817"
 population_types=("uniform" "gaussian" "double_gaussian" $GW_event)
 eos_list=("radio" "radio_chiEFT" "radio_chiEFT_NICER")
 
