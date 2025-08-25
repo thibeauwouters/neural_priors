@@ -70,6 +70,14 @@ EOS_SAMPLES_NAMES_DICT = {"radio": r"Radio",
                           "radio_NICER": r"+NICER"
                           }
 
+# Colorblind-friendly colors for EOS samples (using colors that work for deuteranopia/protanopia)
+EOS_COLORS = {
+    "radio": "#0173B2",           # Blue - easily distinguishable  
+    "radio_chiEFT": "#DE8F05",    # Orange - high contrast with blue
+    "radio_NICER": "#CC78BC",     # Pink/purple - distinct from both blue and orange
+    "radio_chiEFT_NICER": "#029E73"  # Green - for potential future use
+}
+
 POPULATION_NAMES_DICT = {
     "uniform": r"Uniform",
     "gaussian": r"Gaussian",
@@ -655,4 +663,373 @@ def load_adrian_data(gw_event: str, params_to_plot: List[str]) -> Optional[np.nd
         
     except Exception as e:
         print(f"Error loading Adrian's data: {e}")
+        return None
+
+
+def convert_lambdas_with_verbose(posteriors_dict: Dict[str, Dict[str, Any]], 
+                                params_to_plot: List[str],
+                                verbose: bool = False) -> Tuple[Dict[str, Dict[str, Any]], List[str]]:
+    """
+    Convert lambda_1 and lambda_2 to lambda_tilde and delta_lambda_tilde for multiple posteriors.
+    Enhanced version with verbose output and quantile calculations.
+    
+    Args:
+        posteriors_dict (Dict): Dictionary of posterior data
+        params_to_plot (List[str]): List of parameter names
+        verbose (bool): If True, print quantile information
+        
+    Returns:
+        Tuple[Dict, List]: Modified posteriors dict and updated params_to_plot list
+    """
+    import arviz
+    
+    updated_posteriors = {}
+    updated_params = params_to_plot.copy()
+    
+    for key, posterior in posteriors_dict.items():
+        updated_posterior = posterior.copy()
+        
+        if 'lambda_1' in posterior and 'lambda_2' in posterior:
+            mass_1, mass_2 = chirp_mass_and_mass_ratio_to_component_masses(
+                np.array(posterior['chirp_mass']),
+                np.array(posterior['mass_ratio']))
+            
+            lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(
+                np.array(posterior['lambda_1']),
+                np.array(posterior['lambda_2']),
+                mass_1, mass_2)
+            
+            delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(
+                np.array(posterior['lambda_1']),
+                np.array(posterior['lambda_2']),
+                mass_1, mass_2)
+            
+            updated_posterior['lambda_tilde'] = np.array(lambda_tilde)
+            updated_posterior['delta_lambda_tilde'] = np.array(delta_lambda_tilde)
+            
+            # Remove old lambdas
+            if 'lambda_1' in updated_posterior:
+                del updated_posterior['lambda_1']
+            if 'lambda_2' in updated_posterior:
+                del updated_posterior['lambda_2']
+            
+            # Print quantiles if verbose
+            if verbose:
+                print(f"\n{key} posterior quantiles:")
+                
+                # Lambda tilde
+                med = np.median(updated_posterior['lambda_tilde'])
+                low, high = arviz.hdi(np.array(updated_posterior['lambda_tilde']), hdi_prob=0.95)
+                low = med - low
+                high = high - med
+                med, low, high = np.round(med, 2), np.round(low, 2), np.round(high, 2)
+                print(f"   lambda_tilde: {med}-{low}+{high}")
+                
+                # Delta lambda tilde
+                med = np.median(updated_posterior['delta_lambda_tilde'])
+                low, high = arviz.hdi(np.array(updated_posterior['delta_lambda_tilde']), hdi_prob=0.95)
+                low = med - low
+                high = high - med
+                med, low, high = np.round(med, 2), np.round(low, 2), np.round(high, 2)
+                print(f"   delta_lambda_tilde: {med}-{low}+{high}")
+        else:
+            if 'lambda_1' in posterior or 'lambda_2' in posterior:
+                raise ValueError("lambda_1 and lambda_2 must both be present in the posterior to convert to lambda_tilde and delta_lambda_tilde.")
+        
+        updated_posteriors[key] = updated_posterior
+    
+    # Update params_to_plot list
+    if 'lambda_tilde' not in updated_params and any('lambda_1' in p or 'lambda_2' in p for p in posteriors_dict.values()):
+        updated_params.append('lambda_tilde')
+        updated_params.append('delta_lambda_tilde')
+    
+    if 'lambda_1' in updated_params:
+        updated_params.remove('lambda_1')
+    if 'lambda_2' in updated_params:
+        updated_params.remove('lambda_2')
+        
+    return updated_posteriors, updated_params
+
+
+def filter_constant_parameters(labels: List[str], latex_labels: List[str], 
+                              samples_dict: Dict[str, np.ndarray],
+                              threshold: float = 1e-10) -> Tuple[List[str], List[str], Dict[str, np.ndarray]]:
+    """
+    Filter out parameters that are constant across all datasets.
+    
+    Args:
+        labels (List[str]): Parameter names
+        latex_labels (List[str]): LaTeX parameter labels
+        samples_dict (Dict): Dictionary of sample arrays
+        threshold (float): Threshold for considering parameter constant
+        
+    Returns:
+        Tuple[List, List, Dict]: Filtered labels, latex_labels, and samples_dict
+    """
+    params_to_remove = []
+    
+    for i, param in enumerate(labels):
+        # Get all values for this parameter across all runs
+        all_vals_list = []
+        for samples in samples_dict.values():
+            if i < samples.shape[1]:
+                all_vals_list.append(samples[:, i])
+        
+        if all_vals_list:
+            all_vals = np.concatenate(all_vals_list)
+            # If parameter has no dynamic range, mark it for removal
+            if np.std(all_vals) < threshold:
+                params_to_remove.append(i)
+                print(f"Removing constant parameter '{param}' from plot (std={np.std(all_vals):.2e})")
+    
+    # Remove constant parameters from labels and samples
+    filtered_labels = labels.copy()
+    filtered_latex_labels = latex_labels.copy()
+    filtered_samples_dict = {}
+    
+    if params_to_remove:
+        # Remove from labels (in reverse order to preserve indices)
+        for i in reversed(params_to_remove):
+            del filtered_labels[i]
+            del filtered_latex_labels[i]
+        
+        # Remove from samples
+        for key, samples in samples_dict.items():
+            # Remove columns corresponding to constant parameters
+            mask = np.ones(samples.shape[1], dtype=bool)
+            mask[params_to_remove] = False
+            filtered_samples_dict[key] = samples[:, mask]
+    else:
+        filtered_samples_dict = samples_dict.copy()
+    
+    return filtered_labels, filtered_latex_labels, filtered_samples_dict
+
+
+def calculate_corner_plot_ranges(labels: List[str], samples_dict: Dict[str, np.ndarray]) -> List[Tuple[float, float]]:
+    """
+    Calculate ranges for corner plot parameters with special handling for NSBH lambda_1.
+    
+    Args:
+        labels (List[str]): Parameter names
+        samples_dict (Dict): Dictionary of sample arrays
+        
+    Returns:
+        List[Tuple]: List of (min, max) tuples for each parameter
+    """
+    ranges = []
+    
+    for i, param in enumerate(labels):
+        # Get all values for this parameter across all runs
+        all_vals_list = []
+        for samples in samples_dict.values():
+            if i < samples.shape[1]:
+                all_vals_list.append(samples[:, i])
+        
+        if not all_vals_list:
+            continue
+            
+        all_vals = np.concatenate(all_vals_list)
+        
+        # Handle special case for lambda_1 in NSBH runs
+        if param == 'lambda_1' and 'nsbh' in samples_dict:
+            nsbh_samples = samples_dict['nsbh']
+            if i < nsbh_samples.shape[1] and np.std(nsbh_samples[:, i]) < 1e-10:
+                # For constant lambda_1 in NSBH, use range from other runs only
+                non_zero_vals_list = []
+                for key, samples in samples_dict.items():
+                    if key != 'nsbh' and i < samples.shape[1]:
+                        non_zero_vals_list.append(samples[:, i])
+                
+                if non_zero_vals_list:
+                    non_zero_vals = np.concatenate(non_zero_vals_list)
+                    param_range = (np.min(non_zero_vals), np.max(non_zero_vals))
+                else:
+                    param_range = (np.min(all_vals), np.max(all_vals))
+            else:
+                param_range = (np.min(all_vals), np.max(all_vals))
+        else:
+            param_range = (np.min(all_vals), np.max(all_vals))
+        
+        ranges.append(param_range)
+        
+    return ranges
+
+
+def handle_nsbh_lambda_plotting(samples_dict: Dict[str, np.ndarray], labels: List[str],
+                               params_to_plot: List[str], jitter: float = 1e-10) -> Dict[str, np.ndarray]:
+    """
+    Apply jitter to NSBH lambda_1 values for corner plotting to avoid constant parameter issues.
+    
+    Args:
+        samples_dict (Dict): Dictionary of sample arrays
+        labels (List[str]): Parameter names corresponding to sample columns
+        params_to_plot (List[str]): Original parameter list to check for lambda_1
+        jitter (float): Standard deviation of jitter noise
+        
+    Returns:
+        Dict: Modified samples_dict with jittered lambda_1 for NSBH
+    """
+    modified_samples_dict = {}
+    
+    for key, samples in samples_dict.items():
+        modified_samples = samples.copy()
+        
+        # Apply jitter for NSBH lambda_1 plotting
+        if 'lambda_1' in params_to_plot and 'nsbh' in key.lower():
+            try:
+                lambda_1_index = labels.index('lambda_1')
+                if lambda_1_index < modified_samples.shape[1]:
+                    # Turn into very small jitter around zero instead of NaN to make plot pass
+                    modified_samples[:, lambda_1_index] = np.random.normal(
+                        0, jitter, size=modified_samples[:, lambda_1_index].shape
+                    )
+            except ValueError:
+                # lambda_1 not in labels
+                pass
+                
+        modified_samples_dict[key] = modified_samples
+    
+    return modified_samples_dict
+
+
+def prevent_bns_leakage(samples_dict: Dict[str, np.ndarray], labels: List[str],
+                       params_to_plot: List[str], param_name: str = 'delta_lambda_tilde') -> Dict[str, np.ndarray]:
+    """
+    Prevent BNS leakage by masking samples with negative delta_lambda_tilde.
+    
+    Args:
+        samples_dict (Dict): Dictionary of sample arrays
+        labels (List[str]): Parameter names corresponding to sample columns
+        params_to_plot (List[str]): Parameter list to check for delta_lambda_tilde
+        param_name (str): Parameter to use for filtering (default: 'delta_lambda_tilde')
+        
+    Returns:
+        Dict: Modified samples_dict with filtered BNS samples
+    """
+    modified_samples_dict = {}
+    
+    for key, samples in samples_dict.items():
+        modified_samples = samples.copy()
+        
+        # For BNS samples, mask to only have positive delta lambda tilde
+        if param_name in params_to_plot and 'bns' in key.lower():
+            try:
+                param_index = labels.index(param_name)
+                if param_index < modified_samples.shape[1]:
+                    mask = modified_samples[:, param_index] > 0
+                    modified_samples = modified_samples[mask]
+            except ValueError:
+                # param_name not in labels
+                pass
+                
+        modified_samples_dict[key] = modified_samples
+    
+    return modified_samples_dict
+
+
+def setup_corner_plot_styling(group_names: List[str], use_density: bool = True) -> Tuple[Dict[str, str], Dict[str, Dict]]:
+    """
+    Setup color assignment and corner plot kwargs for different groups.
+    
+    Args:
+        group_names (List[str]): Names of groups to assign colors to
+        use_density (bool): Whether to use density for histograms
+        
+    Returns:
+        Tuple[Dict, Dict]: group_colors and group_kwargs dictionaries
+    """
+    # Define colors for different groups
+    colors = ['blue', 'green', 'red', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
+    group_colors = {}
+    
+    # Assign colors to groups
+    for i, group_name in enumerate(group_names):
+        if group_name in ['default', 'bns', 'nsbh']:
+            # Use predefined colors for known groups
+            if group_name == 'default':
+                group_colors[group_name] = DEFAULT_COLOR
+            elif group_name == 'bns':
+                group_colors[group_name] = BNS_COLOR
+            elif group_name == 'nsbh':
+                group_colors[group_name] = NSBH_COLOR
+        else:
+            # Use rotating colors for other groups
+            group_colors[group_name] = colors[i % len(colors)]
+    
+    # Create corner kwargs for each group
+    group_kwargs = {}
+    for group_name, color in group_colors.items():
+        kwargs = DEFAULT_CORNER_KWARGS.copy()
+        kwargs.update({'color': color, 'hist_kwargs': {'color': color, 'density': use_density}})
+        group_kwargs[group_name] = kwargs
+        
+    return group_colors, group_kwargs
+
+
+def add_corner_plot_legend(fig, group_colors: Dict[str, str], plot_all_params: bool = False):
+    """
+    Add legend to corner plot with proper positioning and formatting.
+    
+    Args:
+        fig: Matplotlib figure object
+        group_colors (Dict): Dictionary mapping group names to colors
+        plot_all_params (bool): Whether all parameters are plotted (affects font size)
+    """
+    import matplotlib.pyplot as plt
+    
+    # Set font size based on number of parameters
+    if plot_all_params:
+        fs = 64
+    else:
+        fs = 34
+        
+    x = 0.85
+    y = 0.85
+    dy = 0.1
+    
+    for group_name, color in group_colors.items():
+        label = group_name.upper() if group_name in ['bns', 'nsbh', 'default'] else group_name
+        plt.text(x, y, label, fontsize=fs, color=color, ha='center', va='center', 
+                transform=fig.transFigure)
+        y -= dy
+
+
+def load_injection_truths(base_path: str, params_to_plot: List[str]) -> Optional[List[float]]:
+    """
+    Load injection truth values for corner plot if this is an injection run.
+    
+    Args:
+        base_path (str): Base path to look for injection parameters
+        params_to_plot (List[str]): List of parameter names
+        
+    Returns:
+        List[float] or None: Truth values for parameters or None if not injection run
+    """
+    injection_run = "injection" in base_path
+    
+    if not injection_run:
+        return None
+        
+    truths_filename = os.path.join(base_path, "injection_parameters.json")
+    
+    if not os.path.exists(truths_filename):
+        print(f"Warning: Injection parameters file not found: {truths_filename}")
+        return None
+        
+    try:
+        with open(truths_filename, "r") as f:
+            truths_dict = json.load(f)
+        
+        truths = []
+        for param in params_to_plot:
+            if param in truths_dict:
+                truths.append(truths_dict[param])
+            else:
+                print(f"Warning: Parameter '{param}' not found in injection truths")
+                truths.append(None)
+                
+        return truths
+        
+    except Exception as e:
+        print(f"Error loading injection truths: {e}")
         return None

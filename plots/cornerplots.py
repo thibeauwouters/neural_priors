@@ -23,7 +23,9 @@ from utils import (
     load_comparison_data, construct_result_path, load_posterior_data, load_cosmology_interpolator,
     setup_matplotlib_style, PARAMETER_LATEX_LABELS, DEFAULT_CORNER_KWARGS, VERBOSE,
     DEFAULT_COLOR, BNS_COLOR, NSBH_COLOR, HAUKE_COLOR, HAUKE_EM_COLOR, ADRIAN_COLOR,
-    load_hauke_data, load_adrian_data
+    load_hauke_data, load_adrian_data, convert_lambdas_with_verbose, filter_constant_parameters,
+    calculate_corner_plot_ranges, handle_nsbh_lambda_plotting, prevent_bns_leakage,
+    setup_corner_plot_styling, add_corner_plot_legend, load_injection_truths
 )
 
 # Setup matplotlib style using utils function
@@ -108,70 +110,7 @@ def create_corner_plot(GW_event: str,
         
     # If we convert lambdas, then we need to convert them to lambda_tilde and delta_lambda_tilde
     if convert_lambdas:
-        
-        # Convert lambda_1 and lambda_2 to lambda_tilde and delta_lambda_tilde
-        for key, posterior in posteriors_dict.items():
-            
-            mass_1, mass_2 = chirp_mass_and_mass_ratio_to_component_masses(
-                np.array(posterior['chirp_mass']),
-                np.array(posterior['mass_ratio']))
-            
-            if 'lambda_1' in posterior and 'lambda_2' in posterior:
-                lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(np.array(posterior['lambda_1']),
-                                                                 np.array(posterior['lambda_2']),
-                                                                 mass_1,
-                                                                 mass_2)
-                delta_lambda_tilde = lambda_1_lambda_2_to_delta_lambda_tilde(np.array(posterior['lambda_1']),
-                                                                             np.array(posterior['lambda_2']),
-                                                                             mass_1,
-                                                                             mass_2)
-                
-                posterior['lambda_tilde'] = np.array(lambda_tilde)
-                posterior['delta_lambda_tilde'] = np.array(delta_lambda_tilde)
-                
-                # Remove old lambdas
-                del posterior['lambda_1']
-                del posterior['lambda_2']
-                
-                # Save again
-                posteriors_dict[key] = posterior
-                
-                # Print the 95% quantiles for lambda_tilde and delta_lambda_tilde
-                if VERBOSE:
-                    print(f"\n{key} posterior quantiles:")
-                    med = np.median(posterior['lambda_tilde'])
-                    low, high = arviz.hdi(np.array(posterior['lambda_tilde']), hdi_prob=0.95)
-                    low = med - low
-                    high = high - med
-                    
-                    # Round to 2 digits
-                    med = np.round(med, 2)
-                    low = np.round(low, 2)
-                    high = np.round(high, 2)
-                    print(f"   lambda_tilde: {med}-{low}+{high}")
-                    
-                    med = np.median(posterior['delta_lambda_tilde'])
-                    low, high = arviz.hdi(np.array(posterior['delta_lambda_tilde']), hdi_prob=0.95)
-                    low = med - low
-                    high = high - med
-                    
-                    # Round to 2 digits
-                    med = np.round(med, 2)
-                    low = np.round(low, 2)
-                    high = np.round(high, 2)
-                    print(f"   delta_lambda_tilde: {med}-{low}+{high}")
-            
-            else:
-                raise ValueError("lambda_1 and lambda_2 must be present in the posterior to convert to lambda_tilde and delta_lambda_tilde.")
-            
-        # Add new labels
-        params_to_plot.append('lambda_tilde')
-        params_to_plot.append('delta_lambda_tilde')
-        
-        if 'lambda_1' in params_to_plot:
-            del params_to_plot[params_to_plot.index('lambda_1')]
-        if 'lambda_2' in params_to_plot:
-            del params_to_plot[params_to_plot.index('lambda_2')]
+        posteriors_dict, params_to_plot = convert_lambdas_with_verbose(posteriors_dict, params_to_plot, verbose=VERBOSE)
         
     # Create data arrays for each posterior
     labels = []
@@ -199,124 +138,24 @@ def create_corner_plot(GW_event: str,
             samples_dict[key] = np.array(data).T
     
     # Filter out parameters that are constant across all datasets
-    params_to_remove = []
-    for i, param in enumerate(labels):
-        # Get all values for this parameter across all runs
-        all_vals_list = []
-        for samples in samples_dict.values():
-            if i < samples.shape[1]:
-                all_vals_list.append(samples[:, i])
-        
-        if all_vals_list:
-            all_vals = np.concatenate(all_vals_list)
-            # If parameter has no dynamic range, mark it for removal
-            if np.std(all_vals) < 1e-10:
-                params_to_remove.append(i)
-                print(f"Removing constant parameter '{param}' from plot (std={np.std(all_vals):.2e})")
-    
-    # Remove constant parameters from labels and samples
-    if params_to_remove:
-        # Remove from labels (in reverse order to preserve indices)
-        for i in reversed(params_to_remove):
-            del labels[i]
-            del latex_labels[i]
-        
-        # Remove from samples
-        for key, samples in samples_dict.items():
-            # Remove columns corresponding to constant parameters
-            mask = np.ones(samples.shape[1], dtype=bool)
-            mask[params_to_remove] = False
-            samples_dict[key] = samples[:, mask]
+    labels, latex_labels, samples_dict = filter_constant_parameters(labels, latex_labels, samples_dict)
     
     # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
-    if 'delta_lambda_tilde' in params_to_plot and prevent_bns_leakage and 'bns' in samples_dict:
-        delta_lambda_tilde_index = labels.index('delta_lambda_tilde')
-        bns_samples = samples_dict['bns']
-        samples_dict['bns'] = bns_samples[bns_samples[:, delta_lambda_tilde_index] > 0]
+    if prevent_bns_leakage:
+        samples_dict = prevent_bns_leakage(samples_dict, labels, params_to_plot)
     
     # Create range dictionary to handle constant parameters
-    ranges = []
-    for i, param in enumerate(labels):
-        # Get all values for this parameter across all runs
-        all_vals_list = []
-        for samples in samples_dict.values():
-            if i < samples.shape[1]:
-                all_vals_list.append(samples[:, i])
-        
-        if all_vals_list:
-            all_vals = np.concatenate(all_vals_list)
-        else:
-            continue
-        
-        # Handle special case for lambda_1 in NSBH runs
-        if param == 'lambda_1' and 'nsbh' in samples_dict:
-            nsbh_samples = samples_dict['nsbh']
-            if i < nsbh_samples.shape[1] and np.std(nsbh_samples[:, i]) < 1e-10:
-                # For constant lambda_1 in NSBH, use range from other runs only
-                non_zero_vals_list = []
-                for key, samples in samples_dict.items():
-                    if key != 'nsbh' and i < samples.shape[1]:
-                        non_zero_vals_list.append(samples[:, i])
-                
-                if non_zero_vals_list:
-                    non_zero_vals = np.concatenate(non_zero_vals_list)
-                    param_range = (np.min(non_zero_vals), np.max(non_zero_vals))
-                else:
-                    param_range = (np.min(all_vals), np.max(all_vals))
-            else:
-                param_range = (np.min(all_vals), np.max(all_vals))
-        else:
-            param_range = (np.min(all_vals), np.max(all_vals))
-        
-        ranges.append(param_range)
+    ranges = calculate_corner_plot_ranges(labels, samples_dict)
         
     # Make lambda_1 NaN for NSBH samples for plotting
-    if 'lambda_1' in params_to_plot and 'nsbh' in samples_dict:
-        lambda_1_index = labels.index('lambda_1')
-        nsbh_samples = samples_dict['nsbh']
-        if lambda_1_index < nsbh_samples.shape[1]:
-            # Turn into very small jitter around zero instead of NaN to make plot pass
-            jitter = 1e-10
-            nsbh_samples[:, lambda_1_index] = np.random.normal(0, jitter, size=nsbh_samples[:, lambda_1_index].shape)
-            samples_dict['nsbh'] = nsbh_samples
+    samples_dict = handle_nsbh_lambda_plotting(samples_dict, labels, params_to_plot)
         
     # Create corner plot with overlaid distributions
-    corner_kwargs_with_range = DEFAULT_CORNER_KWARGS.copy()
     use_density = True
-
-    # Define colors for different groups
-    colors = ['blue', 'green', 'red', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
-    group_colors = {}
-    
-    # Assign colors to groups
-    for i, group_name in enumerate(samples_dict.keys()):
-        if group_name in ['default', 'bns', 'nsbh']:
-            # Use predefined colors for known groups
-            if group_name == 'default':
-                group_colors[group_name] = DEFAULT_COLOR
-            elif group_name == 'bns':
-                group_colors[group_name] = BNS_COLOR
-            elif group_name == 'nsbh':
-                group_colors[group_name] = NSBH_COLOR
-        else:
-            # Use rotating colors for other groups
-            group_colors[group_name] = colors[i % len(colors)]
-    
-    # Create corner kwargs for each group
-    group_kwargs = {}
-    for group_name, color in group_colors.items():
-        kwargs = corner_kwargs_with_range.copy()
-        kwargs.update({'color': color, 'hist_kwargs': {'color': color, 'density': use_density}})
-        group_kwargs[group_name] = kwargs
+    group_colors, group_kwargs = setup_corner_plot_styling(list(samples_dict.keys()), use_density)
 
     # If this was an injection, locate the truth values
-    if injection_run:
-        truths_filename = os.path.join(base_path, "injection_parameters.json")
-        with open(truths_filename, "r") as f:
-            truths_dict = json.load(f)
-        truths = [truths_dict[k] for k in params_to_plot]
-    else:
-        truths = None
+    truths = load_injection_truths(base_path, labels)
 
     # Create the overlaid corner plot - start with the first available dataset
     fig = None
@@ -328,48 +167,40 @@ def create_corner_plot(GW_event: str,
             corner.corner(samples, labels=latex_labels, fig=fig, **group_kwargs[group_name])
         
     # Add legend
-    if plot_all_params:
-        fs = 64
-    else:
-        fs = 34
-        
-    x = 0.85
-    y = 0.85
-    dy = 0.1
-    
-    for group_name, color in group_colors.items():
-        label = group_name.upper() if group_name in ['bns', 'nsbh', 'default'] else group_name
-        plt.text(x, y, label, fontsize=fs, color=color, ha='center', va='center', transform=plt.gcf().transFigure)
-        y -= dy
+    add_corner_plot_legend(fig, group_colors, plot_all_params)
     
     # External data loading for comparison (Hauke and Adrian)
     
+    # External data plotting - collect all external data first, then add to legend
+    external_colors = {}
+    
     if plot_hauke:
-        hauke_samples = load_hauke_data(GW_event, params_to_plot, use_em_data=False)
+        hauke_samples = load_hauke_data(GW_event, labels, use_em_data=False)
         if hauke_samples is not None:
-            hauke_kwargs = corner_kwargs_with_range.copy()
+            hauke_kwargs = DEFAULT_CORNER_KWARGS.copy()
             hauke_kwargs.update({'color': HAUKE_COLOR, 'hist_kwargs': {'color': HAUKE_COLOR, 'density': use_density}})
             corner.corner(hauke_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
-            y -= dy
-            plt.text(x, y, 'Hauke', fontsize=fs, color=HAUKE_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+            external_colors['Hauke'] = HAUKE_COLOR
         
     if plot_hauke_EM:
-        hauke_em_samples = load_hauke_data(GW_event, params_to_plot, use_em_data=True)
+        hauke_em_samples = load_hauke_data(GW_event, labels, use_em_data=True)
         if hauke_em_samples is not None:
-            hauke_kwargs = corner_kwargs_with_range.copy()
+            hauke_kwargs = DEFAULT_CORNER_KWARGS.copy()
             hauke_kwargs.update({'color': HAUKE_EM_COLOR, 'hist_kwargs': {'color': HAUKE_EM_COLOR, 'density': use_density}})
             corner.corner(hauke_em_samples, labels=latex_labels, fig=fig, **hauke_kwargs)
-            y -= dy
-            plt.text(x, y, 'Hauke (GW+EM)', fontsize=fs, color=HAUKE_EM_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+            external_colors['Hauke (GW+EM)'] = HAUKE_EM_COLOR
         
     if plot_adrian:
-        adrian_samples = load_adrian_data(GW_event, params_to_plot)
+        adrian_samples = load_adrian_data(GW_event, labels)
         if adrian_samples is not None:
-            adrian_kwargs = corner_kwargs_with_range.copy()
+            adrian_kwargs = DEFAULT_CORNER_KWARGS.copy()
             adrian_kwargs.update({'color': ADRIAN_COLOR, 'hist_kwargs': {'color': ADRIAN_COLOR, 'density': use_density}})
             corner.corner(adrian_samples, labels=latex_labels, fig=fig, **adrian_kwargs)
-            y -= dy
-            plt.text(x, y, 'Adrian', fontsize=fs, color=ADRIAN_COLOR, ha='center', va='center', transform=plt.gcf().transFigure)
+            external_colors['Adrian'] = ADRIAN_COLOR
+    
+    # Add external data to legend
+    if external_colors:
+        add_corner_plot_legend(fig, external_colors, plot_all_params)
     
     # Save the figure using new directory structure
     # Create subdirectory name based on fixed parameters
