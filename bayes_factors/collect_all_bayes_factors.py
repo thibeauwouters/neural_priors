@@ -36,7 +36,7 @@ EOS_DISPLAY = {
 }
 
 
-def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/") -> Dict[str, Any]:
+def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw170817_eos: bool = False) -> Dict[str, Any]:
     """
     Collect Bayes factors organized in source-first structure.
     
@@ -50,12 +50,15 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/") -> Dict[st
         print(f"Base directory {base_dir} does not exist")
         return data
     
+    # Filter EOS samples if ignoring GW170817 constraints
+    eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
+    
     # Initialize source-first structure
     for source in SOURCE_TYPES:
         data[source] = {}
         for pop in POPULATION_TYPES:
             data[source][pop] = {}
-            for eos in EOS_SAMPLES_NAMES:
+            for eos in eos_to_process:
                 data[source][pop][eos] = {}
     
     # Scan directory structure and populate data
@@ -77,7 +80,7 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/") -> Dict[st
                 if not os.path.exists(source_path):
                     continue
                     
-                for eos in EOS_SAMPLES_NAMES:
+                for eos in eos_to_process:
                     eos_path = os.path.join(source_path, eos)
                     if not os.path.exists(eos_path):
                         continue
@@ -122,13 +125,14 @@ def get_jeffreys_color(log10_bf: float) -> str:
         return "jeffreysred5"
 
 
-def find_column_maxima(data: Dict[str, Any]) -> Dict[str, float]:
+def find_column_maxima(data: Dict[str, Any], ignore_gw170817_eos: bool = False) -> Dict[str, float]:
     """Find maximum Bayes factor value for each event column."""
     maxima = {event: float('-inf') for event in GW_EVENTS}
+    eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
     
     for source in SOURCE_TYPES:
         for pop in POPULATION_TYPES:
-            for eos in EOS_SAMPLES_NAMES:
+            for eos in eos_to_process:
                 if pop in data[source] and eos in data[source][pop]:
                     for event in GW_EVENTS:
                         if event in data[source][pop][eos]:
@@ -139,10 +143,11 @@ def find_column_maxima(data: Dict[str, Any]) -> Dict[str, float]:
     return maxima
 
 
-def generate_latex_table(data: Dict[str, Any], replace_nsbh_zeros: bool = True) -> str:
+def generate_latex_table(data: Dict[str, Any], replace_nsbh_zeros: bool = True, ignore_gw170817_eos: bool = False) -> str:
     """Generate LaTeX table with source-first organization."""
     lines = []
-    maxima = find_column_maxima(data)
+    maxima = find_column_maxima(data, ignore_gw170817_eos)
+    eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
     
     # Table header
     lines.extend([
@@ -158,17 +163,17 @@ def generate_latex_table(data: Dict[str, Any], replace_nsbh_zeros: bool = True) 
         
         # Count rows for this source (for multirow)
         source_rows = sum(1 for pop in ["uniform", "gaussian", "double_gaussian"] 
-                         for eos in EOS_SAMPLES_NAMES 
+                         for eos in eos_to_process 
                          if has_data(data, source, pop, eos))
         
         for pop in ["uniform", "gaussian", "double_gaussian"]:
             pop_first = True
             
             # Count rows for this population
-            pop_rows = sum(1 for eos in EOS_SAMPLES_NAMES 
+            pop_rows = sum(1 for eos in eos_to_process 
                           if has_data(data, source, pop, eos))
             
-            for eos in EOS_SAMPLES_NAMES:
+            for eos in eos_to_process:
                 if not has_data(data, source, pop, eos):
                     continue
                 
@@ -203,6 +208,8 @@ def generate_latex_table(data: Dict[str, Any], replace_nsbh_zeros: bool = True) 
                 # Add appropriate lines
                 if eos == "radio":
                     lines.append("\\cline{3-6}")
+                elif eos == "radio_chiEFT":
+                    lines.append("\\cline{3-6}")
                 
                 source_first = False
                 pop_first = False
@@ -232,15 +239,16 @@ def has_data(data: Dict[str, Any], source: str, pop: str, eos: str) -> bool:
     return False
 
 
-def convert_to_log10(data: Dict[str, Any]) -> Dict[str, Any]:
+def convert_to_log10(data: Dict[str, Any], ignore_gw170817_eos: bool = False) -> Dict[str, Any]:
     """Convert Bayes factors from natural log to log10."""
     converted = {"log_evidence_errors": [err / np.log(10) for err in data["log_evidence_errors"]]}
+    eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
     
     for source in SOURCE_TYPES:
         converted[source] = {}
         for pop in POPULATION_TYPES:
             converted[source][pop] = {}
-            for eos in EOS_SAMPLES_NAMES:
+            for eos in eos_to_process:
                 converted[source][pop][eos] = {}
                 for event in GW_EVENTS:
                     val = data[source][pop][eos].get(event, 0.0)
@@ -267,6 +275,8 @@ def main():
                         help='Convert from ln to log10 (default: True)')
     parser.add_argument('--replace-nsbh-zeros', action='store_true', default=True,
                         help='Replace GW170817 NSBH zeros with "<-200" (default: True)')
+    parser.add_argument('--ignore-GW170817', action='store_true', default=True,
+                        help='Ignore EOS constraints that include GW170817 data')
     
     args = parser.parse_args()
     
@@ -276,7 +286,10 @@ def main():
     
     if args.get_JSON:
         print(f"Collecting Bayes factors from: {base_dir}")
-        data = collect_bayes_factors_source_first(base_dir)
+        ignore_gw170817_flag = getattr(args, 'ignore_GW170817', False)
+        if ignore_gw170817_flag:
+            print("Ignoring EOS constraints that include GW170817 data")
+        data = collect_bayes_factors_source_first(base_dir, ignore_gw170817_flag)
         
         print(f"Saving JSON to: {json_file}")
         with open(json_file, 'w') as f:
@@ -298,14 +311,14 @@ def main():
         
         if args.convert_to_log10:
             print("Converting to log10...")
-            data = convert_to_log10(data)
+            data = convert_to_log10(data, getattr(args, 'ignore_GW170817', False))
             
             if data["log_evidence_errors"]:
                 mean_err = np.mean(data["log_evidence_errors"])
                 print(f"Mean log evidence error (log10): {mean_err:.4f}")
         
         print(f"Generating LaTeX table: {latex_file}")
-        table = generate_latex_table(data, args.replace_nsbh_zeros)
+        table = generate_latex_table(data, args.replace_nsbh_zeros, getattr(args, 'ignore_GW170817', False))
         
         with open(latex_file, 'w') as f:
             f.write(table)

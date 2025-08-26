@@ -34,6 +34,9 @@ LEGEND_X = 0.65
 LEGEND_Y = 0.95
 LEGEND_DY = 0.06  # Half of original 0.08
 
+# Title formatting constants
+TITLE_FONTSIZE = 28
+
 
 def load_bayes_factors(bayes_factors_path: str = "../bayes_factors/all_bayes_factors.json") -> Dict:
     """
@@ -115,6 +118,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
                                             legend_y: float = LEGEND_Y,
                                             legend_dy: float = LEGEND_DY,
                                             legend_fontsize: int = LEGEND_FONTSIZE,
+                                            title_fontsize: int = TITLE_FONTSIZE,
                                             bayes_factors_path: str = "../bayes_factors/all_bayes_factors.json",
                                             include_default: bool = True,
                                             verbose: bool = False) -> str:
@@ -145,6 +149,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
         legend_y (float): Y position of legend (0-1 scale)
         legend_dy (float): Vertical spacing between legend entries
         legend_fontsize (int): Font size for legend text
+        title_fontsize (int): Font size for plot title
         bayes_factors_path (str): Path to Bayes factors JSON file
         include_default (bool): Include default uniform prior run (plotted in light gray)
         verbose (bool): Print verbose information
@@ -307,16 +312,25 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
         if len(normalization_keys) != n_params:
             raise ValueError(f"normalization_keys must have length {n_params} (number of parameters), got {len(normalization_keys)}")
         
-        # Check that all keys exist in loaded datasets
+        # Check that all keys exist in loaded datasets or are "default"
         loaded_keys = set(samples_dict.keys())
+        available_keys = loaded_keys.copy()
+        if default_samples is not None:
+            available_keys.add("default")
+        
         for key in normalization_keys:
-            if key not in loaded_keys:
-                raise ValueError(f"normalization_keys contains '{key}' which was not loaded. Available keys: {loaded_keys}")
+            if key not in available_keys:
+                raise ValueError(f"normalization_keys contains '{key}' which was not loaded. Available keys: {available_keys}")
+        
+        # Create extended samples dict that includes default if available
+        extended_samples_dict = samples_dict.copy()
+        if default_samples is not None:
+            extended_samples_dict["default"] = default_samples
         
         # Find minimum number of samples across all datasets
-        min_samples = min(len(dataset) for dataset in samples_dict.values())
+        min_samples = min(len(dataset) for dataset in extended_samples_dict.values())
         if verbose:
-            sample_counts = {key: len(dataset) for key, dataset in samples_dict.items()}
+            sample_counts = {key: len(dataset) for key, dataset in extended_samples_dict.items()}
             print(f"Sample counts by dataset: {sample_counts}")
             print(f"Using minimum sample count for normalization: {min_samples}")
         
@@ -324,7 +338,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
         # All datasets are downsampled to min_samples to ensure consistent sizes
         dummy_columns = []
         for param_idx, dataset_key in enumerate(normalization_keys):
-            dataset = samples_dict[dataset_key]
+            dataset = extended_samples_dict[dataset_key]
             # Downsample to min_samples by taking first min_samples rows
             downsampled_dataset = dataset[:min_samples]
             dummy_columns.append(downsampled_dataset[:, param_idx])
@@ -453,6 +467,10 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
         legend_entries.append("Default posterior")
         legend_colors.append(DEFAULT_RUN_LEGEND_COLOR)
     
+    # Add title
+    title = f"{source_type.upper()} - {population.replace('_', ' ').title()} Population"
+    plt.suptitle(title, fontsize=title_fontsize, weight='bold', y=0.98)
+    
     # Add legend with configurable positioning
     for i, (label, color) in enumerate(zip(legend_entries, legend_colors)):
         plt.text(legend_x, legend_y - i * legend_dy, label, 
@@ -481,13 +499,13 @@ def plot_gw170817_corner() -> str:
                                "radio_chiEFT",
                                "radio_NICER",
                                "radio",
-                               "radio",
+                               "radio_NICER",
                                ],
         'ranges': [[1.197435, 1.1977],
                    [0.88, 1.0],
                    [251, 1000],
                    [0.0, 75.0],
-                   [35.0, 50.0],
+                   [20.0, 50.0],
                    ]
     }
     params_to_plot = ["chirp_mass",
@@ -532,7 +550,9 @@ def plot_gw170817_corner() -> str:
     gw170817_defaults['ranges'] =  [[1.197435, 1.19775],
                                     [0.6, 1.0],
                                     [300, 850],
-                                    [0.0, 200.0]]
+                                    [0.0, 200.0],
+                                    [20.0, 50.0],
+                                    ]
     path = plot_corner_fixed_population_varying_eos(
         gw_event="GW170817",
         population="uniform",
@@ -628,12 +648,19 @@ def plot_gw230529_corner() -> str:
     
     # Set hardcoded defaults for GW230529
     gw230529_defaults = {
-        'normalization_keys': ["radio", "radio_chiEFT", "radio_NICER", "radio"],
-        'ranges': None
+        'normalization_keys': ["radio_NICER",
+                               "default",
+                               "radio_chiEFT",
+                               "radio"],
     }
     params_to_plot = ["chirp_mass", "mass_ratio", "lambda_2", "luminosity_distance"]
     
     # Gaussian
+    gw230529_defaults["ranges"] = [[2.0245, 2.0289],
+                                   [0.25, 0.45],
+                                   [0.0, 1800],
+                                   [50.0, 400],
+                                   ]
     path = plot_corner_fixed_population_varying_eos(
         gw_event="GW230529",
         population="gaussian",
@@ -642,36 +669,46 @@ def plot_gw230529_corner() -> str:
         **gw230529_defaults
     )
     
-    # # Double Gaussian
-    # gw230529_defaults['normalization_keys'] = ["radio", "radio_chiEFT", "radio_NICER", "radio_chiEFT"]
-    # path = plot_corner_fixed_population_varying_eos(
-    #     gw_event="GW230529",
-    #     population="double_gaussian",
-    #     source_type="bns",
-    #     **gw230529_defaults
-    # )
+    # Double Gaussian
+    gw230529_defaults["ranges"] = [[2.0245, 2.0289],
+                                   [0.275, 0.40],
+                                   [0.0, 1800],
+                                   [50.0, 400],
+                                   ]
+    gw230529_defaults['normalization_keys'] = ["default",
+                                               "default",
+                                               "radio_NICER",
+                                               "radio_chiEFT"]
+    path = plot_corner_fixed_population_varying_eos(
+        gw_event="GW230529",
+        population="double_gaussian",
+        source_type="nsbh",
+        params_to_plot=params_to_plot,
+        **gw230529_defaults
+    )
     
-    # # Uniform
-    # gw230529_defaults['normalization_keys'] = ["radio", "radio", "radio", "radio"]
-    # gw230529_defaults['ranges'] = None
-    # path = plot_corner_fixed_population_varying_eos(
-    #     gw_event="GW230529",
-    #     population="uniform",
-    #     source_type="bns",
-    #     **gw230529_defaults
-    # )
+    # Uniform
+    gw230529_defaults["ranges"] = [[2.0245, 2.0289],
+                                   [0.275, 0.50],
+                                   [0.0, 1800],
+                                   [50.0, 400],
+                                   ]
+    gw230529_defaults['normalization_keys'] = ["default",
+                                               "default",
+                                               "radio",
+                                               "radio_chiEFT"]
+    path = plot_corner_fixed_population_varying_eos(
+        gw_event="GW230529",
+        population="uniform",
+        source_type="nsbh",
+        params_to_plot=params_to_plot,
+        **gw230529_defaults
+    )
     
     return path
 
 
 def main():
-    """
-    Main function for creating money plots.
-    Demonstrates usage of the plotting functions.
-    """
-    
-    print("=== Money Plots - Fixed Population, Varying EOS ===")
-    
     plot_gw170817_corner()
     plot_gw190425_corner()
     plot_gw230529_corner()
