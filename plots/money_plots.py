@@ -608,7 +608,7 @@ def plot_gw190425_corner() -> str:
                                    [0.64, 1.0],
                                    [50, 400],
                                    [0, 100],
-                                   [0, 400],
+                                   [0, 300],
                                    ]
     path = plot_corner_fixed_population_varying_eos(
         gw_event="GW190425",
@@ -623,13 +623,13 @@ def plot_gw190425_corner() -> str:
                                                "radio",
                                                "radio_chiEFT",
                                                "radio",
-                                               "radio",
+                                               "radio_chiEFT",
                                                ]
     gw190425_defaults["ranges"] = [[1.4862, 1.4873],
                                    [0.65, 1.0],
                                    [50, 400],
                                    [0, 100],
-                                   [0, 400],
+                                   [30, 300],
                                    ]
     path = plot_corner_fixed_population_varying_eos(
         gw_event="GW190425",

@@ -7,7 +7,7 @@ This directory contains tools for generating corner plots from gravitational wav
 **`cornerplots.py`** - Main plotting script with command-line interface
 - Creates corner plots comparing different priors/sources/populations
 - Supports external data integration (Hauke, Adrian)
-- Lambda parameter conversion (λ₁,λ₂ → λ̃,δλ̃)
+- Lambda parameter conversion (component lambdas to mass-weighted lambdas)
 
 **`utils.py`** - Utility functions and configuration
 - Data loading functions (`load_posterior_data`, `load_hauke_data`, `load_adrian_data`)
