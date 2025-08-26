@@ -5,16 +5,14 @@ This script provides hardcoded configurations for creating publication-quality
 corner plots for specific GW events and parameter combinations. Unlike the batch
 approach in cornerplots.py, this focuses on creating carefully configured plots
 for paper figures.
-
-Author: Claude Code
-Date: 2025-08-20
 """
 
 import os
+import json
 import numpy as np
 import matplotlib.pyplot as plt
 import corner
-from typing import List
+from typing import List, Dict, Optional
 
 from utils import (
     construct_result_path, load_posterior_data, setup_matplotlib_style,
@@ -25,6 +23,70 @@ from utils import (
 
 # Setup matplotlib style
 setup_matplotlib_style()
+
+# Default run color constants
+DEFAULT_RUN_PLOT_COLOR = 'lightgray'
+DEFAULT_RUN_LEGEND_COLOR = 'gray'
+
+# Legend formatting constants
+LEGEND_FONTSIZE = 24
+LEGEND_X = 0.65
+LEGEND_Y = 0.95
+LEGEND_DY = 0.06  # Half of original 0.08
+
+
+def load_bayes_factors(bayes_factors_path: str = "../bayes_factors/all_bayes_factors.json") -> Dict:
+    """
+    Load Bayes factors from JSON file.
+    
+    Args:
+        bayes_factors_path (str): Path to the Bayes factors JSON file
+        
+    Returns:
+        Dict: Bayes factors data structure
+    """
+    with open(bayes_factors_path, 'r') as f:
+        return json.load(f)
+
+
+def get_bayes_factors_for_event(bayes_factors: Dict, 
+                               gw_event: str, 
+                               population: str, 
+                               source_type: str, 
+                               eos_samples: List[str]) -> Dict[str, float]:
+    """
+    Extract Bayes factors for a specific event configuration.
+    
+    Args:
+        bayes_factors (Dict): Loaded Bayes factors data
+        gw_event (str): GW event name
+        population (str): Population type
+        source_type (str): Source type
+        eos_samples (List[str]): List of EOS sample names
+        
+    Returns:
+        Dict[str, float]: Dictionary mapping EOS name to Bayes factor
+    """
+    bf_dict = {}
+    
+    if source_type not in bayes_factors:
+        print(f"Warning: Source type '{source_type}' not found in Bayes factors")
+        return bf_dict
+        
+    if population not in bayes_factors[source_type]:
+        print(f"Warning: Population '{population}' not found for source type '{source_type}'")
+        return bf_dict
+    
+    for eos_name in eos_samples:
+        if eos_name in bayes_factors[source_type][population]:
+            if gw_event in bayes_factors[source_type][population][eos_name]:
+                bf_dict[eos_name] = bayes_factors[source_type][population][eos_name][gw_event]
+            else:
+                print(f"Warning: Event '{gw_event}' not found for {eos_name}")
+        else:
+            print(f"Warning: EOS '{eos_name}' not found for {population} {source_type}")
+    
+    return bf_dict
 
 
 def ensure_output_directory(output_path: str) -> None:
@@ -49,10 +111,12 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
                                             params_to_plot: List[str] = None,
                                             ranges: List[tuple] = None,
                                             normalization_keys: List[str] = None,
-                                            legend_x: float = 0.85,
-                                            legend_y: float = 0.95,
-                                            legend_dy: float = 0.08,
-                                            legend_fontsize: int = 14,
+                                            legend_x: float = LEGEND_X,
+                                            legend_y: float = LEGEND_Y,
+                                            legend_dy: float = LEGEND_DY,
+                                            legend_fontsize: int = LEGEND_FONTSIZE,
+                                            bayes_factors_path: str = "../bayes_factors/all_bayes_factors.json",
+                                            include_default: bool = True,
                                             verbose: bool = False) -> str:
     """
     Create corner plot for a GW event with fixed population type and varying EOS samples.
@@ -81,6 +145,8 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
         legend_y (float): Y position of legend (0-1 scale)
         legend_dy (float): Vertical spacing between legend entries
         legend_fontsize (int): Font size for legend text
+        bayes_factors_path (str): Path to Bayes factors JSON file
+        include_default (bool): Include default uniform prior run (plotted in light gray)
         verbose (bool): Print verbose information
         
     Returns:
@@ -122,11 +188,36 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     if not posteriors_dict:
         raise ValueError("No posterior data could be loaded!")
     
+    # Load default run if requested
+    default_posterior = None
+    if include_default:
+        default_path = construct_result_path(base_path, gw_event, "uniform", 
+                                           "default", "radio")
+        print(f"Loading default run from: {default_path}")
+        
+        if os.path.exists(default_path):
+            default_posterior = load_posterior_data(default_path, fast_mode=True)
+            if default_posterior is not None:
+                if verbose:
+                    print(f"Loaded default run with {len(default_posterior['chirp_mass'])} samples")
+            else:
+                print("Warning: Could not load default run data")
+        else:
+            print(f"Warning: Default run file not found: {default_path}")
+    
     # Convert lambdas to tilde parameters if needed
     if any('lambda_tilde' in p or 'delta_lambda_tilde' in p for p in params_to_plot):
         posteriors_dict, params_to_plot = convert_lambdas_with_verbose(
             posteriors_dict, params_to_plot, verbose=verbose
         )
+        
+        # Also convert default posterior if it exists
+        if default_posterior is not None:
+            default_dict = {"default": default_posterior}
+            default_dict, _ = convert_lambdas_with_verbose(
+                default_dict, params_to_plot, verbose=verbose
+            )
+            default_posterior = default_dict["default"]
     
     # Create samples dictionary for corner plotting
     samples_dict = {}
@@ -145,13 +236,68 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     if not samples_dict:
         raise ValueError("No valid samples could be extracted!")
     
+    # Add default samples if available
+    default_samples = None
+    if default_posterior is not None:
+        samples_list = []
+        for param in params_to_plot:
+            if param in default_posterior:
+                samples_list.append(np.array(default_posterior[param]))
+            else:
+                print(f"Warning: Parameter '{param}' not found in default posterior")
+        
+        if samples_list:
+            default_samples = np.column_stack(samples_list)
+            if verbose:
+                print(f"Created default samples array with shape: {default_samples.shape}")
+    
     # Apply BNS leakage prevention if needed
     if source_type.lower() == 'bns':
         samples_dict = prevent_bns_leakage(samples_dict, params_to_plot, params_to_plot)
+        
+        # Also apply to default samples
+        if default_samples is not None:
+            default_dict_temp = {"default": default_samples}
+            default_dict_temp = prevent_bns_leakage(default_dict_temp, params_to_plot, params_to_plot)
+            default_samples = default_dict_temp["default"]
     
     # Handle NSBH lambda plotting if needed
     if source_type.lower() == 'nsbh':
         samples_dict = handle_nsbh_lambda_plotting(samples_dict, params_to_plot, params_to_plot)
+        
+        # Also apply to default samples
+        if default_samples is not None:
+            default_dict_temp = {"default": default_samples}
+            default_dict_temp = handle_nsbh_lambda_plotting(default_dict_temp, params_to_plot, params_to_plot)
+            default_samples = default_dict_temp["default"]
+    
+    # Load Bayes factors and calculate zorder
+    try:
+        bayes_factors = load_bayes_factors(bayes_factors_path)
+        bf_dict = get_bayes_factors_for_event(bayes_factors, gw_event, population, source_type, eos_samples)
+        
+        if bf_dict:
+            print(f"\n=== Bayes Factors for {gw_event} ({population} {source_type}) ===")
+            sorted_bf = sorted(bf_dict.items(), key=lambda x: x[1], reverse=True)
+            for eos_name, bf_value in sorted_bf:
+                print(f"{eos_name}: ln(BF) = {bf_value:.2f}")
+            
+            # Find highest evidence EOS
+            highest_evidence_eos = sorted_bf[0][0] if sorted_bf else None
+            print(f"Highest evidence: {highest_evidence_eos} *")
+            
+            # Create zorder mapping (higher BF = higher zorder, so it's plotted on top)
+            zorder_dict = {}
+            for i, (eos_name, _) in enumerate(sorted_bf):
+                zorder_dict[eos_name] = len(sorted_bf) - i  # Reverse order so highest BF gets highest zorder
+        else:
+            print(f"Warning: No Bayes factors found for {gw_event} {population} {source_type}")
+            zorder_dict = {}
+            highest_evidence_eos = None
+    except Exception as e:
+        print(f"Warning: Could not load Bayes factors: {e}")
+        zorder_dict = {}
+        highest_evidence_eos = None
     
     # Validate and create normalization dummy dataset if requested
     dummy_dataset = None
@@ -223,9 +369,34 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     fig = None
     group_colors = {}
     
-    for i, (eos_name, samples) in enumerate(samples_dict.items()):
+    # Plot default samples FIRST (if available) to ensure they appear behind everything
+    if default_samples is not None:
+        if verbose:
+            print("Plotting default run samples in light gray (first layer)")
+        
+        default_kwargs = DEFAULT_CORNER_KWARGS.copy()
+        default_kwargs.update({
+            'color': DEFAULT_RUN_PLOT_COLOR,  # Light color for 2D contours
+            'labels': latex_labels,
+            'range': ranges,
+            'hist_kwargs': {'color': DEFAULT_RUN_LEGEND_COLOR, 'density': True},  # Dark color for 1D histograms
+        })
+        
+        fig = corner.corner(default_samples, **default_kwargs)
+    
+    # Sort samples_dict by zorder (lowest first so highest evidence is plotted last/on top)
+    if zorder_dict:
+        sorted_samples = sorted(samples_dict.items(), 
+                              key=lambda x: zorder_dict.get(x[0], 0))
+    else:
+        sorted_samples = list(samples_dict.items())
+    
+    for i, (eos_name, samples) in enumerate(sorted_samples):
         color = EOS_COLORS.get(eos_name, f"C{i}")  # Fallback to default colors if needed
         group_colors[eos_name] = color
+        
+        # Get zorder for this EOS (higher BF = higher zorder = plotted on top)
+        zorder_value = zorder_dict.get(eos_name, 1)
         
         # Corner plot kwargs
         kwargs = DEFAULT_CORNER_KWARGS.copy()
@@ -233,7 +404,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
             'color': color,
             'labels': latex_labels,
             'range': ranges,
-            'hist_kwargs': {'color': color, 'density': True},
+            'hist_kwargs': {'color': color, 'density': True, 'zorder': zorder_value},
         })
         
         if fig is None:
@@ -270,8 +441,17 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     legend_colors = []
     
     for eos_name in samples_dict.keys():
-        legend_entries.append(EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name))
+        base_label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
+        # Add superscript asterisk to highest evidence EOS
+        if highest_evidence_eos and eos_name == highest_evidence_eos:
+            base_label += r"$^{*}$"
+        legend_entries.append(base_label)
         legend_colors.append(EOS_COLORS.get(eos_name, 'black'))
+    
+    # Add default run to legend if included
+    if default_samples is not None:
+        legend_entries.append("Default posterior")
+        legend_colors.append(DEFAULT_RUN_LEGEND_COLOR)
     
     # Add legend with configurable positioning
     for i, (label, color) in enumerate(zip(legend_entries, legend_colors)):
@@ -297,78 +477,191 @@ def plot_gw170817_corner() -> str:
     """
     # Set hardcoded defaults for GW170817
     gw170817_defaults = {
-        'legend_x': 0.75,
-        'legend_y': 0.95,
-        'legend_dy': 0.08,
-        'legend_fontsize': 16,
-        'normalization_keys': ["radio", "radio_chiEFT", "radio_NICER", "radio"],
+        'normalization_keys': ["radio",
+                               "radio_chiEFT",
+                               "radio_NICER",
+                               "radio",
+                               "radio",
+                               ],
         'ranges': [[1.197435, 1.1977],
                    [0.88, 1.0],
                    [251, 1000],
-                   [0.0, 75.0]]
+                   [0.0, 75.0],
+                   [35.0, 50.0],
+                   ]
     }
+    params_to_plot = ["chirp_mass",
+                      "mass_ratio",
+                      "lambda_tilde",
+                      "delta_lambda_tilde",
+                      "luminosity_distance"]
     
+    # Gaussian
     path = plot_corner_fixed_population_varying_eos(
         gw_event="GW170817",
         population="gaussian",
-        source_type="bns",  # GW170817 is primarily BNS
+        source_type="bns",
+        params_to_plot=params_to_plot,
         **gw170817_defaults
     )
     
-    # For double Gaussian the delta_lambda_tilde key should be changed for normalization
-    gw170817_defaults['normalization_keys'] = ["radio", "radio_chiEFT", "radio_NICER", "radio_chiEFT"]
+    # Double Gaussian
+    gw170817_defaults['normalization_keys'] = ["radio",
+                                               "radio_chiEFT",
+                                               "radio_NICER",
+                                               "radio_chiEFT",
+                                               "radio_chiEFT",
+                                               ]
     path = plot_corner_fixed_population_varying_eos(
         gw_event="GW170817",
         population="double_gaussian",
-        source_type="bns",  # GW170817 is primarily BNS
+        source_type="bns",
+        params_to_plot=params_to_plot,
+        **gw170817_defaults
+    )
+    
+    # Uniform
+    # gw170817_defaults['normalization_keys'] = ["radio", "radio_chiEFT", "radio_NICER", "radio_chiEFT"]
+    gw170817_defaults['ranges'] = None
+    gw170817_defaults['normalization_keys'] = ["radio",
+                                               "radio",
+                                               "radio",
+                                               "radio",
+                                               "radio",
+                                               ]
+    gw170817_defaults['ranges'] =  [[1.197435, 1.19775],
+                                    [0.6, 1.0],
+                                    [300, 850],
+                                    [0.0, 200.0]]
+    path = plot_corner_fixed_population_varying_eos(
+        gw_event="GW170817",
+        population="uniform",
+        source_type="bns",
+        params_to_plot=params_to_plot,
         **gw170817_defaults
     )
     
     return path
 
 
-def plot_gw190425_corner(population: str = "gaussian",
-                        source_type: str = "bns",
-                        **kwargs) -> str:
+def plot_gw190425_corner() -> str:
     """
     Convenience function for creating GW190425 corner plot.
-    
-    Args:
-        population (str): Population type
-        source_type (str): Source type ('bns' or 'nsbh')
-        **kwargs: Additional arguments passed to plot_corner_fixed_population_varying_eos
-        
-    Returns:
-        str: Path to saved figure
     """
-    return plot_corner_fixed_population_varying_eos(
+    
+    params_to_plot = ["chirp_mass",
+                      "mass_ratio",
+                      "lambda_tilde",
+                      "delta_lambda_tilde",
+                      "luminosity_distance"
+                      ]
+    
+    # Set hardcoded defaults for GW190425
+    gw190425_defaults = {
+        'normalization_keys': ["radio",
+                               "radio_chiEFT",
+                               "radio_NICER",
+                               "radio",
+                               "radio",
+                               ],
+    }
+    
+    # Gaussian
+    
+    # # NOTE: for GW190425 this is a very poor fit, not plotting now
+    # gw190425_defaults["ranges"] = None
+    # path = plot_corner_fixed_population_varying_eos(
+    #     gw_event="GW190425",
+    #     population="gaussian",
+    #     source_type="bns",
+    #     **gw190425_defaults
+    # )
+    
+    # Double Gaussian
+    gw190425_defaults['normalization_keys'] = ["radio_chiEFT",
+                                               "radio_NICER",
+                                               "radio_NICER",
+                                               "radio_NICER",
+                                               "radio_NICER",
+                                               ]
+    gw190425_defaults["ranges"] = [[1.4862, 1.4873],
+                                   [0.64, 1.0],
+                                   [50, 400],
+                                   [0, 100],
+                                   [0, 400],
+                                   ]
+    path = plot_corner_fixed_population_varying_eos(
         gw_event="GW190425",
-        population=population,
-        source_type=source_type,
-        **kwargs
+        population="double_gaussian",
+        source_type="bns",
+        params_to_plot=params_to_plot,
+        **gw190425_defaults
     )
+    
+    # Uniform
+    gw190425_defaults['normalization_keys'] = ["radio_chiEFT",
+                                               "radio",
+                                               "radio_chiEFT",
+                                               "radio",
+                                               "radio",
+                                               ]
+    gw190425_defaults["ranges"] = [[1.4862, 1.4873],
+                                   [0.65, 1.0],
+                                   [50, 400],
+                                   [0, 100],
+                                   [0, 400],
+                                   ]
+    path = plot_corner_fixed_population_varying_eos(
+        gw_event="GW190425",
+        population="uniform",
+        source_type="bns",
+        params_to_plot=params_to_plot,
+        **gw190425_defaults
+    )
+    
+    return path
 
-
-def plot_gw230529_corner(population: str = "gaussian",
-                        source_type: str = "nsbh",
-                        **kwargs) -> str:
+def plot_gw230529_corner() -> str:
     """
     Convenience function for creating GW230529 corner plot.
-    
-    Args:
-        population (str): Population type
-        source_type (str): Source type ('bns' or 'nsbh')
-        **kwargs: Additional arguments passed to plot_corner_fixed_population_varying_eos
-        
-    Returns:
-        str: Path to saved figure
     """
-    return plot_corner_fixed_population_varying_eos(
+    
+    # Set hardcoded defaults for GW230529
+    gw230529_defaults = {
+        'normalization_keys': ["radio", "radio_chiEFT", "radio_NICER", "radio"],
+        'ranges': None
+    }
+    params_to_plot = ["chirp_mass", "mass_ratio", "lambda_2", "luminosity_distance"]
+    
+    # Gaussian
+    path = plot_corner_fixed_population_varying_eos(
         gw_event="GW230529",
-        population=population,
-        source_type=source_type,
-        **kwargs
+        population="gaussian",
+        source_type="nsbh",
+        params_to_plot=params_to_plot,
+        **gw230529_defaults
     )
+    
+    # # Double Gaussian
+    # gw230529_defaults['normalization_keys'] = ["radio", "radio_chiEFT", "radio_NICER", "radio_chiEFT"]
+    # path = plot_corner_fixed_population_varying_eos(
+    #     gw_event="GW230529",
+    #     population="double_gaussian",
+    #     source_type="bns",
+    #     **gw230529_defaults
+    # )
+    
+    # # Uniform
+    # gw230529_defaults['normalization_keys'] = ["radio", "radio", "radio", "radio"]
+    # gw230529_defaults['ranges'] = None
+    # path = plot_corner_fixed_population_varying_eos(
+    #     gw_event="GW230529",
+    #     population="uniform",
+    #     source_type="bns",
+    #     **gw230529_defaults
+    # )
+    
+    return path
 
 
 def main():
@@ -379,31 +672,9 @@ def main():
     
     print("=== Money Plots - Fixed Population, Varying EOS ===")
     
-    # Create GW170817 corner plot with Gaussian population
-    output_path = plot_gw170817_corner()
-    
-    print(f"\nSuccessfully created GW170817 corner plot: {output_path}")
-    
-    # Example: Create plot with custom ranges
-    # custom_ranges = [(1.1, 1.6), (0.4, 1.0), (0, 800), (-500, 500)]  # chirp_mass, mass_ratio, lambda_tilde, delta_lambda_tilde
-    # output_path_custom = plot_gw170817_corner(
-    #     population="gaussian",
-    #     ranges=custom_ranges,
-    #     verbose=True
-    # )
-    
-    # Example: Create plots for other events/configurations  
-    # output_path_gw190425 = plot_gw190425_corner(
-    #     population="gaussian",
-    #     source_type="bns",
-    #     verbose=True
-    # )
-    
-    # output_path_gw230529 = plot_gw230529_corner(
-    #     population="gaussian", 
-    #     source_type="nsbh",
-    #     verbose=True
-    # )
+    plot_gw170817_corner()
+    plot_gw190425_corner()
+    plot_gw230529_corner()
 
 
 if __name__ == "__main__":
