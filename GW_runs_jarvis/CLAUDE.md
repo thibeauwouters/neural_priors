@@ -37,9 +37,9 @@ This creates up to **96 total configurations**:
 
 ## Directory Structure
 
-Generated configurations follow the pattern:
+Generated configurations are created in the cluster working directory:
 ```
-runs/
+/work/wouters/neural_priors_paper/
 ├── {event}/
 │   ├── {population}/
 │   │   ├── {prior_scenario}/
@@ -50,8 +50,8 @@ runs/
 
 For example:
 ```
-runs/GW170817/double_gaussian/bns/radio/config.ini
-runs/GW170817/default/nsbh/config.ini
+/work/wouters/neural_priors_paper/GW170817/double_gaussian/bns/radio/config.ini
+/work/wouters/neural_priors_paper/GW170817/default/nsbh/config.ini
 ```
 
 ## Key Features
@@ -71,10 +71,10 @@ runs/GW170817/default/nsbh/config.ini
 - **Tidal deformabilities**: λ₁ = 0 for NSBH (black holes have no tides), λ₁,λ₂ from NF/uniform for BNS
 
 ### Normalizing Flow Integration
-- **Model loading**: Automatically finds NF models at `../NFprior/models/{population}/{scenario}/{eos}/model.pt`
-- **Parameter names**: Extracted from `*_kwargs.json` files alongside models
+- **Model loading**: Automatically references NF models at `/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/{population}/{scenario}/{eos}/model.pt`
+- **Parameter names**: Uses default parameter set `["chirp_mass_source", "mass_ratio", "lambda_1", "lambda_2"]`
 - **NF configuration**: Uses NFDist with `use_tilde=False`, `use_component_masses=False` for simplicity
-- **Validation**: Skips configurations where NF models or kwargs files don't exist
+- **Cluster deployment**: Assumes all NF models and kwargs files exist on the cluster environment
 
 ### bilby_pipe Configuration
 - **Likelihood**: MBGravitationalWaveTransient (multibanding for efficiency)
@@ -93,10 +93,15 @@ python generate_bilby_pipe_configs.py
 No command-line arguments needed - the script generates all possible configurations automatically.
 
 The script will:
-1. Create the `runs/` directory structure
-2. Generate config.ini and prior.prior files for each valid combination
-3. Skip combinations where NF models don't exist (with warnings)
+1. Create the `/work/wouters/neural_priors_paper/` directory structure
+2. Generate config.ini and prior.prior files for each configuration combination
+3. Assume all NF models exist on the cluster (no local validation)
 4. Print progress as it creates each configuration
+
+To clean up before regenerating:
+```bash
+./clean_dirs.sh
+```
 
 ## Key Design Decisions
 
@@ -106,8 +111,8 @@ Rather than hardcoding configuration content, the script uses templates with pla
 ### Hierarchical Organization  
 The directory structure mirrors the conceptual hierarchy: event → population → source type → EOS constraint. This makes it intuitive to navigate and run specific subsets of analyses.
 
-### Robust Validation
-The script checks for both `.pt` model files and `_kwargs.json` metadata files before generating NF configurations, preventing incomplete setups.
+### Cluster-Optimized Design
+The script is optimized for cluster deployment, assuming all NF models and data files exist in the expected locations without local validation checks.
 
 ### Resource Alignment
 CPU requests match the number of sampling cores (both 96) to avoid resource waste on compute clusters.

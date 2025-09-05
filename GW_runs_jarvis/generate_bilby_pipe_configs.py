@@ -262,7 +262,7 @@ def create_prior_file(event_name, population_type, prior_name, eos_samples_name,
 def main():
     # Configuration parameters
     events = ['GW170817', 'GW190425', 'GW230529']
-    population_types = ['uniform', 'gaussian', 'double_gaussian', 'default']
+    population_types = ['uniform', 'gaussian', 'double_gaussian']  # Removed 'default'
     prior_names = ['bns', 'nsbh']
     eos_samples = ['radio', 'radio_chiEFT', 'radio_NICER']
     output_base = Path('/work/wouters/neural_priors_paper_runs')
@@ -273,36 +273,45 @@ def main():
     
     print(f"Generating bilby_pipe configurations...")
     print(f"Events: {events}")
-    print(f"Population types: {population_types}")
+    print(f"NF Population types: {population_types}")
     print(f"Prior names: {prior_names}")
     print(f"EOS samples: {eos_samples}")
     print()
     
     total_configs = 0
     
-    for event, pop_type, prior_name, eos_sample in itertools.product(
-        events, population_types, prior_names, eos_samples
+    # Generate NF runs: event × source × population × EOS
+    print("Generating NF runs...")
+    for event, prior_name, pop_type, eos_sample in itertools.product(
+        events, prior_names, population_types, eos_samples
     ):
-        # For default runs, skip NF model checking and use simplified directory structure
-        if pop_type == 'default':
-            # Directory structure: ./{event}/default/{prior_name}/
-            config_dir = output_base / event / 'default' / prior_name
-            config_name = f"{event}_default_{prior_name}"
-        else:
-            # NF model and kwargs paths (assume they exist on cluster)
-            model_path = get_nf_model_path(pop_type, prior_name, eos_sample)
-            kwargs_path = model_path.replace('.pt', '_kwargs.json')
-            
-            # Directory structure: ./{event}/{population}/{prior_name}/{eos}/
-            config_dir = output_base / event / pop_type / prior_name / eos_sample
-            config_name = f"{event}_{pop_type}_{prior_name}_{eos_sample}"
-            
+        # Directory structure: ./{event}/{source}/{population}/{eos}/
+        config_dir = output_base / event / prior_name / pop_type / eos_sample
+        config_name = f"{event}_{prior_name}_{pop_type}_{eos_sample}"
+        
         # Create output directory
         config_dir.mkdir(parents=True, exist_ok=True)
         
         # Generate files by copying and modifying templates
         create_config_ini(event, pop_type, prior_name, eos_sample, config_dir, npool)
         create_prior_file(event, pop_type, prior_name, eos_sample, config_dir)
+        
+        print(f"Generated: {config_name}")
+        total_configs += 1
+    
+    # Generate default runs: event × source
+    print("\nGenerating default runs...")
+    for event, prior_name in itertools.product(events, prior_names):
+        # Directory structure: ./{event}/{source}/default/
+        config_dir = output_base / event / prior_name / 'default'
+        config_name = f"{event}_{prior_name}_default"
+        
+        # Create output directory
+        config_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Generate files by copying and modifying templates (use 'default' as population type)
+        create_config_ini(event, 'default', prior_name, None, config_dir, npool)
+        create_prior_file(event, 'default', prior_name, None, config_dir)
         
         print(f"Generated: {config_name}")
         total_configs += 1
