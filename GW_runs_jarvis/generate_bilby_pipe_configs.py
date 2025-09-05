@@ -241,6 +241,7 @@ def create_prior_file(event_name, population_type, prior_name, eos_samples_name,
             'GEOCENT_TIME_MAX': str(config['trigger_time'] + 0.1),
             'NF_NAMES': nf_params,
             'MODEL_PATH': model_path,
+            'CHIRP_MASS_MIN': str(config['default_priors']['chirp_mass_min'] - 0.25),  # to ensure wider posteriors from neural priors runs
             'A1_MAX': a1_max,
             'A2_MAX': a2_max,
             'NSBH_LAMBDA1_OVERRIDE': nsbh_override
