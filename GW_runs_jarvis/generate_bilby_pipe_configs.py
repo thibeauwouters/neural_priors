@@ -219,8 +219,11 @@ def create_prior_file(event_name, population_type, prior_name, eos_samples_name,
         
         model_path = get_nf_model_path(population_type, prior_name, eos_samples_name)
         
-        # Use default NF parameters (assume kwargs will exist on cluster)
-        nf_params = '["chirp_mass_source", "mass_ratio", "lambda_1", "lambda_2"]'
+        # Use NF parameters based on prior type
+        if prior_name == 'nsbh':
+            nf_params = '["chirp_mass_source", "mass_ratio", "lambda_2"]'  # Exclude lambda_1 for NSBH
+        else:
+            nf_params = '["chirp_mass_source", "mass_ratio", "lambda_1", "lambda_2"]'  # Include all for BNS
         
         # For NSBH, override lambda_1 to be DeltaFunction(0)
         nsbh_override = ""
