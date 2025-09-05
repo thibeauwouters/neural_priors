@@ -222,10 +222,6 @@ def create_prior_file(event_name, population_type, prior_name, eos_samples_name,
         # Use default NF parameters (assume kwargs will exist on cluster)
         nf_params = '["chirp_mass_source", "mass_ratio", "lambda_1", "lambda_2"]'
         
-        # Hardcode for simplicity
-        use_tilde = "false"
-        use_component_masses = "false"
-        
         # For NSBH, override lambda_1 to be DeltaFunction(0)
         nsbh_override = ""
         if prior_name == 'nsbh':
@@ -245,8 +241,6 @@ def create_prior_file(event_name, population_type, prior_name, eos_samples_name,
             'GEOCENT_TIME_MAX': str(config['trigger_time'] + 0.1),
             'NF_NAMES': nf_params,
             'MODEL_PATH': model_path,
-            'USE_TILDE': use_tilde,
-            'USE_COMPONENT_MASSES': use_component_masses,
             'A1_MAX': a1_max,
             'A2_MAX': a2_max,
             'NSBH_LAMBDA1_OVERRIDE': nsbh_override
