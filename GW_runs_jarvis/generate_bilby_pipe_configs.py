@@ -18,8 +18,8 @@ import shutil
 import json
 
 
-# Absolute base directory is one up
-BASE_DIR = ".."
+# Absolute base directory for cluster
+BASE_DIR = "/home/wouters/projects/eos_source_classification/eos_source_classification"
 
 # Event configurations extracted from pe.py and reference_parameters.json
 EVENT_CONFIGS = {
@@ -126,11 +126,8 @@ def create_config_ini(event_name, population_type, prior_name, eos_samples_name,
     # Read the copied file
     config_content = config_file_path.read_text()
     
-    # Create label
-    if population_type == 'default':
-        label = f"{event_name}_default_{prior_name}"
-    else:
-        label = f"{event_name}_{population_type}_{prior_name}_{eos_samples_name}"
+    # Create label (just the GW event)
+    label = event_name
     
     # Build data-dict and channel-dict strings
     data_dict_parts = []
@@ -222,15 +219,8 @@ def create_prior_file(event_name, population_type, prior_name, eos_samples_name,
         
         model_path = get_nf_model_path(population_type, prior_name, eos_samples_name)
         
-        # Load NF kwargs  
-        kwargs_path = model_path.replace('.pt', '_kwargs.json')
-        if os.path.exists(kwargs_path):
-            with open(kwargs_path, 'r') as f:
-                nf_kwargs = json.load(f)
-            nf_params = str(nf_kwargs["names"])
-        else:
-            # Fallback to defaults if kwargs file not found
-            nf_params = '["chirp_mass_source", "mass_ratio", "lambda_1", "lambda_2"]'
+        # Use default NF parameters (assume kwargs will exist on cluster)
+        nf_params = '["chirp_mass_source", "mass_ratio", "lambda_1", "lambda_2"]'
         
         # Hardcode for simplicity
         use_tilde = "false"
@@ -275,7 +265,7 @@ def main():
     population_types = ['uniform', 'gaussian', 'double_gaussian', 'default']
     prior_names = ['bns', 'nsbh']
     eos_samples = ['radio', 'radio_chiEFT', 'radio_NICER', 'radio_chiEFT_NICER']
-    output_base = Path('configs')
+    output_base = Path('/work/wouters/neural_priors_paper')
     npool = 96  # Number of cores for sampling
     
     # Create base output directory
@@ -293,24 +283,22 @@ def main():
     for event, pop_type, prior_name, eos_sample in itertools.product(
         events, population_types, prior_names, eos_samples
     ):
-        # For default runs, skip NF model checking and use simplified naming
+        # For default runs, skip NF model checking and use simplified directory structure
         if pop_type == 'default':
+            # Directory structure: ./{event}/default/{prior_name}/
+            config_dir = output_base / event / 'default' / prior_name
             config_name = f"{event}_default_{prior_name}"
         else:
-            # Check if NF model and kwargs exist for non-default runs
+            # NF model and kwargs paths (assume they exist on cluster)
             model_path = get_nf_model_path(pop_type, prior_name, eos_sample)
             kwargs_path = model_path.replace('.pt', '_kwargs.json')
-            if not os.path.exists(model_path):
-                print(f"Warning: Skipping {event}_{pop_type}_{prior_name}_{eos_sample} - model not found: {model_path}")
-                continue
-            if not os.path.exists(kwargs_path):
-                print(f"Warning: Skipping {event}_{pop_type}_{prior_name}_{eos_sample} - kwargs not found: {kwargs_path}")
-                continue
+            
+            # Directory structure: ./{event}/{population}/{prior_name}/{eos}/
+            config_dir = output_base / event / pop_type / prior_name / eos_sample
             config_name = f"{event}_{pop_type}_{prior_name}_{eos_sample}"
             
         # Create output directory
-        config_dir = output_base / config_name
-        config_dir.mkdir(exist_ok=True)
+        config_dir.mkdir(parents=True, exist_ok=True)
         
         # Generate files by copying and modifying templates
         create_config_ini(event, pop_type, prior_name, eos_sample, config_dir, npool)
