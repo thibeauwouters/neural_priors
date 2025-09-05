@@ -190,7 +190,7 @@ def create_prior_file(event_name, population_type, prior_name, eos_samples_name,
         
         # Set spin maxima based on prior type 
         if prior_name == 'nsbh':
-            a1_max = "0.5"  # Primary (BH) can have higher spin
+            a1_max = "0.99"  # Primary (BH) can have higher spin
             a2_max = "0.05"  # Secondary (NS) lower spin
         else:  # bns
             a1_max = "0.05"  # Both NS, conservative spin
@@ -229,7 +229,7 @@ def create_prior_file(event_name, population_type, prior_name, eos_samples_name,
         
         # Set spin maxima based on prior type for NF runs
         if prior_name == 'nsbh':
-            a1_max = "0.5"  # Primary (BH) can have higher spin  
+            a1_max = "0.99"  # Primary (BH) can have higher spin  
             a2_max = "0.05"  # Secondary (NS) lower spin
         else:  # bns
             a1_max = "0.05"  # Both NS, NF runs use higher values
