@@ -36,9 +36,9 @@ EVENT_CONFIGS = {
             'V1': f'{BASE_DIR}/data/GW170817/V-V1_LOSC_CLN_16_V1-1187007040-2048.gwf'
         },
         'channels': {
-            'H1': 'H1:LOSC-STRAIN',
-            'L1': 'L1:LOSC-STRAIN',
-            'V1': 'V1:LOSC-STRAIN'
+            'H1': 'LOSC-STRAIN',
+            'L1': 'LOSC-STRAIN',
+            'V1': 'LOSC-STRAIN'
         },
         'psd_files': {
             'H1': f'{BASE_DIR}/data/GW170817/h1_psd.txt',
@@ -64,8 +64,8 @@ EVENT_CONFIGS = {
             'V1': f'{BASE_DIR}/data/GW190425/V-V1_GWOSC_16KHZ_R1-1240213455-4096.gwf'
         },
         'channels': {
-            'L1': 'L1:GWOSC-16KHZ_R1_STRAIN',
-            'V1': 'V1:GWOSC-16KHZ_R1_STRAIN'
+            'L1': 'GWOSC-16KHZ_R1_STRAIN',
+            'V1': 'GWOSC-16KHZ_R1_STRAIN'
         },
         'psd_files': {
             'L1': f'{BASE_DIR}/data/GW190425/glitch_median_PSD_forLI_L1_srate8192.txt',
@@ -89,7 +89,7 @@ EVENT_CONFIGS = {
             'L1': f'{BASE_DIR}/data/GW230529/L-L1_GWOSC_16KHZ_R1-1369417271-4096.gwf'
         },
         'channels': {
-            'L1': 'L1:GWOSC-16KHZ_R1_STRAIN'
+            'L1': 'GWOSC-16KHZ_R1_STRAIN'
         },
         'psd_files': {
             'L1': f'{BASE_DIR}/data/GW230529/psd_4096.dat'
