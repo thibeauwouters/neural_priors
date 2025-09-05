@@ -264,8 +264,8 @@ def main():
     events = ['GW170817', 'GW190425', 'GW230529']
     population_types = ['uniform', 'gaussian', 'double_gaussian', 'default']
     prior_names = ['bns', 'nsbh']
-    eos_samples = ['radio', 'radio_chiEFT', 'radio_NICER', 'radio_chiEFT_NICER']
-    output_base = Path('/work/wouters/neural_priors_paper')
+    eos_samples = ['radio', 'radio_chiEFT', 'radio_NICER']
+    output_base = Path('/work/wouters/neural_priors_paper_runs')
     npool = 96  # Number of cores for sampling
     
     # Create base output directory
