@@ -196,7 +196,8 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     # Load default run if requested
     default_posterior = None
     if include_default:
-        default_path = construct_result_path(base_path, gw_event, "uniform", 
+        # For default runs, pass the actual source type as population_type and "default" as source_type
+        default_path = construct_result_path(base_path, gw_event, source_type, 
                                            "default", "radio")
         print(f"Loading default run from: {default_path}")
         
@@ -464,12 +465,12 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     
     # Add default run to legend if included
     if default_samples is not None:
-        legend_entries.append("Default posterior")
+        legend_entries.append("Agnostic prior")
         legend_colors.append(DEFAULT_RUN_LEGEND_COLOR)
     
-    # Add title
-    title = f"{source_type.upper()} - {population.replace('_', ' ').title()} Population"
-    plt.suptitle(title, fontsize=title_fontsize, weight='bold', y=0.98)
+    # # Add title
+    # title = f"{source_type.upper()} - {population.replace('_', ' ').title()} Population"
+    # plt.suptitle(title, fontsize=title_fontsize, weight='bold', y=0.98)
     
     # Add legend with configurable positioning
     for i, (label, color) in enumerate(zip(legend_entries, legend_colors)):
@@ -495,15 +496,15 @@ def plot_gw170817_corner() -> str:
     """
     # Set hardcoded defaults for GW170817
     gw170817_defaults = {
-        'normalization_keys': ["radio",
-                               "radio_chiEFT",
+        'normalization_keys': ["radio_chiEFT",
+                               "radio_NICER",
                                "radio_NICER",
                                "radio",
-                               "radio_NICER",
+                               "radio_NICER"
                                ],
-        'ranges': [[1.197435, 1.1977],
-                   [0.88, 1.0],
-                   [251, 1000],
+        'ranges': [[1.197430, 1.1977],
+                   [0.85, 1.0],
+                   [100, 1000],
                    [0.0, 75.0],
                    [20.0, 50.0],
                    ]
@@ -524,8 +525,8 @@ def plot_gw170817_corner() -> str:
     )
     
     # Double Gaussian
-    gw170817_defaults['normalization_keys'] = ["radio",
-                                               "radio_chiEFT",
+    gw170817_defaults['normalization_keys'] = ["radio_chiEFT",
+                                               "radio_NICER",
                                                "radio_NICER",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
@@ -542,14 +543,14 @@ def plot_gw170817_corner() -> str:
     # gw170817_defaults['normalization_keys'] = ["radio", "radio_chiEFT", "radio_NICER", "radio_chiEFT"]
     gw170817_defaults['ranges'] = None
     gw170817_defaults['normalization_keys'] = ["radio",
+                                               "radio_NICER",
                                                "radio",
-                                               "radio",
-                                               "radio",
+                                               "radio_chiEFT",
                                                "radio",
                                                ]
     gw170817_defaults['ranges'] =  [[1.197435, 1.19775],
                                     [0.6, 1.0],
-                                    [300, 850],
+                                    [150, 850],
                                     [0.0, 200.0],
                                     [20.0, 50.0],
                                     ]
@@ -622,7 +623,7 @@ def plot_gw190425_corner() -> str:
     gw190425_defaults['normalization_keys'] = ["radio_chiEFT",
                                                "radio",
                                                "radio_chiEFT",
-                                               "radio",
+                                               "radio_chiEFT",
                                                "radio_chiEFT",
                                                ]
     gw190425_defaults["ranges"] = [[1.4862, 1.4873],
@@ -648,10 +649,10 @@ def plot_gw230529_corner() -> str:
     
     # Set hardcoded defaults for GW230529
     gw230529_defaults = {
-        'normalization_keys': ["radio_NICER",
-                               "default",
-                               "radio_chiEFT",
-                               "radio"],
+        'normalization_keys': ["default",
+                               "radio_NICER",
+                               "radio",
+                               "radio_chiEFT"],
     }
     params_to_plot = ["chirp_mass", "mass_ratio", "lambda_2", "luminosity_distance"]
     
@@ -675,10 +676,10 @@ def plot_gw230529_corner() -> str:
                                    [0.0, 1800],
                                    [50.0, 400],
                                    ]
-    gw230529_defaults['normalization_keys'] = ["default",
-                                               "default",
+    gw230529_defaults['normalization_keys'] = ["radio",
                                                "radio_NICER",
-                                               "radio_chiEFT"]
+                                               "radio_NICER",
+                                               "radio_NICER"]
     path = plot_corner_fixed_population_varying_eos(
         gw_event="GW230529",
         population="double_gaussian",
@@ -689,14 +690,14 @@ def plot_gw230529_corner() -> str:
     
     # Uniform
     gw230529_defaults["ranges"] = [[2.0245, 2.0289],
-                                   [0.275, 0.50],
+                                   [0.275, 0.60],
                                    [0.0, 1800],
                                    [50.0, 400],
                                    ]
-    gw230529_defaults['normalization_keys'] = ["default",
-                                               "default",
-                                               "radio",
-                                               "radio_chiEFT"]
+    gw230529_defaults['normalization_keys'] = ["radio_NICER",
+                                               "radio_chiEFT",
+                                               "radio_chiEFT",
+                                               "radio_NICER"]
     path = plot_corner_fixed_population_varying_eos(
         gw_event="GW230529",
         population="uniform",

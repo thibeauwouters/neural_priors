@@ -209,16 +209,16 @@ def construct_result_path(base_dir: str, gw_event: str, population_type: str,
     Returns:
         str: Path to result file
     """
-    # Handle special case: default runs in gaussian/double_gaussian are stored in uniform/radio/
-    if source_type == "default" and population_type in ["gaussian", "double_gaussian"]:
-        actual_population = "uniform"
-        actual_eos = "radio"
+    # Handle special case: default runs are stored under {event}/{actual_source_type}/default/
+    if source_type == "default":
+        # Default runs are stored under the actual source type (bns/nsbh) not "default" 
+        # We need to determine the actual source type from context or pass it explicitly
+        # For now, assume BNS default if not specified otherwise
+        actual_source_type = population_type if population_type in ["bns", "nsbh"] else "bns"
+        full_path = os.path.join(base_dir, gw_event, actual_source_type, "default", "samples.npz")
     else:
-        actual_population = population_type
-        actual_eos = eos_samples_name
-    
-    return os.path.join(base_dir, gw_event, actual_population, source_type, 
-                       actual_eos, f"{source_type}_result.npz")
+        full_path = os.path.join(base_dir, gw_event, source_type, population_type, eos_samples_name, "samples.npz")
+    return full_path
 
 
 def load_posterior_data(result_path: str, fast_mode: bool = True) -> Optional[Dict[str, Any]]:
@@ -237,12 +237,12 @@ def load_posterior_data(result_path: str, fast_mode: bool = True) -> Optional[Di
         
     try:
         # Load NPZ file and convert to dictionary
-        npz_data = np.load(result_path)
+        npz_data = np.load(result_path, allow_pickle=True)
         posterior = {key: npz_data[key] for key in npz_data.files}
         convert_chirp_mass(posterior, fast_mode=fast_mode)
         return posterior
-    except (FileNotFoundError, KeyError, OSError, ValueError):
-        return None
+    except Exception as e:
+        raise RuntimeError(f"Error loading posterior data from {result_path}: {e}")
 
 
 def convert_chirp_mass(posterior: Dict[str, Any], fast_mode: bool = False) -> None:
@@ -385,6 +385,7 @@ def load_comparison_data(gw_event: str, base_dir: str, comparison_mode: str,
     groups = get_comparison_groups(comparison_mode, gw_event, base_dir, fixed_params)
     posteriors = {}
     
+    print(f"Getting the comparison data")
     for group_name, (pop_type, source_type, eos_name) in groups.items():
         result_path = construct_result_path(base_dir, gw_event, pop_type, source_type, eos_name)
         posterior = load_posterior_data(result_path, fast_mode=fast_mode)
