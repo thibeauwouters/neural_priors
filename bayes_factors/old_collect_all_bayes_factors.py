@@ -8,7 +8,6 @@ for streamlined table generation.
 """
 
 import os
-import h5py
 import json
 import argparse
 import shutil
@@ -36,11 +35,10 @@ EOS_DISPLAY = {
     "radio_chiEFT_NICER": "+\\chiEFT+NICER"
 }
 
+
 def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw170817_eos: bool = False) -> Dict[str, Any]:
     """
     Collect Bayes factors organized in source-first structure.
-    Directory structure: {event}/{source}/{population}/{eos} with special case {event}/{source}/default/
-    Files are now HDF5 format instead of JSON.
     
     Returns:
         Dict with structure: source -> population -> eos -> {event: bayes_factor}
@@ -63,7 +61,7 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
             for eos in eos_to_process:
                 data[source][pop][eos] = {}
     
-    # Scan directory structure: {event}/{source}/{population}/{eos}
+    # Scan directory structure and populate data
     for event in GW_EVENTS:
         event_path = os.path.join(base_dir, event)
         if not os.path.exists(event_path):
@@ -72,117 +70,45 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
             
         print(f"Processing event: {event}")
         
-        for source in SOURCE_TYPES:
-            source_path = os.path.join(event_path, source)
-            if not os.path.exists(source_path):
-                print(f"  Source directory {source_path} does not exist, skipping")
+        for pop in POPULATION_TYPES:
+            pop_path = os.path.join(event_path, pop)
+            if not os.path.exists(pop_path):
                 continue
                 
-            print(f"  Processing source: {source}")
-            
-            # Check for default directory first
-            default_path = os.path.join(source_path, "default")
-            if os.path.exists(default_path):
-                print(f"    Processing default configuration")
-                # For default, we'll use the first population type as placeholder
-                default_pop = "uniform"  # or whatever makes sense for your default
-                
-                # Look for HDF5 result files in default directory
-                for filename in os.listdir(default_path):
-                    if filename.endswith("_result.h5") or filename.endswith(".h5"):
-                        result_file = os.path.join(default_path, filename)
-                        try:
-                            with h5py.File(result_file, 'r') as f:
-                                # Debug: print available keys in the HDF5 file
-                                print(f"      Available keys in {filename}: {list(f.keys())}")
-                                
-                                # Try common HDF5 key names for Bayes factor
-                                bf_val = 0.0
-                                found_key = None
-                                for key in ['log_bayes_factor', 'logZ', 'log_evidence', 'log_bf', 'ln_bayes_factor']:
-                                    if key in f:
-                                        bf_val = float(f[key][()])
-                                        found_key = key
-                                        break
-                                
-                                if found_key:
-                                    print(f"      Found Bayes factor in key '{found_key}': {bf_val:.2f}")
-                                else:
-                                    print(f"      No Bayes factor key found in {filename}")
-                                
-                                # Store in default population and first EOS
-                                default_eos = eos_to_process[0] if eos_to_process else "radio"
-                                data[source][default_pop][default_eos][event] = bf_val
-                                
-                                # Collect log evidence errors
-                                log_err = None
-                                for err_key in ['log_evidence_err', 'logZ_err', 'log_evidence_error', 'ln_evidence_err']:
-                                    if err_key in f:
-                                        log_err = float(f[err_key][()])
-                                        break
-                                
-                                if log_err is not None:
-                                    data["log_evidence_errors"].append(log_err)
-                                
-                        except (OSError, KeyError, ValueError) as e:
-                            print(f"      Error reading {result_file}: {e}")
-            
-            # Process structured population/eos directories
-            for pop in POPULATION_TYPES:
-                pop_path = os.path.join(source_path, pop)
-                if not os.path.exists(pop_path):
+            for source in SOURCE_TYPES:
+                source_path = os.path.join(pop_path, source)
+                if not os.path.exists(source_path):
                     continue
                     
-                print(f"    Processing population: {pop}")
-                
                 for eos in eos_to_process:
-                    eos_path = os.path.join(pop_path, eos)
+                    eos_path = os.path.join(source_path, eos)
                     if not os.path.exists(eos_path):
                         continue
                         
-                    print(f"      Processing EOS: {eos}")
+                    result_file = os.path.join(eos_path, f"{source}_result.json")
                     
-                    # Look for HDF5 result files in this directory
-                    eos_path = os.path.join(eos_path, "outdir/result/")
-                    for filename in os.listdir(eos_path):
-                        if filename.endswith("_result.hdf5"):
-                            result_file = os.path.join(eos_path, filename)
-                            try:
-                                with h5py.File(result_file, 'r') as f:
-                                    # Debug: print available keys in the HDF5 file
-                                    print(f"        Available keys in {filename}: {list(f.keys())}")
-                                    
-                                    # Try common HDF5 key names for Bayes factor
-                                    bf_val = 0.0
-                                    found_key = None
-                                    for key in ['log_bayes_factor', 'logZ', 'log_evidence', 'log_bf', 'ln_bayes_factor']:
-                                        if key in f:
-                                            bf_val = float(f[key][()])
-                                            found_key = key
-                                            break
-                                    
-                                    if found_key:
-                                        print(f"        Found Bayes factor in key '{found_key}': {bf_val:.2f}")
-                                    else:
-                                        print(f"        No Bayes factor key found in {filename}")
-                                    
-                                    data[source][pop][eos][event] = bf_val
-                                    
-                                    # Collect log evidence errors
-                                    log_err = None
-                                    for err_key in ['log_evidence_err', 'logZ_err', 'log_evidence_error', 'ln_evidence_err']:
-                                        if err_key in f:
-                                            log_err = float(f[err_key][()])
-                                            break
-                                    
-                                    if log_err is not None:
-                                        data["log_evidence_errors"].append(log_err)
-                                    
-                            except (OSError, KeyError, ValueError) as e:
-                                print(f"        Error reading {result_file}: {e}")
+                    if os.path.exists(result_file):
+                        try:
+                            with open(result_file, 'r') as f:
+                                result_data = json.load(f)
+                                bf_val = result_data.get("log_bayes_factor", 0.0)
+                                data[source][pop][eos][event] = bf_val
+                                
+                                # Collect log evidence errors
+                                log_err = result_data.get("log_evidence_err")
+                                if log_err is not None:
+                                    data["log_evidence_errors"].append(log_err)
+                                
+                                print(f"  {source}/{pop}/{eos}: {bf_val:.2f}")
+                        except (json.JSONDecodeError, KeyError, FileNotFoundError) as e:
+                            print(f"  Error reading {result_file}: {e}")
+                            data[source][pop][eos][event] = 0.0
+                    else:
+                        data[source][pop][eos][event] = 0.0
     
     print(f"Collected {len(data['log_evidence_errors'])} log evidence errors")
     return data
+
 
 def get_jeffreys_color(log10_bf: float) -> str:
     """Get LaTeX color for Jeffrey's scale interpretation."""
