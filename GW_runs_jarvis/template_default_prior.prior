@@ -1,6 +1,6 @@
 chirp_mass = bilby.gw.prior.UniformInComponentsChirpMass(minimum={{{CHIRP_MASS_MIN}}}, maximum={{{CHIRP_MASS_MAX}}}, name="chirp_mass")
 mass_ratio = bilby.gw.prior.UniformInComponentsMassRatio(minimum=0.125, maximum=1.0, name="mass_ratio")
-luminosity_distance = UniformComovingVolume(minimum={{{DISTANCE_MIN}}}, maximum={{{DISTANCE_MAX}}}, name='luminosity_distance', latex_label='$D_L$')
+luminosity_distance = bilby.gw.prior.UniformComovingVolume(minimum={{{DISTANCE_MIN}}}, maximum={{{DISTANCE_MAX}}}, name='luminosity_distance', latex_label='$D_L$')
 geocent_time = Uniform(minimum={{{GEOCENT_TIME_MIN}}}, maximum={{{GEOCENT_TIME_MAX}}}, name='geocent_time')
 a_1 = Uniform(minimum=0.0, maximum={{{A1_MAX}}}, name='a_1', latex_label='$a_1$')
 a_2 = Uniform(minimum=0.0, maximum=0.05, name='a_2', latex_label='$a_2$')
