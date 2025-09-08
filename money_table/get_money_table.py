@@ -118,10 +118,11 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
     # Filter EOS samples if ignoring GW170817 constraints
     eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
     
-    # Initialize source-first structure
+    # Initialize source-first structure (include "default" population)
+    all_populations = POPULATION_TYPES + ["default"]
     for source in SOURCE_TYPES:
         data[source] = {}
-        for pop in POPULATION_TYPES:
+        for pop in all_populations:
             data[source][pop] = {}
             for eos in eos_to_process:
                 data[source][pop][eos] = {}
@@ -134,52 +135,39 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
     for event in GW_EVENTS:
         event_path = os.path.join(base_dir, event)
         if not os.path.exists(event_path):
-            print(f"Event directory {event_path} does not exist, skipping")
             continue
-            
-        print(f"Processing event: {event}")
         
         for source in SOURCE_TYPES:
             source_path = os.path.join(event_path, source)
             if not os.path.exists(source_path):
-                print(f"  Source directory {source_path} does not exist, skipping")
                 continue
-                
-            print(f"  Processing source: {source}")
             
             # Check for default directory - path is {event}/{source}/default/samples.npz
             default_path = os.path.join(source_path, "default")
             if os.path.exists(default_path):
-                print(f"    Processing default configuration")
                 default_pop = "default"  # Use "default" as the population type
                 
                 # Look for samples.npz file (as used in plots)
                 npz_file = os.path.join(default_path, "samples.npz")
                 if os.path.exists(npz_file):
                     try:
-                        print(f"      Processing {npz_file}")
-                        
                         # Load NPZ file
                         npz_data = np.load(npz_file, allow_pickle=True)
                         posterior_data = {key: npz_data[key] for key in npz_data.files}
                         
-                        # Extract each parameter
-                        default_eos = eos_to_process[0] if eos_to_process else "radio"
+                        # Extract each parameter - store default data under all EOS keys since it's EOS-agnostic
                         for param in MONEY_PARAMETERS:
                             if param in posterior_data:
                                 samples = posterior_data[param]
                                 summary = compute_parameter_summary(samples)
-                                data[source][default_pop][default_eos][event][param] = summary
-                                print(f"        {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
-                            else:
-                                print(f"        Parameter {param} not found in default run")
+                                # Store default data under all EOS keys for table generation compatibility
+                                for eos in eos_to_process:
+                                    data[source][default_pop][eos][event][param] = summary
                                 
                     except (OSError, KeyError, ValueError) as e:
                         error_msg = f"Error reading {npz_file}: {e}"
-                        print(f"      {error_msg}")
                         data["processing_errors"].append(error_msg)
                 else:
-                    print(f"      No samples.npz found in {default_path}")
                     
                     # Fallback: Look for HDF5 result files in default directory
                     for filename in os.listdir(default_path):
@@ -187,8 +175,6 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                             result_file = os.path.join(default_path, filename)
                             try:
                                 with h5py.File(result_file, 'r') as f:
-                                    print(f"      Processing HDF5 file {filename}")
-                                    
                                     # Look for posterior samples
                                     posterior_key = None
                                     for key in ['posterior_samples', 'posterior', 'samples']:
@@ -197,25 +183,21 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                                             break
                                     
                                     if posterior_key is None:
-                                        print(f"      No posterior samples found in {filename}")
                                         continue
                                     
                                     posterior_data = f[posterior_key]
                                     
-                                    # Extract each parameter
-                                    default_eos = eos_to_process[0] if eos_to_process else "radio"
+                                    # Extract each parameter - store default data under all EOS keys since it's EOS-agnostic
                                     for param in MONEY_PARAMETERS:
                                         if param in posterior_data:
                                             samples = posterior_data[param][:]
                                             summary = compute_parameter_summary(samples)
-                                            data[source][default_pop][default_eos][event][param] = summary
-                                            print(f"        {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
-                                        else:
-                                            print(f"        Parameter {param} not found in {filename}")
+                                            # Store default data under all EOS keys for table generation compatibility
+                                            for eos in eos_to_process:
+                                                data[source][default_pop][eos][event][param] = summary
                                     
                             except (OSError, KeyError, ValueError) as e:
                                 error_msg = f"Error reading {result_file}: {e}"
-                                print(f"      {error_msg}")
                                 data["processing_errors"].append(error_msg)
             
             # Process structured population/eos directories
@@ -223,22 +205,16 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                 pop_path = os.path.join(source_path, pop)
                 if not os.path.exists(pop_path):
                     continue
-                    
-                print(f"    Processing population: {pop}")
                 
                 for eos in eos_to_process:
                     eos_path = os.path.join(pop_path, eos)
                     if not os.path.exists(eos_path):
                         continue
-                        
-                    print(f"      Processing EOS: {eos}")
                     
                     # Look for samples.npz file directly in this directory
                     npz_file = os.path.join(eos_path, "samples.npz")
                     if os.path.exists(npz_file):
                         try:
-                            print(f"        Processing {npz_file}")
-                            
                             # Load NPZ file
                             npz_data = np.load(npz_file, allow_pickle=True)
                             posterior_data = {key: npz_data[key] for key in npz_data.files}
@@ -249,16 +225,11 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                                     samples = posterior_data[param]
                                     summary = compute_parameter_summary(samples)
                                     data[source][pop][eos][event][param] = summary
-                                    print(f"          {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
-                                else:
-                                    print(f"          Parameter {param} not found in {eos} run")
                                     
                         except (OSError, KeyError, ValueError) as e:
                             error_msg = f"Error reading {npz_file}: {e}"
-                            print(f"        {error_msg}")
                             data["processing_errors"].append(error_msg)
                     else:
-                        print(f"        No samples.npz found in {eos_path}")
                         
                         # Fallback: Look for HDF5 result files in subdirectories
                         result_dir = os.path.join(eos_path, "outdir/result/")
@@ -268,8 +239,6 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                                     result_file = os.path.join(result_dir, filename)
                                     try:
                                         with h5py.File(result_file, 'r') as f:
-                                            print(f"        Processing HDF5 file {filename}")
-                                            
                                             # Look for posterior samples
                                             posterior_key = None
                                             for key in ['posterior_samples', 'posterior', 'samples']:
@@ -278,7 +247,6 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                                                     break
                                             
                                             if posterior_key is None:
-                                                print(f"        No posterior samples found in {filename}")
                                                 continue
                                             
                                             posterior_data = f[posterior_key]
@@ -289,16 +257,12 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                                                     samples = posterior_data[param][:]
                                                     summary = compute_parameter_summary(samples)
                                                     data[source][pop][eos][event][param] = summary
-                                                    print(f"          {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
-                                                else:
-                                                    print(f"          Parameter {param} not found in {filename}")
                                             
                                     except (OSError, KeyError, ValueError) as e:
                                         error_msg = f"Error reading {result_file}: {e}"
-                                        print(f"        {error_msg}")
                                         data["processing_errors"].append(error_msg)
     
-    print(f"Processing completed with {len(data['processing_errors'])} errors")
+    
     return data
 
 
@@ -314,10 +278,41 @@ def has_parameter_data(data: Dict[str, Any], source: str, pop: str, eos: str, ev
         return False
 
 
+def load_bayes_factors(bayes_factors_path: str = "../bayes_factors/all_bayes_factors.json") -> Dict[str, Any]:
+    """Load Bayes factors from JSON file."""
+    if not os.path.exists(bayes_factors_path):
+        return {}
+    try:
+        with open(bayes_factors_path, 'r') as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+def find_highest_evidence_run(bayes_factors: Dict[str, Any], gw_event: str, source_type: str, populations: list[str], eos_list: list[str]) -> tuple:
+    """Find the run with highest evidence (Bayes factor) for a given event and source."""
+    max_bf = float('-inf')
+    best_run = None
+    
+    if source_type in bayes_factors:
+        for population in populations:
+            if population in bayes_factors[source_type] and population != "default":
+                for eos_name in eos_list:
+                    if eos_name in bayes_factors[source_type][population]:
+                        if gw_event in bayes_factors[source_type][population][eos_name]:
+                            bf_value = bayes_factors[source_type][population][eos_name][gw_event]
+                            if bf_value > max_bf:
+                                max_bf = bf_value
+                                best_run = (population, eos_name, bf_value)
+    
+    return best_run if best_run else (None, None, None)
+
 def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bool = False) -> str:
     """Generate LaTeX table with parameter summaries for specific event-source combinations."""
     lines = []
     eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
+    
+    # Load Bayes factors
+    bayes_factors = load_bayes_factors()
     
     # Define specific event-source combinations
     event_source_combinations = {
@@ -326,8 +321,8 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
         "GW230529": "nsbh"
     }
     
-    # Populations to include (now including default)
-    populations_to_include = ["uniform", "gaussian", "double_gaussian", "default"]
+    # Base populations list (will be modified per event)
+    base_populations = ["uniform", "gaussian", "double_gaussian", "default"]
     
     # Table header - parameters as columns, configurations as rows (no source column)
     param_headers = " & ".join([PARAMETER_DISPLAY[param] for param in MONEY_PARAMETERS])
@@ -335,7 +330,8 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
         "\\begin{tabular}{|l|l|l|" + "c|" * len(MONEY_PARAMETERS) + "}",
         "\\hline",
         f"\\textbf{{Event}} & \\textbf{{Pop}} & \\textbf{{EOS}} & {param_headers} \\\\",
-        "\\hline\\hline"
+        "\\hline\\hline",
+        "\\rule{0pt}{3ex}"  # Add vertical spacing
     ])
     
     # Generate table rows for specific event-source combinations
@@ -343,18 +339,72 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
         if event not in GW_EVENTS:
             continue
             
+        # Set populations to include for this event (skip Gaussian for GW190425)
+        if event == "GW190425":
+            populations_to_include = ["uniform", "double_gaussian", "default"]
+        else:
+            populations_to_include = base_populations
+            
+        # Find highest evidence run for this event
+        best_pop, best_eos, best_bf = find_highest_evidence_run(bayes_factors, event, source, populations_to_include, eos_to_process)
+            
         event_first = True
         
         # Count rows for this event (for multirow)
-        event_rows = sum(1 for pop in populations_to_include
-                        for eos in eos_to_process
-                        if any(has_parameter_data(data, source, pop, eos, event, param) 
-                              for param in MONEY_PARAMETERS))
+        # Default counts as 1 row (combined), regular populations count by eos
+        default_rows = 1 if ("default" in populations_to_include and 
+                           any(has_parameter_data(data, source, "default", eos, event, param) 
+                               for eos in eos_to_process for param in MONEY_PARAMETERS)) else 0
+        
+        regular_rows = sum(1 for pop in [p for p in populations_to_include if p != "default"]
+                          for eos in eos_to_process
+                          if any(has_parameter_data(data, source, pop, eos, event, param) 
+                                for param in MONEY_PARAMETERS))
+        
+        event_rows = default_rows + regular_rows
         
         if event_rows == 0:
             continue
             
-        for pop in populations_to_include:
+        # Handle default population first (single row with combined Pop+EOS cell)
+        if "default" in populations_to_include and any(has_parameter_data(data, source, "default", eos, event, param) 
+                                                      for eos in eos_to_process for param in MONEY_PARAMETERS):
+            # Format cells for default (combine Pop and EOS columns)
+            event_cell = f"\\multirow{{{event_rows}}}{{*}}{{\\shortstack{{{event}\\\\({source.upper()})}}}}" if event_first else ""
+            combined_cell = "\\multicolumn{2}{c|}{Default}"  # Span both Pop and EOS columns
+            
+            # Use first EOS data since all EOS entries are identical for default
+            first_eos = eos_to_process[0]
+            
+            # Parameter value cells
+            param_cells = []
+            for param in MONEY_PARAMETERS:
+                if has_parameter_data(data, source, "default", first_eos, event, param):
+                    summary = data[source]["default"][first_eos][event][param]
+                    median = summary["median"]
+                    low_diff = summary["low_diff"]
+                    high_diff = summary["high_diff"]
+                    
+                    # Format based on parameter type
+                    if param in ["mass_1_source", "mass_2_source"]:
+                        param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
+                    elif param == "luminosity_distance":
+                        param_cells.append(f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$")
+                    elif param in ["lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde"]:
+                        param_cells.append(f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$")
+                    elif param == "mass_ratio":
+                        param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
+                    else:
+                        param_cells.append(f"${median:.3f}_{{-{low_diff:.3f}}}^{{+{high_diff:.3f}}}$")
+                else:
+                    param_cells.append("--")
+            
+            lines.append(f"{event_cell} & {combined_cell} & {' & '.join(param_cells)} \\\\")
+            event_first = False
+            lines.append("\\cline{2-" + str(3 + len(MONEY_PARAMETERS)) + "}")
+
+        # Handle regular populations (excluding default)
+        for pop in [p for p in populations_to_include if p != "default"]:
             pop_first = True
             
             # Count rows for this population
@@ -371,10 +421,19 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                           for param in MONEY_PARAMETERS):
                     continue
                 
+                # Check if this is the highest evidence run
+                is_best_run = (pop == best_pop and eos == best_eos)
+                
                 # Format cells (no source column)
-                event_cell = f"\\multirow{{{event_rows}}}{{*}}{{{event}}}" if event_first else ""
-                pop_cell = f"\\multirow{{{pop_rows}}}{{*}}{{{POPULATION_DISPLAY[pop]}}}" if pop_first else ""
-                eos_cell = EOS_DISPLAY[eos]
+                event_cell = f"\\multirow{{{event_rows}}}{{*}}{{\\shortstack{{{event}\\\\({source.upper()})}}}}" if event_first else ""
+                
+                # Apply bold formatting for highest evidence run
+                if is_best_run:
+                    pop_cell = f"\\multirow{{{pop_rows}}}{{*}}{{\\textbf{{{POPULATION_DISPLAY[pop]}}}}}" if pop_first else ""
+                    eos_cell = f"\\textbf{{{EOS_DISPLAY[eos]}}}"
+                else:
+                    pop_cell = f"\\multirow{{{pop_rows}}}{{*}}{{{POPULATION_DISPLAY[pop]}}}" if pop_first else ""
+                    eos_cell = EOS_DISPLAY[eos]
                 
                 # Parameter value cells
                 param_cells = []
@@ -386,14 +445,22 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                         high_diff = summary["high_diff"]
                         
                         # Format based on parameter type
-                        if param in ["mass_1_source", "mass_2_source", "luminosity_distance"]:
-                            param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
+                        if param in ["mass_1_source", "mass_2_source"]:
+                            value_str = f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$"
+                        elif param == "luminosity_distance":
+                            value_str = f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$"
                         elif param in ["lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde"]:
-                            param_cells.append(f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$")
+                            value_str = f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$"
                         elif param == "mass_ratio":
-                            param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
+                            value_str = f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$"
                         else:
-                            param_cells.append(f"${median:.3f}_{{-{low_diff:.3f}}}^{{+{high_diff:.3f}}}$")
+                            value_str = f"${median:.3f}_{{-{low_diff:.3f}}}^{{+{high_diff:.3f}}}$"
+                        
+                        # Apply bold formatting for highest evidence run
+                        if is_best_run:
+                            param_cells.append(f"\\textbf{{{value_str}}}")
+                        else:
+                            param_cells.append(value_str)
                     else:
                         param_cells.append("--")
                 
@@ -407,8 +474,11 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
         
         if not event_first:  # Only add line if we've written rows
             lines.append("\\hline\\hline")
+            lines.append("\\rule{0pt}{2ex}")  # Add extra spacing between events
     
-    # Clean up last line
+    # Clean up last lines - remove extra spacing after final event
+    if lines and lines[-1] == "\\rule{0pt}{2ex}":
+        lines.pop()  # Remove extra spacing
     if lines and lines[-1] == "\\hline\\hline":
         lines[-1] = "\\hline"
     
@@ -437,32 +507,18 @@ def main():
     latex_file = "parameter_summaries_table.tex"
     
     if args.get_JSON:
-        print(f"Collecting parameter summaries from: {base_dir}")
         ignore_gw170817_flag = getattr(args, 'ignore_GW170817', False)
-        if ignore_gw170817_flag:
-            print("Ignoring EOS constraints that include GW170817 data")
         data = collect_parameter_summaries_source_first(base_dir, ignore_gw170817_flag)
         
-        print(f"Saving JSON to: {json_file}")
         with open(json_file, 'w') as f:
             json.dump(data, f, indent=2)
     
     if args.make_table:
         if not os.path.exists(json_file):
-            print(f"JSON file {json_file} not found. Run with --get-JSON first.")
             return
-        
-        print(f"Loading data from: {json_file}")
         with open(json_file, 'r') as f:
             data = json.load(f)
         
-        # Print processing statistics
-        if data["processing_errors"]:
-            print(f"Found {len(data['processing_errors'])} processing errors")
-            for error in data["processing_errors"][:5]:  # Show first 5 errors
-                print(f"  {error}")
-        
-        print(f"Generating LaTeX table: {latex_file}")
         table = generate_latex_parameter_table(data, getattr(args, 'ignore_GW170817', False))
         
         with open(latex_file, 'w') as f:
@@ -473,7 +529,6 @@ def main():
         if os.path.exists(paper_dir):
             paper_file = os.path.join(paper_dir, "parameter_summaries_table.tex")
             shutil.copy2(latex_file, paper_file)
-            print(f"Table copied to: {paper_file}")
 
 
 if __name__ == "__main__":
