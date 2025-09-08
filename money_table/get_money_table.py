@@ -359,7 +359,7 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
         lines[-1] = "\\hline"
     
     lines.append("\\end{tabular}")
-    return "\\n".join(lines)
+    return "\n".join(lines)
 
 
 def main():
