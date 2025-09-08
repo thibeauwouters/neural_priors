@@ -233,42 +233,70 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                         
                     print(f"      Processing EOS: {eos}")
                     
-                    # Look for HDF5 result files in this directory
-                    result_dir = os.path.join(eos_path, "outdir/result/")
-                    if not os.path.exists(result_dir):
-                        continue
+                    # Look for samples.npz file directly in this directory
+                    npz_file = os.path.join(eos_path, "samples.npz")
+                    if os.path.exists(npz_file):
+                        try:
+                            print(f"        Processing {npz_file}")
+                            
+                            # Load NPZ file
+                            npz_data = np.load(npz_file, allow_pickle=True)
+                            posterior_data = {key: npz_data[key] for key in npz_data.files}
+                            
+                            # Extract each parameter
+                            for param in MONEY_PARAMETERS:
+                                if param in posterior_data:
+                                    samples = posterior_data[param]
+                                    summary = compute_parameter_summary(samples)
+                                    data[source][pop][eos][event][param] = summary
+                                    print(f"          {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
+                                else:
+                                    print(f"          Parameter {param} not found in {eos} run")
+                                    
+                        except (OSError, KeyError, ValueError) as e:
+                            error_msg = f"Error reading {npz_file}: {e}"
+                            print(f"        {error_msg}")
+                            data["processing_errors"].append(error_msg)
+                    else:
+                        print(f"        No samples.npz found in {eos_path}")
                         
-                    for filename in os.listdir(result_dir):
-                        if filename.endswith("_result.hdf5"):
-                            result_file = os.path.join(result_dir, filename)
-                            try:
-                                with h5py.File(result_file, 'r') as f:
-                                    print(f"        Processing {filename}")
-                                    
-                                    # Look for posterior samples
-                                    posterior_key = None
-                                    for key in ['posterior_samples', 'posterior', 'samples']:
-                                        if key in f:
-                                            posterior_key = key
-                                            break
-                                    
-                                    if posterior_key is None:
-                                        print(f"        No posterior samples found in {filename}")
-                                        continue
-                                    
-                                    posterior_data = f[posterior_key]
-                                    
-                                    # Extract each parameter
-                                    for param in MONEY_PARAMETERS:
-                                        samples = posterior_data[param][:]
-                                        summary = compute_parameter_summary(samples)
-                                        data[source][pop][eos][event][param] = summary
-                                        print(f"          {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
-                                
-                            except (OSError, KeyError, ValueError) as e:
-                                error_msg = f"Error reading {result_file}: {e}"
-                                print(f"        {error_msg}")
-                                data["processing_errors"].append(error_msg)
+                        # Fallback: Look for HDF5 result files in subdirectories
+                        result_dir = os.path.join(eos_path, "outdir/result/")
+                        if os.path.exists(result_dir):
+                            for filename in os.listdir(result_dir):
+                                if filename.endswith("_result.hdf5"):
+                                    result_file = os.path.join(result_dir, filename)
+                                    try:
+                                        with h5py.File(result_file, 'r') as f:
+                                            print(f"        Processing HDF5 file {filename}")
+                                            
+                                            # Look for posterior samples
+                                            posterior_key = None
+                                            for key in ['posterior_samples', 'posterior', 'samples']:
+                                                if key in f:
+                                                    posterior_key = key
+                                                    break
+                                            
+                                            if posterior_key is None:
+                                                print(f"        No posterior samples found in {filename}")
+                                                continue
+                                            
+                                            posterior_data = f[posterior_key]
+                                            
+                                            # Extract each parameter
+                                            for param in MONEY_PARAMETERS:
+                                                if param in posterior_data:
+                                                    samples = posterior_data[param][:]
+                                                    summary = compute_parameter_summary(samples)
+                                                    data[source][pop][eos][event][param] = summary
+                                                    print(f"          {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
+                                                else:
+                                                    print(f"          Parameter {param} not found in {filename}")
+                                            
+                                    except (OSError, KeyError, ValueError) as e:
+                                        error_msg = f"Error reading {result_file}: {e}"
+                                        print(f"        {error_msg}")
+                                        data["processing_errors"].append(error_msg)
     
     print(f"Processing completed with {len(data['processing_errors'])} errors")
     return data
@@ -403,7 +431,8 @@ def main():
     args = parser.parse_args()
     
     # base_dir = "../GW_runs/" # This is on Nikhef, for the relative binning runs
-    base_dir = "/work/wouters/neural_priors_paper_runs/" # This is on Nikhef, for the relative binning runs
+    # base_dir = "/work/wouters/neural_priors_paper_runs/" # This is on Nikhef, for the relative binning runs
+    base_dir = "../final_results/" # Local results directory
     json_file = "parameter_summaries.json"
     latex_file = "parameter_summaries_table.tex"
     
