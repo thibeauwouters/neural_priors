@@ -179,13 +179,10 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                                 # Extract each parameter
                                 default_eos = eos_to_process[0] if eos_to_process else "radio"
                                 for param in MONEY_PARAMETERS:
-                                    if param in posterior_data.dtype.names:
-                                        samples = posterior_data[param][:]
-                                        summary = compute_parameter_summary(samples)
-                                        data[source][default_pop][default_eos][event][param] = summary
-                                        print(f"        {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
-                                    else:
-                                        print(f"        Parameter {param} not found in {filename}")
+                                    samples = posterior_data[param][:]
+                                    summary = compute_parameter_summary(samples)
+                                    data[source][default_pop][default_eos][event][param] = summary
+                                    print(f"        {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
                                 
                         except (OSError, KeyError, ValueError) as e:
                             error_msg = f"Error reading {result_file}: {e}"
@@ -234,13 +231,10 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                                     
                                     # Extract each parameter
                                     for param in MONEY_PARAMETERS:
-                                        if param in posterior_data.dtype.names:
-                                            samples = posterior_data[param][:]
-                                            summary = compute_parameter_summary(samples)
-                                            data[source][pop][eos][event][param] = summary
-                                            print(f"          {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
-                                        else:
-                                            print(f"          Parameter {param} not found in {filename}")
+                                        samples = posterior_data[param][:]
+                                        summary = compute_parameter_summary(samples)
+                                        data[source][pop][eos][event][param] = summary
+                                        print(f"          {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
                                 
                             except (OSError, KeyError, ValueError) as e:
                                 error_msg = f"Error reading {result_file}: {e}"
