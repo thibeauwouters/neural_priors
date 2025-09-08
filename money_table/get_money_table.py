@@ -31,9 +31,10 @@ MONEY_PARAMETERS = [
 
 # Display name mappings
 POPULATION_DISPLAY = {
-    "uniform": "Uniform",
-    "gaussian": "Gaussian", 
-    "double_gaussian": "Double Gaussian"
+    "uniform": "U",
+    "gaussian": "G", 
+    "double_gaussian": "DG",
+    "default": "Default"
 }
 
 EOS_DISPLAY = {
@@ -258,26 +259,38 @@ def has_parameter_data(data: Dict[str, Any], source: str, pop: str, eos: str, ev
 
 
 def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bool = False) -> str:
-    """Generate LaTeX table with parameter summaries."""
+    """Generate LaTeX table with parameter summaries for specific event-source combinations."""
     lines = []
     eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
     
-    # Table header - parameters as columns, configurations as rows
+    # Define specific event-source combinations
+    event_source_combinations = {
+        "GW170817": "bns",
+        "GW190425": "bns", 
+        "GW230529": "nsbh"
+    }
+    
+    # Populations to include (now including default)
+    populations_to_include = ["uniform", "gaussian", "double_gaussian", "default"]
+    
+    # Table header - parameters as columns, configurations as rows (no source column)
     param_headers = " & ".join([PARAMETER_DISPLAY[param] for param in MONEY_PARAMETERS])
     lines.extend([
-        "\\begin{tabular}{|l|l|l|l|" + "c|" * len(MONEY_PARAMETERS) + "}",
+        "\\begin{tabular}{|l|l|l|" + "c|" * len(MONEY_PARAMETERS) + "}",
         "\\hline",
-        f"\\textbf{{Event}} & \\textbf{{Source}} & \\textbf{{Population}} & \\textbf{{EOS}} & {param_headers} \\\\",
+        f"\\textbf{{Event}} & \\textbf{{Pop}} & \\textbf{{EOS}} & {param_headers} \\\\",
         "\\hline\\hline"
     ])
     
-    # Generate table rows
-    for event in GW_EVENTS:
+    # Generate table rows for specific event-source combinations
+    for event, source in event_source_combinations.items():
+        if event not in GW_EVENTS:
+            continue
+            
         event_first = True
         
         # Count rows for this event (for multirow)
-        event_rows = sum(1 for source in SOURCE_TYPES 
-                        for pop in ["uniform", "gaussian", "double_gaussian"]
+        event_rows = sum(1 for pop in populations_to_include
                         for eos in eos_to_process
                         if any(has_parameter_data(data, source, pop, eos, event, param) 
                               for param in MONEY_PARAMETERS))
@@ -285,71 +298,54 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
         if event_rows == 0:
             continue
             
-        for source in SOURCE_TYPES:
-            source_first = True
+        for pop in populations_to_include:
+            pop_first = True
             
-            # Count rows for this source within this event
-            source_rows = sum(1 for pop in ["uniform", "gaussian", "double_gaussian"]
-                             for eos in eos_to_process
-                             if any(has_parameter_data(data, source, pop, eos, event, param) 
-                                   for param in MONEY_PARAMETERS))
+            # Count rows for this population
+            pop_rows = sum(1 for eos in eos_to_process
+                          if any(has_parameter_data(data, source, pop, eos, event, param) 
+                                for param in MONEY_PARAMETERS))
             
-            if source_rows == 0:
+            if pop_rows == 0:
                 continue
             
-            for pop in ["uniform", "gaussian", "double_gaussian"]:
-                pop_first = True
-                
-                # Count rows for this population
-                pop_rows = sum(1 for eos in eos_to_process
-                              if any(has_parameter_data(data, source, pop, eos, event, param) 
-                                    for param in MONEY_PARAMETERS))
-                
-                if pop_rows == 0:
+            for eos in eos_to_process:
+                # Check if this configuration has any data
+                if not any(has_parameter_data(data, source, pop, eos, event, param) 
+                          for param in MONEY_PARAMETERS):
                     continue
                 
-                for eos in eos_to_process:
-                    # Check if this configuration has any data
-                    if not any(has_parameter_data(data, source, pop, eos, event, param) 
-                              for param in MONEY_PARAMETERS):
-                        continue
-                    
-                    # Format cells
-                    event_cell = f"\\multirow{{{event_rows}}}{{*}}{{{event}}}" if event_first else ""
-                    source_cell = f"\\multirow{{{source_rows}}}{{*}}{{{source.upper()}}}" if source_first else ""
-                    pop_cell = f"\\multirow{{{pop_rows}}}{{*}}{{{POPULATION_DISPLAY[pop]}}}" if pop_first else ""
-                    eos_cell = EOS_DISPLAY[eos]
-                    
-                    # Parameter value cells
-                    param_cells = []
-                    for param in MONEY_PARAMETERS:
-                        if has_parameter_data(data, source, pop, eos, event, param):
-                            summary = data[source][pop][eos][event][param]
-                            median = summary["median"]
-                            low_diff = summary["low_diff"]
-                            high_diff = summary["high_diff"]
-                            
-                            # Format based on parameter type
-                            if param in ["mass_1_source", "mass_2_source", "luminosity_distance"]:
-                                param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
-                            elif param in ["lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde"]:
-                                param_cells.append(f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$")
-                            else:  # chi_eff, chi_p, mass_ratio
-                                param_cells.append(f"${median:.3f}_{{-{low_diff:.3f}}}^{{+{high_diff:.3f}}}$")
-                        else:
-                            param_cells.append("--")
-                    
-                    lines.append(f"{event_cell} & {source_cell} & {pop_cell} & {eos_cell} & {' & '.join(param_cells)} \\\\")
-                    
-                    event_first = False
-                    source_first = False
-                    pop_first = False
+                # Format cells (no source column)
+                event_cell = f"\\multirow{{{event_rows}}}{{*}}{{{event}}}" if event_first else ""
+                pop_cell = f"\\multirow{{{pop_rows}}}{{*}}{{{POPULATION_DISPLAY[pop]}}}" if pop_first else ""
+                eos_cell = EOS_DISPLAY[eos]
                 
-                if not pop_first:  # Only add line if we've written rows
-                    lines.append("\\cline{3-" + str(4 + len(MONEY_PARAMETERS)) + "}")
+                # Parameter value cells
+                param_cells = []
+                for param in MONEY_PARAMETERS:
+                    if has_parameter_data(data, source, pop, eos, event, param):
+                        summary = data[source][pop][eos][event][param]
+                        median = summary["median"]
+                        low_diff = summary["low_diff"]
+                        high_diff = summary["high_diff"]
+                        
+                        # Format based on parameter type
+                        if param in ["mass_1_source", "mass_2_source", "luminosity_distance"]:
+                            param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
+                        elif param in ["lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde"]:
+                            param_cells.append(f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$")
+                        else:  # chi_eff, chi_p, mass_ratio
+                            param_cells.append(f"${median:.3f}_{{-{low_diff:.3f}}}^{{+{high_diff:.3f}}}$")
+                    else:
+                        param_cells.append("--")
+                
+                lines.append(f"{event_cell} & {pop_cell} & {eos_cell} & {' & '.join(param_cells)} \\\\")
+                
+                event_first = False
+                pop_first = False
             
-            if not source_first:  # Only add line if we've written rows
-                lines.append("\\cline{2-" + str(4 + len(MONEY_PARAMETERS)) + "}")
+            if not pop_first:  # Only add line if we've written rows
+                lines.append("\\cline{2-" + str(3 + len(MONEY_PARAMETERS)) + "}")
         
         if not event_first:  # Only add line if we've written rows
             lines.append("\\hline\\hline")
