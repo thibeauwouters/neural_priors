@@ -26,7 +26,7 @@ EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_NICER", "radio_GW170817", "
 MONEY_PARAMETERS = [
     "mass_1_source", "mass_2_source", "mass_ratio", 
     "lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde",
-    "luminosity_distance", "chi_eff", "chi_p"
+    "luminosity_distance"
 ]
 
 # Display name mappings
@@ -53,9 +53,7 @@ PARAMETER_DISPLAY = {
     "lambda_2": "$\\Lambda_2$",
     "lambda_tilde": "$\\tilde{\\Lambda}$",
     "delta_lambda_tilde": "$\\delta\\tilde{\\Lambda}$",
-    "luminosity_distance": "$d_L$ [Mpc]",
-    "chi_eff": "$\\chi_{\\mathrm{eff}}$",
-    "chi_p": "$\\chi_p$"
+    "luminosity_distance": "$d_L$ [Mpc]"
 }
 
 
@@ -149,46 +147,76 @@ def collect_parameter_summaries_source_first(base_dir: str = "../GW_runs/", igno
                 
             print(f"  Processing source: {source}")
             
-            # Check for default directory first
+            # Check for default directory - path is {event}/{source}/default/samples.npz
             default_path = os.path.join(source_path, "default")
             if os.path.exists(default_path):
                 print(f"    Processing default configuration")
-                # For default, we'll use the first population type as placeholder
-                default_pop = "uniform"  # or whatever makes sense for your default
+                default_pop = "default"  # Use "default" as the population type
                 
-                # Look for HDF5 result files in default directory
-                for filename in os.listdir(default_path):
-                    if filename.endswith("_result.h5") or filename.endswith(".h5"):
-                        result_file = os.path.join(default_path, filename)
-                        try:
-                            with h5py.File(result_file, 'r') as f:
-                                print(f"      Processing {filename}")
+                # Look for samples.npz file (as used in plots)
+                npz_file = os.path.join(default_path, "samples.npz")
+                if os.path.exists(npz_file):
+                    try:
+                        print(f"      Processing {npz_file}")
+                        
+                        # Load NPZ file
+                        npz_data = np.load(npz_file, allow_pickle=True)
+                        posterior_data = {key: npz_data[key] for key in npz_data.files}
+                        
+                        # Extract each parameter
+                        default_eos = eos_to_process[0] if eos_to_process else "radio"
+                        for param in MONEY_PARAMETERS:
+                            if param in posterior_data:
+                                samples = posterior_data[param]
+                                summary = compute_parameter_summary(samples)
+                                data[source][default_pop][default_eos][event][param] = summary
+                                print(f"        {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
+                            else:
+                                print(f"        Parameter {param} not found in default run")
                                 
-                                # Look for posterior samples
-                                posterior_key = None
-                                for key in ['posterior_samples', 'posterior', 'samples']:
-                                    if key in f:
-                                        posterior_key = key
-                                        break
-                                
-                                if posterior_key is None:
-                                    print(f"      No posterior samples found in {filename}")
-                                    continue
-                                
-                                posterior_data = f[posterior_key]
-                                
-                                # Extract each parameter
-                                default_eos = eos_to_process[0] if eos_to_process else "radio"
-                                for param in MONEY_PARAMETERS:
-                                    samples = posterior_data[param][:]
-                                    summary = compute_parameter_summary(samples)
-                                    data[source][default_pop][default_eos][event][param] = summary
-                                    print(f"        {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
-                                
-                        except (OSError, KeyError, ValueError) as e:
-                            error_msg = f"Error reading {result_file}: {e}"
-                            print(f"      {error_msg}")
-                            data["processing_errors"].append(error_msg)
+                    except (OSError, KeyError, ValueError) as e:
+                        error_msg = f"Error reading {npz_file}: {e}"
+                        print(f"      {error_msg}")
+                        data["processing_errors"].append(error_msg)
+                else:
+                    print(f"      No samples.npz found in {default_path}")
+                    
+                    # Fallback: Look for HDF5 result files in default directory
+                    for filename in os.listdir(default_path):
+                        if filename.endswith("_result.h5") or filename.endswith(".h5"):
+                            result_file = os.path.join(default_path, filename)
+                            try:
+                                with h5py.File(result_file, 'r') as f:
+                                    print(f"      Processing HDF5 file {filename}")
+                                    
+                                    # Look for posterior samples
+                                    posterior_key = None
+                                    for key in ['posterior_samples', 'posterior', 'samples']:
+                                        if key in f:
+                                            posterior_key = key
+                                            break
+                                    
+                                    if posterior_key is None:
+                                        print(f"      No posterior samples found in {filename}")
+                                        continue
+                                    
+                                    posterior_data = f[posterior_key]
+                                    
+                                    # Extract each parameter
+                                    default_eos = eos_to_process[0] if eos_to_process else "radio"
+                                    for param in MONEY_PARAMETERS:
+                                        if param in posterior_data:
+                                            samples = posterior_data[param][:]
+                                            summary = compute_parameter_summary(samples)
+                                            data[source][default_pop][default_eos][event][param] = summary
+                                            print(f"        {param}: {summary['median']:.3f} +{summary['high_diff']:.3f} -{summary['low_diff']:.3f}")
+                                        else:
+                                            print(f"        Parameter {param} not found in {filename}")
+                                    
+                            except (OSError, KeyError, ValueError) as e:
+                                error_msg = f"Error reading {result_file}: {e}"
+                                print(f"      {error_msg}")
+                                data["processing_errors"].append(error_msg)
             
             # Process structured population/eos directories
             for pop in POPULATION_TYPES:
@@ -334,7 +362,9 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                             param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
                         elif param in ["lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde"]:
                             param_cells.append(f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$")
-                        else:  # chi_eff, chi_p, mass_ratio
+                        elif param == "mass_ratio":
+                            param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
+                        else:
                             param_cells.append(f"${median:.3f}_{{-{low_diff:.3f}}}^{{+{high_diff:.3f}}}$")
                     else:
                         param_cells.append("--")
