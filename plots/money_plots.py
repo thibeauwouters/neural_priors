@@ -26,10 +26,10 @@ setup_matplotlib_style()
 
 # Default run color constants
 DEFAULT_RUN_PLOT_COLOR = 'lightgray'
-DEFAULT_RUN_LEGEND_COLOR = 'gray'
+DEFAULT_RUN_LEGEND_COLOR = 'dimgray'
 
 # Legend formatting constants
-LEGEND_FONTSIZE = 24
+LEGEND_FONTSIZE = 36
 LEGEND_X = 0.65
 LEGEND_Y = 0.95
 LEGEND_DY = 0.06  # Half of original 0.08
@@ -465,7 +465,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     
     # Add default run to legend if included
     if default_samples is not None:
-        legend_entries.append("Agnostic prior")
+        legend_entries.append("Agnostic")
         legend_colors.append(DEFAULT_RUN_LEGEND_COLOR)
     
     # # Add title
