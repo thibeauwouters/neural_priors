@@ -475,7 +475,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     
     # Add default run to legend if included
     if default_samples is not None:
-        legend_entries.append("Agnostic posterior")
+        legend_entries.append("Uninformed")
         legend_colors.append(DEFAULT_RUN_LEGEND_COLOR)
     
     # # Add title
