@@ -18,7 +18,7 @@ from utils import (
     construct_result_path, load_posterior_data, setup_matplotlib_style,
     PARAMETER_LATEX_LABELS, DEFAULT_CORNER_KWARGS, EOS_COLORS, EOS_SAMPLES_NAMES_DICT,
     convert_lambdas_with_verbose, filter_constant_parameters,
-    calculate_corner_plot_ranges, handle_nsbh_lambda_plotting, prevent_bns_leakage
+    calculate_corner_plot_ranges, handle_nsbh_lambda_plotting
 )
 
 # Setup matplotlib style
@@ -257,15 +257,25 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
             if verbose:
                 print(f"Created default samples array with shape: {default_samples.shape}")
     
-    # Apply BNS leakage prevention if needed
-    if source_type.lower() == 'bns':
-        samples_dict = prevent_bns_leakage(samples_dict, params_to_plot, params_to_plot)
+    # Compute percentage of samples with negative delta lambda tilde for BNS
+    if source_type.lower() == 'bns' and 'delta_lambda_tilde' in params_to_plot:
+        delta_lambda_idx = params_to_plot.index('delta_lambda_tilde')
         
-        # Also apply to default samples
+        print(f"\n=== Negative Delta Lambda Tilde Statistics ===")
+        for eos_name, samples in samples_dict.items():
+            delta_lambda_samples = samples[:, delta_lambda_idx]
+            negative_count = np.sum(delta_lambda_samples < 0)
+            total_count = len(delta_lambda_samples)
+            percentage = (negative_count / total_count) * 100
+            print(f"{eos_name}: {negative_count}/{total_count} ({percentage:.1f}%) negative delta_lambda_tilde")
+        
+        # Also compute for default samples
         if default_samples is not None:
-            default_dict_temp = {"default": default_samples}
-            default_dict_temp = prevent_bns_leakage(default_dict_temp, params_to_plot, params_to_plot)
-            default_samples = default_dict_temp["default"]
+            delta_lambda_samples = default_samples[:, delta_lambda_idx]
+            negative_count = np.sum(delta_lambda_samples < 0)
+            total_count = len(delta_lambda_samples)
+            percentage = (negative_count / total_count) * 100
+            print(f"default: {negative_count}/{total_count} ({percentage:.1f}%) negative delta_lambda_tilde")
     
     # Handle NSBH lambda plotting if needed
     if source_type.lower() == 'nsbh':
@@ -465,7 +475,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     
     # Add default run to legend if included
     if default_samples is not None:
-        legend_entries.append("Agnostic")
+        legend_entries.append("Agnostic posterior")
         legend_colors.append(DEFAULT_RUN_LEGEND_COLOR)
     
     # # Add title
@@ -498,12 +508,14 @@ def plot_gw170817_corner() -> str:
     gw170817_defaults = {
         'normalization_keys': ["radio_chiEFT",
                                "radio_NICER",
+                               "radio_chiEFT",
                                "radio_NICER",
                                "radio",
                                "radio_NICER"
                                ],
         'ranges': [[1.197430, 1.1977],
                    [0.85, 1.0],
+                   [-0.01, 0.01],
                    [100, 1000],
                    [0.0, 75.0],
                    [20.0, 50.0],
@@ -511,6 +523,7 @@ def plot_gw170817_corner() -> str:
     }
     params_to_plot = ["chirp_mass",
                       "mass_ratio",
+                      "chi_eff",
                       "lambda_tilde",
                       "delta_lambda_tilde",
                       "luminosity_distance"]
@@ -527,6 +540,7 @@ def plot_gw170817_corner() -> str:
     # Double Gaussian
     gw170817_defaults['normalization_keys'] = ["radio_chiEFT",
                                                "radio_NICER",
+                                               "radio_chiEFT",
                                                "radio_NICER",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
@@ -544,12 +558,14 @@ def plot_gw170817_corner() -> str:
     gw170817_defaults['ranges'] = None
     gw170817_defaults['normalization_keys'] = ["radio",
                                                "radio_NICER",
+                                               "radio_chiEFT",
                                                "radio",
                                                "radio_chiEFT",
                                                "radio",
                                                ]
     gw170817_defaults['ranges'] =  [[1.197435, 1.19775],
                                     [0.6, 1.0],
+                                    [-0.01, 0.01],
                                     [150, 850],
                                     [0.0, 200.0],
                                     [20.0, 50.0],
@@ -572,6 +588,7 @@ def plot_gw190425_corner() -> str:
     
     params_to_plot = ["chirp_mass",
                       "mass_ratio",
+                      "chi_eff",
                       "lambda_tilde",
                       "delta_lambda_tilde",
                       "luminosity_distance"
@@ -581,6 +598,7 @@ def plot_gw190425_corner() -> str:
     gw190425_defaults = {
         'normalization_keys': ["radio",
                                "radio_chiEFT",
+                               "radio",
                                "radio_NICER",
                                "radio",
                                "radio",
@@ -601,12 +619,14 @@ def plot_gw190425_corner() -> str:
     # Double Gaussian
     gw190425_defaults['normalization_keys'] = ["radio_chiEFT",
                                                "radio_NICER",
+                                               "radio",
                                                "radio_NICER",
                                                "radio_NICER",
                                                "radio_NICER",
                                                ]
     gw190425_defaults["ranges"] = [[1.4862, 1.4873],
                                    [0.64, 1.0],
+                                   [-0.1, 0.1],
                                    [50, 400],
                                    [0, 100],
                                    [0, 300],
@@ -621,13 +641,15 @@ def plot_gw190425_corner() -> str:
     
     # Uniform
     gw190425_defaults['normalization_keys'] = ["radio_chiEFT",
-                                               "radio",
+                                               "radio_chiEFT",
+                                               "radio_chiEFT",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
                                                ]
     gw190425_defaults["ranges"] = [[1.4862, 1.4873],
                                    [0.65, 1.0],
+                                   [-0.01, 0.03],
                                    [50, 400],
                                    [0, 100],
                                    [30, 300],
@@ -651,14 +673,16 @@ def plot_gw230529_corner() -> str:
     gw230529_defaults = {
         'normalization_keys': ["default",
                                "radio_NICER",
+                               "radio_NICER",
                                "radio",
-                               "radio_chiEFT"],
+                               "radio_chiEFT"]
     }
-    params_to_plot = ["chirp_mass", "mass_ratio", "lambda_2", "luminosity_distance"]
+    params_to_plot = ["chirp_mass", "mass_ratio", "chi_eff", "lambda_2", "luminosity_distance"]
     
     # Gaussian
     gw230529_defaults["ranges"] = [[2.0245, 2.0289],
                                    [0.25, 0.45],
+                                   [-0.25, 0.05],
                                    [0.0, 1800],
                                    [50.0, 400],
                                    ]
@@ -673,11 +697,13 @@ def plot_gw230529_corner() -> str:
     # Double Gaussian
     gw230529_defaults["ranges"] = [[2.0245, 2.0289],
                                    [0.275, 0.40],
+                                   [-0.25, 0.05],
                                    [0.0, 1800],
                                    [50.0, 400],
                                    ]
     gw230529_defaults['normalization_keys'] = ["radio",
                                                "radio_NICER",
+                                               "radio_chiEFT",
                                                "radio_NICER",
                                                "radio_NICER"]
     path = plot_corner_fixed_population_varying_eos(
@@ -691,10 +717,12 @@ def plot_gw230529_corner() -> str:
     # Uniform
     gw230529_defaults["ranges"] = [[2.0245, 2.0289],
                                    [0.275, 0.60],
+                                   [-0.25, 0.05],
                                    [0.0, 1800],
                                    [50.0, 400],
                                    ]
     gw230529_defaults['normalization_keys'] = ["radio_NICER",
+                                               "radio_chiEFT",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
                                                "radio_NICER"]

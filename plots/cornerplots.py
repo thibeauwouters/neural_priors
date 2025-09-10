@@ -24,7 +24,7 @@ from utils import (
     setup_matplotlib_style, PARAMETER_LATEX_LABELS, DEFAULT_CORNER_KWARGS, VERBOSE,
     DEFAULT_COLOR, BNS_COLOR, NSBH_COLOR, HAUKE_COLOR, HAUKE_EM_COLOR, ADRIAN_COLOR,
     load_hauke_data, load_adrian_data, convert_lambdas_with_verbose, filter_constant_parameters,
-    calculate_corner_plot_ranges, handle_nsbh_lambda_plotting, prevent_bns_leakage,
+    calculate_corner_plot_ranges, handle_nsbh_lambda_plotting,
     setup_corner_plot_styling, add_corner_plot_legend, load_injection_truths
 )
 
@@ -45,7 +45,6 @@ def create_corner_plot(GW_event: str,
                        plot_hauke: bool = False,
                        plot_hauke_EM: bool = False,
                        plot_adrian: bool = False,
-                       prevent_bns_leakage: bool = False,
                        fast_plotting: bool = True):
     """
     Create a corner plot comparing posterior samples across different dimensions.
@@ -63,7 +62,6 @@ def create_corner_plot(GW_event: str,
         plot_hauke (bool): If True, include Hauke's data in the corner plot.
         plot_hauke_EM (bool): If True, include Hauke's data in the corner plot that analyzed the GW+EM dataset.
         plot_adrian (bool): If True, include Adrian's data in the corner plot.
-        prevent_bns_leakage (bool): If True, prevent BNS leakage by masking samples with negative delta_lambda_tilde.
         fast_plotting (bool): If True, use fast cosmology interpolator for speed.
     """
     
@@ -84,7 +82,16 @@ def create_corner_plot(GW_event: str,
     
     # Add default run if requested
     if plot_default:
-        default_path = construct_result_path(base_path, GW_event, population_type, "default", eos_samples_name)
+        # Determine appropriate source type for default run based on GW event
+        if GW_event in ["GW170817", "GW190425"]:
+            default_source_type = "bns"
+        elif GW_event == "GW230529":
+            default_source_type = "nsbh"
+        else:
+            # Fallback to current source_type for other events
+            default_source_type = source_type
+            
+        default_path = construct_result_path(base_path, GW_event, default_source_type, "default", "radio")
         default_posterior = load_posterior_data(default_path, fast_mode=fast_plotting)
         if default_posterior:
             posteriors_dict["default"] = default_posterior
@@ -140,9 +147,17 @@ def create_corner_plot(GW_event: str,
     # Filter out parameters that are constant across all datasets
     labels, latex_labels, samples_dict = filter_constant_parameters(labels, latex_labels, samples_dict)
     
-    # For the BNS samples, in case we have lambda tilde, mask to only have positive delta lambda tilde
-    if prevent_bns_leakage:
-        samples_dict = prevent_bns_leakage(samples_dict, labels, params_to_plot)
+    # Compute percentage of samples with negative delta lambda tilde for BNS
+    if 'delta_lambda_tilde' in labels:
+        delta_lambda_idx = labels.index('delta_lambda_tilde')
+        
+        print(f"\n=== Negative Delta Lambda Tilde Statistics ===")
+        for dataset_name, samples in samples_dict.items():
+            delta_lambda_samples = samples[:, delta_lambda_idx]
+            negative_count = np.sum(delta_lambda_samples < 0)
+            total_count = len(delta_lambda_samples)
+            percentage = (negative_count / total_count) * 100
+            print(f"{dataset_name}: {negative_count}/{total_count} ({percentage:.1f}%) negative delta_lambda_tilde")
     
     # Create range dictionary to handle constant parameters
     ranges = calculate_corner_plot_ranges(labels, samples_dict)
@@ -365,8 +380,6 @@ def main():
                         help='Include Hauke\'s GW+EM results in plot')
     parser.add_argument('--plot-adrian', action='store_true',
                         help='Include Adrian\'s results in plot')
-    parser.add_argument('--prevent-bns-leakage', action='store_true',
-                        help='Prevent BNS leakage by masking negative delta_lambda_tilde')
     parser.add_argument('--fast-plotting', action='store_true', default=True,
                         help='Enable fast plotting mode (use cosmology interpolator for speed)')
     parser.add_argument('--no-fast-plotting', dest='fast_plotting', action='store_false',
@@ -392,7 +405,6 @@ def main():
             plot_hauke=args.plot_hauke,
             plot_hauke_EM=args.plot_hauke_em,
             plot_adrian=args.plot_adrian,
-            prevent_bns_leakage=args.prevent_bns_leakage,
             fast_plotting=args.fast_plotting
         )
     else:

@@ -494,6 +494,8 @@ PARAMETER_LATEX_LABELS = {
     "mass_ratio": r"$q$",
     "luminosity_distance": r"$d_L$ [Mpc]",
     "geocent_time": r"$t_c$ [s]",
+    "chi_eff": r"$\chi_{\rm{eff}}$",
+    "chi_p": r"$\\chi_{p}$",
     "a_1": r"$a_1$",
     "a_2": r"$a_2$",
     "tilt_1": r"$\theta_{1}$",
@@ -893,39 +895,6 @@ def handle_nsbh_lambda_plotting(samples_dict: Dict[str, np.ndarray], labels: Lis
     return modified_samples_dict
 
 
-def prevent_bns_leakage(samples_dict: Dict[str, np.ndarray], labels: List[str],
-                       params_to_plot: List[str], param_name: str = 'delta_lambda_tilde') -> Dict[str, np.ndarray]:
-    """
-    Prevent BNS leakage by masking samples with negative delta_lambda_tilde.
-    
-    Args:
-        samples_dict (Dict): Dictionary of sample arrays
-        labels (List[str]): Parameter names corresponding to sample columns
-        params_to_plot (List[str]): Parameter list to check for delta_lambda_tilde
-        param_name (str): Parameter to use for filtering (default: 'delta_lambda_tilde')
-        
-    Returns:
-        Dict: Modified samples_dict with filtered BNS samples
-    """
-    modified_samples_dict = {}
-    
-    for key, samples in samples_dict.items():
-        modified_samples = samples.copy()
-        
-        # For BNS samples, mask to only have positive delta lambda tilde
-        if param_name in params_to_plot and 'bns' in key.lower():
-            try:
-                param_index = labels.index(param_name)
-                if param_index < modified_samples.shape[1]:
-                    mask = modified_samples[:, param_index] > 0
-                    modified_samples = modified_samples[mask]
-            except ValueError:
-                # param_name not in labels
-                pass
-                
-        modified_samples_dict[key] = modified_samples
-    
-    return modified_samples_dict
 
 
 def setup_corner_plot_styling(group_names: List[str], use_density: bool = True) -> Tuple[Dict[str, str], Dict[str, Dict]]:
