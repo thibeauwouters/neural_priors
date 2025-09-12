@@ -142,7 +142,10 @@ def single_plot(pop: str,
         single_plot("uniform", "bns", normalization_indices=[0, 1, 2])
     """
     
-    colors = utils.COLORS_LIST_DICT[pop]
+    # Use consistent EOS colors (colorblind-friendly) as in money_plots.py
+    eos_colors = [utils.EOS_COLORS["radio"], 
+                  utils.EOS_COLORS["radio_chiEFT"], 
+                  utils.EOS_COLORS["radio_NICER"]]
     
     # Determine which parameters to fetch for the plotting
     if convert_masses:
@@ -229,14 +232,14 @@ def single_plot(pop: str,
             fig = corner.corner(corner_data, 
                         labels=labels,
                         range=ranges,
-                        color=colors[i],
+                        color=eos_colors[i],
                         **default_corner_kwargs)
         else:
             # Plot on existing figure
             corner.corner(corner_data, 
                           labels=labels,
                           range=ranges,
-                          color=colors[i],
+                          color=eos_colors[i],
                           fig=fig,
                           **default_corner_kwargs)
     
@@ -273,7 +276,7 @@ def single_plot(pop: str,
         for i, eos_samples_name in enumerate(eos_samples_name_list):
             plt.text(x, y - i*dy, 
                     utils.EOS_SAMPLES_NAMES_DICT[eos_samples_name], 
-                    color=colors[i],
+                    color=eos_colors[i],
                     fontsize=32,
                     transform=plt.gcf().transFigure)
     
