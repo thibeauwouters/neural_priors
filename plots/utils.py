@@ -496,6 +496,7 @@ PARAMETER_LATEX_LABELS = {
     "geocent_time": r"$t_c$ [s]",
     "chi_eff": r"$\chi_{\rm{eff}}$",
     "chi_p": r"$\\chi_{p}$",
+    "spin_1z": r"$\chi_{1z}$",
     "a_1": r"$a_1$",
     "a_2": r"$a_2$",
     "tilt_1": r"$\theta_{1}$",

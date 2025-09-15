@@ -35,7 +35,9 @@ LEGEND_Y = 0.95
 LEGEND_DY = 0.06  # Half of original 0.08
 
 # Title formatting constants
-TITLE_FONTSIZE = 28
+TITLE_FONTSIZE = 34
+TITLE_LABELPAD = 50
+ADD_TITLE = True
 
 
 def load_bayes_factors(bayes_factors_path: str = "../bayes_factors/all_bayes_factors.json") -> Dict:
@@ -121,6 +123,8 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
                                             title_fontsize: int = TITLE_FONTSIZE,
                                             bayes_factors_path: str = "../bayes_factors/all_bayes_factors.json",
                                             include_default: bool = True,
+                                            remove_chieff: bool = False,
+                                            remove_spin1z: bool = False,
                                             verbose: bool = False) -> str:
     """
     Create corner plot for a GW event with fixed population type and varying EOS samples.
@@ -152,6 +156,8 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
         title_fontsize (int): Font size for plot title
         bayes_factors_path (str): Path to Bayes factors JSON file
         include_default (bool): Include default uniform prior run (plotted in light gray)
+        remove_chieff (bool): Remove chi_eff parameter from plotting if True
+        remove_spin1z (bool): Remove spin_1z parameter from plotting if True
         verbose (bool): Print verbose information
         
     Returns:
@@ -165,6 +171,18 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     if params_to_plot is None:
         params_to_plot = ["chirp_mass", "mass_ratio", 
                          "lambda_tilde", "delta_lambda_tilde"]
+    
+    # Remove chi_eff if requested
+    if remove_chieff and "chi_eff" in params_to_plot:
+        params_to_plot = [p for p in params_to_plot if p != "chi_eff"]
+        if verbose:
+            print("Removed chi_eff from parameters to plot")
+    
+    # Remove spin_1z if requested
+    if remove_spin1z and "spin_1z" in params_to_plot:
+        params_to_plot = [p for p in params_to_plot if p != "spin_1z"]
+        if verbose:
+            print("Removed spin_1z from parameters to plot")
     
     print(f"Creating {gw_event} corner plot for population: {population}, source: {source_type}")
     print(f"EOS samples: {eos_samples}")
@@ -478,9 +496,10 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
         legend_entries.append("Uninformed")
         legend_colors.append(DEFAULT_RUN_LEGEND_COLOR)
     
-    # # Add title
-    # title = f"{source_type.upper()} - {population.replace('_', ' ').title()} Population"
-    # plt.suptitle(title, fontsize=title_fontsize, weight='bold', y=0.98)
+    # Add title
+    if ADD_TITLE:
+        title = f"{gw_event} - {population.replace('_', ' ').title()} population"
+        plt.suptitle(title, fontsize=title_fontsize, weight='bold', y=0.98 + TITLE_LABELPAD/1000)
     
     # Add legend with configurable positioning
     for i, (label, color) in enumerate(zip(legend_entries, legend_colors)):
@@ -500,22 +519,23 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     return output_path
 
 
-def plot_gw170817_corner() -> str:
+def plot_gw170817_corner(remove_chieff: bool = False) -> str:
     """
     Convenience function for creating GW170817 corner plot.
+    
+    Args:
+        remove_chieff (bool): Remove chi_eff parameter from plotting if True
     """
     # Set hardcoded defaults for GW170817
     gw170817_defaults = {
         'normalization_keys': ["radio_chiEFT",
                                "radio_NICER",
-                               "radio_chiEFT",
                                "radio_NICER",
                                "radio",
                                "radio_NICER"
                                ],
         'ranges': [[1.197430, 1.1977],
                    [0.85, 1.0],
-                   [-0.01, 0.01],
                    [100, 1000],
                    [0.0, 75.0],
                    [20.0, 50.0],
@@ -523,7 +543,6 @@ def plot_gw170817_corner() -> str:
     }
     params_to_plot = ["chirp_mass",
                       "mass_ratio",
-                      "chi_eff",
                       "lambda_tilde",
                       "delta_lambda_tilde",
                       "luminosity_distance"]
@@ -534,13 +553,13 @@ def plot_gw170817_corner() -> str:
         population="gaussian",
         source_type="bns",
         params_to_plot=params_to_plot,
+        remove_chieff=remove_chieff,
         **gw170817_defaults
     )
     
     # Double Gaussian
     gw170817_defaults['normalization_keys'] = ["radio_chiEFT",
                                                "radio_NICER",
-                                               "radio_chiEFT",
                                                "radio_NICER",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
@@ -550,6 +569,7 @@ def plot_gw170817_corner() -> str:
         population="double_gaussian",
         source_type="bns",
         params_to_plot=params_to_plot,
+        remove_chieff=remove_chieff,
         **gw170817_defaults
     )
     
@@ -558,14 +578,12 @@ def plot_gw170817_corner() -> str:
     gw170817_defaults['ranges'] = None
     gw170817_defaults['normalization_keys'] = ["radio",
                                                "radio_NICER",
-                                               "radio_chiEFT",
                                                "radio",
                                                "radio_chiEFT",
                                                "radio",
                                                ]
     gw170817_defaults['ranges'] =  [[1.197435, 1.19775],
                                     [0.6, 1.0],
-                                    [-0.01, 0.01],
                                     [150, 850],
                                     [0.0, 200.0],
                                     [20.0, 50.0],
@@ -575,20 +593,23 @@ def plot_gw170817_corner() -> str:
         population="uniform",
         source_type="bns",
         params_to_plot=params_to_plot,
+        remove_chieff=remove_chieff,
         **gw170817_defaults
     )
     
     return path
 
 
-def plot_gw190425_corner() -> str:
+def plot_gw190425_corner(remove_chieff: bool = False) -> str:
     """
     Convenience function for creating GW190425 corner plot.
+    
+    Args:
+        remove_chieff (bool): Remove chi_eff parameter from plotting if True
     """
     
     params_to_plot = ["chirp_mass",
                       "mass_ratio",
-                      "chi_eff",
                       "lambda_tilde",
                       "delta_lambda_tilde",
                       "luminosity_distance"
@@ -598,7 +619,6 @@ def plot_gw190425_corner() -> str:
     gw190425_defaults = {
         'normalization_keys': ["radio",
                                "radio_chiEFT",
-                               "radio",
                                "radio_NICER",
                                "radio",
                                "radio",
@@ -619,14 +639,12 @@ def plot_gw190425_corner() -> str:
     # Double Gaussian
     gw190425_defaults['normalization_keys'] = ["radio_chiEFT",
                                                "radio_NICER",
-                                               "radio",
                                                "radio_NICER",
                                                "radio_NICER",
                                                "radio_NICER",
                                                ]
     gw190425_defaults["ranges"] = [[1.4862, 1.4873],
                                    [0.64, 1.0],
-                                   [-0.1, 0.1],
                                    [50, 400],
                                    [0, 100],
                                    [0, 300],
@@ -636,6 +654,7 @@ def plot_gw190425_corner() -> str:
         population="double_gaussian",
         source_type="bns",
         params_to_plot=params_to_plot,
+        remove_chieff=remove_chieff,
         **gw190425_defaults
     )
     
@@ -645,11 +664,9 @@ def plot_gw190425_corner() -> str:
                                                "radio_chiEFT",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
-                                               "radio_chiEFT",
                                                ]
     gw190425_defaults["ranges"] = [[1.4862, 1.4873],
                                    [0.65, 1.0],
-                                   [-0.01, 0.03],
                                    [50, 400],
                                    [0, 100],
                                    [30, 300],
@@ -659,14 +676,19 @@ def plot_gw190425_corner() -> str:
         population="uniform",
         source_type="bns",
         params_to_plot=params_to_plot,
+        remove_chieff=remove_chieff,
         **gw190425_defaults
     )
     
     return path
 
-def plot_gw230529_corner() -> str:
+def plot_gw230529_corner(remove_chieff: bool = False, remove_spin1z: bool = False) -> str:
     """
     Convenience function for creating GW230529 corner plot.
+    
+    Args:
+        remove_chieff (bool): Remove chi_eff parameter from plotting if True
+        remove_spin1z (bool): Remove spin_1z parameter from plotting if True
     """
     
     # Set hardcoded defaults for GW230529
@@ -677,12 +699,12 @@ def plot_gw230529_corner() -> str:
                                "radio",
                                "radio_chiEFT"]
     }
-    params_to_plot = ["chirp_mass", "mass_ratio", "chi_eff", "lambda_2", "luminosity_distance"]
+    params_to_plot = ["chirp_mass", "mass_ratio", "spin_1z", "lambda_2", "luminosity_distance"]
     
     # Gaussian
     gw230529_defaults["ranges"] = [[2.0245, 2.0289],
-                                   [0.25, 0.45],
-                                   [-0.25, 0.05],
+                                   [0.25, 0.5],
+                                   [-0.3, 0.1],
                                    [0.0, 1800],
                                    [50.0, 400],
                                    ]
@@ -691,19 +713,21 @@ def plot_gw230529_corner() -> str:
         population="gaussian",
         source_type="nsbh",
         params_to_plot=params_to_plot,
+        remove_chieff=remove_chieff,
+        remove_spin1z=remove_spin1z,
         **gw230529_defaults
     )
     
     # Double Gaussian
     gw230529_defaults["ranges"] = [[2.0245, 2.0289],
-                                   [0.275, 0.40],
-                                   [-0.25, 0.05],
+                                   [0.275, 0.5],
+                                   [-0.3, 0.1],
                                    [0.0, 1800],
                                    [50.0, 400],
                                    ]
     gw230529_defaults['normalization_keys'] = ["radio",
                                                "radio_NICER",
-                                               "radio_chiEFT",
+                                               "radio_NICER",
                                                "radio_NICER",
                                                "radio_NICER"]
     path = plot_corner_fixed_population_varying_eos(
@@ -711,19 +735,21 @@ def plot_gw230529_corner() -> str:
         population="double_gaussian",
         source_type="nsbh",
         params_to_plot=params_to_plot,
+        remove_chieff=remove_chieff,
+        remove_spin1z=remove_spin1z,
         **gw230529_defaults
     )
     
     # Uniform
     gw230529_defaults["ranges"] = [[2.0245, 2.0289],
-                                   [0.275, 0.60],
-                                   [-0.25, 0.05],
+                                   [0.275, 0.5],
+                                   [-0.3, 0.1],
                                    [0.0, 1800],
                                    [50.0, 400],
                                    ]
     gw230529_defaults['normalization_keys'] = ["radio_NICER",
                                                "radio_chiEFT",
-                                               "radio_chiEFT",
+                                               "radio_NICER",
                                                "radio_chiEFT",
                                                "radio_NICER"]
     path = plot_corner_fixed_population_varying_eos(
@@ -731,6 +757,8 @@ def plot_gw230529_corner() -> str:
         population="uniform",
         source_type="nsbh",
         params_to_plot=params_to_plot,
+        remove_chieff=remove_chieff,
+        remove_spin1z=remove_spin1z,
         **gw230529_defaults
     )
     

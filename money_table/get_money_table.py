@@ -25,7 +25,7 @@ EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_NICER", "radio_GW170817", "
 # Parameters of interest - guaranteed to exist in HDF5 files
 MONEY_PARAMETERS = [
     "mass_1_source", "mass_2_source", "mass_ratio", 
-    "chi_eff", "chi_p",
+    # "chi_eff", "chi_p",
     "lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde",
     "luminosity_distance"
 ]

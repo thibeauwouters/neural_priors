@@ -1,0 +1,32 @@
+{
+  "model_path": "models/uniform/bns/radio",
+  "parameter_names": [
+    "chirp_mass_source",
+    "mass_ratio",
+    "lambda_1",
+    "lambda_2"
+  ],
+  "q_range": [
+    0.95,
+    1.0
+  ],
+  "n_points": 100,
+  "analysis": {
+    "physical_boundary": {
+      "n_valid_points": 100,
+      "n_nan_points": 0,
+      "ln_prob_min": -7.193977355957031,
+      "ln_prob_max": -6.398050308227539,
+      "ln_prob_range": 0.7959270477294922,
+      "ln_prob_std": 0.13011683463732188,
+      "max_jump": 0.09339332580566406,
+      "mean_abs_diff": 0.01234071904962713,
+      "trend_slope_near_boundary": -332.54833377201,
+      "final_ln_prob": -7.193977355957031,
+      "q_range_achieved": [
+        0.9768739788213906,
+        1.0
+      ]
+    }
+  }
+}
