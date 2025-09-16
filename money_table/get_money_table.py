@@ -25,6 +25,7 @@ EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_NICER", "radio_GW170817", "
 # Parameters of interest - guaranteed to exist in HDF5 files
 MONEY_PARAMETERS = [
     "mass_1_source", "mass_2_source", "mass_ratio", 
+    # "chi_eff", "chi_p",
     "lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde",
     "luminosity_distance"
 ]
@@ -49,6 +50,8 @@ PARAMETER_DISPLAY = {
     "mass_1_source": "$m_1^{\\mathrm{src}}$ [$M_\\odot$]",
     "mass_2_source": "$m_2^{\\mathrm{src}}$ [$M_\\odot$]",
     "mass_ratio": "$q$",
+    "chi_eff": "$\\chi_{\\rm{eff}}$",
+    "chi_p": "$\\chi_{p}$",
     "lambda_1": "$\\Lambda_1$",
     "lambda_2": "$\\Lambda_2$",
     "lambda_tilde": "$\\tilde{\\Lambda}$",
@@ -394,6 +397,8 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                         param_cells.append(f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$")
                     elif param == "mass_ratio":
                         param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
+                    elif param in ["chi_eff", "chi_p"]:
+                        param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
                     else:
                         param_cells.append(f"${median:.3f}_{{-{low_diff:.3f}}}^{{+{high_diff:.3f}}}$")
                 else:
@@ -452,6 +457,8 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                         elif param in ["lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde"]:
                             value_str = f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$"
                         elif param == "mass_ratio":
+                            value_str = f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$"
+                        elif param in ["chi_eff", "chi_p"]:
                             value_str = f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$"
                         else:
                             value_str = f"${median:.3f}_{{-{low_diff:.3f}}}^{{+{high_diff:.3f}}}$"

@@ -1,0 +1,14 @@
+{
+  "model_path": "models/uniform/bns/radio",
+  "parameter_names": [
+    "chirp_mass_source",
+    "mass_ratio",
+    "lambda_1",
+    "lambda_2"
+  ],
+  "q_threshold": 0.98,
+  "analysis": {
+    "filter_info": {
+      "q_threshold": 0.98,
+      "n_total": 200000,
+      "n_filtered": 

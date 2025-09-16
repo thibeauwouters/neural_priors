@@ -142,7 +142,15 @@ def single_plot(pop: str,
         single_plot("uniform", "bns", normalization_indices=[0, 1, 2])
     """
     
-    colors = utils.COLORS_LIST_DICT[pop]
+    if convert_to_lambda_tilde and source_type == "nsbh":
+        print(f"Not doing lambda tilde conversion for NSBH")
+        convert_to_lambda_tilde = False
+        
+    
+    # Use consistent EOS colors (colorblind-friendly) as in money_plots.py
+    eos_colors = [utils.EOS_COLORS["radio"], 
+                  utils.EOS_COLORS["radio_chiEFT"], 
+                  utils.EOS_COLORS["radio_NICER"]]
     
     # Determine which parameters to fetch for the plotting
     if convert_masses:
@@ -229,14 +237,14 @@ def single_plot(pop: str,
             fig = corner.corner(corner_data, 
                         labels=labels,
                         range=ranges,
-                        color=colors[i],
+                        color=eos_colors[i],
                         **default_corner_kwargs)
         else:
             # Plot on existing figure
             corner.corner(corner_data, 
                           labels=labels,
                           range=ranges,
-                          color=colors[i],
+                          color=eos_colors[i],
                           fig=fig,
                           **default_corner_kwargs)
     
@@ -273,7 +281,7 @@ def single_plot(pop: str,
         for i, eos_samples_name in enumerate(eos_samples_name_list):
             plt.text(x, y - i*dy, 
                     utils.EOS_SAMPLES_NAMES_DICT[eos_samples_name], 
-                    color=colors[i],
+                    color=eos_colors[i],
                     fontsize=32,
                     transform=plt.gcf().transFigure)
     
@@ -283,6 +291,9 @@ def single_plot(pop: str,
     else:
         save_name = f"./figures/priors/{source_type}_{pop}_priors_component.pdf"
         
+    if convert_to_lambda_tilde:
+        save_name = save_name.replace(".pdf", "_tilde.pdf")
+        
     print(f"Saving figure to {save_name}")
     plt.savefig(save_name, bbox_inches="tight")
     if os.path.exists("../../paper/Figures"):
@@ -291,22 +302,116 @@ def single_plot(pop: str,
         plt.savefig(save_name, bbox_inches="tight")
     plt.close()
 
+def scatter_plot_mass_ratio_vs_lambda(pop: str,
+                                      source_type: str) -> None:
+    """
+    Create individual 2D scatter plots of mass ratio vs tidal parameter for each EOS sample.
+    For BNS: mass ratio vs delta lambda tilde
+    For NSBH: mass ratio vs lambda_2 (NS tidal deformability)
+    
+    Args:
+        pop (str): Population name (e.g., "uniform", "gaussian", "double_gaussian").
+        source_type (str): Source type ("bns" or "nsbh").
+    """
+        
+    # Use consistent EOS colors (colorblind-friendly)
+    eos_colors = [utils.EOS_COLORS["radio"], 
+                  utils.EOS_COLORS["radio_chiEFT"], 
+                  utils.EOS_COLORS["radio_NICER"]]
+    
+    # eos_samples_name_list = ["radio", "radio_chiEFT", "radio_NICER"]
+    eos_samples_name_list = ["radio"]
+    
+    # Determine parameter name
+    param_name = "delta_lambda_tilde"
+    
+    # Create individual plots for each EOS
+    for i, eos_samples_name in enumerate(eos_samples_name_list):
+        # Create figure for this EOS
+        plt.figure(figsize=(8, 6))
+        
+        # Load the data
+        path = get_training_data_path(pop, source_type, eos_samples_name)
+        data = dict(np.load(path))
+        data = make_conversions(data)
+        
+        # Extract mass ratio and appropriate tidal parameter
+        mass_ratio = data["mass_ratio"]
+        tidal_param = data["delta_lambda_tilde"]
+        
+        # Create scatter plot with low alpha to show density
+        plt.scatter(mass_ratio, tidal_param, 
+                   color=eos_colors[i], 
+                   alpha=0.005, 
+                   s=5)
+        
+        # Set labels
+        plt.xlabel(utils.TEX_TRANSLATION_DICT["mass_ratio"], fontsize=fs)
+        plt.ylabel(utils.TEX_TRANSLATION_DICT[param_name], fontsize=fs)
+        
+        # Add title with EOS name
+        plt.title(utils.EOS_SAMPLES_NAMES_DICT[eos_samples_name], fontsize=fs)
+        
+        # Set reasonable limits based on source type
+        if source_type == "bns":
+            plt.xlim(0.4, 1.0)
+            if pop == "uniform":
+                plt.ylim(-500, 500)
+            elif pop == "gaussian":
+                plt.xlim(0.99, 1.0)
+                plt.ylim(0.0, 20.0)
+            else:
+                plt.ylim(None, None)  # Let matplotlib choose
+        else:  # nsbh
+            plt.xlim(0.2, 1.0)
+            if pop == "uniform":
+                plt.ylim(0, 2000)
+            else:
+                plt.ylim(None, None)  # Let matplotlib choose
+        
+        plt.tight_layout()
+        
+        # Save the figure for this EOS
+        os.makedirs("./figures/priors/scatterplots", exist_ok=True)
+        save_name = f"./figures/priors/scatterplots/{source_type}_{pop}_{eos_samples_name}_mass_ratio_vs_{param_name}_scatter.pdf"
+        print(f"Saving scatter plot to {save_name}")
+        plt.savefig(save_name, bbox_inches="tight")
+        if os.path.exists("../../paper/Figures"):
+            print(f"Also saving to the Overleaf paper repo")
+            save_name_paper = save_name.replace("./figures/priors/scatterplots/", "../../paper/Figures/")
+            plt.savefig(save_name_paper, bbox_inches="tight")
+        plt.close()
+
 def main():
+    
+    convert_to_lambda_tilde = True
     
     for pop in utils.POPULATION_NAMES:
         for source_type in ["bns", "nsbh"]:
             print(f"Plotting priors for {pop} {source_type}...")
             
-            if pop == "uniform" and source_type == "bns":
+            if pop == "uniform" and source_type == "bns" and not convert_to_lambda_tilde:
                 ranges = [[0.9, 2.1],
                           [0.425, 1.0],
                           [0.0, 700.0],
                           [0.0, 4_500.0],
                 ]
-            elif pop == "uniform" and source_type == "nsbh":
+            elif pop == "uniform" and source_type == "bns" and convert_to_lambda_tilde:
+                ranges = [[0.9, 2.1],
+                          [0.425, 1.0],
+                          [0.0, 1000.0],
+                          [0.0, 400.0],
+                ]
+            elif pop == "uniform" and source_type == "nsbh" and not convert_to_lambda_tilde:
                 ranges = [[1.25, 3.0],
                           [0.20, 1.0],
                           [0.0, 2_000.0],
+                ]
+            elif pop == "uniform" and source_type == "nsbh" and convert_to_lambda_tilde:
+                ranges = [[1.25, 3.0],
+                          [0.20, 1.0],
+                          [0.0, 1000.0],
+                        #   [0.0, 400.0],
                 ]
             else:
                 ranges = None
@@ -316,10 +421,13 @@ def main():
                         add_legend=pop=="uniform", # only add the legend on the "uniform" population plot
                         add_title=False,
                         convert_masses=True,
-                        convert_to_lambda_tilde=False,
+                        convert_to_lambda_tilde=convert_to_lambda_tilde,
                         ranges=ranges,
                         normalization_indices=[1, 1, 1, 1] if source_type == "bns" else [1, 1, 1]
                         )
+            
+            # Create scatter plot for mass ratio vs tidal parameter
+            scatter_plot_mass_ratio_vs_lambda(pop, source_type)
             
     
 if __name__ == "__main__":

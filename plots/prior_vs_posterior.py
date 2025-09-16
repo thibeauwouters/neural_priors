@@ -20,7 +20,7 @@ from money_plots import (
     DEFAULT_CORNER_KWARGS, EOS_COLORS, EOS_SAMPLES_NAMES_DICT,
     convert_lambdas_with_verbose, filter_constant_parameters,
     calculate_corner_plot_ranges, handle_nsbh_lambda_plotting, 
-    prevent_bns_leakage, PARAMETER_LATEX_LABELS
+    PARAMETER_LATEX_LABELS
 )
 
 # Setup matplotlib style
@@ -174,8 +174,17 @@ def plot_prior_vs_posterior(gw_event: str,
     # Apply source-specific processing
     samples_dict = {"prior": prior_samples, "posterior": posterior_samples}
     
-    if source_type.lower() == 'bns':
-        samples_dict = prevent_bns_leakage(samples_dict, params_to_plot, params_to_plot)
+    # Compute percentage of samples with negative delta lambda tilde for BNS
+    if source_type.lower() == 'bns' and 'delta_lambda_tilde' in params_to_plot:
+        delta_lambda_idx = params_to_plot.index('delta_lambda_tilde')
+        
+        print(f"\n=== Negative Delta Lambda Tilde Statistics ===")
+        for dataset_name, samples in samples_dict.items():
+            delta_lambda_samples = samples[:, delta_lambda_idx]
+            negative_count = np.sum(delta_lambda_samples < 0)
+            total_count = len(delta_lambda_samples)
+            percentage = (negative_count / total_count) * 100
+            print(f"{dataset_name}: {negative_count}/{total_count} ({percentage:.1f}%) negative delta_lambda_tilde")
     elif source_type.lower() == 'nsbh':
         samples_dict = handle_nsbh_lambda_plotting(samples_dict, params_to_plot, params_to_plot)
     
