@@ -5,6 +5,7 @@ import corner
 import utils
 from bilby.gw.conversion import component_masses_to_chirp_mass
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
+from matplotlib.patches import FancyBboxPatch
 
 # Font size
 fs = 32
@@ -305,6 +306,63 @@ def combined_plot(source_type: str,
         #     "double_gaussian": "Double Gaussian"
         # }
         # subfigs[pop_idx].suptitle(title_map[pop], fontsize=40, y=0.98)
+
+    # Add gray rectangle with rounded corners around all three corner plots
+    # Compute bounding box automatically from all axes
+
+    # Get all axes from the figure (includes all subplot axes from all corner plots)
+    all_axes = fig.get_axes()
+
+    # Get bounding box in figure coordinates
+    # Note: axes positions are already in figure coordinates
+    x0_list = [ax.get_position().x0 for ax in all_axes]
+    y0_list = [ax.get_position().y0 for ax in all_axes]
+    x1_list = [ax.get_position().x1 for ax in all_axes]
+    y1_list = [ax.get_position().y1 for ax in all_axes]
+
+    # Find extrema
+    min_x = min(x0_list)
+    min_y = min(y0_list)
+    max_x = max(x1_list)
+    max_y = max(y1_list)
+
+    # Add a small margin (in figure coordinates)
+    margin = 0.10
+    rect_left = min_x - margin
+    rect_bottom = min_y - margin
+    rect_width = (max_x - min_x) + 1.4 * margin
+    rect_height = (max_y - min_y) + 2 * margin
+
+    # Create fancy box patch with rounded corners
+    fancy_box = FancyBboxPatch(
+        (rect_left, rect_bottom),
+        rect_width,
+        rect_height,
+        boxstyle="round,pad=0.01",
+        fill=False,
+        edgecolor='gray',
+        linewidth=5,
+        zorder=1000,
+        transform=fig.transFigure
+    )
+    fig.patches.extend([fancy_box])
+
+    # Add vertical text to the left of the rectangle
+    text_x = rect_left - 0.03
+    text_y = rect_bottom + rect_height / 2
+    source_label = "BNS" if source_type == "bns" else "NSBH"
+
+    fig.text(
+        text_x,
+        text_y,
+        source_label,
+        fontsize=60,
+        rotation=90,
+        verticalalignment='center',
+        horizontalalignment='center',
+        transform=fig.transFigure,
+        weight='bold'
+    )
 
     # Add legend in the top-right area of the overall figure
     legend_x = 0.875
