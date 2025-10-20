@@ -7,7 +7,7 @@ from bilby.gw.conversion import component_masses_to_chirp_mass
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 
 # Font size
-fs = 24
+fs = 32
 
 # Matplotlib style parameters
 params = {"axes.grid": False,
@@ -23,13 +23,28 @@ params = {"axes.grid": False,
         "axes.labelsize": fs,
         "legend.fontsize": fs,
         "legend.title_fontsize": fs,
-        "figure.titlesize": fs}
+        "figure.titlesize": fs
+        }
 
 plt.rcParams.update(params)
 
 # Corner plot styling constants
 LINEWIDTH = 2.5      # Thickness of lines in corner plots (1D histograms and 2D contours)
 LABELPAD = 0.05      # Padding for axis labels in corner plots
+SMOOTH = 1.5         # KDE smoothing factor
+MIN_N_TICKS = 2      # Minimum number of ticks on axes (passed to corner)
+MAX_N_TICKS = 3      # Maximum number of ticks on axes (passed to corner)
+
+# Base corner plot kwargs used across all corner plots
+BASE_CORNER_KWARGS = {
+    'bins': 40,
+    'smooth': SMOOTH,
+    'plot_datapoints': False,
+    'plot_density': False,
+    'min_n_ticks': MIN_N_TICKS,
+    'max_n_ticks': MAX_N_TICKS,
+    'labelpad': LABELPAD,
+}
 
 
 def get_training_data_path(population_name: str,
@@ -238,18 +253,13 @@ def combined_plot(source_type: str,
             range=ranges,
             color=filled_color,
             fig=subfigs[pop_idx],
-            bins=40,
-            smooth=1.,
             fill_contours=True,
             plot_contours=True,
-            plot_datapoints=False,
-            plot_density=False,
             levels=levels,
-            max_n_ticks=3,
-            labelpad=LABELPAD,
             hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
             contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
             contourf_kwargs={'zorder': 999},  # Filled regions very high
+            **BASE_CORNER_KWARGS
         )
 
         # Step 2: Overlay line contours for other EOS datasets (EVEN HIGHER zorder)
@@ -266,15 +276,12 @@ def combined_plot(source_type: str,
                 range=ranges,
                 color=line_color,
                 fig=corner_fig,  # Use the existing figure
-                bins=40,
-                smooth=1.,
                 fill_contours=False,  # No fill for overlay
                 plot_contours=True,
-                plot_datapoints=False,
-                plot_density=False,
                 levels=levels,
                 hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Above filled contours
                 contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1001},  # Above filled contours
+                **BASE_CORNER_KWARGS
             )
 
         # Step 3: Plot invisible dummy dataset LAST for histogram normalization
@@ -285,13 +292,10 @@ def combined_plot(source_type: str,
                 labels=labels,
                 range=ranges,
                 fig=corner_fig,
-                bins=40,
-                smooth=1.,
                 plot_contours=False,
                 fill_contours=False,
-                plot_density=False,
-                plot_datapoints=False,
                 hist_kwargs={'alpha': 0},  # Invisible histograms
+                **BASE_CORNER_KWARGS
             )
 
         # # Add title for each population (REMOVED)
@@ -302,10 +306,11 @@ def combined_plot(source_type: str,
         # }
         # subfigs[pop_idx].suptitle(title_map[pop], fontsize=40, y=0.98)
 
-    # Add legend in the top-left area of the overall figure
-    legend_x = 0.05
-    legend_y = 0.95
-    dy = 0.03
+    # Add legend in the top-right area of the overall figure
+    legend_x = 0.875
+    legend_y = 0.875
+    dy = 0.075
+    legend_fontsize = 50
 
     for i, eos_samples_name in enumerate(eos_samples_name_list):
         fig.text(
@@ -313,9 +318,10 @@ def combined_plot(source_type: str,
             legend_y - i * dy,
             utils.EOS_SAMPLES_NAMES_DICT[eos_samples_name],
             color=eos_colors[eos_samples_name],
-            fontsize=32,
+            fontsize=legend_fontsize,
             transform=fig.transFigure,
-            verticalalignment='top'
+            verticalalignment='top',
+            horizontalalignment='left'
         )
 
     # Save the combined figure
@@ -355,16 +361,13 @@ def main():
         if source_type == "bns":
             if convert_to_lambda_tilde:
                 ranges_dict = {
-                    "uniform": [[0.9, 2.1], [0.425, 1.0], [0.0, 1000.0], [0.0, 400.0]],
-                    "gaussian": None,  # Will auto-compute
-                    "double_gaussian": None,  # Will auto-compute
+                    "uniform": [[0.8, 2.2], [0.40, 1.0], [0.0, 1000.0], [0.0, 300.0]],
+                    "gaussian": [[0.99, 1.35], [0.75, 1.0], [0.0, 1800.0], [0.0, 180.0]],
+                    "double_gaussian": [[1.00, 1.75], [0.50, 1.0], [0.0, 1700.0], [0.0, 180.0]],
                 }
             else:
-                ranges_dict = {
-                    "uniform": [[0.9, 2.1], [0.425, 1.0], [0.0, 700.0], [0.0, 4500.0]],
-                    "gaussian": None,
-                    "double_gaussian": None,
-                }
+                # No ranges for the m1-m2 version
+                ranges_dict = None
         else:  # nsbh
             if convert_to_lambda_tilde:
                 ranges_dict = {
@@ -373,11 +376,8 @@ def main():
                     "double_gaussian": None,
                 }
             else:
-                ranges_dict = {
-                    "uniform": [[1.25, 3.0], [0.20, 1.0], [0.0, 2000.0]],
-                    "gaussian": None,
-                    "double_gaussian": None,
-                }
+                # No ranges for the m1-m2 version
+                ranges_dict = None
 
         # Define normalization indices for each population
         # Index mapping: 0=radio, 1=radio_chiEFT, 2=radio_NICER
