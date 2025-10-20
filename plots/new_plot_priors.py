@@ -28,6 +28,7 @@ plt.rcParams.update(params)
 
 # Corner plot styling constants
 LINEWIDTH = 2.5      # Thickness of lines in corner plots (1D histograms and 2D contours)
+LINE_ONLY_LINEWIDTH = 7.0  # Thickness for line-only contours when FILL_ALL=False (non-filled EOS)
 LABELPAD = 0.075      # Padding for axis labels in corner plots
 SMOOTH = 1.5         # KDE smoothing factor
 MIN_N_TICKS = 2      # Minimum number of ticks on axes (passed to corner)
@@ -67,7 +68,7 @@ BASE_CORNER_KWARGS = {
 # ==============================================
 # If True: Fill all three EOS constraints (radio has highest zorder)
 # If False: Only fill "radio" (Heavy PSR) constraint
-FILL_ALL = True  # Toggle this to fill all EOS constraints or just radio
+FILL_ALL = False  # Toggle this to fill all EOS constraints or just radio
 
 # ==============================================
 # CONFIGURATION: Box plotting control
@@ -85,6 +86,11 @@ GRID_VERTICAL_LINE_1_X = 0.325  # X position of first vertical line (after Unifo
 GRID_VERTICAL_LINE_2_X = 0.66  # X position of second vertical line (after Gaussian column)
 GRID_LINE_COLOR = 'gray'      # Color of separator lines
 GRID_LINE_WIDTH = 3                # Width of separator lines
+
+# Outer border lines (frame around the entire grid)
+PLOT_POP_SRC_LINES = False          # Toggle to show/hide outer border lines # TODO: this needs a bit more tuning from my side
+GRID_LEFT_LINE_X = 0.0             # X position of left vertical line (next to source labels)
+GRID_TOP_LINE_Y = 1.0              # Y position of top horizontal line (below population labels)
 
 
 def get_training_data_path(population_name: str,
@@ -371,8 +377,8 @@ def combined_plot(source_type: str,
                     fill_contours=False,  # No fill for overlay
                     plot_contours=True,
                     levels=levels,
-                    hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Above filled contours
-                    contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1001},  # Above filled contours
+                    hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Keep 1D histograms at standard width
+                    contour_kwargs={'linewidths': LINE_ONLY_LINEWIDTH, 'zorder': 1001},  # Thick 2D contours
                     **BASE_CORNER_KWARGS
                 )
 
@@ -703,8 +709,8 @@ def combined_plot_both_sources(convert_masses: bool = True,
                         fill_contours=False,  # No fill for overlay
                         plot_contours=True,
                         levels=levels,
-                        hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Above filled contours
-                        contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1001},  # Above filled contours
+                        hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Keep 1D histograms at standard width
+                        contour_kwargs={'linewidths': LINE_ONLY_LINEWIDTH, 'zorder': 1001},  # Thick 2D contours
                         **BASE_CORNER_KWARGS
                     )
 
@@ -813,6 +819,26 @@ def combined_plot_both_sources(convert_masses: bool = True,
         for vertical_line_x in vertical_line_positions:
             fig.add_artist(plt.Line2D(
                 [vertical_line_x, vertical_line_x], [0.0, 1.0],
+                transform=fig.transFigure,
+                color=GRID_LINE_COLOR,
+                linewidth=GRID_LINE_WIDTH,
+                zorder=998
+            ))
+
+        # Add outer border lines (optional)
+        if PLOT_POP_SRC_LINES:
+            # Left vertical line (next to source labels)
+            fig.add_artist(plt.Line2D(
+                [GRID_LEFT_LINE_X, GRID_LEFT_LINE_X], [0.0, 1.0],
+                transform=fig.transFigure,
+                color=GRID_LINE_COLOR,
+                linewidth=GRID_LINE_WIDTH,
+                zorder=998
+            ))
+
+            # Top horizontal line (below population labels)
+            fig.add_artist(plt.Line2D(
+                [0.0, 1.0], [GRID_TOP_LINE_Y, GRID_TOP_LINE_Y],
                 transform=fig.transFigure,
                 color=GRID_LINE_COLOR,
                 linewidth=GRID_LINE_WIDTH,
