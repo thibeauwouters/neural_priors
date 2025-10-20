@@ -5,7 +5,6 @@ import corner
 import utils
 from bilby.gw.conversion import component_masses_to_chirp_mass
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
-from matplotlib.patches import FancyBboxPatch
 
 # Font size
 fs_ticks = 40
@@ -76,6 +75,16 @@ FILL_ALL = True  # Toggle this to fill all EOS constraints or just radio
 # If True: Plot decorative boxes around source types and populations
 # If False: Skip box plotting for cleaner figures
 PLOT_BOXES = True  # Toggle this to show/hide decorative boxes
+
+# ==============================================
+# CONFIGURATION: Grid separator line positions
+# ==============================================
+# Positions for separator lines in combined_plot_both_sources (BNS+NSBH grid)
+GRID_HORIZONTAL_LINE_Y = 0.475      # Y position of horizontal line separating BNS/NSBH rows
+GRID_VERTICAL_LINE_1_X = 0.325  # X position of first vertical line (after Uniform column)
+GRID_VERTICAL_LINE_2_X = 0.66  # X position of second vertical line (after Gaussian column)
+GRID_LINE_COLOR = 'gray'      # Color of separator lines
+GRID_LINE_WIDTH = 3                # Width of separator lines
 
 
 def get_training_data_path(population_name: str,
@@ -390,49 +399,21 @@ def combined_plot(source_type: str,
         # subfigs[pop_idx].suptitle(title_map[pop], fontsize=40, y=0.98)
 
     if PLOT_BOXES:
-        # Add gray rectangle with rounded corners around all three corner plots
-        # Compute bounding box automatically from all axes
-
-        # Get all axes from the figure (includes all subplot axes from all corner plots)
+        # Add source label to the left of the plots
+        # Get all axes from the figure
         all_axes = fig.get_axes()
-
-        # Get bounding box in figure coordinates
-        # Note: axes positions are already in figure coordinates
         x0_list = [ax.get_position().x0 for ax in all_axes]
         y0_list = [ax.get_position().y0 for ax in all_axes]
         x1_list = [ax.get_position().x1 for ax in all_axes]
         y1_list = [ax.get_position().y1 for ax in all_axes]
 
-        # Find extrema
         min_x = min(x0_list)
         min_y = min(y0_list)
-        max_x = max(x1_list)
         max_y = max(y1_list)
 
-        # Add a small margin (in figure coordinates)
-        margin = 0.10
-        rect_left = min_x - margin
-        rect_bottom = min_y - margin
-        rect_width = (max_x - min_x) + 1.4 * margin
-        rect_height = (max_y - min_y) + 2 * margin
-
-        # Create fancy box patch with rounded corners
-        fancy_box = FancyBboxPatch(
-            (rect_left, rect_bottom),
-            rect_width,
-            rect_height,
-            boxstyle="round,pad=0.01",
-            fill=False,
-            edgecolor='lightgray',
-            linewidth=5,
-            zorder=1000,
-            transform=fig.transFigure
-        )
-        fig.patches.extend([fancy_box])
-
-        # Add vertical text to the left of the rectangle
-        text_x = rect_left - 0.03
-        text_y = rect_bottom + rect_height / 2
+        # Add vertical text to the left
+        text_x = min_x - 0.08
+        text_y = (min_y + max_y) / 2
         source_label = "BNS" if source_type == "bns" else "NSBH"
 
         fig.text(
@@ -743,7 +724,7 @@ def combined_plot_both_sources(convert_masses: bool = True,
 
         if PLOT_BOXES:
             # ==============================================
-            # ADD RECTANGLE AND LABEL FOR THIS ROW
+            # ADD LABEL FOR THIS ROW
             # ==============================================
 
             # Use centralized SRC_BOX_* parameters from top of file
@@ -752,21 +733,7 @@ def combined_plot_both_sources(convert_masses: bool = True,
             else:  # nsbh
                 rect_bottom = SRC_BOX_BOTTOM_NSBH
 
-            # Create fancy box patch with rounded corners using main figure coordinates
-            fancy_box = FancyBboxPatch(
-                (SRC_BOX_LEFT_START, rect_bottom),
-                SRC_BOX_WIDTH,
-                SRC_BOX_HEIGHT,
-                boxstyle="round,pad=0.01",
-                fill=False,
-                edgecolor='lightgray',
-                linewidth=5,
-                zorder=1000,
-                transform=fig.transFigure  # Use main figure transform
-            )
-            fig.patches.extend([fancy_box])  # Add to main figure
-
-            # Add vertical text to the left of the rectangle
+            # Add vertical text to the left
             text_x = SRC_BOX_LEFT_START + SRC_BOX_TEXT_X_OFFSET
             text_y = rect_bottom + SRC_BOX_HEIGHT / 2
             source_label = "BNS" if source_type == "bns" else "NSBH"
@@ -783,76 +750,74 @@ def combined_plot_both_sources(convert_masses: bool = True,
                 weight='bold'
             )
 
-    # ==============================================
-    # ADD VERTICAL BOXES FOR EACH POPULATION
-    # ==============================================
+    if PLOT_BOXES:
+        # ==============================================
+        # ADD GRID SEPARATOR LINES
+        # ==============================================
 
-    # Define population labels
-    population_labels = {
-        "uniform": "Uniform",
-        "gaussian": "Gaussian",
-        "double_gaussian": "Double Gaussian"
-    }
-
-    # Calculate rectangle coordinates for each population using centralized parameters
-    # Positions are automatically calculated based on POP_BOX_* constants at top of file
-    # Formula: POP_BOX_LEFT_START + x * POP_BOX_WIDTH + x * POP_BOX_SPACING where x = 0, 1, 2
-    population_boxes = {
-        "uniform": {
-            "rect_left": POP_BOX_LEFT_START + 0 * POP_BOX_WIDTH + 0 * POP_BOX_SPACING,
-            "rect_bottom": POP_BOX_BOTTOM,
-            "rect_width": POP_BOX_WIDTH,
-            "rect_height": POP_BOX_HEIGHT,
-            "text_y": POP_BOX_TEXT_Y
-        },
-        "gaussian": {
-            "rect_left": POP_BOX_LEFT_START + 1 * POP_BOX_WIDTH + 1 * POP_BOX_SPACING,
-            "rect_bottom": POP_BOX_BOTTOM,
-            "rect_width": POP_BOX_WIDTH,
-            "rect_height": POP_BOX_HEIGHT,
-            "text_y": POP_BOX_TEXT_Y
-        },
-        "double_gaussian": {
-            "rect_left": POP_BOX_LEFT_START + 2 * POP_BOX_WIDTH + 2 * POP_BOX_SPACING,
-            "rect_bottom": POP_BOX_BOTTOM,
-            "rect_width": POP_BOX_WIDTH,
-            "rect_height": POP_BOX_HEIGHT,
-            "text_y": POP_BOX_TEXT_Y
+        # Define population labels
+        population_labels = {
+            "uniform": "Uniform",
+            "gaussian": "Gaussian",
+            "double_gaussian": "Double Gaussian"
         }
-    }
 
-    for pop_idx, pop in enumerate(populations):
-        coords = population_boxes[pop]
+        # Calculate positions for population labels and vertical separators
+        population_boxes = {
+            "uniform": {
+                "rect_left": POP_BOX_LEFT_START + 0 * POP_BOX_WIDTH + 0 * POP_BOX_SPACING,
+                "rect_width": POP_BOX_WIDTH,
+                "text_y": POP_BOX_TEXT_Y
+            },
+            "gaussian": {
+                "rect_left": POP_BOX_LEFT_START + 1 * POP_BOX_WIDTH + 1 * POP_BOX_SPACING,
+                "rect_width": POP_BOX_WIDTH,
+                "text_y": POP_BOX_TEXT_Y
+            },
+            "double_gaussian": {
+                "rect_left": POP_BOX_LEFT_START + 2 * POP_BOX_WIDTH + 2 * POP_BOX_SPACING,
+                "rect_width": POP_BOX_WIDTH,
+                "text_y": POP_BOX_TEXT_Y
+            }
+        }
 
-        # Create vertical fancy box
-        vertical_box = FancyBboxPatch(
-            (coords["rect_left"], coords["rect_bottom"]),
-            coords["rect_width"],
-            coords["rect_height"],
-            boxstyle="round,pad=0.01",
-            fill=False,
-            edgecolor='lightgray',
-            linewidth=5,
-            zorder=999,  # Below source type boxes
-            transform=fig.transFigure
-        )
-        fig.patches.extend([vertical_box])
+        # Add population labels at the top
+        for pop_idx, pop in enumerate(populations):
+            coords = population_boxes[pop]
+            text_x = coords["rect_left"] + coords["rect_width"] / 2
+            text_y = coords["text_y"]
 
-        # Add horizontal text above each column
-        text_x = coords["rect_left"] + coords["rect_width"] / 2
-        text_y = coords["text_y"]
+            fig.text(
+                text_x,
+                text_y,
+                population_labels[pop],
+                fontsize=POP_BOX_LABEL_FONTSIZE,
+                rotation=0,
+                verticalalignment='bottom',
+                horizontalalignment='center',
+                transform=fig.transFigure,
+                weight='bold'
+            )
 
-        fig.text(
-            text_x,
-            text_y,
-            population_labels[pop],
-            fontsize=POP_BOX_LABEL_FONTSIZE,
-            rotation=0,
-            verticalalignment='bottom',
-            horizontalalignment='center',
+        # Add horizontal separator line between BNS and NSBH
+        fig.add_artist(plt.Line2D(
+            [0.0, 1.0], [GRID_HORIZONTAL_LINE_Y, GRID_HORIZONTAL_LINE_Y],
             transform=fig.transFigure,
-            weight='bold'
-        )
+            color=GRID_LINE_COLOR,
+            linewidth=GRID_LINE_WIDTH,
+            zorder=998
+        ))
+
+        # Add vertical separator lines between populations
+        vertical_line_positions = [GRID_VERTICAL_LINE_1_X, GRID_VERTICAL_LINE_2_X]
+        for vertical_line_x in vertical_line_positions:
+            fig.add_artist(plt.Line2D(
+                [vertical_line_x, vertical_line_x], [0.0, 1.0],
+                transform=fig.transFigure,
+                color=GRID_LINE_COLOR,
+                linewidth=GRID_LINE_WIDTH,
+                zorder=998
+            ))
 
     # Add legend in the top-right area of the overall figure
     legend_x = 0.875
