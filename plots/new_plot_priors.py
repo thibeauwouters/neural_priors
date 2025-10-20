@@ -41,6 +41,7 @@ SRC_BOX_HEIGHT = 0.475        # Height of each source box
 SRC_BOX_BOTTOM_BNS = 0.5   # Bottom position of BNS box (top row)
 SRC_BOX_BOTTOM_NSBH = -0.01  # Bottom position of NSBH box (bottom row)
 SRC_BOX_TEXT_X_OFFSET = -0.03  # X offset for source labels relative to box left edge
+SRC_BOX_LABEL_FONTSIZE = 60   # Font size for source labels (BNS/NSBH)
 
 # Population box parameters for combined_plot_both_sources (vertical boxes)
 POP_BOX_LEFT_START = -0.005  # Left edge of first population box (must be > SRC_BOX_LEFT_START)
@@ -49,6 +50,7 @@ POP_BOX_SPACING = 0.025      # Gap between consecutive boxes (next box = current
 POP_BOX_BOTTOM = -0.005       # Bottom position of boxes
 POP_BOX_HEIGHT = 1.02        # Height of boxes
 POP_BOX_TEXT_Y = 0.99         # Y position for population labels
+POP_BOX_LABEL_FONTSIZE = 60   # Font size for population labels (Uniform/Gaussian/Double Gaussian)
 
 # Base corner plot kwargs used across all corner plots
 BASE_CORNER_KWARGS = {
@@ -370,7 +372,7 @@ def combined_plot(source_type: str,
         text_x,
         text_y,
         source_label,
-        fontsize=60,
+        fontsize=SRC_BOX_LABEL_FONTSIZE,
         rotation=90,
         verticalalignment='center',
         horizontalalignment='center',
@@ -653,7 +655,7 @@ def combined_plot_both_sources(convert_masses: bool = True,
             text_x,
             text_y,
             source_label,
-            fontsize=60,
+            fontsize=SRC_BOX_LABEL_FONTSIZE,
             rotation=90,
             verticalalignment='center',
             horizontalalignment='center',
@@ -724,7 +726,7 @@ def combined_plot_both_sources(convert_masses: bool = True,
             text_x,
             text_y,
             population_labels[pop],
-            fontsize=50,
+            fontsize=POP_BOX_LABEL_FONTSIZE,
             rotation=0,
             verticalalignment='bottom',
             horizontalalignment='center',
