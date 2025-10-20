@@ -64,18 +64,17 @@ EOS_SAMPLES_NAMES = ["radio",
                      "radio_chiEFT",
                      "radio_NICER",
                      "radio_chiEFT_NICER"]
-EOS_SAMPLES_NAMES_DICT = {"radio": r"Radio",
+EOS_SAMPLES_NAMES_DICT = {"radio": r"Heavy PSRs",
                           "radio_chiEFT": r"+$\chi_{\rm{EFT}}$",
                           "radio_chiEFT_NICER": r"+$\chi_{\rm{EFT}}$+NICER",
                           "radio_NICER": r"+NICER"
                           }
 
-# Colorblind-friendly colors for EOS samples (using colors that work for deuteranopia/protanopia)
 EOS_COLORS = {
-    "radio": "#0372b1",           # Blue - easily distinguishable  
-    "radio_chiEFT": "#de8f05",    # Orange - high contrast with blue
-    "radio_NICER": "#cb79bc",     # Pink/purple - distinct from both blue and orange
-    "radio_chiEFT_NICER": "#029E73"  # Green - for potential future use
+    "radio": JAX_LIGHT_BLUE,           # Blue - easily distinguishable  
+    "radio_chiEFT": JAX_DARK_GREEN,    # Orange - high contrast with blue
+    "radio_NICER": JAX_DARK_PURPLE,     # Pink/purple - distinct from both blue and orange
+    # "radio_chiEFT_NICER": "#029E73"  # Green - for potential future use
 }
 
 POPULATION_NAMES_DICT = {

@@ -286,19 +286,21 @@ def single_plot(pop: str,
                     transform=plt.gcf().transFigure)
     
     # Save the figure
+    os.makedirs("./figures/priors/individual", exist_ok=True)
+
     if convert_masses:
-        save_name = f"./figures/priors/{source_type}_{pop}_priors_chirp.pdf"
+        save_name = f"./figures/priors/individual/{source_type}_{pop}_priors_chirp.pdf"
     else:
-        save_name = f"./figures/priors/{source_type}_{pop}_priors_component.pdf"
-        
+        save_name = f"./figures/priors/individual/{source_type}_{pop}_priors_component.pdf"
+
     if convert_to_lambda_tilde:
         save_name = save_name.replace(".pdf", "_tilde.pdf")
-        
+
     print(f"Saving figure to {save_name}")
     plt.savefig(save_name, bbox_inches="tight")
     if os.path.exists("../../paper/Figures"):
         print(f"Also saving to the Overleaf paper repo")
-        save_name = save_name.replace("./figures/priors/", "../../paper/Figures/")
+        save_name = save_name.replace("./figures/priors/individual/", "../../paper/Figures/")
         plt.savefig(save_name, bbox_inches="tight")
     plt.close()
 
