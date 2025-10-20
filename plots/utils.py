@@ -70,6 +70,13 @@ EOS_SAMPLES_NAMES_DICT = {"radio": r"Heavy PSRs",
                           "radio_NICER": r"+NICER"
                           }
 
+# EOS_COLORS = {
+#     "radio": JAX_LIGHT_BLUE,
+#     "radio_chiEFT": JAX_DARK_GREEN,
+#     "radio_NICER": JAX_DARK_PURPLE,
+# } # Colors using JAX palette
+
+### The OG colors
 EOS_COLORS = {
     "radio": "#0472b0",           # Blue - easily distinguishable
     "radio_chiEFT": "#de8f05",    # Orange - high contrast with blue

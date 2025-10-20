@@ -35,20 +35,20 @@ MIN_N_TICKS = 2      # Minimum number of ticks on axes (passed to corner)
 MAX_N_TICKS = 3      # Maximum number of ticks on axes (passed to corner)
 
 # Source box parameters for combined_plot_both_sources (BNS/NSBH horizontal boxes)
-SRC_BOX_LEFT_START = -0.01   # Left edge of source boxes (more left than POP boxes)
-SRC_BOX_WIDTH = 1.01          # Width of source boxes
-SRC_BOX_HEIGHT = 0.475        # Height of each source box
+SRC_BOX_LEFT_START = 0.0   # Left edge of source boxes (aligned with grid)
+SRC_BOX_WIDTH = 1.0          # Width of source boxes (full width)
+SRC_BOX_HEIGHT = 0.5        # Height of each source box (exactly half)
 SRC_BOX_BOTTOM_BNS = 0.5   # Bottom position of BNS box (top row)
-SRC_BOX_BOTTOM_NSBH = -0.01  # Bottom position of NSBH box (bottom row)
+SRC_BOX_BOTTOM_NSBH = 0.0  # Bottom position of NSBH box (bottom row, aligned with grid)
 SRC_BOX_TEXT_X_OFFSET = -0.03  # X offset for source labels relative to box left edge
 SRC_BOX_LABEL_FONTSIZE = 60   # Font size for source labels (BNS/NSBH)
 
 # Population box parameters for combined_plot_both_sources (vertical boxes)
-POP_BOX_LEFT_START = -0.005  # Left edge of first population box (must be > SRC_BOX_LEFT_START)
-POP_BOX_WIDTH = 0.315         # Width of each population box (reduced to avoid overlap)
-POP_BOX_SPACING = 0.025      # Gap between consecutive boxes (next box = current + width + spacing)
-POP_BOX_BOTTOM = -0.005       # Bottom position of boxes
-POP_BOX_HEIGHT = 1.02        # Height of boxes
+POP_BOX_LEFT_START = 0.0  # Left edge of first population box (aligned with grid)
+POP_BOX_WIDTH = 0.333333         # Width of each population box (exactly 1/3 for grid)
+POP_BOX_SPACING = 0.0      # No spacing - boxes share borders for grid appearance
+POP_BOX_BOTTOM = 0.0       # Bottom position of boxes (aligned with grid)
+POP_BOX_HEIGHT = 1.0        # Height of boxes (full height)
 POP_BOX_TEXT_Y = 0.99         # Y position for population labels
 POP_BOX_LABEL_FONTSIZE = 60   # Font size for population labels (Uniform/Gaussian/Double Gaussian)
 
@@ -62,6 +62,20 @@ BASE_CORNER_KWARGS = {
     'max_n_ticks': MAX_N_TICKS,
     'labelpad': LABELPAD,
 }
+
+# ==============================================
+# CONFIGURATION: Filled contours control
+# ==============================================
+# If True: Fill all three EOS constraints (radio has highest zorder)
+# If False: Only fill "radio" (Heavy PSR) constraint
+FILL_ALL = True  # Toggle this to fill all EOS constraints or just radio
+
+# ==============================================
+# CONFIGURATION: Box plotting control
+# ==============================================
+# If True: Plot decorative boxes around source types and populations
+# If False: Skip box plotting for cleaner figures
+PLOT_BOXES = True  # Toggle this to show/hide decorative boxes
 
 
 def get_training_data_path(population_name: str,
@@ -260,46 +274,98 @@ def combined_plot(source_type: str,
         # LOOP 2: PLOTTING
         # ==============================================
 
-        # Step 1: Plot the filled contours for the specified EOS first (VERY HIGH zorder)
-        print(f"Plotting {filled_eos} with filled contours...")
-        filled_color = eos_colors[filled_eos]
+        if FILL_ALL:
+            # Plot all EOS with filled contours, all at same zorder
+            # Order matters for overlapping regions (last plotted on top)
 
-        corner_fig = corner.corner(
-            datasets[filled_eos],
-            labels=labels,
-            range=ranges,
-            color=filled_color,
-            fig=subfigs[pop_idx],
-            fill_contours=True,
-            plot_contours=True,
-            levels=levels,
-            hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
-            contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
-            contourf_kwargs={'zorder': 999},  # Filled regions very high
-            **BASE_CORNER_KWARGS
-        )
-
-        # Step 2: Overlay line contours for other EOS datasets (EVEN HIGHER zorder)
-        for eos_samples_name in eos_samples_name_list:
-            if eos_samples_name == filled_eos:
-                continue  # Already plotted with fill
-
-            print(f"Plotting {eos_samples_name} with line contours...")
-            line_color = eos_colors[eos_samples_name]
-
+            print(f"Plotting radio_NICER with filled contours...")
             corner_fig = corner.corner(
-                datasets[eos_samples_name],
+                datasets["radio_NICER"],
                 labels=labels,
                 range=ranges,
-                color=line_color,
-                fig=corner_fig,  # Use the existing figure
-                fill_contours=False,  # No fill for overlay
+                color=eos_colors["radio_NICER"],
+                fig=subfigs[pop_idx],
+                fill_contours=True,
                 plot_contours=True,
                 levels=levels,
-                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Above filled contours
-                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1001},  # Above filled contours
+                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                contourf_kwargs={'zorder': 999},
                 **BASE_CORNER_KWARGS
             )
+
+            print(f"Plotting radio_chiEFT with filled contours...")
+            corner_fig = corner.corner(
+                datasets["radio_chiEFT"],
+                labels=labels,
+                range=ranges,
+                color=eos_colors["radio_chiEFT"],
+                fig=corner_fig,
+                fill_contours=True,
+                plot_contours=True,
+                levels=levels,
+                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                contourf_kwargs={'zorder': 999},
+                **BASE_CORNER_KWARGS
+            )
+
+            print(f"Plotting radio with filled contours...")
+            corner_fig = corner.corner(
+                datasets["radio"],
+                labels=labels,
+                range=ranges,
+                color=eos_colors["radio"],
+                fig=corner_fig,
+                fill_contours=True,
+                plot_contours=True,
+                levels=levels,
+                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                contourf_kwargs={'zorder': 999},
+                **BASE_CORNER_KWARGS
+            )
+        else:
+            # Original behavior: only fill radio, others as lines
+            print(f"Plotting {filled_eos} with filled contours...")
+            filled_color = eos_colors[filled_eos]
+
+            corner_fig = corner.corner(
+                datasets[filled_eos],
+                labels=labels,
+                range=ranges,
+                color=filled_color,
+                fig=subfigs[pop_idx],
+                fill_contours=True,
+                plot_contours=True,
+                levels=levels,
+                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                contourf_kwargs={'zorder': 999},  # Filled regions very high
+                **BASE_CORNER_KWARGS
+            )
+
+            # Step 2: Overlay line contours for other EOS datasets (EVEN HIGHER zorder)
+            for eos_samples_name in eos_samples_name_list:
+                if eos_samples_name == filled_eos:
+                    continue  # Already plotted with fill
+
+                print(f"Plotting {eos_samples_name} with line contours...")
+                line_color = eos_colors[eos_samples_name]
+
+                corner_fig = corner.corner(
+                    datasets[eos_samples_name],
+                    labels=labels,
+                    range=ranges,
+                    color=line_color,
+                    fig=corner_fig,  # Use the existing figure
+                    fill_contours=False,  # No fill for overlay
+                    plot_contours=True,
+                    levels=levels,
+                    hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Above filled contours
+                    contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1001},  # Above filled contours
+                    **BASE_CORNER_KWARGS
+                )
 
         # Step 3: Plot invisible dummy dataset LAST for histogram normalization
         if dummy_dataset is not None:
@@ -323,62 +389,63 @@ def combined_plot(source_type: str,
         # }
         # subfigs[pop_idx].suptitle(title_map[pop], fontsize=40, y=0.98)
 
-    # Add gray rectangle with rounded corners around all three corner plots
-    # Compute bounding box automatically from all axes
+    if PLOT_BOXES:
+        # Add gray rectangle with rounded corners around all three corner plots
+        # Compute bounding box automatically from all axes
 
-    # Get all axes from the figure (includes all subplot axes from all corner plots)
-    all_axes = fig.get_axes()
+        # Get all axes from the figure (includes all subplot axes from all corner plots)
+        all_axes = fig.get_axes()
 
-    # Get bounding box in figure coordinates
-    # Note: axes positions are already in figure coordinates
-    x0_list = [ax.get_position().x0 for ax in all_axes]
-    y0_list = [ax.get_position().y0 for ax in all_axes]
-    x1_list = [ax.get_position().x1 for ax in all_axes]
-    y1_list = [ax.get_position().y1 for ax in all_axes]
+        # Get bounding box in figure coordinates
+        # Note: axes positions are already in figure coordinates
+        x0_list = [ax.get_position().x0 for ax in all_axes]
+        y0_list = [ax.get_position().y0 for ax in all_axes]
+        x1_list = [ax.get_position().x1 for ax in all_axes]
+        y1_list = [ax.get_position().y1 for ax in all_axes]
 
-    # Find extrema
-    min_x = min(x0_list)
-    min_y = min(y0_list)
-    max_x = max(x1_list)
-    max_y = max(y1_list)
+        # Find extrema
+        min_x = min(x0_list)
+        min_y = min(y0_list)
+        max_x = max(x1_list)
+        max_y = max(y1_list)
 
-    # Add a small margin (in figure coordinates)
-    margin = 0.10
-    rect_left = min_x - margin
-    rect_bottom = min_y - margin
-    rect_width = (max_x - min_x) + 1.4 * margin
-    rect_height = (max_y - min_y) + 2 * margin
+        # Add a small margin (in figure coordinates)
+        margin = 0.10
+        rect_left = min_x - margin
+        rect_bottom = min_y - margin
+        rect_width = (max_x - min_x) + 1.4 * margin
+        rect_height = (max_y - min_y) + 2 * margin
 
-    # Create fancy box patch with rounded corners
-    fancy_box = FancyBboxPatch(
-        (rect_left, rect_bottom),
-        rect_width,
-        rect_height,
-        boxstyle="round,pad=0.01",
-        fill=False,
-        edgecolor='gray',
-        linewidth=5,
-        zorder=1000,
-        transform=fig.transFigure
-    )
-    fig.patches.extend([fancy_box])
+        # Create fancy box patch with rounded corners
+        fancy_box = FancyBboxPatch(
+            (rect_left, rect_bottom),
+            rect_width,
+            rect_height,
+            boxstyle="round,pad=0.01",
+            fill=False,
+            edgecolor='lightgray',
+            linewidth=5,
+            zorder=1000,
+            transform=fig.transFigure
+        )
+        fig.patches.extend([fancy_box])
 
-    # Add vertical text to the left of the rectangle
-    text_x = rect_left - 0.03
-    text_y = rect_bottom + rect_height / 2
-    source_label = "BNS" if source_type == "bns" else "NSBH"
+        # Add vertical text to the left of the rectangle
+        text_x = rect_left - 0.03
+        text_y = rect_bottom + rect_height / 2
+        source_label = "BNS" if source_type == "bns" else "NSBH"
 
-    fig.text(
-        text_x,
-        text_y,
-        source_label,
-        fontsize=SRC_BOX_LABEL_FONTSIZE,
-        rotation=90,
-        verticalalignment='center',
-        horizontalalignment='center',
-        transform=fig.transFigure,
-        weight='bold'
-    )
+        fig.text(
+            text_x,
+            text_y,
+            source_label,
+            fontsize=SRC_BOX_LABEL_FONTSIZE,
+            rotation=90,
+            verticalalignment='center',
+            horizontalalignment='center',
+            transform=fig.transFigure,
+            weight='bold'
+        )
 
     # Add legend in the top-right area of the overall figure
     legend_x = 0.875
@@ -567,46 +634,98 @@ def combined_plot_both_sources(convert_masses: bool = True,
             # LOOP 2: PLOTTING
             # ==============================================
 
-            # Step 1: Plot the filled contours for the specified EOS first (VERY HIGH zorder)
-            print(f"Plotting {filled_eos} with filled contours...")
-            filled_color = eos_colors[filled_eos]
+            if FILL_ALL:
+                # Plot all EOS with filled contours, all at same zorder
+                # Order matters for overlapping regions (last plotted on top)
 
-            corner_fig = corner.corner(
-                datasets[filled_eos],
-                labels=labels,
-                range=ranges,
-                color=filled_color,
-                fig=subfigs_cols[pop_idx],
-                fill_contours=True,
-                plot_contours=True,
-                levels=levels,
-                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
-                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
-                contourf_kwargs={'zorder': 999},  # Filled regions very high
-                **BASE_CORNER_KWARGS
-            )
-
-            # Step 2: Overlay line contours for other EOS datasets (EVEN HIGHER zorder)
-            for eos_samples_name in eos_samples_name_list:
-                if eos_samples_name == filled_eos:
-                    continue  # Already plotted with fill
-
-                print(f"Plotting {eos_samples_name} with line contours...")
-                line_color = eos_colors[eos_samples_name]
-
+                print(f"Plotting radio_NICER with filled contours...")
                 corner_fig = corner.corner(
-                    datasets[eos_samples_name],
+                    datasets["radio_NICER"],
                     labels=labels,
                     range=ranges,
-                    color=line_color,
-                    fig=corner_fig,  # Use the existing figure
-                    fill_contours=False,  # No fill for overlay
+                    color=eos_colors["radio_NICER"],
+                    fig=subfigs_cols[pop_idx],
+                    fill_contours=True,
                     plot_contours=True,
                     levels=levels,
-                    hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Above filled contours
-                    contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1001},  # Above filled contours
+                    hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                    contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                    contourf_kwargs={'zorder': 999},
                     **BASE_CORNER_KWARGS
                 )
+
+                print(f"Plotting radio_chiEFT with filled contours...")
+                corner_fig = corner.corner(
+                    datasets["radio_chiEFT"],
+                    labels=labels,
+                    range=ranges,
+                    color=eos_colors["radio_chiEFT"],
+                    fig=corner_fig,
+                    fill_contours=True,
+                    plot_contours=True,
+                    levels=levels,
+                    hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                    contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                    contourf_kwargs={'zorder': 999},
+                    **BASE_CORNER_KWARGS
+                )
+
+                print(f"Plotting radio with filled contours...")
+                corner_fig = corner.corner(
+                    datasets["radio"],
+                    labels=labels,
+                    range=ranges,
+                    color=eos_colors["radio"],
+                    fig=corner_fig,
+                    fill_contours=True,
+                    plot_contours=True,
+                    levels=levels,
+                    hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                    contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                    contourf_kwargs={'zorder': 999},
+                    **BASE_CORNER_KWARGS
+                )
+            else:
+                # Original behavior: only fill radio, others as lines
+                print(f"Plotting {filled_eos} with filled contours...")
+                filled_color = eos_colors[filled_eos]
+
+                corner_fig = corner.corner(
+                    datasets[filled_eos],
+                    labels=labels,
+                    range=ranges,
+                    color=filled_color,
+                    fig=subfigs_cols[pop_idx],
+                    fill_contours=True,
+                    plot_contours=True,
+                    levels=levels,
+                    hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                    contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                    contourf_kwargs={'zorder': 999},  # Filled regions very high
+                    **BASE_CORNER_KWARGS
+                )
+
+                # Step 2: Overlay line contours for other EOS datasets (EVEN HIGHER zorder)
+                for eos_samples_name in eos_samples_name_list:
+                    if eos_samples_name == filled_eos:
+                        continue  # Already plotted with fill
+
+                    print(f"Plotting {eos_samples_name} with line contours...")
+                    line_color = eos_colors[eos_samples_name]
+
+                    corner_fig = corner.corner(
+                        datasets[eos_samples_name],
+                        labels=labels,
+                        range=ranges,
+                        color=line_color,
+                        fig=corner_fig,  # Use the existing figure
+                        fill_contours=False,  # No fill for overlay
+                        plot_contours=True,
+                        levels=levels,
+                        hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Above filled contours
+                        contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1001},  # Above filled contours
+                        **BASE_CORNER_KWARGS
+                    )
 
             # Step 3: Plot invisible dummy dataset LAST for histogram normalization
             if dummy_dataset is not None:
@@ -622,46 +741,47 @@ def combined_plot_both_sources(convert_masses: bool = True,
                     **BASE_CORNER_KWARGS
                 )
 
-        # ==============================================
-        # ADD RECTANGLE AND LABEL FOR THIS ROW
-        # ==============================================
+        if PLOT_BOXES:
+            # ==============================================
+            # ADD RECTANGLE AND LABEL FOR THIS ROW
+            # ==============================================
 
-        # Use centralized SRC_BOX_* parameters from top of file
-        if source_type == "bns":
-            rect_bottom = SRC_BOX_BOTTOM_BNS
-        else:  # nsbh
-            rect_bottom = SRC_BOX_BOTTOM_NSBH
+            # Use centralized SRC_BOX_* parameters from top of file
+            if source_type == "bns":
+                rect_bottom = SRC_BOX_BOTTOM_BNS
+            else:  # nsbh
+                rect_bottom = SRC_BOX_BOTTOM_NSBH
 
-        # Create fancy box patch with rounded corners using main figure coordinates
-        fancy_box = FancyBboxPatch(
-            (SRC_BOX_LEFT_START, rect_bottom),
-            SRC_BOX_WIDTH,
-            SRC_BOX_HEIGHT,
-            boxstyle="round,pad=0.01",
-            fill=False,
-            edgecolor='gray',
-            linewidth=5,
-            zorder=1000,
-            transform=fig.transFigure  # Use main figure transform
-        )
-        fig.patches.extend([fancy_box])  # Add to main figure
+            # Create fancy box patch with rounded corners using main figure coordinates
+            fancy_box = FancyBboxPatch(
+                (SRC_BOX_LEFT_START, rect_bottom),
+                SRC_BOX_WIDTH,
+                SRC_BOX_HEIGHT,
+                boxstyle="round,pad=0.01",
+                fill=False,
+                edgecolor='lightgray',
+                linewidth=5,
+                zorder=1000,
+                transform=fig.transFigure  # Use main figure transform
+            )
+            fig.patches.extend([fancy_box])  # Add to main figure
 
-        # Add vertical text to the left of the rectangle
-        text_x = SRC_BOX_LEFT_START + SRC_BOX_TEXT_X_OFFSET
-        text_y = rect_bottom + SRC_BOX_HEIGHT / 2
-        source_label = "BNS" if source_type == "bns" else "NSBH"
+            # Add vertical text to the left of the rectangle
+            text_x = SRC_BOX_LEFT_START + SRC_BOX_TEXT_X_OFFSET
+            text_y = rect_bottom + SRC_BOX_HEIGHT / 2
+            source_label = "BNS" if source_type == "bns" else "NSBH"
 
-        fig.text(  # Add text to main figure
-            text_x,
-            text_y,
-            source_label,
-            fontsize=SRC_BOX_LABEL_FONTSIZE,
-            rotation=90,
-            verticalalignment='center',
-            horizontalalignment='center',
-            transform=fig.transFigure,  # Use main figure transform
-            weight='bold'
-        )
+            fig.text(  # Add text to main figure
+                text_x,
+                text_y,
+                source_label,
+                fontsize=SRC_BOX_LABEL_FONTSIZE,
+                rotation=90,
+                verticalalignment='center',
+                horizontalalignment='center',
+                transform=fig.transFigure,  # Use main figure transform
+                weight='bold'
+            )
 
     # ==============================================
     # ADD VERTICAL BOXES FOR EACH POPULATION
@@ -711,7 +831,7 @@ def combined_plot_both_sources(convert_masses: bool = True,
             coords["rect_height"],
             boxstyle="round,pad=0.01",
             fill=False,
-            edgecolor='gray',
+            edgecolor='lightgray',
             linewidth=5,
             zorder=999,  # Below source type boxes
             transform=fig.transFigure
@@ -881,7 +1001,7 @@ def main():
         convert_masses=True,
         convert_to_lambda_tilde=convert_to_lambda_tilde,
         levels=[0.68, 0.95],
-        filled_eos="radio",
+        filled_eos="radio",  # Only used when FILL_ALL=False
         ranges_dict_bns=ranges_dict_bns,
         ranges_dict_nsbh=ranges_dict_nsbh,
         normalization_indices_dict_bns=normalization_indices_dict_bns,
