@@ -21,18 +21,42 @@ from utils import (
     calculate_corner_plot_ranges, handle_nsbh_lambda_plotting
 )
 
-# Setup matplotlib style
-setup_matplotlib_style()
+# Font size
+fs_ticks = 20
+fs_labels = 24
+labelpad = 0.085
+
+# Matplotlib style parameters
+params = {"axes.grid": False,
+        "text.usetex" : True,
+        "font.family" : "serif",
+        "ytick.color" : "black",
+        "xtick.color" : "black",
+        "axes.labelcolor" : "black",
+        "axes.edgecolor" : "black",
+        "font.serif" : ["Computer Modern Serif"],
+        "xtick.labelsize": fs_ticks,
+        "ytick.labelsize": fs_ticks,
+        "axes.labelsize": fs_labels,
+        }
+
+plt.rcParams.update(params)
+
+# Update default corner kwargs with new tick settings and increased fontsize/labelpad
+DEFAULT_CORNER_KWARGS = DEFAULT_CORNER_KWARGS.copy()
+DEFAULT_CORNER_KWARGS.update({
+    'max_n_ticks': 3,
+    'min_n_ticks': 2,
+    'label_kwargs': dict(fontsize=fs_labels),
+    'tick_kwargs': dict(labelsize=fs_ticks),
+    'labelpad': labelpad,
+})
 
 # Presentation version of corner kwargs with larger labels and ticks
 PRESENTATION_CORNER_KWARGS = DEFAULT_CORNER_KWARGS.copy()
 PRESENTATION_CORNER_KWARGS.update({
-    'max_n_ticks': 3, 
-    'min_n_ticks': 2, 
-    'label_kwargs': dict(fontsize=28),  # Increased from 16
-    'title_kwargs': dict(fontsize=24),  # Increased from 16
-    'labelpad': 0.20,                   # Increased spacing for presentations
-    'tick_kwargs': dict(labelsize=28)   # Increased tick size for better visibility
+    'max_n_ticks': 3,
+    'min_n_ticks': 2,
 })
 
 # Default run color constants
@@ -48,7 +72,7 @@ LEGEND_DY = 0.06  # Half of original 0.08
 # Title formatting constants
 TITLE_FONTSIZE = 34
 TITLE_LABELPAD = 50
-ADD_TITLE = True
+ADD_TITLE = False
 
 
 def load_bayes_factors(bayes_factors_path: str = "../bayes_factors/all_bayes_factors.json") -> Dict:
@@ -433,6 +457,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
             'color': DEFAULT_RUN_PLOT_COLOR,  # Light color for 2D contours
             'labels': latex_labels,
             'range': ranges,
+            'levels': [0.68, 0.95],
             'hist_kwargs': {'color': DEFAULT_RUN_LEGEND_COLOR, 'density': True},  # Dark color for 1D histograms
         })
         
@@ -458,6 +483,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
             'color': color,
             'labels': latex_labels,
             'range': ranges,
+            'levels': [0.68, 0.95],
             'hist_kwargs': {'color': color, 'density': True, 'zorder': zorder_value},
         })
         
@@ -525,8 +551,23 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     
     plt.savefig(output_path, bbox_inches='tight')
     print(f"Saved figure to: {output_path}")
+
+    # Copy to paper directory for specific plots
+    copy_to_paper = False
+    if gw_event == "GW170817" and source_type == "bns" and population == "gaussian":
+        copy_to_paper = True
+    elif gw_event == "GW190425" and source_type == "bns" and population == "uniform":
+        copy_to_paper = True
+    elif gw_event == "GW230529" and source_type == "nsbh" and population == "gaussian":
+        copy_to_paper = True
+
+    if copy_to_paper and os.path.exists("../../paper/Figures"):
+        print(f"Also saving to the Overleaf paper repo")
+        save_name_paper = output_path.replace("./figures/money_plots/", "../../paper/Figures/")
+        plt.savefig(save_name_paper, bbox_inches='tight')
+
     plt.close()
-    
+
     return output_path
 
 
@@ -817,6 +858,7 @@ def plot_corner_fixed_population_varying_eos_PRESENTATION(gw_event: str,
             'color': DEFAULT_RUN_PLOT_COLOR,  # Light color for 2D contours
             'labels': latex_labels,
             'range': ranges,
+            'levels': [0.68, 0.95],
             'hist_kwargs': {'color': DEFAULT_RUN_LEGEND_COLOR, 'density': True},  # Dark color for 1D histograms
         })
 
@@ -842,6 +884,7 @@ def plot_corner_fixed_population_varying_eos_PRESENTATION(gw_event: str,
             'color': color,
             'labels': latex_labels,
             'range': ranges,
+            'levels': [0.68, 0.95],
             'hist_kwargs': {'color': color, 'density': True, 'zorder': zorder_value},
         })
 
@@ -909,6 +952,21 @@ def plot_corner_fixed_population_varying_eos_PRESENTATION(gw_event: str,
 
     plt.savefig(output_path, bbox_inches='tight')
     print(f"Saved PRESENTATION figure to: {output_path}")
+
+    # Copy to paper directory for specific plots
+    copy_to_paper = False
+    if gw_event == "GW170817" and source_type == "bns" and population == "gaussian":
+        copy_to_paper = True
+    elif gw_event == "GW190425" and source_type == "bns" and population == "uniform":
+        copy_to_paper = True
+    elif gw_event == "GW230529" and source_type == "nsbh" and population == "gaussian":
+        copy_to_paper = True
+
+    if copy_to_paper and os.path.exists("../../paper/Figures"):
+        print(f"Also saving to the Overleaf paper repo")
+        save_name_paper = output_path.replace("./figures/money_plots/", "../../paper/Figures/")
+        plt.savefig(save_name_paper, bbox_inches='tight')
+
     plt.close()
 
     return output_path
