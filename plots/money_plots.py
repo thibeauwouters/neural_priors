@@ -1403,10 +1403,312 @@ def plot_gw230529_corner(remove_chieff: bool = False, remove_spin1z: bool = Fals
     return path
 
 
+def plot_debug_corner(gw_event: str,
+                     population: str = "gaussian",
+                     source_type: str = "bns",
+                     base_path: str = "../final_results/",
+                     output_dir: str = "./figures/money_plots/",
+                     eos_samples: List[str] = None,
+                     include_default: bool = True,
+                     verbose: bool = False) -> str:
+    """
+    Create debug corner plot with chirp_mass, chirp_mass_source, lambda_tilde,
+    luminosity_distance, and redshift. Includes agnostic (default) posteriors
+    and uses radio_chiEFT for all normalization indices.
+
+    Args:
+        gw_event (str): GW event name
+        population (str): Population type
+        source_type (str): Source type
+        base_path (str): Base path to result files
+        output_dir (str): Output directory for figures
+        eos_samples (List[str]): EOS samples to include
+        include_default (bool): Include default uninformed prior run
+        verbose (bool): Print verbose information
+
+    Returns:
+        str: Path to saved figure
+    """
+
+    # Set default parameters
+    if eos_samples is None:
+        eos_samples = ["radio", "radio_chiEFT", "radio_NICER"]
+
+    # Parameters to plot
+    params_to_plot = ["chirp_mass", "chirp_mass_source", "lambda_tilde",
+                     "luminosity_distance", "redshift"]
+
+    # Use radio_chiEFT for all normalization indices
+    normalization_keys = ["radio_chiEFT"] * len(params_to_plot)
+
+    print(f"\n=== Creating DEBUG corner plot for {gw_event} ===")
+    print(f"Population: {population}, Source: {source_type}")
+    print(f"EOS samples: {eos_samples}")
+    print(f"Parameters: {params_to_plot}")
+    print(f"Normalization keys: {normalization_keys}")
+
+    # Load posterior data for each EOS sample
+    posteriors_dict = {}
+
+    for eos_name in eos_samples:
+        result_path = construct_result_path(base_path, gw_event, population,
+                                          source_type, eos_name)
+        print(f"Loading {eos_name} from: {result_path}")
+
+        if not os.path.exists(result_path):
+            print(f"Warning: Result file not found: {result_path}")
+            continue
+
+        posterior = load_posterior_data(result_path, fast_mode=True)
+        if posterior is not None:
+            posteriors_dict[eos_name] = posterior
+            if verbose:
+                print(f"Loaded {eos_name} with {len(posterior['chirp_mass'])} samples")
+        else:
+            print(f"Warning: Could not load data for {eos_name}")
+
+    if not posteriors_dict:
+        raise ValueError("No posterior data could be loaded!")
+
+    # Load default run if requested
+    default_posterior = None
+    if include_default:
+        # For default runs, pass the actual source type as population_type and "default" as source_type
+        default_path = construct_result_path(base_path, gw_event, source_type,
+                                           "default", "radio")
+        print(f"Loading default run from: {default_path}")
+
+        if os.path.exists(default_path):
+            default_posterior = load_posterior_data(default_path, fast_mode=True)
+            if default_posterior is not None:
+                if verbose:
+                    print(f"Loaded default run with {len(default_posterior['chirp_mass'])} samples")
+            else:
+                print("Warning: Could not load default run data")
+        else:
+            print(f"Warning: Default run file not found: {default_path}")
+
+    # Convert lambdas to tilde parameters if needed
+    if 'lambda_tilde' in params_to_plot or 'delta_lambda_tilde' in params_to_plot:
+        posteriors_dict, params_to_plot = convert_lambdas_with_verbose(
+            posteriors_dict, params_to_plot, verbose=verbose
+        )
+
+        # Also convert default posterior if it exists
+        if default_posterior is not None:
+            default_dict = {"default": default_posterior}
+            default_dict, _ = convert_lambdas_with_verbose(
+                default_dict, params_to_plot, verbose=verbose
+            )
+            default_posterior = default_dict["default"]
+
+    # Create samples dictionary for corner plotting
+    samples_dict = {}
+    for eos_name, posterior in posteriors_dict.items():
+        # Extract parameter samples
+        samples_list = []
+        for param in params_to_plot:
+            if param in posterior:
+                samples_list.append(np.array(posterior[param]))
+            else:
+                print(f"Warning: Parameter '{param}' not found in {eos_name} posterior")
+                print(f"Available parameters: {list(posterior.keys())[:20]}")
+
+        if samples_list and len(samples_list) == len(params_to_plot):
+            samples_dict[eos_name] = np.column_stack(samples_list)
+        else:
+            print(f"Warning: Could not extract all parameters for {eos_name}")
+
+    if not samples_dict:
+        raise ValueError("No valid samples could be extracted!")
+
+    # Add default samples if available
+    default_samples = None
+    if default_posterior is not None:
+        samples_list = []
+        for param in params_to_plot:
+            if param in default_posterior:
+                samples_list.append(np.array(default_posterior[param]))
+            else:
+                print(f"Warning: Parameter '{param}' not found in default posterior")
+
+        if samples_list and len(samples_list) == len(params_to_plot):
+            default_samples = np.column_stack(samples_list)
+            if verbose:
+                print(f"Created default samples array with shape: {default_samples.shape}")
+
+    # Validate and create normalization dummy dataset
+    dummy_dataset = None
+    if normalization_keys is not None:
+        # Validate normalization_keys
+        n_params = len(params_to_plot)
+        if len(normalization_keys) != n_params:
+            raise ValueError(f"normalization_keys must have length {n_params} (number of parameters), got {len(normalization_keys)}")
+
+        # Check that all keys exist in loaded datasets or are "default"
+        loaded_keys = set(samples_dict.keys())
+        available_keys = loaded_keys.copy()
+        if default_samples is not None:
+            available_keys.add("default")
+
+        for key in normalization_keys:
+            if key not in available_keys:
+                raise ValueError(f"normalization_keys contains '{key}' which was not loaded. Available keys: {available_keys}")
+
+        # Create extended samples dict that includes default if available
+        extended_samples_dict = samples_dict.copy()
+        if default_samples is not None:
+            extended_samples_dict["default"] = default_samples
+
+        # Find minimum number of samples across all datasets
+        min_samples = min(len(dataset) for dataset in extended_samples_dict.values())
+        if verbose:
+            sample_counts = {key: len(dataset) for key, dataset in extended_samples_dict.items()}
+            print(f"Sample counts by dataset: {sample_counts}")
+            print(f"Using minimum sample count for normalization: {min_samples}")
+
+        # Create dummy dataset by selecting specified dataset for each parameter
+        # All datasets are downsampled to min_samples to ensure consistent sizes
+        dummy_columns = []
+        for param_idx, dataset_key in enumerate(normalization_keys):
+            dataset = extended_samples_dict[dataset_key]
+            # Downsample to min_samples by taking first min_samples rows
+            downsampled_dataset = dataset[:min_samples]
+            dummy_columns.append(downsampled_dataset[:, param_idx])
+
+        dummy_dataset = np.column_stack(dummy_columns)
+        if verbose:
+            print(f"Created normalization dummy dataset using keys: {normalization_keys}")
+            print(f"Dummy dataset shape: {dummy_dataset.shape}")
+
+    # Filter constant parameters
+    labels, latex_labels, samples_dict = filter_constant_parameters(
+        params_to_plot,
+        [PARAMETER_LATEX_LABELS.get(p, p) for p in params_to_plot],
+        samples_dict
+    )
+
+    # Calculate ranges automatically
+    ranges = calculate_corner_plot_ranges(labels, samples_dict)
+    print(f"\nAutomatic ranges: {ranges}")
+
+    # Create corner plot
+    fig = None
+    group_colors = {}
+
+    # Plot default samples FIRST (if available) to ensure they appear behind everything
+    if default_samples is not None:
+        if verbose:
+            print("Plotting default run samples in light gray (first layer)")
+
+        default_kwargs = DEFAULT_CORNER_KWARGS.copy()
+        default_kwargs.update({
+            'color': DEFAULT_RUN_PLOT_COLOR,  # Light color for 2D contours
+            'labels': latex_labels,
+            'range': ranges,
+            'levels': [0.68, 0.95],
+            'hist_kwargs': {'color': DEFAULT_RUN_LEGEND_COLOR, 'density': True},  # Dark color for 1D histograms
+        })
+
+        fig = corner.corner(default_samples, **default_kwargs)
+
+    for i, (eos_name, samples) in enumerate(samples_dict.items()):
+        color = EOS_COLORS.get(eos_name, f"C{i}")
+        group_colors[eos_name] = color
+
+        # Corner plot kwargs
+        kwargs = DEFAULT_CORNER_KWARGS.copy()
+        kwargs.update({
+            'color': color,
+            'labels': latex_labels,
+            'range': ranges,
+            'levels': [0.68, 0.95],
+            'hist_kwargs': {'color': color, 'density': True},
+        })
+
+        if fig is None:
+            # First plot - create the figure
+            fig = corner.corner(samples, **kwargs)
+        else:
+            # Overlay subsequent plots
+            corner.corner(samples, fig=fig, **kwargs)
+
+    # Plot invisible dummy dataset LAST for histogram normalization
+    # Only plot histograms (1D) to avoid white space in 2D contours
+    if dummy_dataset is not None:
+        if verbose:
+            print(f"Plotting invisible dummy dataset for histogram normalization")
+
+        # Create corner kwargs that only plots 1D histograms
+        invisible_kwargs = DEFAULT_CORNER_KWARGS.copy()
+        invisible_kwargs.update({
+            'labels': latex_labels,
+            'range': ranges,
+            'hist_kwargs': {'alpha': 0, 'density': True},
+            'plot_density': False,     # Disable 2D density plots
+            'plot_contours': False,    # Disable 2D contours
+            'plot_datapoints': False,  # Disable scatter points
+            'no_fill_contours': True,  # Disable filled contours
+            'color': 'black'
+        })
+
+        corner.corner(dummy_dataset, fig=fig, **invisible_kwargs)
+
+    # Add legend
+    legend_entries = []
+    legend_colors = []
+
+    for eos_name in samples_dict.keys():
+        base_label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
+        legend_entries.append(base_label)
+        legend_colors.append(EOS_COLORS.get(eos_name, 'black'))
+
+    # Add default run to legend if included
+    if default_samples is not None:
+        legend_entries.append("Uninformed")
+        legend_colors.append(DEFAULT_RUN_LEGEND_COLOR)
+
+    # Add legend
+    for i, (label, color) in enumerate(zip(legend_entries, legend_colors)):
+        plt.text(LEGEND_X, LEGEND_Y - i * LEGEND_DY, label,
+                fontsize=LEGEND_FONTSIZE, color=color, ha='left', va='top',
+                transform=fig.transFigure, weight='bold')
+
+    # Save figure with DEBUG in filename
+    output_filename = f"{gw_event}_corner_{population}_{source_type}_DEBUG.pdf"
+    output_path = os.path.join(output_dir, output_filename)
+    ensure_output_directory(output_path)
+
+    plt.savefig(output_path, bbox_inches='tight')
+    print(f"\nSaved DEBUG figure to: {output_path}")
+    plt.close()
+
+    return output_path
+
+
 def main():
     plot_gw170817_corner()
     plot_gw190425_corner()
     plot_gw230529_corner()
+
+    # Debug plots
+    print("\n" + "="*60)
+    print("Creating DEBUG plots")
+    print("="*60)
+
+    # GW190425 debug plots
+    for population in ["gaussian", "uniform", "double_gaussian"]:
+        try:
+            plot_debug_corner("GW190425", population=population, source_type="bns")
+        except Exception as e:
+            print(f"Failed to create DEBUG plot for GW190425 {population}: {e}")
+
+    # GW230529 debug plots
+    for population in ["gaussian", "uniform", "double_gaussian"]:
+        try:
+            plot_debug_corner("GW230529", population=population, source_type="nsbh")
+        except Exception as e:
+            print(f"Failed to create DEBUG plot for GW230529 {population}: {e}")
 
 
 if __name__ == "__main__":
