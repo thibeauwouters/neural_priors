@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/gaussian/bns/radio_chiEFT
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
-Number of good samples:  0.954
+Number of good samples:  0.9311
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.954
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.0834117030222739, 1.7243830229662258]
-  m2: range = [0.9172555360332075, 1.5913897432404929]
-  mass_ratio: range = [0.6396677015848221, 0.9999992252174439]
-  lambda_1: range = [46.17756582368717, 3835.2852385902124]
-  lambda_2: range = [70.99004178264231, 9027.779885332038]
-  lambda_tilde: range = [65.76200005972709, 5475.077168400271]
-  delta_lambda_tilde: range = [-3.6499768560888466, 509.15376243716526]
-  chirp_mass_source: range = [0.9068162976355725, 1.4066535774228575]
+  m1: range = [1.0750761281847596, 1.7578271296330086]
+  m2: range = [0.8847943545360694, 1.601243873332803]
+  mass_ratio: range = [0.6329476369018621, 0.9999995966394932]
+  lambda_1: range = [38.988913021425674, 2779.566466897072]
+  lambda_2: range = [86.9848919040498, 7345.638851711375]
+  lambda_tilde: range = [78.01111314646266, 2947.643619410673]
+  delta_lambda_tilde: range = [0.00015319103215723613, 513.807325399306]
+  chirp_mass_source: range = [0.9226231299412799, 1.396593940451624]
 Saving to ./models/gaussian/bns/radio_chiEFT/training_data.npz:
 Saving to ./models/gaussian/bns/radio_chiEFT/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/gaussian/bns/radio_chiEFT/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 1396
+Early stopping triggered at epoch 1434
 Saving the training loss plot to ./models/gaussian/bns/radio_chiEFT/training_loss.pdf
-Training done. Took around 156.32 minutes
+Training done. Took around 87.63 minutes
 Saving the model weights to ./models/gaussian/bns/radio_chiEFT/model.pt
 Saving the model kwargs to ./models/gaussian/bns/radio_chiEFT/model_kwargs.json
 DONE training!

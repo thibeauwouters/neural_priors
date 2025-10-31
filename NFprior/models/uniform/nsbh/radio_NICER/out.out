@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/uniform/nsbh/radio_NICER
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_NICER/eos_samples.npz
-Number of good samples:  0.9849
+Number of good samples:  0.9953
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.9849
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.0036411944192585, 4.999999533902003]
-  m2: range = [1.00000134728806, 3.4192436290737738]
-  mass_ratio: range = [0.20022695215702976, 0.9978986135813862]
+  m1: range = [2.0126180978899004, 4.999988939462932]
+  m2: range = [1.0000023521549197, 3.2504769700729357]
+  mass_ratio: range = [0.20036755042939067, 0.9953405247753494]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [2.5946094070980457, 7910.412994913452]
-  lambda_tilde: range = [0.3036068048600242, 867.7829468504822]
-  delta_lambda_tilde: range = [0.14849963676342426, 417.4880309814621]
-  chirp_mass_source: range = [1.2321259687605697, 3.3579949523601873]
+  lambda_2: range = [2.7636238383907026, 7130.521483414452]
+  lambda_tilde: range = [0.470371351691628, 664.7164863798383]
+  delta_lambda_tilde: range = [0.2284297836511538, 321.37813686746176]
+  chirp_mass_source: range = [1.2395137988981408, 3.4564920088211295]
 Saving to ./models/uniform/nsbh/radio_NICER/training_data.npz:
 Saving to ./models/uniform/nsbh/radio_NICER/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/nsbh/radio_NICER/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 900
+Early stopping triggered at epoch 1162
 Saving the training loss plot to ./models/uniform/nsbh/radio_NICER/training_loss.pdf
-Training done. Took around 141.45 minutes
+Training done. Took around 74.40 minutes
 Saving the model weights to ./models/uniform/nsbh/radio_NICER/model.pt
 Saving the model kwargs to ./models/uniform/nsbh/radio_NICER/model_kwargs.json
 DONE training!

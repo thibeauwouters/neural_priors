@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/uniform/nsbh/radio_chiEFT
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
-Number of good samples:  0.954
+Number of good samples:  0.9311
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.954
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.002338920342599, 4.999979626658218]
-  m2: range = [1.0000019021875883, 3.340865400816567]
-  mass_ratio: range = [0.20052637551354593, 0.9962410014011149]
+  m1: range = [2.003349246425393, 4.999957786445324]
+  m2: range = [1.0000162906594954, 3.149683561683282]
+  mass_ratio: range = [0.20059144956924735, 0.9985073388663703]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [2.738002250016114, 8070.754886413845]
-  lambda_tilde: range = [0.2997886236814979, 744.7905759558724]
-  delta_lambda_tilde: range = [0.14851299765526293, 359.4189683403687]
-  chirp_mass_source: range = [1.233704654545498, 3.5104488992851715]
+  lambda_2: range = [2.5776746119295026, 6218.464856128885]
+  lambda_tilde: range = [0.31281850525535243, 498.36649087621095]
+  delta_lambda_tilde: range = [0.15334347148240735, 243.8272751901343]
+  chirp_mass_source: range = [1.2268334611230802, 3.395627911792715]
 Saving to ./models/uniform/nsbh/radio_chiEFT/training_data.npz:
 Saving to ./models/uniform/nsbh/radio_chiEFT/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/nsbh/radio_chiEFT/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 1175
+Early stopping triggered at epoch 1380
 Saving the training loss plot to ./models/uniform/nsbh/radio_chiEFT/training_loss.pdf
-Training done. Took around 134.19 minutes
+Training done. Took around 89.21 minutes
 Saving the model weights to ./models/uniform/nsbh/radio_chiEFT/model.pt
 Saving the model kwargs to ./models/uniform/nsbh/radio_chiEFT/model_kwargs.json
 DONE training!

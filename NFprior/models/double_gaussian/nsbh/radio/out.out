@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/double_gaussian/nsbh/radio
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
-Number of good samples:  0.9601
+Number of good samples:  0.9388
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.9601
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.0016898542055017, 4.999993873905383]
-  m2: range = [0.9712535794086691, 2.57413050168333]
-  mass_ratio: range = [0.21985947957031407, 1.1849855607578115]
+  m1: range = [2.003341062288037, 4.999979614699248]
+  m2: range = [0.9113320169214262, 2.6479609558037676]
+  mass_ratio: range = [0.19897155295326285, 1.1520049801162289]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [2.5436099196018898, 4321.063947716943]
-  lambda_tilde: range = [0.25951086039013305, 435.1281889328338]
-  delta_lambda_tilde: range = [0.12750904187687467, 206.32201513081753]
-  chirp_mass_source: range = [1.2957661127865563, 3.0260775155736432]
+  lambda_2: range = [3.33634237664537, 9855.935376731299]
+  lambda_tilde: range = [0.31843242751107464, 690.4592786382822]
+  delta_lambda_tilde: range = [0.1570171678246991, 343.37999201702746]
+  chirp_mass_source: range = [1.2370428744188284, 3.0646581399508723]
 Saving to ./models/double_gaussian/nsbh/radio/training_data.npz:
 Saving to ./models/double_gaussian/nsbh/radio/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/double_gaussian/nsbh/radio/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 1027
+Early stopping triggered at epoch 695
 Saving the training loss plot to ./models/double_gaussian/nsbh/radio/training_loss.pdf
-Training done. Took around 115.94 minutes
+Training done. Took around 41.87 minutes
 Saving the model weights to ./models/double_gaussian/nsbh/radio/model.pt
 Saving the model kwargs to ./models/double_gaussian/nsbh/radio/model_kwargs.json
 DONE training!

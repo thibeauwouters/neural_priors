@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/double_gaussian/bns/radio_NICER
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_NICER/eos_samples.npz
-Number of good samples:  0.9849
+Number of good samples:  0.9953
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.9849
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.151384106517573, 2.7151706559972975]
-  m2: range = [0.9083321308166447, 2.328141933061958]
-  mass_ratio: range = [0.42127471402456995, 0.9999998709206269]
-  lambda_1: range = [2.7657513439340646, 3100.923506635481]
-  lambda_2: range = [3.997827190456613, 11045.52616271868]
-  lambda_tilde: range = [4.003727408156709, 3356.129226917535]
-  delta_lambda_tilde: range = [-5.2093411176721105, 593.0429512686455]
-  chirp_mass_source: range = [0.9709405686984413, 2.0843599632250744]
+  m1: range = [1.1209232791917523, 2.662865041890921]
+  m2: range = [0.8836958283031409, 2.352968240818771]
+  mass_ratio: range = [0.4691722243756911, 0.999999290968064]
+  lambda_1: range = [3.3399998320834965, 2878.561171959509]
+  lambda_2: range = [4.194023071851053, 10371.380816506873]
+  lambda_tilde: range = [4.19564478475628, 3267.013746933987]
+  delta_lambda_tilde: range = [-2.6992708072008478, 767.0500516478776]
+  chirp_mass_source: range = [0.9488258496795503, 2.091955093230993]
 Saving to ./models/double_gaussian/bns/radio_NICER/training_data.npz:
 Saving to ./models/double_gaussian/bns/radio_NICER/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/double_gaussian/bns/radio_NICER/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 1354
+Early stopping triggered at epoch 1225
 Saving the training loss plot to ./models/double_gaussian/bns/radio_NICER/training_loss.pdf
-Training done. Took around 201.38 minutes
+Training done. Took around 117.64 minutes
 Saving the model weights to ./models/double_gaussian/bns/radio_NICER/model.pt
 Saving the model kwargs to ./models/double_gaussian/bns/radio_NICER/model_kwargs.json
 DONE training!

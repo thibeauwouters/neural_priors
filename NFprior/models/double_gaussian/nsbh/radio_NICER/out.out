@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/double_gaussian/nsbh/radio_NICER
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_NICER/eos_samples.npz
-Number of good samples:  0.9849
+Number of good samples:  0.9953
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.9849
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.003531760001326, 4.999984567142677]
-  m2: range = [0.9725333847374776, 2.6383049585972587]
-  mass_ratio: range = [0.20577535848967682, 1.2031971263221661]
+  m1: range = [2.008881359687632, 4.9999914158563]
+  m2: range = [0.9067723956415795, 2.8047529007776553]
+  mass_ratio: range = [0.2007885715375531, 1.1370842652542685]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [2.9070055868665543, 7360.7105346296175]
-  lambda_tilde: range = [0.3100876868284243, 490.15513515736114]
-  delta_lambda_tilde: range = [0.15328479286469576, 234.31303037195983]
-  chirp_mass_source: range = [1.3324682082311303, 3.0755941213251567]
+  lambda_2: range = [3.320211388303591, 5623.182941697706]
+  lambda_tilde: range = [0.3918974292170395, 426.9745905624698]
+  delta_lambda_tilde: range = [0.18963092185897612, 205.71231381982614]
+  chirp_mass_source: range = [1.3406383673818878, 3.046991233769422]
 Saving to ./models/double_gaussian/nsbh/radio_NICER/training_data.npz:
 Saving to ./models/double_gaussian/nsbh/radio_NICER/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/double_gaussian/nsbh/radio_NICER/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 1258
+Early stopping triggered at epoch 1059
 Saving the training loss plot to ./models/double_gaussian/nsbh/radio_NICER/training_loss.pdf
-Training done. Took around 160.16 minutes
+Training done. Took around 67.17 minutes
 Saving the model weights to ./models/double_gaussian/nsbh/radio_NICER/model.pt
 Saving the model kwargs to ./models/double_gaussian/nsbh/radio_NICER/model_kwargs.json
 DONE training!

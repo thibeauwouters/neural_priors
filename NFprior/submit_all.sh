@@ -6,7 +6,7 @@ COMMON_ARGS="--submit --batch-size 1024 --learning-rate 1e-4 --max-patience 250 
 # Arrays for iteration
 POPULATIONS=("uniform" "gaussian" "double_gaussian")
 SOURCES=("bns" "nsbh")
-EOS_SAMPLES=("radio_NICER" "radio_GW170817")
+EOS_SAMPLES=("radio" "radio_chiEFT" "radio_NICER")
 
 echo "Submitting flow training jobs..."
 for pop in "${POPULATIONS[@]}"; do

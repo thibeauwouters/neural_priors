@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/uniform/bns/radio
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
-Number of good samples:  0.9601
+Number of good samples:  0.9388
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.9601
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.0030467258358553, 3.6501338688368774]
-  m2: range = [1.000001334426072, 3.281661916293847]
-  mass_ratio: range = [0.32234421826814097, 0.9999999552742398]
-  lambda_1: range = [2.719737099453056, 6895.328109173983]
-  lambda_2: range = [4.124267135291331, 8060.692493709729]
-  lambda_tilde: range = [3.5033695500980246, 7408.524861960014]
-  delta_lambda_tilde: range = [-0.7284834310567903, 535.9554739157636]
-  chirp_mass_source: range = [0.8726033369435546, 3.0121210825392217]
+  m1: range = [1.001768181826394, 3.188530951861132]
+  m2: range = [1.0000008291120823, 3.128546278655751]
+  mass_ratio: range = [0.3374106227199103, 0.9999998445413011]
+  lambda_1: range = [2.6760540284117784, 6042.4174244704545]
+  lambda_2: range = [3.2906569256436287, 7147.355966041894]
+  lambda_tilde: range = [3.277002680403433, 6269.922494717566]
+  delta_lambda_tilde: range = [4.6710231455084426e-05, 532.9833427766282]
+  chirp_mass_source: range = [0.8716553378480835, 2.727206356304508]
 Saving to ./models/uniform/bns/radio/training_data.npz:
 Saving to ./models/uniform/bns/radio/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/bns/radio/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 1923
+Early stopping triggered at epoch 1349
 Saving the training loss plot to ./models/uniform/bns/radio/training_loss.pdf
-Training done. Took around 216.53 minutes
+Training done. Took around 124.25 minutes
 Saving the model weights to ./models/uniform/bns/radio/model.pt
 Saving the model kwargs to ./models/uniform/bns/radio/model_kwargs.json
 DONE training!

@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/uniform/nsbh/radio
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio/eos_samples.npz
-Number of good samples:  0.9601
+Number of good samples:  0.9388
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.9601
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [2.0045241138635936, 4.999993979207802]
-  m2: range = [1.0000017880477639, 3.665412149250494]
-  mass_ratio: range = [0.20008070138660067, 0.9976611133803439]
+  m1: range = [2.0051320259287118, 4.999987974862895]
+  m2: range = [1.0000003639507236, 3.194262676835779]
+  mass_ratio: range = [0.20030762125811383, 0.9971373757900803]
   lambda_1: range = [0.0001, 0.0001]
-  lambda_2: range = [2.7041589066550813, 8487.28873604285]
-  lambda_tilde: range = [0.2579328742576244, 634.7335301164505]
-  delta_lambda_tilde: range = [0.12626565915956933, 304.7167225190319]
-  chirp_mass_source: range = [1.2299280513019282, 3.5108937734952628]
+  lambda_2: range = [2.776290074205748, 7020.5586800727815]
+  lambda_tilde: range = [0.3614343018504503, 699.7763007320245]
+  delta_lambda_tilde: range = [0.17751039210362263, 337.7033005630325]
+  chirp_mass_source: range = [1.2310836108385657, 3.3923470357154772]
 Saving to ./models/uniform/nsbh/radio/training_data.npz:
 Saving to ./models/uniform/nsbh/radio/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/nsbh/radio/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 837
+Early stopping triggered at epoch 908
 Saving the training loss plot to ./models/uniform/nsbh/radio/training_loss.pdf
-Training done. Took around 94.79 minutes
+Training done. Took around 87.34 minutes
 Saving the model weights to ./models/uniform/nsbh/radio/model.pt
 Saving the model kwargs to ./models/uniform/nsbh/radio/model_kwargs.json
 DONE training!

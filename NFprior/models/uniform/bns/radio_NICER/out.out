@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/uniform/bns/radio_NICER
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_NICER/eos_samples.npz
-Number of good samples:  0.9849
+Number of good samples:  0.9953
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.9849
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.0043637624761579, 3.3913574942876656]
-  m2: range = [1.000004545266942, 3.0701254174130495]
-  mass_ratio: range = [0.31996135158334255, 0.9999978132447832]
-  lambda_1: range = [2.502545449130815, 6878.816613444003]
-  lambda_2: range = [3.946752045167286, 8217.323290399412]
-  lambda_tilde: range = [3.5497726358672623, 7015.180674433808]
-  delta_lambda_tilde: range = [-1.2262745687671397, 675.7960156306533]
-  chirp_mass_source: range = [0.8725810247739864, 2.761222808650067]
+  m1: range = [1.0046821330544593, 3.2884967365357305]
+  m2: range = [1.000000002629754, 3.1808287102339743]
+  mass_ratio: range = [0.3106666760156771, 0.9999998278523059]
+  lambda_1: range = [2.678909532685498, 5993.6959720024515]
+  lambda_2: range = [4.1517856728158335, 7087.6397362346215]
+  lambda_tilde: range = [3.948130823503116, 6169.980595471865]
+  delta_lambda_tilde: range = [1.0957470560333834e-05, 529.9101248615872]
+  chirp_mass_source: range = [0.8745760683809398, 2.7726244527921255]
 Saving to ./models/uniform/bns/radio_NICER/training_data.npz:
 Saving to ./models/uniform/bns/radio_NICER/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/bns/radio_NICER/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 1430
+Early stopping triggered at epoch 1890
 Saving the training loss plot to ./models/uniform/bns/radio_NICER/training_loss.pdf
-Training done. Took around 185.61 minutes
+Training done. Took around 168.80 minutes
 Saving the model weights to ./models/uniform/bns/radio_NICER/model.pt
 Saving the model kwargs to ./models/uniform/bns/radio_NICER/model_kwargs.json
 DONE training!

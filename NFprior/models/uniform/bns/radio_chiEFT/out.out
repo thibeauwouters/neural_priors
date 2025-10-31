@@ -7,7 +7,7 @@ Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neuron
 Everything for this model will be saved to ./models/uniform/bns/radio_chiEFT
 Starting training with the following parameters:
 Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_chiEFT/eos_samples.npz
-Number of good samples:  0.954
+Number of good samples:  0.9311
 0/200000
 20000/200000
 40000/200000
@@ -19,14 +19,14 @@ Number of good samples:  0.954
 160000/200000
 180000/200000
 Create data will save the following data:
-  m1: range = [1.0017553955179663, 3.347036328524052]
-  m2: range = [1.0000038065384014, 3.0449210625220386]
-  mass_ratio: range = [0.32095164166686535, 0.9999985776368316]
-  lambda_1: range = [2.5047916413655535, 5940.185055672226]
-  lambda_2: range = [3.165592299776857, 8068.522440024623]
-  lambda_tilde: range = [3.1493939616443702, 6323.525074270169]
-  delta_lambda_tilde: range = [-1.4395570480253093, 540.9405735793754]
-  chirp_mass_source: range = [0.8717895258277347, 2.720670310537672]
+  m1: range = [1.0006581219069495, 3.2218619657742056]
+  m2: range = [1.0000045045075927, 2.9541313924980175]
+  mass_ratio: range = [0.3310179831505589, 0.9999994446066351]
+  lambda_1: range = [2.5667942158688986, 5348.364419322608]
+  lambda_2: range = [3.9238900842783835, 5746.360603132366]
+  lambda_tilde: range = [3.7360055633944484, 5356.782609673083]
+  delta_lambda_tilde: range = [4.7298703356201535e-05, 441.1905612317014]
+  chirp_mass_source: range = [0.8710260465065719, 2.6505795230747555]
 Saving to ./models/uniform/bns/radio_chiEFT/training_data.npz:
 Saving to ./models/uniform/bns/radio_chiEFT/training_data.npz DONE
 Using source-frame chirp mass and mass ratio (Mc, q) for training
@@ -40,9 +40,9 @@ Using MinMaxScaler to scale the input data x
 Saved sklearn scaler to ./models/uniform/bns/radio_chiEFT/scaler.gz
 Going to start training for glasflow . . .
 Only RELU supported for now
-Early stopping triggered at epoch 1263
+Early stopping triggered at epoch 1320
 Saving the training loss plot to ./models/uniform/bns/radio_chiEFT/training_loss.pdf
-Training done. Took around 144.18 minutes
+Training done. Took around 116.43 minutes
 Saving the model weights to ./models/uniform/bns/radio_chiEFT/model.pt
 Saving the model kwargs to ./models/uniform/bns/radio_chiEFT/model_kwargs.json
 DONE training!

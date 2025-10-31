@@ -12,5 +12,4 @@ request_gpus = 1
 requirements = regexp("L40S", TARGET.GPUs_DeviceName)
 +USeOS = "el9"
 +JobCategory = "long"
-+MaxWallTime = 345600
 Queue 1

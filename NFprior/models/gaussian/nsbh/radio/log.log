@@ -467,3 +467,46 @@
 
 	Job terminated of its own accord at 2025-08-08T12:42:14Z with exit-code 0.
 ...
+000 (3230286.000.000) 2025-10-30 17:19:20 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_11406_2550>
+...
+001 (3230286.000.000) 2025-10-30 18:47:29 Job executing on host: <145.107.4.165:9618?addrs=145.107.4.165-9618+[2a07-8500-120-e070--a5]-9618&alias=wn-pijl-004.nikhef.nl&noUDP&sock=startd_4351_00a8>
+	SlotName: slot1_6@wn-pijl-004.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_1f146b0b_a830_c84c_fd33_4949dcc59318 }
+	CondorScratchDir = "/scratch/condor_execute/dir_3718525"
+	Cpus = 1
+	Disk = 16790347
+	GPUs = 1
+	GPUs_GPU_1f146b0b_a830_c84c_fd33_4949dcc59318 = [ Id = "GPU-1f146b0b-a830-c84c-fd33-4949dcc59318"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "1f146b0b-a830-c84c-fd33-4949dcc59318"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "580.95.05"; DriverVersion = 13.0; DevicePciBusId = "0000:C2:00.0"; GlobalMemoryMb = 45458; MaxSupportedVersion = 13000 ]
+	Memory = 16384
+...
+006 (3230286.000.000) 2025-10-30 18:47:38 Image size of job updated: 651812
+	637  -  MemoryUsage of job (MB)
+	651812  -  ResidentSetSize of job (KB)
+...
+006 (3230286.000.000) 2025-10-30 18:52:39 Image size of job updated: 1315276
+	1283  -  MemoryUsage of job (MB)
+	1313616  -  ResidentSetSize of job (KB)
+...
+006 (3230286.000.000) 2025-10-30 18:57:39 Image size of job updated: 1315276
+	1284  -  MemoryUsage of job (MB)
+	1313844  -  ResidentSetSize of job (KB)
+...
+005 (3230286.000.000) 2025-10-30 19:49:52 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 01:02:11, Sys 0 00:00:12  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 01:02:11, Sys 0 00:00:12  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            : 17500    16777216  16790347 
+	   GPUs                 :     0.13        1         1 "GPU-1f146b0b-a830-c84c-fd33-4949dcc59318"
+	   GpusMemory (MB)      :  1331                       
+	   Memory (MB)          :  1284       16384     16384 
+	   TimeExecute (s)      :  3743                       
+	   TimeSlotBusy (s)     :  3743                       
+...
