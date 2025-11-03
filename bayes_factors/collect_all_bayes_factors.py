@@ -354,8 +354,8 @@ def main():
     
     args = parser.parse_args()
     
-    # base_dir = "../GW_runs/" # This is on Nikhef, for the relative binning runs
-    base_dir = "/work/wouters/neural_priors_paper_runs/" # This is on Nikhef, for the relative binning runs
+    # base_dir = "../GW_runs/" # This is on Nikhef, for the relative binning runs (first few runs)
+    base_dir = "/work/wouters/neural_priors_paper_runs/" # This is on Jarvis, multibanding runs (newer runs)
     json_file = "all_bayes_factors.json"
     latex_file = "bayes_factors_table.tex"
     
