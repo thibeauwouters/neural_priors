@@ -1,23 +1,23 @@
 {
   "n_samples_generated": 200000,
-  "total_bad_samples": 1180,
-  "bad_percentage": 0.59,
+  "total_bad_samples": 259,
+  "bad_percentage": 0.1295,
   "violation_details": {
     "mass_ratio_out_of_bounds": {
-      "count": 193,
-      "percentage": 0.0965
+      "count": 66,
+      "percentage": 0.033
     },
     "lambda_1_negative": {
-      "count": 8,
-      "percentage": 0.004
+      "count": 21,
+      "percentage": 0.0105
     },
     "lambda_2_negative": {
-      "count": 6,
-      "percentage": 0.003
+      "count": 4,
+      "percentage": 0.002
     },
     "lambda_ordering_violation": {
-      "count": 1176,
-      "percentage": 0.588
+      "count": 233,
+      "percentage": 0.1165
     }
   }
 }
