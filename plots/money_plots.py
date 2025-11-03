@@ -983,13 +983,13 @@ def plot_gw170817_corner(remove_chieff: bool = False) -> str:
     gw170817_defaults = {
         'normalization_keys': ["radio_chiEFT",
                                "radio_NICER",
-                               "radio_NICER",
-                               "radio",
-                               "radio_NICER"
+                               "radio_chiEFT",
+                               "radio_chiEFT",
+                               "radio_chiEFT"
                                ],
-        'ranges': [[1.197430, 1.1977],
-                   [0.85, 1.0],
-                   [100, 1000],
+        'ranges': [[1.19735, 1.19775],
+                   [0.80, 1.0],
+                   [50, 1050],
                    [0.0, 75.0],
                    [20.0, 50.0],
                    ]
@@ -999,7 +999,7 @@ def plot_gw170817_corner(remove_chieff: bool = False) -> str:
                       "lambda_tilde",
                       "delta_lambda_tilde",
                       "luminosity_distance"]
-    
+
     # Gaussian
     path = plot_corner_fixed_population_varying_eos(
         gw_event="GW170817",
@@ -1009,11 +1009,11 @@ def plot_gw170817_corner(remove_chieff: bool = False) -> str:
         remove_chieff=remove_chieff,
         **gw170817_defaults
     )
-    
+
     # Double Gaussian
     gw170817_defaults['normalization_keys'] = ["radio_chiEFT",
-                                               "radio_NICER",
-                                               "radio_NICER",
+                                               "radio_chiEFT",
+                                               "radio_chiEFT",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
                                                ]
@@ -1025,30 +1025,29 @@ def plot_gw170817_corner(remove_chieff: bool = False) -> str:
         remove_chieff=remove_chieff,
         **gw170817_defaults
     )
-    
-    # Uniform
-    # gw170817_defaults['normalization_keys'] = ["radio", "radio_chiEFT", "radio_NICER", "radio_chiEFT"]
-    gw170817_defaults['ranges'] = None
-    gw170817_defaults['normalization_keys'] = ["radio",
-                                               "radio_NICER",
-                                               "radio",
-                                               "radio_chiEFT",
-                                               "radio",
-                                               ]
-    gw170817_defaults['ranges'] =  [[1.197435, 1.19775],
-                                    [0.6, 1.0],
-                                    [150, 850],
-                                    [0.0, 200.0],
-                                    [20.0, 50.0],
-                                    ]
-    path = plot_corner_fixed_population_varying_eos(
-        gw_event="GW170817",
-        population="uniform",
-        source_type="bns",
-        params_to_plot=params_to_plot,
-        remove_chieff=remove_chieff,
-        **gw170817_defaults
-    )
+
+    # # Uniform
+    # gw170817_defaults['ranges'] = None
+    # gw170817_defaults['normalization_keys'] = ["radio_chiEFT",
+    #                                            "radio_chiEFT",
+    #                                            "radio_chiEFT",
+    #                                            "radio_chiEFT",
+    #                                            "radio_chiEFT",
+    #                                            ]
+    # gw170817_defaults['ranges'] =  [[1.197435, 1.19775],
+    #                                 [0.6, 1.0],
+    #                                 [150, 850],
+    #                                 [0.0, 200.0],
+    #                                 [20.0, 50.0],
+    #                                 ]
+    # path = plot_corner_fixed_population_varying_eos(
+    #     gw_event="GW170817",
+    #     population="uniform",
+    #     source_type="bns",
+    #     params_to_plot=params_to_plot,
+    #     remove_chieff=remove_chieff,
+    #     **gw170817_defaults
+    # )
 
     # Also create presentation versions for all populations
     print("\n=== Creating GW170817 PRESENTATION versions ===")
@@ -1056,12 +1055,12 @@ def plot_gw170817_corner(remove_chieff: bool = False) -> str:
     # Gaussian PRESENTATION
     gw170817_defaults_pres = {
         'normalization_keys': ["radio_chiEFT",
-                               "radio_NICER",
-                               "radio_NICER",
-                               "radio",
-                               "radio_NICER"
+                               "radio_chiEFT",
+                               "radio_chiEFT",
+                               "radio_chiEFT",
+                               "radio_chiEFT"
                                ],
-        'ranges': [[1.197430, 1.1977],
+        'ranges': [[1.1974, 1.1977],
                    [0.85, 1.0],
                    [100, 1000],
                    [0.0, 75.0],
@@ -1079,8 +1078,8 @@ def plot_gw170817_corner(remove_chieff: bool = False) -> str:
 
     # Double Gaussian PRESENTATION
     gw170817_defaults_pres['normalization_keys'] = ["radio_chiEFT",
-                                                   "radio_NICER",
-                                                   "radio_NICER",
+                                                   "radio_chiEFT",
+                                                   "radio_chiEFT",
                                                    "radio_chiEFT",
                                                    "radio_chiEFT",
                                                    ]
@@ -1094,11 +1093,11 @@ def plot_gw170817_corner(remove_chieff: bool = False) -> str:
     )
 
     # Uniform PRESENTATION
-    gw170817_defaults_pres['normalization_keys'] = ["radio",
-                                                   "radio_NICER",
-                                                   "radio",
+    gw170817_defaults_pres['normalization_keys'] = ["radio_chiEFT",
                                                    "radio_chiEFT",
-                                                   "radio",
+                                                   "radio_chiEFT",
+                                                   "radio_chiEFT",
+                                                   "radio_chiEFT",
                                                    ]
     gw170817_defaults_pres['ranges'] =  [[1.197435, 1.19775],
                                         [0.6, 1.0],
@@ -1177,11 +1176,11 @@ def plot_gw190425_corner(remove_chieff: bool = False) -> str:
     )
     
     # Uniform
-    gw190425_defaults['normalization_keys'] = ["radio_chiEFT",
+    gw190425_defaults['normalization_keys'] = ["radio_NICER",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
                                                "radio_chiEFT",
-                                               "radio_chiEFT",
+                                               "radio_NICER",
                                                ]
     gw190425_defaults["ranges"] = [[1.4862, 1.4873],
                                    [0.65, 1.0],
@@ -1203,7 +1202,7 @@ def plot_gw190425_corner(remove_chieff: bool = False) -> str:
 
     # Double Gaussian PRESENTATION
     gw190425_defaults_pres = {
-        'normalization_keys': ["radio_chiEFT",
+        'normalization_keys': ["radio_NICER",
                                "radio_NICER",
                                "radio_NICER",
                                "radio_NICER",
@@ -1226,11 +1225,11 @@ def plot_gw190425_corner(remove_chieff: bool = False) -> str:
     )
 
     # Uniform PRESENTATION
-    gw190425_defaults_pres['normalization_keys'] = ["radio_chiEFT",
-                                                   "radio_chiEFT",
-                                                   "radio_chiEFT",
-                                                   "radio_chiEFT",
-                                                   "radio_chiEFT",
+    gw190425_defaults_pres['normalization_keys'] = ["radio_NICER",
+                                                   "radio_NICER",
+                                                   "radio_NICER",
+                                                   "radio_NICER",
+                                                   "radio_NICER",
                                                    ]
     gw190425_defaults_pres["ranges"] = [[1.4862, 1.4873],
                                        [0.65, 1.0],
@@ -1260,10 +1259,10 @@ def plot_gw230529_corner(remove_chieff: bool = False, remove_spin1z: bool = Fals
     
     # Set hardcoded defaults for GW230529
     gw230529_defaults = {
-        'normalization_keys': ["default",
+        'normalization_keys': ["radio_NICER",
                                "radio_NICER",
                                "radio_NICER",
-                               "radio",
+                               "radio_chiEFT",
                                "radio_chiEFT"]
     }
     params_to_plot = ["chirp_mass", "mass_ratio", "spin_1z", "lambda_2", "luminosity_distance"]
@@ -1687,8 +1686,8 @@ def plot_debug_corner(gw_event: str,
 
 
 def main():
-    plot_gw170817_corner()
-    plot_gw190425_corner()
+    # plot_gw170817_corner()
+    # plot_gw190425_corner()
     plot_gw230529_corner()
 
     # Debug plots
