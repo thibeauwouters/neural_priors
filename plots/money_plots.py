@@ -1686,8 +1686,8 @@ def plot_debug_corner(gw_event: str,
 
 
 def main():
-    # plot_gw170817_corner()
-    # plot_gw190425_corner()
+    plot_gw170817_corner()
+    plot_gw190425_corner()
     plot_gw230529_corner()
 
     # Debug plots
