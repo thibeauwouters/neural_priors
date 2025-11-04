@@ -1408,12 +1408,16 @@ def plot_debug_corner(gw_event: str,
                      base_path: str = "../final_results/",
                      output_dir: str = "./figures/money_plots/",
                      eos_samples: List[str] = None,
+                     params_to_plot: List[str] = None,
+                     normalization_keys: List[str] = None,
                      include_default: bool = True,
+                     suffix: str = "DEBUG",
                      verbose: bool = False) -> str:
     """
-    Create debug corner plot with chirp_mass, chirp_mass_source, lambda_tilde,
-    luminosity_distance, and redshift. Includes agnostic (default) posteriors
-    and uses radio_chiEFT for all normalization indices.
+    Create corner plot with custom parameters and suffix.
+
+    By default creates debug corner plot with chirp_mass, chirp_mass_source, lambda_tilde,
+    luminosity_distance, and redshift. Can be customized for other parameter sets.
 
     Args:
         gw_event (str): GW event name
@@ -1422,7 +1426,10 @@ def plot_debug_corner(gw_event: str,
         base_path (str): Base path to result files
         output_dir (str): Output directory for figures
         eos_samples (List[str]): EOS samples to include
+        params_to_plot (List[str]): Parameters to plot (default: debug parameter set)
+        normalization_keys (List[str]): Normalization keys (default: radio_chiEFT for all)
         include_default (bool): Include default uninformed prior run
+        suffix (str): Suffix for output filename (default: "DEBUG")
         verbose (bool): Print verbose information
 
     Returns:
@@ -1433,14 +1440,16 @@ def plot_debug_corner(gw_event: str,
     if eos_samples is None:
         eos_samples = ["radio", "radio_chiEFT", "radio_NICER"]
 
-    # Parameters to plot
-    params_to_plot = ["chirp_mass", "chirp_mass_source", "lambda_tilde",
-                     "luminosity_distance", "redshift"]
+    # Parameters to plot - default to debug set if not specified
+    if params_to_plot is None:
+        params_to_plot = ["chirp_mass", "chirp_mass_source", "lambda_tilde",
+                         "luminosity_distance", "redshift"]
 
-    # Use radio_chiEFT for all normalization indices
-    normalization_keys = ["radio_chiEFT"] * len(params_to_plot)
+    # Use radio_chiEFT for all normalization indices if not specified
+    if normalization_keys is None:
+        normalization_keys = ["radio_chiEFT"] * len(params_to_plot)
 
-    print(f"\n=== Creating DEBUG corner plot for {gw_event} ===")
+    print(f"\n=== Creating {suffix} corner plot for {gw_event} ===")
     print(f"Population: {population}, Source: {source_type}")
     print(f"EOS samples: {eos_samples}")
     print(f"Parameters: {params_to_plot}")
@@ -1673,13 +1682,13 @@ def plot_debug_corner(gw_event: str,
                 fontsize=LEGEND_FONTSIZE, color=color, ha='left', va='top',
                 transform=fig.transFigure, weight='bold')
 
-    # Save figure with DEBUG in filename
-    output_filename = f"{gw_event}_corner_{population}_{source_type}_DEBUG.pdf"
+    # Save figure with suffix in filename
+    output_filename = f"{gw_event}_corner_{population}_{source_type}_{suffix}.pdf"
     output_path = os.path.join(output_dir, output_filename)
     ensure_output_directory(output_path)
 
     plt.savefig(output_path, bbox_inches='tight')
-    print(f"\nSaved DEBUG figure to: {output_path}")
+    print(f"\nSaved {suffix} figure to: {output_path}")
     plt.close()
 
     return output_path
@@ -1695,6 +1704,13 @@ def main():
     print("Creating DEBUG plots")
     print("="*60)
 
+    # GW170817 debug plots
+    for population in ["gaussian", "uniform", "double_gaussian"]:
+        try:
+            plot_debug_corner("GW170817", population=population, source_type="bns")
+        except Exception as e:
+            print(f"Failed to create DEBUG plot for GW190425 {population}: {e}")
+            
     # GW190425 debug plots
     for population in ["gaussian", "uniform", "double_gaussian"]:
         try:
@@ -1708,6 +1724,67 @@ def main():
             plot_debug_corner("GW230529", population=population, source_type="nsbh")
         except Exception as e:
             print(f"Failed to create DEBUG plot for GW230529 {population}: {e}")
+
+    # Full plots with all parameters
+    print("\n" + "="*60)
+    print("Creating FULL plots")
+    print("="*60)
+
+    # Define full parameter set
+    full_params_bns = [
+        "chirp_mass", "mass_ratio", "a_1", "a_2",
+        "tilt_1", "tilt_2", "phi_jl", "phi_12",
+        "lambda_tilde", "delta_lambda_tilde",
+        "luminosity_distance", "phase", "theta_jn", "psi",
+        "ra", "dec"
+    ]
+
+    full_params_nsbh = [
+        "chirp_mass", "mass_ratio", "a_1", "a_2",
+        "tilt_1", "tilt_2", "phi_jl", "phi_12",
+        "lambda_2",  # NSBH uses lambda_2 instead of tilde parameters
+        "luminosity_distance", "phase", "theta_jn", "psi",
+        "ra", "dec"
+    ]
+
+    # GW170817 full plots
+    for population in ["gaussian", "uniform", "double_gaussian"]:
+        try:
+            plot_debug_corner(
+                "GW170817",
+                population=population,
+                source_type="bns",
+                params_to_plot=full_params_bns,
+                suffix="FULL"
+            )
+        except Exception as e:
+            print(f"Failed to create FULL plot for GW170817 {population}: {e}")
+
+    # GW190425 full plots
+    for population in ["gaussian", "uniform", "double_gaussian"]:
+        try:
+            plot_debug_corner(
+                "GW190425",
+                population=population,
+                source_type="bns",
+                params_to_plot=full_params_bns,
+                suffix="FULL"
+            )
+        except Exception as e:
+            print(f"Failed to create FULL plot for GW190425 {population}: {e}")
+
+    # GW230529 full plots
+    for population in ["gaussian", "uniform", "double_gaussian"]:
+        try:
+            plot_debug_corner(
+                "GW230529",
+                population=population,
+                source_type="nsbh",
+                params_to_plot=full_params_nsbh,
+                suffix="FULL"
+            )
+        except Exception as e:
+            print(f"Failed to create FULL plot for GW230529 {population}: {e}")
 
 
 if __name__ == "__main__":

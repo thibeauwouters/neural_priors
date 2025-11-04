@@ -7,6 +7,7 @@ distributions across different EOS constraints and population priors.
 Now includes support for:
 - log_likelihood distributions
 - log_prior distributions
+- log_posterior distributions (log_likelihood + log_prior)
 - Network SNR (combined detector SNR)
 - Individual detector SNRs (H1, L1, V1)
 """
@@ -24,11 +25,11 @@ from plots.utils import (
     EOS_COLORS, EOS_SAMPLES_NAMES_DICT
 )
 
-# Font size
-fs_ticks = 16
-fs_labels = 18
-fs_legend = 14
-fs_title = 20
+# Font sizes (customize here for all plots)
+fs_ticks = 20
+fs_labels = 24
+fs_legend = 18
+fs_title = 26
 
 # Matplotlib style parameters
 params = {
@@ -43,6 +44,7 @@ params = {
     "xtick.labelsize": fs_ticks,
     "ytick.labelsize": fs_ticks,
     "axes.labelsize": fs_labels,
+    "text.latex.preamble": r"\usepackage{amsmath}",
 }
 
 plt.rcParams.update(params)
@@ -69,6 +71,13 @@ QUANTITY_CONFIG = {
         'ylabel_density': r'Probability Density',
         'ylabel_count': r'Count',
         'output_dir': 'logPrior'
+    },
+    'log_posterior': {
+        'key': None,  # Computed from log_likelihood + log_prior
+        'label': r'$\log \mathcal{P}$',
+        'ylabel_density': r'Probability Density',
+        'ylabel_count': r'Count',
+        'output_dir': 'logPosterior'
     },
     'network_snr': {
         'key': None,  # Computed from detector SNRs
@@ -120,7 +129,7 @@ def extract_quantity(posterior: Dict, quantity: str) -> Optional[np.ndarray]:
 
     Args:
         posterior (Dict): Posterior samples dictionary
-        quantity (str): Quantity name (e.g., 'log_likelihood', 'network_snr', 'H1_snr')
+        quantity (str): Quantity name (e.g., 'log_likelihood', 'log_posterior', 'network_snr', 'H1_snr')
 
     Returns:
         Optional[np.ndarray]: Extracted quantity values, or None if not available
@@ -133,6 +142,13 @@ def extract_quantity(posterior: Dict, quantity: str) -> Optional[np.ndarray]:
     # Handle network SNR specially
     if quantity == 'network_snr':
         return compute_network_snr(posterior)
+
+    # Handle log_posterior specially (log_likelihood + log_prior)
+    if quantity == 'log_posterior':
+        if 'log_likelihood' in posterior and 'log_prior' in posterior:
+            return np.array(posterior['log_likelihood']) + np.array(posterior['log_prior'])
+        else:
+            return None
 
     # For regular quantities, check if key exists
     key = config['key']
@@ -161,7 +177,7 @@ def plot_quantity_histogram(gw_event: str,
 
     Args:
         gw_event (str): GW event name (e.g., 'GW170817', 'GW190425', 'GW230529')
-        quantity (str): Quantity to plot ('log_likelihood', 'log_prior', 'network_snr', 'H1_snr', etc.)
+        quantity (str): Quantity to plot ('log_likelihood', 'log_prior', 'log_posterior', 'network_snr', 'H1_snr', etc.)
         population (str): Population type ('uniform', 'gaussian', 'double_gaussian')
         source_type (str): Source type ('bns', 'nsbh', 'default')
         base_path (str): Base path to result files
@@ -275,7 +291,7 @@ def plot_quantity_histogram(gw_event: str,
                   f"{stat['std']:<10.2f} {stat['min']:<10.2f} {stat['max']:<10.2f}")
 
     # Create figure
-    fig, ax = plt.subplots(figsize=(10, 6))
+    _, ax = plt.subplots(figsize=(8, 6))
 
     # Determine global range for histograms
     all_data = np.concatenate([data for data in quantity_dict.values()])
@@ -309,14 +325,11 @@ def plot_quantity_histogram(gw_event: str,
         ax.set_ylabel(config['ylabel_count'], fontsize=fs_labels)
 
     # Add title
-    title = f"{gw_event} - {population.replace('_', ' ').title()} Population"
+    title = f"{gw_event} - {population.replace('_', ' ').title()} population"
     ax.set_title(title, fontsize=fs_title, weight='bold', pad=15)
 
     # Add legend
     ax.legend(fontsize=fs_legend, loc='best', framealpha=0.9)
-
-    # Grid
-    ax.grid(True, alpha=0.3, linestyle='--', linewidth=0.5)
 
     # Ensure output directory exists
     full_output_dir = os.path.join(output_dir, config['output_dir'])
@@ -495,7 +508,7 @@ def plot_log_likelihood_cdf(gw_event: str,
             print(f"{stat['name']:<20} Mean: {stat['mean']:.2f}, Median: {stat['median']:.2f}")
 
     # Create figure
-    fig, ax = plt.subplots(figsize=(10, 6))
+    _, ax = plt.subplots(figsize=(8, 6))
 
     # Plot default run first (so it appears behind)
     if default_logL is not None:
@@ -521,14 +534,11 @@ def plot_log_likelihood_cdf(gw_event: str,
     ax.set_ylabel(r'Cumulative Probability', fontsize=fs_labels)
 
     # Add title (use hyphen instead of em dash for LaTeX compatibility)
-    title = f"{gw_event} - {population.replace('_', ' ').title()} Population"
+    title = f"{gw_event} - {population.replace('_', ' ').title()} population"
     ax.set_title(title, fontsize=fs_title, weight='bold', pad=15)
 
     # Add legend
     ax.legend(fontsize=fs_legend, loc='best', framealpha=0.9)
-
-    # Grid
-    ax.grid(True, alpha=0.3, linestyle='--', linewidth=0.5)
 
     # Set y-axis limits to [0, 1]
     ax.set_ylim([0, 1])
@@ -771,7 +781,7 @@ def debug_gw170817_bns_gaussian_chiEFT_threshold(
         return output_dir
 
     # Extract required parameters from filtered samples
-    required_params = ['chirp_mass', 'mass_ratio', 'lambda_tilde']
+    required_params = ['chirp_mass', 'mass_ratio', 'lambda_tilde', 'luminosity_distance']
     filtered_data = {}
 
     for param in required_params:
@@ -789,61 +799,29 @@ def debug_gw170817_bns_gaussian_chiEFT_threshold(
     # Create output directory
     os.makedirs(output_dir, exist_ok=True)
 
-    # Create scatter plots
+    # Create scatter plot
     param_labels = {
         'chirp_mass': r'$\mathcal{M}_c \, [M_\odot]$',
         'mass_ratio': r'$q$',
-        'lambda_tilde': r'$\tilde{\Lambda}$'
+        'lambda_tilde': r'$\tilde{\Lambda}$',
+        'luminosity_distance': r'$d_L \, [\mathrm{Mpc}]$'
     }
 
-    print(f"\nCreating scatter plots...")
+    print(f"\nCreating scatter plot...")
 
-    # Plot 1: chirp_mass vs mass_ratio
-    fig, ax = plt.subplots(figsize=(8, 6))
-    ax.scatter(filtered_data['chirp_mass'], filtered_data['mass_ratio'],
+    # Plot: chirp_mass vs luminosity_distance
+    _, ax = plt.subplots(figsize=(8, 6))
+    ax.scatter(filtered_data['chirp_mass'], filtered_data['luminosity_distance'],
                alpha=0.5, s=10, c='steelblue', edgecolors='none')
     ax.set_xlabel(param_labels['chirp_mass'], fontsize=fs_labels)
-    ax.set_ylabel(param_labels['mass_ratio'], fontsize=fs_labels)
+    ax.set_ylabel(param_labels['luminosity_distance'], fontsize=fs_labels)
     ax.set_title(f'GW170817 BNS Default (logL > {max_chiEFT_logL:.1f})',
                 fontsize=fs_title, weight='bold', pad=15)
-    ax.grid(True, alpha=0.3, linestyle='--', linewidth=0.5)
     plt.tight_layout()
 
-    output_path_1 = os.path.join(output_dir, "chirp_mass_vs_mass_ratio.pdf")
-    plt.savefig(output_path_1, bbox_inches='tight', dpi=300)
-    print(f"  Saved: {output_path_1}")
-    plt.close()
-
-    # Plot 2: chirp_mass vs lambda_tilde
-    fig, ax = plt.subplots(figsize=(8, 6))
-    ax.scatter(filtered_data['chirp_mass'], filtered_data['lambda_tilde'],
-               alpha=0.5, s=10, c='steelblue', edgecolors='none')
-    ax.set_xlabel(param_labels['chirp_mass'], fontsize=fs_labels)
-    ax.set_ylabel(param_labels['lambda_tilde'], fontsize=fs_labels)
-    ax.set_title(f'GW170817 BNS Default (logL > {max_chiEFT_logL:.1f})',
-                fontsize=fs_title, weight='bold', pad=15)
-    ax.grid(True, alpha=0.3, linestyle='--', linewidth=0.5)
-    plt.tight_layout()
-
-    output_path_2 = os.path.join(output_dir, "chirp_mass_vs_lambda_tilde.pdf")
-    plt.savefig(output_path_2, bbox_inches='tight', dpi=300)
-    print(f"  Saved: {output_path_2}")
-    plt.close()
-
-    # Plot 3: mass_ratio vs lambda_tilde
-    fig, ax = plt.subplots(figsize=(8, 6))
-    ax.scatter(filtered_data['mass_ratio'], filtered_data['lambda_tilde'],
-               alpha=0.5, s=10, c='steelblue', edgecolors='none')
-    ax.set_xlabel(param_labels['mass_ratio'], fontsize=fs_labels)
-    ax.set_ylabel(param_labels['lambda_tilde'], fontsize=fs_labels)
-    ax.set_title(f'GW170817 BNS Default (logL > {max_chiEFT_logL:.1f})',
-                fontsize=fs_title, weight='bold', pad=15)
-    ax.grid(True, alpha=0.3, linestyle='--', linewidth=0.5)
-    plt.tight_layout()
-
-    output_path_3 = os.path.join(output_dir, "mass_ratio_vs_lambda_tilde.pdf")
-    plt.savefig(output_path_3, bbox_inches='tight', dpi=300)
-    print(f"  Saved: {output_path_3}")
+    output_path = os.path.join(output_dir, "chirp_mass_vs_luminosity_distance.pdf")
+    plt.savefig(output_path, bbox_inches='tight', dpi=300)
+    print(f"  Saved: {output_path}")
     plt.close()
 
     print(f"\n{'='*80}")
@@ -851,6 +829,332 @@ def debug_gw170817_bns_gaussian_chiEFT_threshold(
     print(f"{'='*80}")
 
     return output_dir
+
+
+def plot_combined_log_likelihood(base_path: str = "../final_results/",
+                                  output_dir: str = "./figures/logL/",
+                                  eos_samples: List[str] = None,
+                                  include_default: bool = True,
+                                  bins: int = 50,
+                                  normalize: bool = True,
+                                  quantile_range: Tuple[float, float] = (0.00011, 0.9999),
+                                  title_fontsize: int = 22,
+                                  label_fontsize: int = 24,
+                                  legend_fontsize: int = 20,
+                                  verbose: bool = False) -> str:
+    """
+    Create a combined figure showing log likelihood distributions for three key events
+    stacked vertically: GW170817 (Gaussian BNS), GW190425 (Uniform BNS), GW230529 (Gaussian NSBH).
+
+    Args:
+        base_path (str): Base path to result files
+        output_dir (str): Output directory for figure
+        eos_samples (List[str]): EOS samples to include (default: radio, radio_chiEFT, radio_NICER)
+        include_default (bool): Include default uniform prior run
+        bins (int): Number of bins for histogram
+        normalize (bool): Normalize histograms to density
+        quantile_range (Tuple[float, float]): Quantile range for x-axis limits (default: (0.01, 0.99))
+        title_fontsize (int): Font size for subplot titles
+        label_fontsize (int): Font size for axis labels
+        legend_fontsize (int): Font size for legend
+        verbose (bool): Print verbose information
+
+    Returns:
+        str: Path to saved figure
+    """
+
+    if eos_samples is None:
+        eos_samples = ["radio", "radio_chiEFT", "radio_NICER"]
+
+    # Event configurations: (event_name, population, source_type, title)
+    event_configs = [
+        ("GW170817", "gaussian", "bns", "GW170817 - Gaussian population (BNS)"),
+        ("GW190425", "uniform", "bns", "GW190425 - Uniform population (BNS)"),
+        ("GW230529", "gaussian", "nsbh", "GW230529 - Gaussian population (NSBH)")
+    ]
+
+    print("Creating combined log likelihood plot for three events...")
+
+    # Create figure with 3 vertically stacked subplots
+    _, axes = plt.subplots(3, 1, figsize=(8, 12))
+
+    quantity = 'log_likelihood'
+
+    for idx, (gw_event, population, source_type, title) in enumerate(event_configs):
+        ax = axes[idx]
+
+        print(f"\nProcessing {gw_event} ({population} {source_type})...")
+
+        # Load log_likelihood data for each EOS sample
+        quantity_dict = {}
+
+        for eos_name in eos_samples:
+            result_path = construct_result_path(base_path, gw_event, population,
+                                              source_type, eos_name)
+
+            if verbose:
+                print(f"  Loading {eos_name} from: {result_path}")
+
+            if not os.path.exists(result_path):
+                print(f"  Warning: Result file not found: {result_path}")
+                continue
+
+            posterior = load_posterior_data(result_path, fast_mode=True)
+            if posterior is not None:
+                quantity_data = extract_quantity(posterior, quantity)
+                if quantity_data is not None:
+                    quantity_dict[eos_name] = quantity_data
+                    if verbose:
+                        print(f"    Loaded {len(quantity_dict[eos_name])} samples")
+                else:
+                    print(f"  Warning: Could not extract {quantity} for {eos_name}")
+            else:
+                print(f"  Warning: Could not load posterior for {eos_name}")
+
+        # Load default run if requested
+        default_quantity = None
+        if include_default:
+            default_path = construct_result_path(base_path, gw_event, source_type,
+                                               "default", "radio")
+
+            if verbose:
+                print(f"  Loading default run from: {default_path}")
+
+            if os.path.exists(default_path):
+                default_posterior = load_posterior_data(default_path, fast_mode=True)
+                if default_posterior is not None:
+                    default_quantity = extract_quantity(default_posterior, quantity)
+                    if default_quantity is not None and verbose:
+                        print(f"    Loaded {len(default_quantity)} samples")
+                    elif default_quantity is None:
+                        print(f"  Warning: Could not extract {quantity} from default run")
+            else:
+                print(f"  Warning: Default run file not found: {default_path}")
+
+        # Determine range for histograms based on quantiles
+        if quantity_dict:
+            all_data = np.concatenate([data for data in quantity_dict.values()])
+            if default_quantity is not None:
+                all_data = np.concatenate([all_data, default_quantity])
+
+            # Use quantiles to exclude outliers
+            data_min = np.quantile(all_data, quantile_range[0])
+            data_max = np.quantile(all_data, quantile_range[1])
+            data_range = (data_min, data_max)
+
+            if verbose:
+                print(f"  Data range (quantiles {quantile_range[0]:.2f}-{quantile_range[1]:.2f}): [{data_min:.2f}, {data_max:.2f}]")
+
+            # Plot default run first (so it appears behind)
+            if default_quantity is not None:
+                ax.hist(default_quantity, bins=bins, range=data_range, alpha=1.0,
+                       color=DEFAULT_RUN_COLOR, label=DEFAULT_RUN_LABEL,
+                       density=normalize, histtype='step', linewidth=2.0)
+
+            # Plot EOS runs
+            for eos_name, data in quantity_dict.items():
+                color = EOS_COLORS.get(eos_name, 'black')
+                label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
+
+                ax.hist(data, bins=bins, range=data_range, alpha=1.0,
+                       color=color, label=label, density=normalize,
+                       histtype='step', linewidth=2.0)
+        else:
+            print(f"  Warning: No data loaded for {gw_event}")
+
+        # Formatting
+        ax.set_title(title, fontsize=title_fontsize, weight='bold', pad=15)
+
+        # Only show x-label on bottom subplot
+        if idx == 2:
+            ax.set_xlabel(r'$\log p(d | \boldsymbol{\theta}, \mathcal{H})$', fontsize=label_fontsize)
+
+        # Y-label for all subplots
+        if normalize:
+            ax.set_ylabel(r'Probability Density', fontsize=label_fontsize)
+        else:
+            ax.set_ylabel(r'Count', fontsize=label_fontsize)
+
+        # Add legend only to top subplot
+        if idx == 0:
+            ax.legend(fontsize=legend_fontsize, loc='best', framealpha=0.9)
+
+    # Ensure output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Save figure
+    output_filename = f"combined_log_likelihood_three_events.pdf"
+    output_path = os.path.join(output_dir, output_filename)
+
+    plt.tight_layout()
+    plt.savefig(output_path, bbox_inches='tight', dpi=300)
+    print(f"\nSaved combined figure to: {output_path}")
+    plt.close()
+
+    return output_path
+
+
+def plot_combined_log_posterior(base_path: str = "../final_results/",
+                                 output_dir: str = "./figures/logPosterior/",
+                                 eos_samples: List[str] = None,
+                                 include_default: bool = True,
+                                 bins: int = 50,
+                                 normalize: bool = True,
+                                 quantile_range: Tuple[float, float] = (0.01, 0.99),
+                                 title_fontsize: int = 22,
+                                 label_fontsize: int = 24,
+                                 legend_fontsize: int = 18,
+                                 verbose: bool = False) -> str:
+    """
+    Create a combined figure showing log posterior distributions for three key events
+    stacked vertically: GW170817 (Gaussian BNS), GW190425 (Uniform BNS), GW230529 (Gaussian NSBH).
+
+    Args:
+        base_path (str): Base path to result files
+        output_dir (str): Output directory for figure
+        eos_samples (List[str]): EOS samples to include (default: radio, radio_chiEFT, radio_NICER)
+        include_default (bool): Include default uniform prior run
+        bins (int): Number of bins for histogram
+        normalize (bool): Normalize histograms to density
+        quantile_range (Tuple[float, float]): Quantile range for x-axis limits (default: (0.01, 0.99))
+        title_fontsize (int): Font size for subplot titles
+        label_fontsize (int): Font size for axis labels
+        legend_fontsize (int): Font size for legend
+        verbose (bool): Print verbose information
+
+    Returns:
+        str: Path to saved figure
+    """
+
+    if eos_samples is None:
+        eos_samples = ["radio", "radio_chiEFT", "radio_NICER"]
+
+    # Event configurations: (event_name, population, source_type, title)
+    event_configs = [
+        ("GW170817", "gaussian", "bns", "GW170817 - Gaussian population (BNS)"),
+        ("GW190425", "uniform", "bns", "GW190425 - Uniform population (BNS)"),
+        ("GW230529", "gaussian", "nsbh", "GW230529 - Gaussian population (NSBH)")
+    ]
+
+    print("Creating combined log posterior plot for three events...")
+
+    # Create figure with 3 vertically stacked subplots
+    _, axes = plt.subplots(3, 1, figsize=(8, 14))
+
+    quantity = 'log_posterior'
+
+    for idx, (gw_event, population, source_type, title) in enumerate(event_configs):
+        ax = axes[idx]
+
+        print(f"\nProcessing {gw_event} ({population} {source_type})...")
+
+        # Load log_posterior data for each EOS sample
+        quantity_dict = {}
+
+        for eos_name in eos_samples:
+            result_path = construct_result_path(base_path, gw_event, population,
+                                              source_type, eos_name)
+
+            if verbose:
+                print(f"  Loading {eos_name} from: {result_path}")
+
+            if not os.path.exists(result_path):
+                print(f"  Warning: Result file not found: {result_path}")
+                continue
+
+            posterior = load_posterior_data(result_path, fast_mode=True)
+            if posterior is not None:
+                quantity_data = extract_quantity(posterior, quantity)
+                if quantity_data is not None:
+                    quantity_dict[eos_name] = quantity_data
+                    if verbose:
+                        print(f"    Loaded {len(quantity_dict[eos_name])} samples")
+                else:
+                    print(f"  Warning: Could not extract {quantity} for {eos_name}")
+            else:
+                print(f"  Warning: Could not load posterior for {eos_name}")
+
+        # Load default run if requested
+        default_quantity = None
+        if include_default:
+            default_path = construct_result_path(base_path, gw_event, source_type,
+                                               "default", "radio")
+
+            if verbose:
+                print(f"  Loading default run from: {default_path}")
+
+            if os.path.exists(default_path):
+                default_posterior = load_posterior_data(default_path, fast_mode=True)
+                if default_posterior is not None:
+                    default_quantity = extract_quantity(default_posterior, quantity)
+                    if default_quantity is not None and verbose:
+                        print(f"    Loaded {len(default_quantity)} samples")
+                    elif default_quantity is None:
+                        print(f"  Warning: Could not extract {quantity} from default run")
+            else:
+                print(f"  Warning: Default run file not found: {default_path}")
+
+        # Determine range for histograms based on quantiles
+        if quantity_dict:
+            all_data = np.concatenate([data for data in quantity_dict.values()])
+            if default_quantity is not None:
+                all_data = np.concatenate([all_data, default_quantity])
+
+            # Use quantiles to exclude outliers
+            data_min = np.quantile(all_data, quantile_range[0])
+            data_max = np.quantile(all_data, quantile_range[1])
+            data_range = (data_min, data_max)
+
+            if verbose:
+                print(f"  Data range (quantiles {quantile_range[0]:.2f}-{quantile_range[1]:.2f}): [{data_min:.2f}, {data_max:.2f}]")
+
+            # Plot default run first (so it appears behind)
+            if default_quantity is not None:
+                ax.hist(default_quantity, bins=bins, range=data_range, alpha=1.0,
+                       color=DEFAULT_RUN_COLOR, label=DEFAULT_RUN_LABEL,
+                       density=normalize, histtype='step', linewidth=2.0)
+
+            # Plot EOS runs
+            for eos_name, data in quantity_dict.items():
+                color = EOS_COLORS.get(eos_name, 'black')
+                label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
+
+                ax.hist(data, bins=bins, range=data_range, alpha=1.0,
+                       color=color, label=label, density=normalize,
+                       histtype='step', linewidth=2.0)
+        else:
+            print(f"  Warning: No data loaded for {gw_event}")
+
+        # Formatting
+        ax.set_title(title, fontsize=title_fontsize, weight='bold', pad=15)
+
+        # Only show x-label on bottom subplot
+        if idx == 2:
+            ax.set_xlabel(r'$p(\boldsymbol{\theta} | d, \mathcal{H})$', fontsize=label_fontsize)
+
+        # Y-label for all subplots
+        if normalize:
+            ax.set_ylabel(r'Probability Density', fontsize=label_fontsize)
+        else:
+            ax.set_ylabel(r'Count', fontsize=label_fontsize)
+
+        # Add legend only to top subplot
+        if idx == 0:
+            ax.legend(fontsize=legend_fontsize, loc='best', framealpha=0.9)
+
+    # Ensure output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Save figure
+    output_filename = f"combined_log_posterior_three_events.pdf"
+    output_path = os.path.join(output_dir, output_filename)
+
+    plt.tight_layout()
+    plt.savefig(output_path, bbox_inches='tight', dpi=300)
+    print(f"\nSaved combined figure to: {output_path}")
+    plt.close()
+
+    return output_path
 
 
 def plot_all_quantities_for_event(gw_event: str,
@@ -867,14 +1171,14 @@ def plot_all_quantities_for_event(gw_event: str,
         gw_event (str): GW event name
         population (str): Population type
         source_type (str): Source type
-        quantities (List[str]): List of quantities to plot (default: log_likelihood, log_prior, network_snr, detector SNRs)
+        quantities (List[str]): List of quantities to plot (default: log_likelihood, log_prior, log_posterior, network_snr, detector SNRs)
         eos_samples (List[str]): EOS samples to include
         include_default (bool): Include default run
         verbose (bool): Print verbose information
     """
     if quantities is None:
         # Default: plot all available quantities
-        quantities = ['log_likelihood', 'log_prior', 'network_snr', 'H1_snr', 'L1_snr', 'V1_snr']
+        quantities = ['log_likelihood', 'log_prior', 'log_posterior', 'network_snr'] # , 'H1_snr', 'L1_snr', 'V1_snr'
 
     if eos_samples is None:
         eos_samples = ["radio", "radio_chiEFT", "radio_NICER"]
@@ -899,36 +1203,46 @@ def plot_all_quantities_for_event(gw_event: str,
 
 def main():
     """Main function to generate all log-likelihood histograms and CDFs."""
-    print("Generating log-likelihood histograms for all events...\n")
-    plot_all_events_logL_histograms(verbose=True)
-    print("\nAll log-likelihood histograms generated successfully!")
+    # print("Generating log-likelihood histograms for all events...\n")
+    # plot_all_events_logL_histograms(verbose=True)
+    # print("\nAll log-likelihood histograms generated successfully!")
 
-    print("\n" + "="*80)
-    print("Generating log-likelihood CDFs for all events...\n")
-    plot_all_events_logL_cdfs(verbose=True)
-    print("\nAll log-likelihood CDFs generated successfully!")
+    # print("\n" + "="*80)
+    # print("Generating log-likelihood CDFs for all events...\n")
+    # plot_all_events_logL_cdfs(verbose=True)
+    # print("\nAll log-likelihood CDFs generated successfully!")
 
-    print("\n" + "="*80)
-    print("Generating all quantities (log_prior, SNRs) for all events...\n")
+    # print("\n" + "="*80)
+    # print("Generating all quantities (log_prior, SNRs) for all events...\n")
 
-    # GW170817 - BNS
-    for population in ["gaussian", "double_gaussian"]:
-        plot_all_quantities_for_event("GW170817", population, "bns", verbose=True)
+    # # GW170817 - BNS
+    # for population in ["gaussian", "double_gaussian"]:
+    #     plot_all_quantities_for_event("GW170817", population, "bns", verbose=True)
 
-    # GW190425 - BNS
-    for population in ["uniform", "double_gaussian"]:
-        plot_all_quantities_for_event("GW190425", population, "bns", verbose=True)
+    # # GW190425 - BNS
+    # for population in ["uniform", "double_gaussian"]:
+    #     plot_all_quantities_for_event("GW190425", population, "bns", verbose=True)
 
-    # GW230529 - NSBH
-    for population in ["gaussian", "uniform", "double_gaussian"]:
-        plot_all_quantities_for_event("GW230529", population, "nsbh", verbose=True)
+    # # GW230529 - NSBH
+    # for population in ["gaussian", "uniform", "double_gaussian"]:
+    #     plot_all_quantities_for_event("GW230529", population, "nsbh", verbose=True)
 
     print("\nAll quantity histograms generated successfully!")
 
     print("\n" + "="*80)
-    print("Running debug analysis for GW170817 BNS Gaussian...\n")
-    debug_gw170817_bns_gaussian_chiEFT_threshold(verbose=True)
-    print("\nDebug analysis completed!")
+    print("Generating combined log likelihood plot for three key events...\n")
+    plot_combined_log_likelihood(verbose=True)
+    print("\nCombined log likelihood plot generated successfully!")
+
+    print("\n" + "="*80)
+    print("Generating combined log posterior plot for three key events...\n")
+    plot_combined_log_posterior(verbose=True)
+    print("\nCombined log posterior plot generated successfully!")
+
+    # print("\n" + "="*80)
+    # print("Running debug analysis for GW170817 BNS Gaussian...\n")
+    # debug_gw170817_bns_gaussian_chiEFT_threshold(verbose=True)
+    # print("\nDebug analysis completed!")
 
 
 if __name__ == "__main__":

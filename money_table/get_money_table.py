@@ -22,13 +22,22 @@ POPULATION_TYPES = ["uniform", "gaussian", "double_gaussian", "GW170817", "GW190
 SOURCE_TYPES = ["bns", "nsbh"]
 EOS_SAMPLES_NAMES = ["radio", "radio_chiEFT", "radio_NICER", "radio_GW170817", "radio_chiEFT_NICER"]
 
+# Table configuration
+ADD_SOURCE_FRAME_CHIRP_MASS = False  # Whether to include source-frame chirp mass in LaTeX table
+
 # Parameters of interest - guaranteed to exist in HDF5 files
+# Conditionally include chirp_mass_source based on ADD_SOURCE_FRAME_CHIRP_MASS
 MONEY_PARAMETERS = [
-    "mass_1_source", "mass_2_source", "mass_ratio", 
+    "mass_1_source", "mass_2_source"
+]
+if ADD_SOURCE_FRAME_CHIRP_MASS:
+    MONEY_PARAMETERS.append("chirp_mass_source")
+MONEY_PARAMETERS.extend([
+    "mass_ratio",
     # "chi_eff", "chi_p",
     "lambda_1", "lambda_2", "lambda_tilde", "delta_lambda_tilde",
     "luminosity_distance"
-]
+])
 
 # Display name mappings
 POPULATION_DISPLAY = {
@@ -49,6 +58,7 @@ EOS_DISPLAY = {
 PARAMETER_DISPLAY = {
     "mass_1_source": "$m_1^{\\mathrm{src}}$ [$M_\\odot$]",
     "mass_2_source": "$m_2^{\\mathrm{src}}$ [$M_\\odot$]",
+    "chirp_mass_source": "$\\mathcal{M}^{\\mathrm{src}}$ [$M_\\odot$]",
     "mass_ratio": "$q$",
     "chi_eff": "$\\chi_{\\rm{eff}}$",
     "chi_p": "$\\chi_{p}$",
@@ -389,7 +399,7 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                     high_diff = summary["high_diff"]
                     
                     # Format based on parameter type
-                    if param in ["mass_1_source", "mass_2_source"]:
+                    if param in ["mass_1_source", "mass_2_source", "chirp_mass_source"]:
                         param_cells.append(f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$")
                     elif param == "luminosity_distance":
                         param_cells.append(f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$")
@@ -411,15 +421,22 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
         # Handle regular populations (excluding default)
         for pop in [p for p in populations_to_include if p != "default"]:
             pop_first = True
-            
+
             # Count rows for this population
             pop_rows = sum(1 for eos in eos_to_process
-                          if any(has_parameter_data(data, source, pop, eos, event, param) 
+                          if any(has_parameter_data(data, source, pop, eos, event, param)
                                 for param in MONEY_PARAMETERS))
-            
+
             if pop_rows == 0:
                 continue
-            
+
+            # Check if ANY eos in this population is the best run (for multirow bold formatting)
+            pop_contains_best_run = any(
+                (pop == best_pop and eos == best_eos)
+                for eos in eos_to_process
+                if any(has_parameter_data(data, source, pop, eos, event, param) for param in MONEY_PARAMETERS)
+            )
+
             for eos in eos_to_process:
                 # Check if this configuration has any data
                 if not any(has_parameter_data(data, source, pop, eos, event, param) 
@@ -428,16 +445,30 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                 
                 # Check if this is the highest evidence run
                 is_best_run = (pop == best_pop and eos == best_eos)
-                
+
                 # Format cells (no source column)
                 event_cell = f"\\multirow{{{event_rows}}}{{*}}{{\\shortstack{{{event}\\\\({source.upper()})}}}}" if event_first else ""
-                
-                # Apply bold formatting for highest evidence run
-                if is_best_run:
-                    pop_cell = f"\\multirow{{{pop_rows}}}{{*}}{{\\textbf{{{POPULATION_DISPLAY[pop]}}}}}" if pop_first else ""
-                    eos_cell = f"\\textbf{{{EOS_DISPLAY[eos]}}}"
+
+                # Apply bold formatting for population if it contains the best run
+                if pop_first:
+                    if pop_contains_best_run:
+                        pop_cell = f"\\multirow{{{pop_rows}}}{{*}}{{\\textbf{{{POPULATION_DISPLAY[pop]}}}}}"
+                    else:
+                        pop_cell = f"\\multirow{{{pop_rows}}}{{*}}{{{POPULATION_DISPLAY[pop]}}}"
                 else:
-                    pop_cell = f"\\multirow{{{pop_rows}}}{{*}}{{{POPULATION_DISPLAY[pop]}}}" if pop_first else ""
+                    pop_cell = ""
+
+                # Apply bold formatting for EOS if this specific row is the best run
+                if is_best_run:
+                    # Handle math mode symbols specially (need \boldsymbol instead of \textbf)
+                    eos_display = EOS_DISPLAY[eos]
+                    if "\\chi" in eos_display:
+                        # Replace \chiEFT with \boldsymbol{\chiEFT} for math mode bold
+                        eos_display_bold = eos_display.replace("\\chiEFT", "\\boldsymbol{\\chiEFT}")
+                        eos_cell = f"\\textbf{{{eos_display_bold}}}"
+                    else:
+                        eos_cell = f"\\textbf{{{eos_display}}}"
+                else:
                     eos_cell = EOS_DISPLAY[eos]
                 
                 # Parameter value cells
@@ -450,7 +481,7 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                         high_diff = summary["high_diff"]
                         
                         # Format based on parameter type
-                        if param in ["mass_1_source", "mass_2_source"]:
+                        if param in ["mass_1_source", "mass_2_source", "chirp_mass_source"]:
                             value_str = f"${median:.2f}_{{-{low_diff:.2f}}}^{{+{high_diff:.2f}}}$"
                         elif param == "luminosity_distance":
                             value_str = f"${median:.0f}_{{-{low_diff:.0f}}}^{{+{high_diff:.0f}}}$"
