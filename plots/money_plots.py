@@ -21,6 +21,12 @@ from utils import (
     calculate_corner_plot_ranges, handle_nsbh_lambda_plotting
 )
 
+# DEBUG plot specific parameter labels
+DEBUG_PARAMETER_LATEX_LABELS = {
+    'chirp_mass_source': r'$\mathcal{M}_c^{\rm{src}}$ $M_{\odot}$',
+    'redshift': r'$z$',
+}
+
 # Font size
 fs_ticks = 20
 fs_labels = 24
@@ -1590,9 +1596,11 @@ def plot_debug_corner(gw_event: str,
             print(f"Dummy dataset shape: {dummy_dataset.shape}")
 
     # Filter constant parameters
+    # Merge PARAMETER_LATEX_LABELS with DEBUG_PARAMETER_LATEX_LABELS (DEBUG takes priority)
+    merged_labels = {**PARAMETER_LATEX_LABELS, **DEBUG_PARAMETER_LATEX_LABELS}
     labels, latex_labels, samples_dict = filter_constant_parameters(
         params_to_plot,
-        [PARAMETER_LATEX_LABELS.get(p, p) for p in params_to_plot],
+        [merged_labels.get(p, p) for p in params_to_plot],
         samples_dict
     )
 

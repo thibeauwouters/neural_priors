@@ -41,12 +41,13 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
     Collect Bayes factors organized in source-first structure.
     Directory structure: {event}/{source}/{population}/{eos} with special case {event}/{source}/default/
     Files are now HDF5 format instead of JSON.
-    
+
     Returns:
         Dict with structure: source -> population -> eos -> {event: bayes_factor}
         Plus 'log_evidence_errors' key with list of errors
+        Plus 'defaults' key with structure: source -> {event: bayes_factor}
     """
-    data = {"log_evidence_errors": []}
+    data = {"log_evidence_errors": [], "defaults": {"bns": {}, "nsbh": {}}}
     
     if not os.path.exists(base_dir):
         print(f"Base directory {base_dir} does not exist")
@@ -81,12 +82,10 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
             print(f"  Processing source: {source}")
             
             # Check for default directory first
-            default_path = os.path.join(source_path, "default")
+            default_path = os.path.join(source_path, "default", "outdir", "final_result")
             if os.path.exists(default_path):
                 print(f"    Processing default configuration")
-                # For default, we'll use the first population type as placeholder
-                default_pop = "uniform"  # or whatever makes sense for your default
-                
+
                 # Look for HDF5 result files in default directory
                 for filename in os.listdir(default_path):
                     if filename.endswith("_result.h5") or filename.endswith(".h5"):
@@ -95,7 +94,7 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
                             with h5py.File(result_file, 'r') as f:
                                 # Debug: print available keys in the HDF5 file
                                 print(f"      Available keys in {filename}: {list(f.keys())}")
-                                
+
                                 # Try common HDF5 key names for Bayes factor
                                 bf_val = 0.0
                                 found_key = None
@@ -104,26 +103,25 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
                                         bf_val = float(f[key][()])
                                         found_key = key
                                         break
-                                
+
                                 if found_key:
                                     print(f"      Found Bayes factor in key '{found_key}': {bf_val:.2f}")
                                 else:
                                     print(f"      No Bayes factor key found in {filename}")
-                                
-                                # Store in default population and first EOS
-                                default_eos = eos_to_process[0] if eos_to_process else "radio"
-                                data[source][default_pop][default_eos][event] = bf_val
-                                
+
+                                # Store in defaults structure
+                                data["defaults"][source][event] = bf_val
+
                                 # Collect log evidence errors
                                 log_err = None
                                 for err_key in ['log_evidence_err', 'logZ_err', 'log_evidence_error', 'ln_evidence_err']:
                                     if err_key in f:
                                         log_err = float(f[err_key][()])
                                         break
-                                
+
                                 if log_err is not None:
                                     data["log_evidence_errors"].append(log_err)
-                                
+
                         except (OSError, KeyError, ValueError) as e:
                             print(f"      Error reading {result_file}: {e}")
             
@@ -199,11 +197,21 @@ def get_jeffreys_color(log10_bf: float) -> str:
         return "jeffreysred5"
 
 
-def find_column_maxima(data: Dict[str, Any], ignore_gw170817_eos: bool = False) -> Dict[str, float]:
+def find_column_maxima(data: Dict[str, Any], ignore_gw170817_eos: bool = False, include_defaults: bool = False) -> Dict[str, float]:
     """Find maximum Bayes factor value for each event column."""
     maxima = {event: float('-inf') for event in GW_EVENTS}
     eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
-    
+
+    # Check defaults if requested
+    if include_defaults and "defaults" in data:
+        for source in SOURCE_TYPES:
+            if source in data["defaults"]:
+                for event in GW_EVENTS:
+                    if event in data["defaults"][source]:
+                        val = data["defaults"][source][event]
+                        if isinstance(val, (int, float)) and val != 0.0:
+                            maxima[event] = max(maxima[event], val)
+
     for source in SOURCE_TYPES:
         for pop in POPULATION_TYPES:
             for eos in eos_to_process:
@@ -213,16 +221,16 @@ def find_column_maxima(data: Dict[str, Any], ignore_gw170817_eos: bool = False) 
                             val = data[source][pop][eos][event]
                             if isinstance(val, (int, float)) and val != 0.0:
                                 maxima[event] = max(maxima[event], val)
-    
+
     return maxima
 
 
-def generate_latex_table(data: Dict[str, Any], replace_nsbh_zeros: bool = True, ignore_gw170817_eos: bool = False) -> str:
+def generate_latex_table(data: Dict[str, Any], replace_nsbh_zeros: bool = True, ignore_gw170817_eos: bool = False, add_default: bool = False) -> str:
     """Generate LaTeX table with source-first organization."""
     lines = []
-    maxima = find_column_maxima(data, ignore_gw170817_eos)
+    maxima = find_column_maxima(data, ignore_gw170817_eos, include_defaults=add_default)
     eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
-    
+
     # Table header
     lines.extend([
         "\\begin{tabular}{|l|l|l|c|c|c|}",
@@ -230,6 +238,42 @@ def generate_latex_table(data: Dict[str, Any], replace_nsbh_zeros: bool = True, 
         "\\textbf{Source} & \\textbf{Population} & \\textbf{EOS Constraints} & \\textbf{GW170817} & \\textbf{GW190425} & \\textbf{GW230529} \\\\",
         "\\hline\\hline"
     ])
+
+    # Add default runs if requested
+    if add_default and "defaults" in data:
+        for source in SOURCE_TYPES:
+            if source in data["defaults"] and data["defaults"][source]:
+                # Create multicolumn cell spanning first 3 columns
+                source_label = f"{source.upper()} (Default/Agnostic)"
+
+                # Event value cells for defaults
+                event_cells = []
+                for event in GW_EVENTS:
+                    val = data["defaults"][source].get(event, 0.0)
+
+                    if replace_nsbh_zeros and event == "GW170817" and source == "nsbh" and val == 0.0:
+                        event_cells.append("\\cellcolor{jeffreysred5}$<-200$")
+                    elif val != 0.0:
+                        max_val = maxima[event]
+                        if max_val != float('-inf'):
+                            diff = val - max_val
+                            if abs(diff) < 1e-10:  # Essentially zero difference
+                                event_cells.append("\\textbf{ref.}")
+                            else:
+                                color = get_jeffreys_color(diff)
+                                event_cells.append(f"\\cellcolor{{{color}}}${diff:+.2f}$")
+                        else:
+                            event_cells.append(f"${val:.2f}$")
+                    else:
+                        event_cells.append("--")
+
+                lines.append(f"\\multicolumn{{3}}{{|c|}}{{{source_label}}} & {' & '.join(event_cells)} \\\\")
+                lines.append("\\hline")
+
+        # Add extra separation line before regular results
+        if any(data["defaults"][source] for source in SOURCE_TYPES if source in data["defaults"]):
+            lines.append("\\hline")
+
     
     # Generate table rows
     for source in SOURCE_TYPES:
@@ -317,7 +361,22 @@ def convert_to_log10(data: Dict[str, Any], ignore_gw170817_eos: bool = False) ->
     """Convert Bayes factors from natural log to log10."""
     converted = {"log_evidence_errors": [err / np.log(10) for err in data["log_evidence_errors"]]}
     eos_to_process = [eos for eos in EOS_SAMPLES_NAMES if not (ignore_gw170817_eos and "GW170817" in eos)]
-    
+
+    # Convert defaults if present
+    if "defaults" in data:
+        converted["defaults"] = {}
+        for source in SOURCE_TYPES:
+            if source in data["defaults"]:
+                converted["defaults"][source] = {}
+                for event in GW_EVENTS:
+                    val = data["defaults"][source].get(event, 0.0)
+                    if isinstance(val, str):  # Keep strings like "<-200"
+                        converted["defaults"][source][event] = val
+                    elif val != 0.0:
+                        converted["defaults"][source][event] = val / np.log(10)
+                    else:
+                        converted["defaults"][source][event] = val
+
     for source in SOURCE_TYPES:
         converted[source] = {}
         for pop in POPULATION_TYPES:
@@ -332,14 +391,14 @@ def convert_to_log10(data: Dict[str, Any], ignore_gw170817_eos: bool = False) ->
                         converted[source][pop][eos][event] = val / np.log(10)
                     else:
                         converted[source][pop][eos][event] = val
-    
+
     return converted
 
 
 def main():
     """Main function to collect Bayes factors and generate LaTeX table."""
     parser = argparse.ArgumentParser(description="Collect Bayes factors (source-first approach)")
-    parser.add_argument('--get-JSON', action='store_true', 
+    parser.add_argument('--get-JSON', action='store_true',
                         help='Generate JSON file with Bayes factors')
     parser.add_argument('--make-table', action='store_true', default=True,
                         help='Generate LaTeX table (default: True)')
@@ -351,7 +410,9 @@ def main():
                         help='Replace GW170817 NSBH zeros with "<-200" (default: True)')
     parser.add_argument('--ignore-GW170817', action='store_true', default=True,
                         help='Ignore EOS constraints that include GW170817 data')
-    
+    parser.add_argument('--add-default', action='store_true', default=False,
+                        help='Add default (agnostic prior) runs to the LaTeX table')
+
     args = parser.parse_args()
     
     # base_dir = "../GW_runs/" # This is on Nikhef, for the relative binning runs (first few runs)
@@ -393,8 +454,8 @@ def main():
                 print(f"Mean log evidence error (log10): {mean_err:.4f}")
         
         print(f"Generating LaTeX table: {latex_file}")
-        table = generate_latex_table(data, args.replace_nsbh_zeros, getattr(args, 'ignore_GW170817', False))
-        
+        table = generate_latex_table(data, args.replace_nsbh_zeros, getattr(args, 'ignore_GW170817', False), add_default=args.add_default)
+
         with open(latex_file, 'w') as f:
             f.write(table)
         
