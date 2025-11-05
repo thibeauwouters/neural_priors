@@ -26,10 +26,11 @@ from plots.utils import (
 )
 
 # Font sizes (customize here for all plots)
-fs_ticks = 20
-fs_labels = 24
-fs_legend = 18
-fs_title = 26
+fs_ticks = 18
+fs_labels = 22
+fs_legend = 16
+fs_title = 20
+title_pad = 10  # Padding between title and figure
 
 # Matplotlib style parameters
 params = {
