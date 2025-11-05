@@ -15,6 +15,8 @@ import shutil
 import numpy as np
 from typing import Dict, Any
 
+VERBOSE = False
+
 # Configuration constants
 GW_EVENTS = ["GW170817", "GW190425", "GW230529"]
 POPULATION_TYPES = ["uniform", "gaussian", "double_gaussian", "GW170817", "GW190425", "GW230529"]
@@ -50,7 +52,8 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
     data = {"log_evidence_errors": [], "defaults": {"bns": {}, "nsbh": {}}}
     
     if not os.path.exists(base_dir):
-        print(f"Base directory {base_dir} does not exist")
+        if VERBOSE:
+            print(f"Base directory {base_dir} does not exist")
         return data
     
     # Filter EOS samples if ignoring GW170817 constraints
@@ -71,7 +74,8 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
             print(f"Event directory {event_path} does not exist, skipping")
             continue
             
-        print(f"Processing event: {event}")
+        if VERBOSE:
+            print(f"Processing event: {event}")
         
         for source in SOURCE_TYPES:
             source_path = os.path.join(event_path, source)
@@ -79,21 +83,28 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
                 print(f"  Source directory {source_path} does not exist, skipping")
                 continue
                 
-            print(f"  Processing source: {source}")
+            if VERBOSE:
+                print(f"  Processing source: {source}")
             
             # Check for default directory first
             default_path = os.path.join(source_path, "default", "outdir", "final_result")
+            print("default_path")
+            print(default_path)
             if os.path.exists(default_path):
-                print(f"    Processing default configuration")
+                if VERBOSE:
+                    print(f"    Processing default configuration")
 
                 # Look for HDF5 result files in default directory
                 for filename in os.listdir(default_path):
-                    if filename.endswith("_result.h5") or filename.endswith(".h5"):
+                    print("filename")
+                    print(filename)
+                    if filename.endswith(".h5") or filename.endswith(".hdf5"):
                         result_file = os.path.join(default_path, filename)
                         try:
                             with h5py.File(result_file, 'r') as f:
                                 # Debug: print available keys in the HDF5 file
-                                print(f"      Available keys in {filename}: {list(f.keys())}")
+                                if VERBOSE:
+                                    print(f"      Available keys in {filename}: {list(f.keys())}")
 
                                 # Try common HDF5 key names for Bayes factor
                                 bf_val = 0.0
@@ -105,9 +116,11 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
                                         break
 
                                 if found_key:
-                                    print(f"      Found Bayes factor in key '{found_key}': {bf_val:.2f}")
+                                    if VERBOSE:
+                                        print(f"      Found Bayes factor in key '{found_key}': {bf_val:.2f}")
                                 else:
-                                    print(f"      No Bayes factor key found in {filename}")
+                                    if VERBOSE:
+                                        print(f"      No Bayes factor key found in {filename}")
 
                                 # Store in defaults structure
                                 data["defaults"][source][event] = bf_val
@@ -131,14 +144,16 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
                 if not os.path.exists(pop_path):
                     continue
                     
-                print(f"    Processing population: {pop}")
+                if VERBOSE:
+                    print(f"    Processing population: {pop}")
                 
                 for eos in eos_to_process:
                     eos_path = os.path.join(pop_path, eos)
                     if not os.path.exists(eos_path):
                         continue
-                        
-                    print(f"      Processing EOS: {eos}")
+                    
+                    if VERBOSE:    
+                        print(f"      Processing EOS: {eos}")
                     
                     # Look for HDF5 result files in this directory
                     eos_path = os.path.join(eos_path, "outdir/result/")
@@ -148,7 +163,8 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
                             try:
                                 with h5py.File(result_file, 'r') as f:
                                     # Debug: print available keys in the HDF5 file
-                                    print(f"        Available keys in {filename}: {list(f.keys())}")
+                                    if VERBOSE:
+                                        print(f"        Available keys in {filename}: {list(f.keys())}")
                                     
                                     # Try common HDF5 key names for Bayes factor
                                     bf_val = 0.0
@@ -160,9 +176,11 @@ def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw1
                                             break
                                     
                                     if found_key:
-                                        print(f"        Found Bayes factor in key '{found_key}': {bf_val:.2f}")
+                                        if VERBOSE:
+                                            print(f"        Found Bayes factor in key '{found_key}': {bf_val:.2f}")
                                     else:
-                                        print(f"        No Bayes factor key found in {filename}")
+                                        if VERBOSE:
+                                            print(f"        No Bayes factor key found in {filename}")
                                     
                                     data[source][pop][eos][event] = bf_val
                                     
