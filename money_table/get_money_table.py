@@ -49,10 +49,10 @@ POPULATION_DISPLAY = {
 
 EOS_DISPLAY = {
     "radio": "Radio",
-    "radio_chiEFT": "+\\chiEFT",
+    "radio_chiEFT": "+$\\chi_{\\rm{EFT}}$",
     "radio_NICER": "+NICER",
     "radio_GW170817": "+GW170817",
-    "radio_chiEFT_NICER": "+\\chiEFT+NICER"
+    "radio_chiEFT_NICER": "+$\\chi_{\\rm{EFT}}$+NICER"
 }
 
 PARAMETER_DISPLAY = {
@@ -463,8 +463,8 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                     # Handle math mode symbols specially (need \boldsymbol instead of \textbf)
                     eos_display = EOS_DISPLAY[eos]
                     if "\\chi" in eos_display:
-                        # Replace \chiEFT with \boldsymbol{\chiEFT} for math mode bold
-                        eos_display_bold = eos_display.replace("\\chiEFT", "\\boldsymbol{\\chiEFT}")
+                        # Replace $\chi_{\rm{EFT}}$ with $\boldsymbol{\chi}_{\rm{EFT}}$ for math mode bold
+                        eos_display_bold = eos_display.replace("$\\chi_{\\rm{EFT}}$", "$\\boldsymbol{\\chi}_{\\rm{EFT}}$")
                         eos_cell = f"\\textbf{{{eos_display_bold}}}"
                     else:
                         eos_cell = f"\\textbf{{{eos_display}}}"

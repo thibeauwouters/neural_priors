@@ -170,6 +170,7 @@ def plot_quantity_histogram(gw_event: str,
                             alpha: float = 0.6,
                             normalize: bool = True,
                             show_stats: bool = True,
+                            quantile_range: Tuple[float, float] = (0.00011, 0.9999),
                             verbose: bool = False) -> str:
     """
     Create histogram of any quantity for a GW event with fixed population
@@ -188,6 +189,7 @@ def plot_quantity_histogram(gw_event: str,
         alpha (float): Transparency for histogram bars (0-1)
         normalize (bool): Normalize histograms to density
         show_stats (bool): Print summary statistics
+        quantile_range (Tuple[float, float]): Quantile range for x-axis limits (default: (0.00011, 0.9999))
         verbose (bool): Print verbose information
 
     Returns:
@@ -291,15 +293,16 @@ def plot_quantity_histogram(gw_event: str,
                   f"{stat['std']:<10.2f} {stat['min']:<10.2f} {stat['max']:<10.2f}")
 
     # Create figure
-    _, ax = plt.subplots(figsize=(8, 6))
+    _, ax = plt.subplots(figsize=(8, 5))
 
-    # Determine global range for histograms
+    # Determine global range for histograms using quantiles
     all_data = np.concatenate([data for data in quantity_dict.values()])
     if default_quantity is not None:
         all_data = np.concatenate([all_data, default_quantity])
 
-    data_min = np.min(all_data)
-    data_max = np.max(all_data)
+    # Use quantiles to exclude outliers
+    data_min = np.quantile(all_data, quantile_range[0])
+    data_max = np.quantile(all_data, quantile_range[1])
     data_range = (data_min, data_max)
 
     # Plot default run first (so it appears behind)
@@ -326,10 +329,10 @@ def plot_quantity_histogram(gw_event: str,
 
     # Add title
     title = f"{gw_event} - {population.replace('_', ' ').title()} population"
-    ax.set_title(title, fontsize=fs_title, weight='bold', pad=15)
+    ax.set_title(title, fontsize=22, weight='bold', pad=15)
 
     # Add legend
-    ax.legend(fontsize=fs_legend, loc='best', framealpha=0.9)
+    ax.legend(fontsize=20, loc='best', framealpha=0.9)
 
     # Ensure output directory exists
     full_output_dir = os.path.join(output_dir, config['output_dir'])
@@ -358,6 +361,7 @@ def plot_log_likelihood_histogram(gw_event: str,
                                    alpha: float = 0.6,
                                    normalize: bool = True,
                                    show_stats: bool = True,
+                                   quantile_range: Tuple[float, float] = (0.00011, 0.9999),
                                    verbose: bool = False) -> str:
     """
     Create histogram of log-likelihood values for a GW event with fixed population
@@ -378,6 +382,7 @@ def plot_log_likelihood_histogram(gw_event: str,
         alpha (float): Transparency for histogram bars (0-1)
         normalize (bool): Normalize histograms to density
         show_stats (bool): Print summary statistics
+        quantile_range (Tuple[float, float]): Quantile range for x-axis limits (default: (0.00011, 0.9999))
         verbose (bool): Print verbose information
 
     Returns:
@@ -396,6 +401,7 @@ def plot_log_likelihood_histogram(gw_event: str,
         alpha=alpha,
         normalize=normalize,
         show_stats=show_stats,
+        quantile_range=quantile_range,
         verbose=verbose
     )
 
@@ -739,12 +745,19 @@ def debug_gw170817_bns_gaussian_chiEFT_threshold(
     chiEFT_logL = np.array(chiEFT_posterior['log_likelihood'])
     max_chiEFT_logL = np.max(chiEFT_logL)
 
+    # Extract lambda_tilde from chiEFT posterior
+    if 'lambda_tilde' not in chiEFT_posterior:
+        raise ValueError("Could not load lambda_tilde from chiEFT posterior")
+    chiEFT_lambda_tilde = np.array(chiEFT_posterior['lambda_tilde'])
+    min_chiEFT_lambda_tilde = np.min(chiEFT_lambda_tilde)
+
     if verbose:
         print(f"chiEFT posterior statistics:")
         print(f"  Number of samples: {len(chiEFT_logL)}")
         print(f"  Mean log_likelihood: {np.mean(chiEFT_logL):.2f}")
         print(f"  Max log_likelihood: {max_chiEFT_logL:.2f}")
         print(f"  Min log_likelihood: {np.min(chiEFT_logL):.2f}")
+        print(f"  Min lambda_tilde: {min_chiEFT_lambda_tilde:.2f}")
 
     # Load default posterior
     default_path = construct_result_path(base_path, "GW170817", "bns",
@@ -781,7 +794,7 @@ def debug_gw170817_bns_gaussian_chiEFT_threshold(
         return output_dir
 
     # Extract required parameters from filtered samples
-    required_params = ['chirp_mass', 'mass_ratio', 'lambda_tilde', 'luminosity_distance']
+    required_params = ['chirp_mass', 'mass_ratio', 'lambda_tilde', 'delta_lambda_tilde', 'luminosity_distance']
     filtered_data = {}
 
     for param in required_params:
@@ -804,22 +817,29 @@ def debug_gw170817_bns_gaussian_chiEFT_threshold(
         'chirp_mass': r'$\mathcal{M}_c \, [M_\odot]$',
         'mass_ratio': r'$q$',
         'lambda_tilde': r'$\tilde{\Lambda}$',
+        'delta_lambda_tilde': r'$\delta\tilde{\Lambda}$',
         'luminosity_distance': r'$d_L \, [\mathrm{Mpc}]$'
     }
 
     print(f"\nCreating scatter plot...")
 
-    # Plot: chirp_mass vs luminosity_distance
+    # Plot: lambda_tilde vs delta_lambda_tilde
     _, ax = plt.subplots(figsize=(8, 6))
-    ax.scatter(filtered_data['chirp_mass'], filtered_data['luminosity_distance'],
+    ax.scatter(filtered_data['lambda_tilde'], filtered_data['delta_lambda_tilde'],
                alpha=0.5, s=10, c='steelblue', edgecolors='none')
-    ax.set_xlabel(param_labels['chirp_mass'], fontsize=fs_labels)
-    ax.set_ylabel(param_labels['luminosity_distance'], fontsize=fs_labels)
+
+    # Add vertical dashed line at minimum chiEFT lambda_tilde
+    ax.axvline(min_chiEFT_lambda_tilde, color='red', linestyle='--', linewidth=2.0,
+               label=f'Min chiEFT $\\tilde{{\\Lambda}}$ = {min_chiEFT_lambda_tilde:.1f}')
+
+    ax.set_xlabel(param_labels['lambda_tilde'], fontsize=fs_labels)
+    ax.set_ylabel(param_labels['delta_lambda_tilde'], fontsize=fs_labels)
     ax.set_title(f'GW170817 BNS Default (logL > {max_chiEFT_logL:.1f})',
                 fontsize=fs_title, weight='bold', pad=15)
+    ax.legend(fontsize=fs_legend, loc='best', framealpha=0.9)
     plt.tight_layout()
 
-    output_path = os.path.join(output_dir, "chirp_mass_vs_luminosity_distance.pdf")
+    output_path = os.path.join(output_dir, "lambda_tilde_vs_delta_lambda_tilde.pdf")
     plt.savefig(output_path, bbox_inches='tight', dpi=300)
     print(f"  Saved: {output_path}")
     plt.close()
@@ -1223,10 +1243,9 @@ def main():
     # for population in ["uniform", "double_gaussian"]:
     #     plot_all_quantities_for_event("GW190425", population, "bns", verbose=True)
 
-    # # GW230529 - NSBH
     # for population in ["gaussian", "uniform", "double_gaussian"]:
     #     plot_all_quantities_for_event("GW230529", population, "nsbh", verbose=True)
-
+    
     print("\nAll quantity histograms generated successfully!")
 
     print("\n" + "="*80)
@@ -1239,10 +1258,10 @@ def main():
     plot_combined_log_posterior(verbose=True)
     print("\nCombined log posterior plot generated successfully!")
 
-    # print("\n" + "="*80)
-    # print("Running debug analysis for GW170817 BNS Gaussian...\n")
-    # debug_gw170817_bns_gaussian_chiEFT_threshold(verbose=True)
-    # print("\nDebug analysis completed!")
+    print("\n" + "="*80)
+    print("Running debug analysis for GW170817 BNS Gaussian...\n")
+    debug_gw170817_bns_gaussian_chiEFT_threshold(verbose=True)
+    print("\nDebug analysis completed!")
 
 
 if __name__ == "__main__":
