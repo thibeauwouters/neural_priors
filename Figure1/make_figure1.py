@@ -24,12 +24,32 @@ WIDTH_EOS_COLUMN = 1.5         # Width ratio for EOS column (right)
 OUTPUT_DIR = Path(__file__).parent / "figures"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-fs_labels_x = 18
-fs_labels_y = 24
-fs_ticks_x = 20
-fs_ticks_y = 14
-fs_titles = 24
-fs_legend = 16
+LAMBDA_MIN_EOS, LAMBDA_MAX_EOS = 3, 5000
+M_MIN_EOS, M_MAX_EOS = 1.0, 2.4
+N_MASSES_LAMBDAS_PLOT = 20
+
+# ===== Font sizes and spacing parameters =====
+
+# Source column (left) - BNS/NSBH drawings
+fs_source_label = 24           # Font size for "BNS" and "NSBH" text labels
+source_label_spacing = 1.2     # Vertical spacing between drawing and label text
+
+# Population column (middle) - Mass distribution plots
+fs_population_xlabel = 18      # Font size for x-axis label (Mass)
+fs_population_ylabel = 24      # Font size for y-axis labels (Probability Density)
+fs_population_title = 24       # Font size for plot titles (Uniform, Gaussian, etc.)
+fs_population_ticks = 14       # Font size for axis tick labels
+
+# EOS column (right) - Lambda(M) plot
+fs_eos_xlabel = 18             # Font size for x-axis label (M)
+fs_eos_ylabel = 24             # Font size for y-axis label (Lambda)
+fs_eos_ticks = 20              # Font size for axis tick labels
+fs_eos_legend = 16             # Font size for legend text
+
+# Column headers (Source, Population, EOS)
+fs_column_headers = 26         # Font size for the column header boxes at top
+
+# Corner plot kwargs (if used elsewhere)
 fs_corner_labels = 16
 fs_corner_titles = 16
 
@@ -40,11 +60,7 @@ params = {"axes.grid": False,
         "xtick.color" : "black",
         "axes.labelcolor" : "black",
         "axes.edgecolor" : "black",
-        "font.serif" : ["Computer Modern Serif"],
-        "xtick.labelsize": fs_ticks_x,
-        "ytick.labelsize": fs_ticks_y,
-        "axes.titlesize": fs_titles,
-        "figure.titlesize": fs_titles
+        "font.serif" : ["Computer Modern Serif"]
         }
 
 plt.rcParams.update(params)
@@ -168,7 +184,7 @@ def load_eos_data(eos_path: str) -> dict:
 def create_mass_distributions(
     m_min: float = 1.0,
     m_max: float = 2.4,
-    n_points: int = 1000,
+    n_points: int = 250,
     save: bool = True,
     show: bool = False
 ) -> None:
@@ -237,7 +253,7 @@ def create_mass_distributions(
     ax_bns.add_patch(circle2_bns)
 
     # Add BNS label
-    ax_bns.text(0, -1.2, 'BNS', ha='center', va='top', fontsize=fs_titles, fontweight='bold')
+    ax_bns.text(0, -source_label_spacing, 'BNS', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
 
     # ===== Source Column: NSBH Drawing =====
     ax_nsbh.set_xlim(-1.5, 1.5)
@@ -269,38 +285,39 @@ def create_mass_distributions(
     ax_nsbh.add_patch(circle2_nsbh)
 
     # Add NSBH label
-    ax_nsbh.text(0, -1.2, 'NSBH', ha='center', va='top', fontsize=fs_titles, fontweight='bold')
+    ax_nsbh.text(0, -source_label_spacing, 'NSBH', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
 
     # ===== Population Column: Mass Distributions =====
     # Uniform distribution (KDE from training data)
     pdf_uniform = uniform_mass_pdf(masses)
     ax_uniform.fill_between(masses, pdf_uniform, alpha=0.7, color=NS_COLOR, linewidth=2)
     ax_uniform.plot(masses, pdf_uniform, color=NS_COLOR, linewidth=2.5)
-    ax_uniform.set_ylabel('Probability Density', fontsize=fs_labels_y)
-    ax_uniform.set_title('Uniform', fontsize=fs_titles)
+    ax_uniform.set_ylabel('Probability Density', fontsize=fs_population_ylabel)
+    ax_uniform.set_title('Uniform', fontsize=fs_population_title)
     ax_uniform.set_xlim(m_min, m_max)
     ax_uniform.set_ylim(0, None)
-    ax_uniform.tick_params(labelbottom=False)
+    ax_uniform.tick_params(labelbottom=False, labelsize=fs_population_ticks)
 
     # Single Gaussian distribution
     pdf_gaussian = gaussian_mass_pdf(masses)
     ax_gaussian.fill_between(masses, pdf_gaussian, alpha=0.7, color=NS_COLOR, linewidth=2)
     ax_gaussian.plot(masses, pdf_gaussian, color=NS_COLOR, linewidth=2.5)
-    ax_gaussian.set_ylabel('Probability Density', fontsize=fs_labels_y)
-    ax_gaussian.set_title('Gaussian', fontsize=fs_titles)
+    ax_gaussian.set_ylabel('Probability Density', fontsize=fs_population_ylabel)
+    ax_gaussian.set_title('Gaussian', fontsize=fs_population_title)
     ax_gaussian.set_xlim(m_min, m_max)
     ax_gaussian.set_ylim(0, None)
-    ax_gaussian.tick_params(labelbottom=False)
+    ax_gaussian.tick_params(labelbottom=False, labelsize=fs_population_ticks)
 
     # Double Gaussian distribution
     pdf_double = double_gaussian_mass_pdf(masses)
     ax_double.fill_between(masses, pdf_double, alpha=0.7, color=NS_COLOR, linewidth=2)
     ax_double.plot(masses, pdf_double, color=NS_COLOR, linewidth=2.5)
-    ax_double.set_xlabel(r'Mass [$M_\odot$]', fontsize=fs_labels_x)
-    ax_double.set_ylabel('Probability Density', fontsize=fs_labels_y)
-    ax_double.set_title('Double Gaussian', fontsize=fs_titles)
+    ax_double.set_xlabel(r'Mass [$M_\odot$]', fontsize=fs_population_xlabel)
+    ax_double.set_ylabel('Probability Density', fontsize=fs_population_ylabel)
+    ax_double.set_title('Double Gaussian', fontsize=fs_population_title)
     ax_double.set_xlim(m_min, m_max)
     ax_double.set_ylim(0, None)
+    ax_double.tick_params(labelsize=fs_population_ticks)
 
     # ===== EOS Column: Lambda(M) Curves =====
     # Define EOS color scheme (from plots/utils.py)
@@ -322,12 +339,8 @@ def create_mass_distributions(
 
     eos_datasets = ["radio", "radio_chiEFT", "radio_NICER"]
 
-    # Plot parameters
-    lambda_min_eos, lambda_max_eos = 3, 5000
-    m_min_eos, m_max_eos = 1.0, 2.8
-
     # Create mass array for computing credible intervals
-    masses_array = np.linspace(m_min_eos, m_max_eos, 100)
+    masses_array = np.linspace(M_MIN_EOS, M_MAX_EOS, N_MASSES_LAMBDAS_PLOT)
 
     # Plot 90% credible intervals for each dataset
     for eos_name in eos_datasets:
@@ -389,34 +402,34 @@ def create_mass_distributions(
         ax_eos.plot(masses_array, lambda_high, color=color, linewidth=1.5, alpha=0.8)
 
     # Styling
-    ax_eos.set_xlabel(r'$M$ [$M_\odot$]', fontsize=fs_labels_x)
-    ax_eos.set_ylabel(r'$\Lambda$', fontsize=fs_labels_y)
-    ax_eos.set_xlim(m_min_eos, m_max_eos)
-    ax_eos.set_ylim(lambda_min_eos, lambda_max_eos)
+    ax_eos.set_xlabel(r'$M$ [$M_\odot$]', fontsize=fs_eos_xlabel)
+    ax_eos.set_ylabel(r'$\Lambda$', fontsize=fs_eos_ylabel)
+    ax_eos.set_xlim(M_MIN_EOS, M_MAX_EOS)
+    ax_eos.set_ylim(LAMBDA_MIN_EOS, LAMBDA_MAX_EOS)
     ax_eos.set_yscale('log')
-    ax_eos.tick_params(labelsize=fs_ticks_x)
+    ax_eos.tick_params(labelsize=fs_eos_ticks)
 
     # Add legend for EOS datasets
-    ax_eos.legend(loc='upper right', fontsize=fs_legend, framealpha=0.9)
+    ax_eos.legend(loc='upper right', fontsize=fs_eos_legend, framealpha=0.9)
 
     # ===== Add column headers =====
     # Source header (left column)
     fig.text(0.15, 0.96, 'Source', ha='center', va='center',
-             fontsize=fs_titles+2, fontweight='bold',
+             fontsize=fs_column_headers, fontweight='bold',
              bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', edgecolor='black', linewidth=2))
 
     # Population header (middle column)
     fig.text(0.45, 0.96, 'Population', ha='center', va='center',
-             fontsize=fs_titles+2, fontweight='bold',
+             fontsize=fs_column_headers, fontweight='bold',
              bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', edgecolor='black', linewidth=2))
 
     # EOS header (right column)
     fig.text(0.80, 0.96, 'EOS', ha='center', va='center',
-             fontsize=fs_titles+2, fontweight='bold',
+             fontsize=fs_column_headers, fontweight='bold',
              bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', edgecolor='black', linewidth=2))
 
     if save:
-        output_path = OUTPUT_DIR / "mass_distributions.pdf"
+        output_path = OUTPUT_DIR / "Figure1.pdf"
         plt.savefig(output_path, bbox_inches='tight')
         print(f"Saved figure to {output_path}")
 
