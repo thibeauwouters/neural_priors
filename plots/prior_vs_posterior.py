@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 from typing import Dict, List, Tuple
 from scipy.interpolate import interp1d
 from scipy.stats import gaussian_kde
+from scipy.special import kl_div
 
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 from utils import (
@@ -44,6 +45,129 @@ params = {
 }
 
 plt.rcParams.update(params)
+
+
+def calculate_jsd_bits_histogram(p_samples: np.ndarray, q_samples: np.ndarray, n_bins: int = 50) -> float:
+    """
+    Calculate Jensen-Shannon Divergence in bits using histogram method.
+
+    Args:
+        p_samples: Samples from distribution P
+        q_samples: Samples from distribution Q
+        n_bins: Number of bins for histogram estimation
+
+    Returns:
+        float: JSD in bits
+    """
+    # Determine common range for both distributions
+    min_val = min(p_samples.min(), q_samples.min())
+    max_val = max(p_samples.max(), q_samples.max())
+    bins = np.linspace(min_val, max_val, n_bins + 1)
+
+    # Create histograms
+    p_hist, _ = np.histogram(p_samples, bins=bins, density=True)
+    q_hist, _ = np.histogram(q_samples, bins=bins, density=True)
+
+    # Normalize to get probability distributions
+    p_prob = p_hist / p_hist.sum()
+    q_prob = q_hist / q_hist.sum()
+
+    # Add small epsilon to avoid log(0)
+    eps = 1e-10
+    p_prob = np.maximum(p_prob, eps)
+    q_prob = np.maximum(q_prob, eps)
+
+    # Calculate mixture distribution M = 0.5 * (P + Q)
+    m_prob = 0.5 * (p_prob + q_prob)
+
+    # Calculate JSD = 0.5 * KL(P||M) + 0.5 * KL(Q||M)
+    kl_pm = np.sum(kl_div(p_prob, m_prob))
+    kl_qm = np.sum(kl_div(q_prob, m_prob))
+    jsd_nats = 0.5 * kl_pm + 0.5 * kl_qm
+
+    # Convert from nats to bits
+    jsd_bits = jsd_nats / np.log(2)
+
+    return float(jsd_bits)
+
+
+def calculate_jsd_bits_kde(p_samples: np.ndarray, q_samples: np.ndarray, n_points: int = 1000) -> float:
+    """
+    Calculate Jensen-Shannon Divergence in bits using Kernel Density Estimation.
+
+    Args:
+        p_samples: Samples from distribution P
+        q_samples: Samples from distribution Q
+        n_points: Number of points for KDE evaluation
+
+    Returns:
+        float: JSD in bits
+    """
+    # Create KDEs for both distributions
+    p_kde = gaussian_kde(p_samples)
+    q_kde = gaussian_kde(q_samples)
+
+    # Determine common range for evaluation
+    min_val = min(p_samples.min(), q_samples.min())
+    max_val = max(p_samples.max(), q_samples.max())
+
+    # Add some padding to the range
+    padding = (max_val - min_val) * 0.1
+    x_grid = np.linspace(min_val - padding, max_val + padding, n_points)
+
+    # Evaluate KDEs on the grid
+    p_density = p_kde(x_grid)
+    q_density = q_kde(x_grid)
+
+    # Normalize densities (should already be normalized, but ensure it)
+    dx = x_grid[1] - x_grid[0]
+    p_density = p_density / (np.sum(p_density) * dx)
+    q_density = q_density / (np.sum(q_density) * dx)
+
+    # Convert to discrete probabilities for divergence calculation
+    p_prob = p_density * dx
+    q_prob = q_density * dx
+
+    # Add small epsilon to avoid log(0)
+    eps = 1e-10
+    p_prob = np.maximum(p_prob, eps)
+    q_prob = np.maximum(q_prob, eps)
+
+    # Calculate mixture distribution M = 0.5 * (P + Q)
+    m_prob = 0.5 * (p_prob + q_prob)
+
+    # Calculate JSD = 0.5 * KL(P||M) + 0.5 * KL(Q||M)
+    kl_pm = np.sum(kl_div(p_prob, m_prob))
+    kl_qm = np.sum(kl_div(q_prob, m_prob))
+    jsd_nats = 0.5 * kl_pm + 0.5 * kl_qm
+
+    # Convert from nats to bits
+    jsd_bits = jsd_nats / np.log(2)
+
+    return float(jsd_bits)
+
+
+def calculate_jsd_bits(p_samples: np.ndarray, q_samples: np.ndarray,
+                       method: str = 'kde', n_bins: int = 50, n_points: int = 1000) -> float:
+    """
+    Calculate Jensen-Shannon Divergence in bits between two sample distributions.
+
+    Args:
+        p_samples: Samples from distribution P
+        q_samples: Samples from distribution Q
+        method: Method to use ('histogram' or 'kde'), default: 'kde'
+        n_bins: Number of bins for histogram method
+        n_points: Number of evaluation points for KDE method
+
+    Returns:
+        float: JSD in bits
+    """
+    if method == 'kde':
+        return calculate_jsd_bits_kde(p_samples, q_samples, n_points=n_points)
+    elif method == 'histogram':
+        return calculate_jsd_bits_histogram(p_samples, q_samples, n_bins=n_bins)
+    else:
+        raise ValueError(f"Unknown method '{method}'. Choose 'histogram' or 'kde'.")
 
 
 def load_eos_curves(eos_name: str, eos_data_dir: str = "../data/eos") -> Tuple[np.ndarray, np.ndarray]:
@@ -215,7 +339,10 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
                                      prior_dict_all: Dict[str, Dict[str, Dict[str, np.ndarray]]],
                                      output_dir: str = "./figures/prior_vs_posterior",
                                      output_filename: str = "combined_prior_vs_posterior.pdf",
-                                     quantile_range: Tuple[float, float] = (0.0001, 0.9975)):
+                                     quantile_range: Tuple[float, float] = (0.0001, 0.9975),
+                                     jsd_method: str = 'kde',
+                                     jsd_n_bins: int = 100,
+                                     jsd_n_points: int = 1000):
     """
     Create combined KDE comparison plot with 3 vertical panels (one per event).
 
@@ -229,6 +356,9 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
         output_dir (str): Output directory for figures
         output_filename (str): Output filename
         quantile_range (Tuple[float, float]): Quantile range for x-axis limits
+        jsd_method (str): Method for JSD calculation ('histogram' or 'kde'), default: 'kde'
+        jsd_n_bins (int): Number of bins for histogram method, default: 100
+        jsd_n_points (int): Number of evaluation points for KDE method, default: 1000
     """
     # Create figure with 3 vertical panels
     fig, axes = plt.subplots(3, 1, figsize=(8, 12))
@@ -258,19 +388,32 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
         posterior_dict = posterior_dict_all[gw_event]
         prior_dict = prior_dict_all[gw_event]
 
-        # Determine x-axis limits using quantiles from prior data
+        # Determine x-axis limits using quantiles from both prior and posterior data
         all_prior_data = []
+        all_posterior_data = []
         for eos_name in eos_samples:
             if eos_name in prior_dict and param in prior_dict[eos_name]:
                 all_prior_data.append(prior_dict[eos_name][param])
+            if eos_name in posterior_dict and param in posterior_dict[eos_name]:
+                all_posterior_data.append(posterior_dict[eos_name][param])
 
-        if all_prior_data:
-            all_prior_combined = np.concatenate(all_prior_data)
-            x_min = np.quantile(all_prior_combined, quantile_range[0])
-            x_max = np.quantile(all_prior_combined, quantile_range[1])
+        if all_prior_data or all_posterior_data:
+            # Combine all data to get range
+            all_combined_data = []
+            if all_prior_data:
+                all_combined_data.extend(all_prior_data)
+            if all_posterior_data:
+                all_combined_data.extend(all_posterior_data)
+
+            all_combined = np.concatenate(all_combined_data)
+            x_min = np.quantile(all_combined, quantile_range[0])
+            x_max = np.quantile(all_combined, quantile_range[1])
             x_min = max(0, x_min)  # Don't go below 0 for Lambda parameters
         else:
             x_min, x_max = 0, 1000  # Fallback
+
+        # Dictionary to store JSD values for this event
+        jsd_values = {}
 
         # Plot each EOS
         for eos_name in eos_samples:
@@ -283,6 +426,14 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
             # Get posterior and prior data
             posterior_data = posterior_dict[eos_name][param]
             prior_data = prior_dict[eos_name][param]
+
+            # Compute JSD between posterior and prior
+            jsd_value = calculate_jsd_bits(posterior_data, prior_data,
+                                          method=jsd_method,
+                                          n_bins=jsd_n_bins,
+                                          n_points=jsd_n_points)
+            jsd_values[eos_name] = jsd_value
+            print(f"  {gw_event} - {eos_name} - {param}: JSD = {jsd_value:.3f} bits ({jsd_method} method)")
 
             # Create KDEs
             posterior_kde = gaussian_kde(posterior_data)
@@ -317,27 +468,32 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
         title = f"{gw_event} - {population.replace('_', ' ').title()} population"
         ax.set_title(title, fontsize=fs_title, weight='bold', pad=title_pad)
 
-        # Add custom legend only to top subplot
+        # Add custom legend to each subplot
+        # Create legend handles
+        legend_handles = []
+        legend_labels = []
+
+        # Add EOS color squares with JSD values for this event
+        for eos_name in eos_samples:
+            color = EOS_COLORS.get(eos_name, 'black')
+            label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
+
+            # Add JSD value in brackets if available
+            if eos_name in jsd_values:
+                label += f" ({jsd_values[eos_name]:.3f})"
+
+            legend_handles.append(Rectangle((0, 0), 1, 1, fc=color, alpha=1.0, edgecolor='none'))
+            legend_labels.append(label)
+
+        # Add posterior and prior line styles (only in top subplot to avoid redundancy)
         if idx == 0:
-            # Create legend handles
-            legend_handles = []
-            legend_labels = []
-
-            # Add EOS color squares
-            for eos_name in eos_samples:
-                color = EOS_COLORS.get(eos_name, 'black')
-                label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
-                legend_handles.append(Rectangle((0, 0), 1, 1, fc=color, alpha=1.0, edgecolor='none'))
-                legend_labels.append(label)
-
-            # Add posterior and prior line styles
             legend_handles.append(Line2D([0], [0], color='black', linewidth=2.5, linestyle='-'))
             legend_labels.append('Posterior')
             legend_handles.append(Line2D([0], [0], color='black', linewidth=2.5, linestyle='--'))
             legend_labels.append('Prior')
 
-            ax.legend(legend_handles, legend_labels, fontsize=fs_legend,
-                     loc='upper right', framealpha=0.9)
+        ax.legend(legend_handles, legend_labels, fontsize=fs_legend,
+                 loc='upper right', framealpha=0.9)
 
     plt.tight_layout()
 
@@ -469,8 +625,21 @@ def load_posterior_data_for_event(gw_event: str,
     return posterior_dict
 
 
-def main():
-    """Main function to generate prior samples and create combined KDE plot."""
+def main(jsd_method: str = 'kde', jsd_n_bins: int = 100, jsd_n_points: int = 1000):
+    """
+    Main function to generate prior samples and create combined KDE plot.
+
+    Args:
+        jsd_method (str): Method for JSD calculation ('histogram' or 'kde'), default: 'kde'
+        jsd_n_bins (int): Number of bins for histogram method, default: 100
+        jsd_n_points (int): Number of evaluation points for KDE method, default: 1000
+    """
+
+    print(f"\nUsing JSD calculation method: {jsd_method}")
+    if jsd_method == 'histogram':
+        print(f"  Number of bins: {jsd_n_bins}")
+    elif jsd_method == 'kde':
+        print(f"  Number of evaluation points: {jsd_n_points}")
 
     # Configuration for specific events
     events_config = [
@@ -535,7 +704,10 @@ def main():
     plot_combined_prior_vs_posterior(
         event_configs=events_config,
         posterior_dict_all=posterior_dict_all,
-        prior_dict_all=prior_dict_all
+        prior_dict_all=prior_dict_all,
+        jsd_method=jsd_method,
+        jsd_n_bins=jsd_n_bins,
+        jsd_n_points=jsd_n_points
     )
 
     print("\n" + "="*60)
@@ -544,4 +716,35 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Generate prior samples and create prior vs posterior comparison plots"
+    )
+    parser.add_argument(
+        "--jsd-method",
+        type=str,
+        choices=['histogram', 'kde'],
+        default='kde',
+        help="Method for JSD calculation (default: kde)"
+    )
+    parser.add_argument(
+        "--jsd-n-bins",
+        type=int,
+        default=100,
+        help="Number of bins for histogram method (default: 100)"
+    )
+    parser.add_argument(
+        "--jsd-n-points",
+        type=int,
+        default=1000,
+        help="Number of evaluation points for KDE method (default: 1000)"
+    )
+
+    args = parser.parse_args()
+
+    main(
+        jsd_method=args.jsd_method,
+        jsd_n_bins=args.jsd_n_bins,
+        jsd_n_points=args.jsd_n_points
+    )
