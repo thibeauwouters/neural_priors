@@ -24,11 +24,14 @@ WIDTH_EOS_COLUMN = 1.5         # Width ratio for EOS column (right)
 OUTPUT_DIR = Path(__file__).parent / "figures"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-fs_labels_x = 20
-fs_labels_y = 20
+fs_labels_x = 18
+fs_labels_y = 24
 fs_ticks_x = 20
 fs_ticks_y = 14
 fs_titles = 24
+fs_legend = 16
+fs_corner_labels = 16
+fs_corner_titles = 16
 
 params = {"axes.grid": False,
         "text.usetex" : True,
@@ -47,11 +50,11 @@ params = {"axes.grid": False,
 plt.rcParams.update(params)
 
 # Improved corner kwargs
-default_corner_kwargs = dict(bins=40, 
-                        smooth=1., 
+default_corner_kwargs = dict(bins=40,
+                        smooth=1.,
                         show_titles=False,
-                        label_kwargs=dict(fontsize=16),
-                        title_kwargs=dict(fontsize=16), 
+                        label_kwargs=dict(fontsize=fs_corner_labels),
+                        title_kwargs=dict(fontsize=fs_corner_titles), 
                         color="blue",
                         # quantiles=[],
                         # levels=[0.9],
@@ -143,9 +146,28 @@ def uniform_mass_pdf(m: np.ndarray, training_data_path: str = None) -> np.ndarra
     return pdf
 
 
+def load_eos_data(eos_path: str) -> dict:
+    """
+    Load EOS samples from npz file.
+
+    Args:
+        eos_path: Path to eos_samples.npz file
+
+    Returns:
+        Dictionary with masses, radii, lambdas, and log_prob arrays
+    """
+    data = np.load(eos_path)
+    return {
+        'masses': data['masses_EOS'],
+        'radii': data['radii_EOS'],
+        'lambdas': data['Lambdas_EOS'],
+        'log_prob': data['log_prob']
+    }
+
+
 def create_mass_distributions(
     m_min: float = 1.0,
-    m_max: float = 2.8,
+    m_max: float = 2.4,
     n_points: int = 1000,
     save: bool = True,
     show: bool = False
@@ -274,18 +296,108 @@ def create_mass_distributions(
     pdf_double = double_gaussian_mass_pdf(masses)
     ax_double.fill_between(masses, pdf_double, alpha=0.7, color=NS_COLOR, linewidth=2)
     ax_double.plot(masses, pdf_double, color=NS_COLOR, linewidth=2.5)
-    ax_double.set_xlabel(r'Neutron Star Mass [$M_\odot$]', fontsize=fs_labels_x)
+    ax_double.set_xlabel(r'Mass [$M_\odot$]', fontsize=fs_labels_x)
     ax_double.set_ylabel('Probability Density', fontsize=fs_labels_y)
     ax_double.set_title('Double Gaussian', fontsize=fs_titles)
     ax_double.set_xlim(m_min, m_max)
     ax_double.set_ylim(0, None)
 
-    # ===== EOS Column: Placeholder =====
-    ax_eos.text(0.5, 0.5, 'EOS Placeholder',
-                ha='center', va='center', fontsize=20, color='gray')
-    ax_eos.set_xlim(0, 1)
-    ax_eos.set_ylim(0, 1)
-    ax_eos.axis('off')
+    # ===== EOS Column: Lambda(M) Curves =====
+    # Define EOS color scheme (from plots/utils.py)
+    EOS_COLORS = {
+        "radio": "#0472b0",           # Blue
+        "radio_chiEFT": "#de8f05",    # Orange
+        "radio_NICER": "#ca7abc",     # Pink/purple
+    }
+
+    EOS_LABELS = {
+        "radio": r"Heavy PSRs",
+        "radio_chiEFT": r"+$\chi_{\rm{EFT}}$",
+        "radio_NICER": r"+NICER"
+    }
+
+    # Load EOS data from each dataset
+    script_dir = Path(__file__).parent
+    eos_base_dir = script_dir.parent / "data" / "eos"
+
+    eos_datasets = ["radio", "radio_chiEFT", "radio_NICER"]
+
+    # Plot parameters
+    lambda_min_eos, lambda_max_eos = 3, 5000
+    m_min_eos, m_max_eos = 1.0, 2.8
+
+    # Create mass array for computing credible intervals
+    masses_array = np.linspace(m_min_eos, m_max_eos, 100)
+
+    # Plot 90% credible intervals for each dataset
+    for eos_name in eos_datasets:
+        eos_path = eos_base_dir / eos_name / "eos_samples.npz"
+
+        if not eos_path.exists():
+            print(f"Warning: EOS data not found at {eos_path}")
+            continue
+
+        eos_data = load_eos_data(str(eos_path))
+        masses = eos_data['masses']
+        lambdas = eos_data['lambdas']
+
+        color = EOS_COLORS[eos_name]
+
+        # Compute credible intervals at each mass point
+        lambda_low = np.empty_like(masses_array)
+        lambda_high = np.empty_like(masses_array)
+
+        for i, mass_point in enumerate(masses_array):
+            # Gather all lambdas at this mass point by interpolation
+            lambdas_at_mass = []
+            for mass_curve, lambda_curve in zip(masses, lambdas):
+                # Skip invalid samples
+                if np.any(np.isnan(mass_curve)) or np.any(np.isnan(lambda_curve)):
+                    continue
+
+                # Skip samples with negative lambdas
+                if np.any(lambda_curve < 0):
+                    continue
+
+                # Check for unphysical mass-radius values
+                # (we still have masses available for this check if needed)
+
+                # Interpolate lambda at this mass point
+                try:
+                    lambda_interp = np.interp(mass_point, mass_curve, lambda_curve)
+                    if lambda_interp > 0:  # Only keep positive lambdas
+                        lambdas_at_mass.append(lambda_interp)
+                except:
+                    continue
+
+            lambdas_at_mass = np.array(lambdas_at_mass)
+
+            # Compute 90% credible interval using percentiles
+            if len(lambdas_at_mass) > 0:
+                lambda_low[i] = np.percentile(lambdas_at_mass, 5)
+                lambda_high[i] = np.percentile(lambdas_at_mass, 95)
+            else:
+                lambda_low[i] = np.nan
+                lambda_high[i] = np.nan
+
+        # Plot credible interval with fill_between
+        ax_eos.fill_between(masses_array, lambda_low, lambda_high,
+                            alpha=0.3, color=color, label=EOS_LABELS[eos_name])
+
+        # Draw boundary lines
+        ax_eos.plot(masses_array, lambda_low, color=color, linewidth=1.5, alpha=0.8)
+        ax_eos.plot(masses_array, lambda_high, color=color, linewidth=1.5, alpha=0.8)
+
+    # Styling
+    ax_eos.set_xlabel(r'$M$ [$M_\odot$]', fontsize=fs_labels_x)
+    ax_eos.set_ylabel(r'$\Lambda$', fontsize=fs_labels_y)
+    ax_eos.set_xlim(m_min_eos, m_max_eos)
+    ax_eos.set_ylim(lambda_min_eos, lambda_max_eos)
+    ax_eos.set_yscale('log')
+    ax_eos.tick_params(labelsize=fs_ticks_x)
+
+    # Add legend for EOS datasets
+    ax_eos.legend(loc='upper right', fontsize=fs_legend, framealpha=0.9)
 
     # ===== Add column headers =====
     # Source header (left column)
@@ -315,9 +427,4 @@ def create_mass_distributions(
 
 
 if __name__ == "__main__":
-    # Generate mass distribution plot
-    print("Generating mass distribution figure for Inkscape...")
-
     create_mass_distributions(save=True, show=False)
-
-    print("Done! Figure saved to", OUTPUT_DIR)
