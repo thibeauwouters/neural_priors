@@ -26,6 +26,10 @@ N_MASSES_LAMBDAS_PLOT = 20
 
 # ===== Font sizes and spacing parameters =====
 
+# GridSpec spacing parameters
+HSPACE_POPULATION = 0.55        # Vertical spacing between population plots (higher = more whitespace)
+WSPACE_COLUMNS = 0.4            # Horizontal spacing between columns
+
 ######################
 ### SOURCE DRAWING ###
 ######################
@@ -50,7 +54,7 @@ source_label_y_nsbh = 0.175              # Y position for NSBH label in figure c
 fs_population_xlabel = 28      # Font size for x-axis label (Mass)
 fs_population_ylabel = 22      # Font size for y-axis labels (Probability Density)
 fs_population_title = 26       # Font size for plot titles (Uniform, Gaussian, etc.)
-fs_xticks_population = 18      # Font size for all population plots x-axis ticks
+fs_xticks_population = 22      # Font size for all population plots x-axis ticks
 fs_yticks_population = 16      # Font size for all population plots y-axis ticks
 
 # EOS column (right) - Lambda(M) plot
@@ -59,6 +63,11 @@ fs_eos_ylabel = 28             # Font size for y-axis label (Lambda)
 fs_xticks_eos = 22             # Font size for EOS plot x-axis tick labels
 fs_yticks_eos = 22             # Font size for EOS plot y-axis tick labels
 fs_eos_legend = 22             # Font size for legend text
+
+# EOS credible interval styling
+eos_border_linewidth = 3.0     # Line width for credible interval borders
+eos_border_alpha = 0.9         # Alpha (transparency) for border lines (0=transparent, 1=opaque)
+eos_fill_alpha = 0.25          # Alpha (transparency) for fill_between shading
 
 # Column headers (Source, Population, EOS)
 fs_column_headers = 36         # Font size for the column header text at top
@@ -235,7 +244,7 @@ def create_mass_distributions(
     fig = plt.figure(figsize=(13.5, 10.5))
     # 6 rows for better control: Source gets 2 equal rows (0-2 for BNS, 3-5 for NSBH)
     # Population and EOS span all 6 rows but we'll create 3 subplots each
-    gs = GridSpec(6, 3, figure=fig, hspace=0.35, wspace=0.4,
+    gs = GridSpec(6, 3, figure=fig, hspace=HSPACE_POPULATION, wspace=WSPACE_COLUMNS,
                   width_ratios=[WIDTH_SOURCE_COLUMN, WIDTH_POPULATION_COLUMN, WIDTH_EOS_COLUMN])
 
     # Left column: Source drawings - each gets 3 rows for equal space
@@ -425,11 +434,11 @@ def create_mass_distributions(
 
         # Plot credible interval with fill_between (no label here to avoid alpha in legend)
         ax_eos.fill_between(masses_array, lambda_low, lambda_high,
-                            alpha=0.3, color=color)
+                            alpha=eos_fill_alpha, color=color)
 
         # Draw boundary lines
-        ax_eos.plot(masses_array, lambda_low, color=color, linewidth=1.5, alpha=0.8)
-        ax_eos.plot(masses_array, lambda_high, color=color, linewidth=1.5, alpha=0.8)
+        ax_eos.plot(masses_array, lambda_low, color=color, linewidth=eos_border_linewidth, alpha=eos_border_alpha)
+        ax_eos.plot(masses_array, lambda_high, color=color, linewidth=eos_border_linewidth, alpha=eos_border_alpha)
 
         # Create custom legend handle with solid color (no alpha)
         legend_handles.append(Patch(facecolor=color, edgecolor=color, label=EOS_LABELS[eos_name]))
