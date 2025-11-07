@@ -20,7 +20,7 @@ WIDTH_EOS_COLUMN = 1.5         # Width ratio for EOS column (right)
 OUTPUT_DIR = Path(__file__).parent / "figures"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-LAMBDA_MIN_EOS, LAMBDA_MAX_EOS = 3, 5000
+LAMBDA_MIN_EOS, LAMBDA_MAX_EOS = 3, 7000
 M_MIN_EOS, M_MAX_EOS = 1.0, 2.4
 N_MASSES_LAMBDAS_PLOT = 20
 
@@ -44,25 +44,25 @@ source_vertical_offset_bns = 1.0        # Vertical offset for BNS drawing (posit
 source_vertical_offset_nsbh = 1.0       # Vertical offset for NSBH drawing (positive = up)
 
 # Label text parameters
-fs_source_label = 32                    # Font size for "BNS" and "NSBH" text labels
-source_label_x_bns = 0.12               # X position for BNS label in figure coordinates (0-1 scale)
+fs_source_label = 36                    # Font size for "BNS" and "NSBH" text labels
+source_label_x_bns = 0.09               # X position for BNS label in figure coordinates (0-1 scale)
 source_label_y_bns = 0.60               # Y position for BNS label in figure coordinates (0-1 scale)
-source_label_x_nsbh = 0.12              # X position for NSBH label in figure coordinates (0-1 scale)
+source_label_x_nsbh = 0.09              # X position for NSBH label in figure coordinates (0-1 scale)
 source_label_y_nsbh = 0.175              # Y position for NSBH label in figure coordinates (0-1 scale)
 
 # Population column (middle) - Mass distribution plots
-fs_population_xlabel = 28      # Font size for x-axis label (Mass)
-fs_population_ylabel = 22      # Font size for y-axis labels (Probability Density)
-fs_population_title = 26       # Font size for plot titles (Uniform, Gaussian, etc.)
-fs_xticks_population = 22      # Font size for all population plots x-axis ticks
-fs_yticks_population = 16      # Font size for all population plots y-axis ticks
+fs_population_xlabel = 32      # Font size for x-axis label (Mass)
+fs_population_ylabel = 26      # Font size for y-axis labels (Probability Density)
+fs_population_title = 30       # Font size for plot titles (Uniform, Gaussian, etc.)
+fs_xticks_population = 26      # Font size for all population plots x-axis ticks
+fs_yticks_population = 20      # Font size for all population plots y-axis ticks
 
 # EOS column (right) - Lambda(M) plot
-fs_eos_xlabel = 28             # Font size for x-axis label (M)
-fs_eos_ylabel = 28             # Font size for y-axis label (Lambda)
-fs_xticks_eos = 22             # Font size for EOS plot x-axis tick labels
-fs_yticks_eos = 22             # Font size for EOS plot y-axis tick labels
-fs_eos_legend = 22             # Font size for legend text
+fs_eos_xlabel = 32             # Font size for x-axis label (M)
+fs_eos_ylabel = 32             # Font size for y-axis label (Lambda)
+fs_xticks_eos = 26             # Font size for EOS plot x-axis tick labels
+fs_yticks_eos = 26             # Font size for EOS plot y-axis tick labels
+fs_eos_legend = 26             # Font size for legend text
 
 # EOS credible interval styling
 eos_border_linewidth = 3.0     # Line width for credible interval borders
@@ -70,12 +70,12 @@ eos_border_alpha = 0.9         # Alpha (transparency) for border lines (0=transp
 eos_fill_alpha = 0.25          # Alpha (transparency) for fill_between shading
 
 # Column headers (Source, Population, EOS)
-fs_column_headers = 36         # Font size for the column header text at top
+fs_column_headers = 40         # Font size for the column header text at top
 
 # Column header positions (x-coordinate in figure coordinates, 0-1 scale)
-header_x_source = 0.12          # X position for Source header
-header_x_population = 0.435     # X position for Population header
-header_x_eos = 0.77             # X position for EOS header
+header_x_source = 0.10          # X position for Source header
+header_x_population = 0.415     # X position for Population header
+header_x_eos = 0.80             # X position for EOS header
 header_y = 0.96                 # Y position for all headers (vertical position)
 
 # Column header underline parameters
@@ -91,11 +91,11 @@ bracket_y = -0.02                   # Y position for bracket top edge (negative 
 bracket_height = 0.025              # Depth of the center dip (increased for steeper/deeper)
 bracket_text_y = -0.08              # Y position for text below bracket (adjusted accordingly)
 bracket_flat_length = 0.42          # Length of flat horizontal sections (fraction of total width, increased for tighter dip)
-fs_bracket_text = 46                # Font size for pi_NF text below bracket
+fs_bracket_text = 50                # Font size for pi_NF text below bracket
 
 # Corner plot kwargs (if used elsewhere)
-fs_corner_labels = 16
-fs_corner_titles = 16
+fs_corner_labels = 20
+fs_corner_titles = 20
 
 params = {"axes.grid": False,
         "text.usetex" : True,
@@ -255,7 +255,7 @@ def create_mass_distributions(
     # Population and EOS span all 6 rows but we'll create 3 subplots each
     gs = GridSpec(6, 3, figure=fig, hspace=HSPACE_POPULATION, wspace=WSPACE_COLUMNS,
                   width_ratios=[WIDTH_SOURCE_COLUMN, WIDTH_POPULATION_COLUMN, WIDTH_EOS_COLUMN],
-                  left=0.05, right=0.97)
+                  left=0.02, right=0.99)
 
     # Left column: Source drawings - each gets 3 rows for equal space
     ax_bns = fig.add_subplot(gs[0:3, 0])
