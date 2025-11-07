@@ -84,6 +84,14 @@ underline_width_population = 0.15   # Width of underline for Population header
 underline_width_eos = 0.08          # Width of underline for EOS header
 underline_offset = 0.03             # Distance below text to underline
 
+# Bottom curly bracket parameters
+bracket_x_left = 0.08               # Left edge of bracket (figure coordinates 0-1)
+bracket_x_right = 0.92              # Right edge of bracket (figure coordinates 0-1)
+bracket_y = -0.02                   # Y position for bracket top edge (negative moves it down below bottom)
+bracket_height = 0.025              # Depth of the center dip (increased for steeper/deeper)
+bracket_text_y = -0.06              # Y position for text below bracket (adjusted accordingly)
+bracket_flat_length = 0.42          # Length of flat horizontal sections (fraction of total width, increased for tighter dip)
+
 # Corner plot kwargs (if used elsewhere)
 fs_corner_labels = 16
 fs_corner_titles = 16
@@ -491,6 +499,73 @@ def create_mass_distributions(
                       [header_y - underline_offset, header_y - underline_offset],
                       transform=fig.transFigure, color='black', linewidth=2)
     fig.add_artist(line_eos)
+
+    # ===== Add curly bracket at bottom spanning all columns =====
+    from matplotlib.patches import FancyBboxPatch
+    import matplotlib.patches as mpatches
+
+    # Create curly bracket using annotation
+    # We'll draw it as two annotations forming a brace shape
+    ax_bracket = fig.add_axes([0, 0, 1, 1], facecolor='none')
+    ax_bracket.set_xlim(0, 1)
+    ax_bracket.set_ylim(0, 1)
+    ax_bracket.axis('off')
+
+    # Draw curly bracket using FancyBboxPatch
+    # Alternative: draw it manually with path or use annotation with bracket connectionstyle
+    from matplotlib.patches import ConnectionPatch
+
+    # Use annotate to create bracket spanning the columns
+    ax_bracket.annotate('', xy=(bracket_x_left, bracket_y), xytext=(bracket_x_right, bracket_y),
+                       xycoords='figure fraction', textcoords='figure fraction',
+                       arrowprops=dict(arrowstyle='-', lw=0, shrinkA=0, shrinkB=0),
+                       annotation_clip=False)
+
+    # Manual curly bracket drawing using path
+    from matplotlib.path import Path as MplPath
+    import matplotlib.patches as patches
+
+    # Define curly bracket path with flat sides and sharp center dip
+    bracket_center = (bracket_x_left + bracket_x_right) / 2
+    total_width = bracket_x_right - bracket_x_left
+
+    # Define turning points
+    left_turn = bracket_x_left + bracket_flat_length * total_width
+    right_turn = bracket_x_right - bracket_flat_length * total_width
+
+    # Curly bracket with sharp inflection: flat sides, sharp downward turn
+    verts = [
+        (bracket_x_left, bracket_y),  # Start (left)
+        (left_turn, bracket_y),  # Flat section left
+        (left_turn + 0.01, bracket_y),  # Control point for sharp turn
+        (bracket_center - 0.01, bracket_y - bracket_height),  # Control point approaching center
+        (bracket_center, bracket_y - bracket_height),  # Center bottom point
+        (bracket_center + 0.01, bracket_y - bracket_height),  # Control point leaving center
+        (right_turn - 0.01, bracket_y),  # Control point for sharp turn
+        (right_turn, bracket_y),  # Flat section right
+        (bracket_x_right, bracket_y),  # End (right)
+    ]
+
+    codes = [
+        MplPath.MOVETO,
+        MplPath.LINETO,  # Flat left section
+        MplPath.CURVE4,  # Sharp turn down
+        MplPath.CURVE4,
+        MplPath.CURVE4,
+        MplPath.CURVE4,  # Sharp turn up
+        MplPath.CURVE4,
+        MplPath.LINETO,  # Flat right section
+        MplPath.LINETO,
+    ]
+
+    path = MplPath(verts, codes)
+    patch = patches.PathPatch(path, facecolor='none', edgecolor='black', lw=2,
+                              transform=fig.transFigure, clip_on=False)
+    fig.add_artist(patch)
+
+    # Add text below the bracket
+    fig.text(bracket_center, bracket_text_y, r'$\pi_{\rm{NF}}(m_1^{\rm{src}}, m_2^{\rm{src}}, \Lambda_1, \Lambda_2)$',
+             ha='center', va='top', fontsize=32, transform=fig.transFigure)
 
     if save:
         output_path = OUTPUT_DIR / "Figure1.pdf"
