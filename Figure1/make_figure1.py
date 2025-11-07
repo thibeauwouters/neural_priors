@@ -11,10 +11,6 @@ from pathlib import Path
 # Color scheme
 NS_COLOR = "#47d0ecff"  # Light blue for neutron star distributions (RGBA)
 
-# Source diagram parameters
-RADIUS_LARGER_OBJECT = 0.45   # Radius for upper-left object in BNS/NSBH diagrams
-RADIUS_SMALLER_OBJECT = 0.45  # Radius for lower-right object in BNS/NSBH diagrams
-
 # Column width ratios for the three-column layout
 WIDTH_SOURCE_COLUMN = 0.7      # Width ratio for Source column (left)
 WIDTH_POPULATION_COLUMN = 1.2  # Width ratio for Population column (middle)
@@ -34,8 +30,10 @@ N_MASSES_LAMBDAS_PLOT = 20
 ### SOURCE DRAWING ###
 ######################
 
-source_orbit_radius_bns = 1.5           # Orbital radius for BNS system (controls drawing size)
-source_orbit_radius_nsbh = 1.5          # Orbital radius for NSBH system (controls drawing size)
+source_orbit_radius_bns = 6.0           # Orbital radius for BNS system (controls drawing size)
+source_orbit_radius_nsbh = source_orbit_radius_bns          # Orbital radius for NSBH system (controls drawing size)
+RADIUS_LARGER_OBJECT = 3.0   # Radius for upper-left object in BNS/NSBH diagrams
+RADIUS_SMALLER_OBJECT = RADIUS_LARGER_OBJECT  # Radius for lower-right object in BNS/NSBH diagrams
 
 # Drawing position parameters (vertical positioning within each subplot)
 source_vertical_offset_bns = 1.0        # Vertical offset for BNS drawing (positive = up)
@@ -43,7 +41,10 @@ source_vertical_offset_nsbh = 1.0       # Vertical offset for NSBH drawing (posi
 
 # Label text parameters
 fs_source_label = 32                    # Font size for "BNS" and "NSBH" text labels
-source_label_spacing = 1.75             # Vertical spacing between drawing and label text (distance below drawing)
+source_label_x_bns = 0.185              # X position for BNS label in figure coordinates (0-1 scale)
+source_label_y_bns = 0.60               # Y position for BNS label in figure coordinates (0-1 scale)
+source_label_x_nsbh = source_label_x_bns             # X position for NSBH label in figure coordinates (0-1 scale)
+source_label_y_nsbh = 0.175              # Y position for NSBH label in figure coordinates (0-1 scale)
 
 # Population column (middle) - Mass distribution plots
 fs_population_xlabel = 28      # Font size for x-axis label (Mass)
@@ -250,9 +251,9 @@ def create_mass_distributions(
     ax_eos = fig.add_subplot(gs[:, 2])
 
     # ===== Source Column: BNS Drawing =====
-    # Calculate axis limits automatically to fit drawing and label
-    # Need to accommodate: orbit radius + circle radius + offset + label spacing
-    ylim_bns = source_orbit_radius_bns + RADIUS_LARGER_OBJECT + abs(source_vertical_offset_bns) + source_label_spacing + 0.3
+    # Calculate axis limits automatically to fit drawing only (no label spacing)
+    # Need to accommodate: orbit radius + circle radius + offset
+    ylim_bns = source_orbit_radius_bns + RADIUS_LARGER_OBJECT + abs(source_vertical_offset_bns) + 0.3
     ax_bns.set_xlim(-ylim_bns, ylim_bns)
     ax_bns.set_ylim(-ylim_bns, ylim_bns)
     ax_bns.set_aspect('equal')
@@ -280,13 +281,10 @@ def create_mass_distributions(
     ax_bns.add_patch(circle1_bns)
     ax_bns.add_patch(circle2_bns)
 
-    # Add BNS label
-    ax_bns.text(0, -source_label_spacing + source_vertical_offset_bns, 'BNS', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
-
     # ===== Source Column: NSBH Drawing =====
-    # Calculate axis limits automatically to fit drawing and label
-    # Need to accommodate: orbit radius + circle radius + offset + label spacing
-    ylim_nsbh = source_orbit_radius_nsbh + RADIUS_LARGER_OBJECT + abs(source_vertical_offset_nsbh) + source_label_spacing + 0.3
+    # Calculate axis limits automatically to fit drawing only (no label spacing)
+    # Need to accommodate: orbit radius + circle radius + offset
+    ylim_nsbh = source_orbit_radius_nsbh + RADIUS_LARGER_OBJECT + abs(source_vertical_offset_nsbh) + 0.3
     ax_nsbh.set_xlim(-ylim_nsbh, ylim_nsbh)
     ax_nsbh.set_ylim(-ylim_nsbh, ylim_nsbh)
     ax_nsbh.set_aspect('equal')
@@ -311,9 +309,6 @@ def create_mass_distributions(
     circle2_nsbh = Circle((x2_nsbh, y2_nsbh), RADIUS_SMALLER_OBJECT, color=NS_COLOR, ec='black', linewidth=2, zorder=2)
     ax_nsbh.add_patch(circle1_nsbh)
     ax_nsbh.add_patch(circle2_nsbh)
-
-    # Add NSBH label
-    ax_nsbh.text(0, -source_label_spacing + source_vertical_offset_nsbh, 'NSBH', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
 
     # ===== Population Column: Mass Distributions =====
     # Uniform distribution (KDE from training data)
@@ -451,9 +446,15 @@ def create_mass_distributions(
     # Add legend for EOS datasets with custom handles (solid colors, no alpha)
     ax_eos.legend(handles=legend_handles, loc='upper right', fontsize=fs_eos_legend, framealpha=0.9)
 
-    # ===== Add column headers =====
+    # ===== Add column headers and source labels =====
     # Import line for drawing underlines
     from matplotlib.lines import Line2D
+
+    # Add BNS and NSBH labels (using fig.text to avoid affecting axis limits)
+    fig.text(source_label_x_bns, source_label_y_bns, 'BNS', ha='center', va='center',
+             fontsize=fs_source_label, fontweight='bold')
+    fig.text(source_label_x_nsbh, source_label_y_nsbh, 'NSBH', ha='center', va='center',
+             fontsize=fs_source_label, fontweight='bold')
 
     # Source header (left column)
     fig.text(header_x_source, header_y, 'Source', ha='center', va='center',
