@@ -48,7 +48,7 @@ POPULATION_DISPLAY = {
 }
 
 EOS_DISPLAY = {
-    "radio": "Radio",
+    "radio": "Heavy PSRs",
     "radio_chiEFT": "+$\\chi_{\\rm{EFT}}$",
     "radio_NICER": "+NICER",
     "radio_GW170817": "+GW170817",
