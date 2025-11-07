@@ -16,9 +16,9 @@ RADIUS_LARGER_OBJECT = 0.45   # Radius for upper-left object in BNS/NSBH diagram
 RADIUS_SMALLER_OBJECT = 0.45  # Radius for lower-right object in BNS/NSBH diagrams
 
 # Column width ratios for the three-column layout
-WIDTH_SOURCE_COLUMN = 0.8      # Width ratio for Source column (left)
-WIDTH_POPULATION_COLUMN = 1.2  # Width ratio for Population column (middle)
-WIDTH_EOS_COLUMN = 1.5         # Width ratio for EOS column (right)
+WIDTH_SOURCE_COLUMN = 0.6      # Width ratio for Source column (left)
+WIDTH_POPULATION_COLUMN = 1.3  # Width ratio for Population column (middle)
+WIDTH_EOS_COLUMN = 1.6         # Width ratio for EOS column (right)
 
 # Output directory
 OUTPUT_DIR = Path(__file__).parent / "figures"
@@ -35,19 +35,28 @@ fs_source_label = 24           # Font size for "BNS" and "NSBH" text labels
 source_label_spacing = 1.2     # Vertical spacing between drawing and label text
 
 # Population column (middle) - Mass distribution plots
-fs_population_xlabel = 18      # Font size for x-axis label (Mass)
-fs_population_ylabel = 24      # Font size for y-axis labels (Probability Density)
-fs_population_title = 24       # Font size for plot titles (Uniform, Gaussian, etc.)
+fs_population_xlabel = 26      # Font size for x-axis label (Mass)
+fs_population_ylabel = 20      # Font size for y-axis labels (Probability Density)
+fs_population_title = 26       # Font size for plot titles (Uniform, Gaussian, etc.)
 fs_population_ticks = 14       # Font size for axis tick labels
 
 # EOS column (right) - Lambda(M) plot
-fs_eos_xlabel = 18             # Font size for x-axis label (M)
-fs_eos_ylabel = 24             # Font size for y-axis label (Lambda)
+fs_eos_xlabel = 26             # Font size for x-axis label (M)
+fs_eos_ylabel = 26             # Font size for y-axis label (Lambda)
 fs_eos_ticks = 20              # Font size for axis tick labels
-fs_eos_legend = 16             # Font size for legend text
+fs_eos_legend = 22             # Font size for legend text
 
 # Column headers (Source, Population, EOS)
 fs_column_headers = 26         # Font size for the column header boxes at top
+
+# Column header positions (x-coordinate in figure coordinates, 0-1 scale)
+header_x_source = 0.180         # X position for Source header
+header_x_population = 0.425     # X position for Population header
+header_x_eos = 0.77            # X position for EOS header
+header_y = 0.96                # Y position for all headers (vertical position)
+
+# Source drawings vertical offset (shifts BNS/NSBH drawings and labels up/down)
+source_vertical_offset = 0.3   # Positive values move drawings upward
 
 # Corner plot kwargs (if used elsewhere)
 fs_corner_labels = 16
@@ -236,13 +245,13 @@ def create_mass_distributions(
     # Position circles on diagonal (upper-left and lower-right)
     # Upper left position
     x1_bns = -orbit_radius_bns * np.cos(angle_diag)
-    y1_bns = orbit_radius_bns * np.sin(angle_diag)
+    y1_bns = orbit_radius_bns * np.sin(angle_diag) + source_vertical_offset
     # Lower right position
     x2_bns = orbit_radius_bns * np.cos(angle_diag)
-    y2_bns = -orbit_radius_bns * np.sin(angle_diag)
+    y2_bns = -orbit_radius_bns * np.sin(angle_diag) + source_vertical_offset
 
     # Draw orbit line first (lower zorder so it appears behind circles)
-    orbit_bns = Circle((0, 0), orbit_radius_bns, fill=False, ec='black', linewidth=1.5,
+    orbit_bns = Circle((0, source_vertical_offset), orbit_radius_bns, fill=False, ec='black', linewidth=1.5,
                        linestyle='--', alpha=0.5, zorder=1)
     ax_bns.add_patch(orbit_bns)
 
@@ -253,7 +262,7 @@ def create_mass_distributions(
     ax_bns.add_patch(circle2_bns)
 
     # Add BNS label
-    ax_bns.text(0, -source_label_spacing, 'BNS', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
+    ax_bns.text(0, -source_label_spacing + source_vertical_offset, 'BNS', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
 
     # ===== Source Column: NSBH Drawing =====
     ax_nsbh.set_xlim(-1.5, 1.5)
@@ -267,13 +276,13 @@ def create_mass_distributions(
     # Position circles on diagonal (upper-left BH, lower-right NS)
     # Upper left position (black hole)
     x1_nsbh = -orbit_radius_nsbh * np.cos(angle_diag)
-    y1_nsbh = orbit_radius_nsbh * np.sin(angle_diag)
+    y1_nsbh = orbit_radius_nsbh * np.sin(angle_diag) + source_vertical_offset
     # Lower right position (neutron star)
     x2_nsbh = orbit_radius_nsbh * np.cos(angle_diag)
-    y2_nsbh = -orbit_radius_nsbh * np.sin(angle_diag)
+    y2_nsbh = -orbit_radius_nsbh * np.sin(angle_diag) + source_vertical_offset
 
     # Draw orbit line first (lower zorder so it appears behind circles)
-    orbit_nsbh = Circle((0, 0), orbit_radius_nsbh, fill=False, ec='black', linewidth=1.5,
+    orbit_nsbh = Circle((0, source_vertical_offset), orbit_radius_nsbh, fill=False, ec='black', linewidth=1.5,
                         linestyle='--', alpha=0.5, zorder=1)
     ax_nsbh.add_patch(orbit_nsbh)
 
@@ -285,7 +294,7 @@ def create_mass_distributions(
     ax_nsbh.add_patch(circle2_nsbh)
 
     # Add NSBH label
-    ax_nsbh.text(0, -source_label_spacing, 'NSBH', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
+    ax_nsbh.text(0, -source_label_spacing + source_vertical_offset, 'NSBH', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
 
     # ===== Population Column: Mass Distributions =====
     # Uniform distribution (KDE from training data)
@@ -402,7 +411,7 @@ def create_mass_distributions(
         ax_eos.plot(masses_array, lambda_high, color=color, linewidth=1.5, alpha=0.8)
 
     # Styling
-    ax_eos.set_xlabel(r'$M$ [$M_\odot$]', fontsize=fs_eos_xlabel)
+    ax_eos.set_xlabel(r'Mass [$M_\odot$]', fontsize=fs_eos_xlabel)
     ax_eos.set_ylabel(r'$\Lambda$', fontsize=fs_eos_ylabel)
     ax_eos.set_xlim(M_MIN_EOS, M_MAX_EOS)
     ax_eos.set_ylim(LAMBDA_MIN_EOS, LAMBDA_MAX_EOS)
@@ -414,19 +423,19 @@ def create_mass_distributions(
 
     # ===== Add column headers =====
     # Source header (left column)
-    fig.text(0.15, 0.96, 'Source', ha='center', va='center',
+    fig.text(header_x_source, header_y, 'Source', ha='center', va='center',
              fontsize=fs_column_headers, fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', edgecolor='black', linewidth=2))
+             bbox=dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='black', linewidth=2))
 
     # Population header (middle column)
-    fig.text(0.45, 0.96, 'Population', ha='center', va='center',
+    fig.text(header_x_population, header_y, 'Population', ha='center', va='center',
              fontsize=fs_column_headers, fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', edgecolor='black', linewidth=2))
+             bbox=dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='black', linewidth=2))
 
     # EOS header (right column)
-    fig.text(0.80, 0.96, 'EOS', ha='center', va='center',
+    fig.text(header_x_eos, header_y, 'EOS', ha='center', va='center',
              fontsize=fs_column_headers, fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', edgecolor='black', linewidth=2))
+             bbox=dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='black', linewidth=2))
 
     if save:
         output_path = OUTPUT_DIR / "Figure1.pdf"
