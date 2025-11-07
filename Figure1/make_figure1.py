@@ -45,9 +45,9 @@ source_vertical_offset_nsbh = 1.0       # Vertical offset for NSBH drawing (posi
 
 # Label text parameters
 fs_source_label = 32                    # Font size for "BNS" and "NSBH" text labels
-source_label_x_bns = 0.185              # X position for BNS label in figure coordinates (0-1 scale)
+source_label_x_bns = 0.12               # X position for BNS label in figure coordinates (0-1 scale)
 source_label_y_bns = 0.60               # Y position for BNS label in figure coordinates (0-1 scale)
-source_label_x_nsbh = source_label_x_bns             # X position for NSBH label in figure coordinates (0-1 scale)
+source_label_x_nsbh = 0.12              # X position for NSBH label in figure coordinates (0-1 scale)
 source_label_y_nsbh = 0.175              # Y position for NSBH label in figure coordinates (0-1 scale)
 
 # Population column (middle) - Mass distribution plots
@@ -73,7 +73,7 @@ eos_fill_alpha = 0.25          # Alpha (transparency) for fill_between shading
 fs_column_headers = 36         # Font size for the column header text at top
 
 # Column header positions (x-coordinate in figure coordinates, 0-1 scale)
-header_x_source = 0.180         # X position for Source header
+header_x_source = 0.12          # X position for Source header
 header_x_population = 0.435     # X position for Population header
 header_x_eos = 0.77             # X position for EOS header
 header_y = 0.96                 # Y position for all headers (vertical position)
@@ -89,8 +89,9 @@ bracket_x_left = 0.08               # Left edge of bracket (figure coordinates 0
 bracket_x_right = 0.92              # Right edge of bracket (figure coordinates 0-1)
 bracket_y = -0.02                   # Y position for bracket top edge (negative moves it down below bottom)
 bracket_height = 0.025              # Depth of the center dip (increased for steeper/deeper)
-bracket_text_y = -0.06              # Y position for text below bracket (adjusted accordingly)
+bracket_text_y = -0.08              # Y position for text below bracket (adjusted accordingly)
 bracket_flat_length = 0.42          # Length of flat horizontal sections (fraction of total width, increased for tighter dip)
+fs_bracket_text = 46                # Font size for pi_NF text below bracket
 
 # Corner plot kwargs (if used elsewhere)
 fs_corner_labels = 16
@@ -249,11 +250,12 @@ def create_mass_distributions(
     from matplotlib.gridspec import GridSpec
     from matplotlib.patches import Circle
 
-    fig = plt.figure(figsize=(13.5, 10.5))
+    fig = plt.figure(figsize=(13.5, 12.0))
     # 6 rows for better control: Source gets 2 equal rows (0-2 for BNS, 3-5 for NSBH)
     # Population and EOS span all 6 rows but we'll create 3 subplots each
     gs = GridSpec(6, 3, figure=fig, hspace=HSPACE_POPULATION, wspace=WSPACE_COLUMNS,
-                  width_ratios=[WIDTH_SOURCE_COLUMN, WIDTH_POPULATION_COLUMN, WIDTH_EOS_COLUMN])
+                  width_ratios=[WIDTH_SOURCE_COLUMN, WIDTH_POPULATION_COLUMN, WIDTH_EOS_COLUMN],
+                  left=0.05, right=0.97)
 
     # Left column: Source drawings - each gets 3 rows for equal space
     ax_bns = fig.add_subplot(gs[0:3, 0])
@@ -565,7 +567,7 @@ def create_mass_distributions(
 
     # Add text below the bracket
     fig.text(bracket_center, bracket_text_y, r'$\pi_{\rm{NF}}(m_1^{\rm{src}}, m_2^{\rm{src}}, \Lambda_1, \Lambda_2)$',
-             ha='center', va='top', fontsize=32, transform=fig.transFigure)
+             ha='center', va='top', fontsize=fs_bracket_text, transform=fig.transFigure)
 
     if save:
         output_path = OUTPUT_DIR / "Figure1.pdf"
