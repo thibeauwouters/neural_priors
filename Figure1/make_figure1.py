@@ -16,9 +16,9 @@ RADIUS_LARGER_OBJECT = 0.45   # Radius for upper-left object in BNS/NSBH diagram
 RADIUS_SMALLER_OBJECT = 0.45  # Radius for lower-right object in BNS/NSBH diagrams
 
 # Column width ratios for the three-column layout
-WIDTH_SOURCE_COLUMN = 0.6      # Width ratio for Source column (left)
-WIDTH_POPULATION_COLUMN = 1.3  # Width ratio for Population column (middle)
-WIDTH_EOS_COLUMN = 1.6         # Width ratio for EOS column (right)
+WIDTH_SOURCE_COLUMN = 0.7      # Width ratio for Source column (left)
+WIDTH_POPULATION_COLUMN = 1.2  # Width ratio for Population column (middle)
+WIDTH_EOS_COLUMN = 1.5         # Width ratio for EOS column (right)
 
 # Output directory
 OUTPUT_DIR = Path(__file__).parent / "figures"
@@ -30,33 +30,49 @@ N_MASSES_LAMBDAS_PLOT = 20
 
 # ===== Font sizes and spacing parameters =====
 
-# Source column (left) - BNS/NSBH drawings
-fs_source_label = 24           # Font size for "BNS" and "NSBH" text labels
-source_label_spacing = 1.2     # Vertical spacing between drawing and label text
+######################
+### SOURCE DRAWING ###
+######################
+
+source_orbit_radius_bns = 1.5           # Orbital radius for BNS system (controls drawing size)
+source_orbit_radius_nsbh = 1.5          # Orbital radius for NSBH system (controls drawing size)
+
+# Drawing position parameters (vertical positioning within each subplot)
+source_vertical_offset_bns = 1.0        # Vertical offset for BNS drawing (positive = up)
+source_vertical_offset_nsbh = 1.0       # Vertical offset for NSBH drawing (positive = up)
+
+# Label text parameters
+fs_source_label = 32                    # Font size for "BNS" and "NSBH" text labels
+source_label_spacing = 1.75             # Vertical spacing between drawing and label text (distance below drawing)
 
 # Population column (middle) - Mass distribution plots
-fs_population_xlabel = 26      # Font size for x-axis label (Mass)
-fs_population_ylabel = 20      # Font size for y-axis labels (Probability Density)
+fs_population_xlabel = 28      # Font size for x-axis label (Mass)
+fs_population_ylabel = 22      # Font size for y-axis labels (Probability Density)
 fs_population_title = 26       # Font size for plot titles (Uniform, Gaussian, etc.)
-fs_population_ticks = 14       # Font size for axis tick labels
+fs_xticks_population = 18      # Font size for all population plots x-axis ticks
+fs_yticks_population = 16      # Font size for all population plots y-axis ticks
 
 # EOS column (right) - Lambda(M) plot
-fs_eos_xlabel = 26             # Font size for x-axis label (M)
-fs_eos_ylabel = 26             # Font size for y-axis label (Lambda)
-fs_eos_ticks = 20              # Font size for axis tick labels
+fs_eos_xlabel = 28             # Font size for x-axis label (M)
+fs_eos_ylabel = 28             # Font size for y-axis label (Lambda)
+fs_xticks_eos = 22             # Font size for EOS plot x-axis tick labels
+fs_yticks_eos = 22             # Font size for EOS plot y-axis tick labels
 fs_eos_legend = 22             # Font size for legend text
 
 # Column headers (Source, Population, EOS)
-fs_column_headers = 26         # Font size for the column header boxes at top
+fs_column_headers = 36         # Font size for the column header text at top
 
 # Column header positions (x-coordinate in figure coordinates, 0-1 scale)
 header_x_source = 0.180         # X position for Source header
-header_x_population = 0.425     # X position for Population header
-header_x_eos = 0.77            # X position for EOS header
-header_y = 0.96                # Y position for all headers (vertical position)
+header_x_population = 0.435     # X position for Population header
+header_x_eos = 0.77             # X position for EOS header
+header_y = 0.96                 # Y position for all headers (vertical position)
 
-# Source drawings vertical offset (shifts BNS/NSBH drawings and labels up/down)
-source_vertical_offset = 0.3   # Positive values move drawings upward
+# Column header underline parameters
+underline_width_source = 0.10       # Width of underline for Source header
+underline_width_population = 0.15   # Width of underline for Population header
+underline_width_eos = 0.08          # Width of underline for EOS header
+underline_offset = 0.03             # Distance below text to underline
 
 # Corner plot kwargs (if used elsewhere)
 fs_corner_labels = 16
@@ -216,42 +232,45 @@ def create_mass_distributions(
     from matplotlib.patches import Circle
 
     fig = plt.figure(figsize=(13.5, 10.5))
-    # 3 columns: Source (2 rows), Population (3 rows), EOS (3 rows)
-    gs = GridSpec(3, 3, figure=fig, hspace=0.35, wspace=0.4,
+    # 6 rows for better control: Source gets 2 equal rows (0-2 for BNS, 3-5 for NSBH)
+    # Population and EOS span all 6 rows but we'll create 3 subplots each
+    gs = GridSpec(6, 3, figure=fig, hspace=0.35, wspace=0.4,
                   width_ratios=[WIDTH_SOURCE_COLUMN, WIDTH_POPULATION_COLUMN, WIDTH_EOS_COLUMN])
 
-    # Left column: Source drawings (BNS spans rows 0-1.5, NSBH spans rows 1.5-3)
-    ax_bns = fig.add_subplot(gs[0:2, 0])
-    ax_nsbh = fig.add_subplot(gs[2, 0])
+    # Left column: Source drawings - each gets 3 rows for equal space
+    ax_bns = fig.add_subplot(gs[0:3, 0])
+    ax_nsbh = fig.add_subplot(gs[3:6, 0])
 
-    # Middle column: Population mass distributions
-    ax_uniform = fig.add_subplot(gs[0, 1])
-    ax_gaussian = fig.add_subplot(gs[1, 1], sharex=ax_uniform)
-    ax_double = fig.add_subplot(gs[2, 1], sharex=ax_uniform)
+    # Middle column: Population mass distributions - distribute across 6 rows
+    ax_uniform = fig.add_subplot(gs[0:2, 1])
+    ax_gaussian = fig.add_subplot(gs[2:4, 1], sharex=ax_uniform)
+    ax_double = fig.add_subplot(gs[4:6, 1], sharex=ax_uniform)
 
-    # Right column: EOS placeholder spanning all rows
+    # Right column: EOS placeholder spanning all 6 rows
     ax_eos = fig.add_subplot(gs[:, 2])
 
     # ===== Source Column: BNS Drawing =====
-    ax_bns.set_xlim(-1.5, 1.5)
-    ax_bns.set_ylim(-1.5, 1.5)
+    # Calculate axis limits automatically to fit drawing and label
+    # Need to accommodate: orbit radius + circle radius + offset + label spacing
+    ylim_bns = source_orbit_radius_bns + RADIUS_LARGER_OBJECT + abs(source_vertical_offset_bns) + source_label_spacing + 0.3
+    ax_bns.set_xlim(-ylim_bns, ylim_bns)
+    ax_bns.set_ylim(-ylim_bns, ylim_bns)
     ax_bns.set_aspect('equal')
     ax_bns.axis('off')
 
     # BNS orbital parameters
-    orbit_radius_bns = 0.9
     angle_diag = np.pi / 4  # 45 degrees
 
     # Position circles on diagonal (upper-left and lower-right)
     # Upper left position
-    x1_bns = -orbit_radius_bns * np.cos(angle_diag)
-    y1_bns = orbit_radius_bns * np.sin(angle_diag) + source_vertical_offset
+    x1_bns = -source_orbit_radius_bns * np.cos(angle_diag)
+    y1_bns = source_orbit_radius_bns * np.sin(angle_diag) + source_vertical_offset_bns
     # Lower right position
-    x2_bns = orbit_radius_bns * np.cos(angle_diag)
-    y2_bns = -orbit_radius_bns * np.sin(angle_diag) + source_vertical_offset
+    x2_bns = source_orbit_radius_bns * np.cos(angle_diag)
+    y2_bns = -source_orbit_radius_bns * np.sin(angle_diag) + source_vertical_offset_bns
 
     # Draw orbit line first (lower zorder so it appears behind circles)
-    orbit_bns = Circle((0, source_vertical_offset), orbit_radius_bns, fill=False, ec='black', linewidth=1.5,
+    orbit_bns = Circle((0, source_vertical_offset_bns), source_orbit_radius_bns, fill=False, ec='black', linewidth=1.5,
                        linestyle='--', alpha=0.5, zorder=1)
     ax_bns.add_patch(orbit_bns)
 
@@ -262,27 +281,27 @@ def create_mass_distributions(
     ax_bns.add_patch(circle2_bns)
 
     # Add BNS label
-    ax_bns.text(0, -source_label_spacing + source_vertical_offset, 'BNS', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
+    ax_bns.text(0, -source_label_spacing + source_vertical_offset_bns, 'BNS', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
 
     # ===== Source Column: NSBH Drawing =====
-    ax_nsbh.set_xlim(-1.5, 1.5)
-    ax_nsbh.set_ylim(-1.5, 1.5)
+    # Calculate axis limits automatically to fit drawing and label
+    # Need to accommodate: orbit radius + circle radius + offset + label spacing
+    ylim_nsbh = source_orbit_radius_nsbh + RADIUS_LARGER_OBJECT + abs(source_vertical_offset_nsbh) + source_label_spacing + 0.3
+    ax_nsbh.set_xlim(-ylim_nsbh, ylim_nsbh)
+    ax_nsbh.set_ylim(-ylim_nsbh, ylim_nsbh)
     ax_nsbh.set_aspect('equal')
     ax_nsbh.axis('off')
 
-    # NSBH orbital parameters
-    orbit_radius_nsbh = 0.85
-
     # Position circles on diagonal (upper-left BH, lower-right NS)
     # Upper left position (black hole)
-    x1_nsbh = -orbit_radius_nsbh * np.cos(angle_diag)
-    y1_nsbh = orbit_radius_nsbh * np.sin(angle_diag) + source_vertical_offset
+    x1_nsbh = -source_orbit_radius_nsbh * np.cos(angle_diag)
+    y1_nsbh = source_orbit_radius_nsbh * np.sin(angle_diag) + source_vertical_offset_nsbh
     # Lower right position (neutron star)
-    x2_nsbh = orbit_radius_nsbh * np.cos(angle_diag)
-    y2_nsbh = -orbit_radius_nsbh * np.sin(angle_diag) + source_vertical_offset
+    x2_nsbh = source_orbit_radius_nsbh * np.cos(angle_diag)
+    y2_nsbh = -source_orbit_radius_nsbh * np.sin(angle_diag) + source_vertical_offset_nsbh
 
     # Draw orbit line first (lower zorder so it appears behind circles)
-    orbit_nsbh = Circle((0, source_vertical_offset), orbit_radius_nsbh, fill=False, ec='black', linewidth=1.5,
+    orbit_nsbh = Circle((0, source_vertical_offset_nsbh), source_orbit_radius_nsbh, fill=False, ec='black', linewidth=1.5,
                         linestyle='--', alpha=0.5, zorder=1)
     ax_nsbh.add_patch(orbit_nsbh)
 
@@ -294,39 +313,42 @@ def create_mass_distributions(
     ax_nsbh.add_patch(circle2_nsbh)
 
     # Add NSBH label
-    ax_nsbh.text(0, -source_label_spacing + source_vertical_offset, 'NSBH', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
+    ax_nsbh.text(0, -source_label_spacing + source_vertical_offset_nsbh, 'NSBH', ha='center', va='top', fontsize=fs_source_label, fontweight='bold')
 
     # ===== Population Column: Mass Distributions =====
     # Uniform distribution (KDE from training data)
     pdf_uniform = uniform_mass_pdf(masses)
     ax_uniform.fill_between(masses, pdf_uniform, alpha=0.7, color=NS_COLOR, linewidth=2)
     ax_uniform.plot(masses, pdf_uniform, color=NS_COLOR, linewidth=2.5)
-    ax_uniform.set_ylabel('Probability Density', fontsize=fs_population_ylabel)
+    ax_uniform.set_ylabel('Prob. density', fontsize=fs_population_ylabel)
     ax_uniform.set_title('Uniform', fontsize=fs_population_title)
     ax_uniform.set_xlim(m_min, m_max)
     ax_uniform.set_ylim(0, None)
-    ax_uniform.tick_params(labelbottom=False, labelsize=fs_population_ticks)
+    ax_uniform.tick_params(axis='x', labelbottom=False, labelsize=fs_xticks_population)
+    ax_uniform.tick_params(axis='y', labelsize=fs_yticks_population)
 
     # Single Gaussian distribution
     pdf_gaussian = gaussian_mass_pdf(masses)
     ax_gaussian.fill_between(masses, pdf_gaussian, alpha=0.7, color=NS_COLOR, linewidth=2)
     ax_gaussian.plot(masses, pdf_gaussian, color=NS_COLOR, linewidth=2.5)
-    ax_gaussian.set_ylabel('Probability Density', fontsize=fs_population_ylabel)
+    ax_gaussian.set_ylabel('Prob. density', fontsize=fs_population_ylabel)
     ax_gaussian.set_title('Gaussian', fontsize=fs_population_title)
     ax_gaussian.set_xlim(m_min, m_max)
     ax_gaussian.set_ylim(0, None)
-    ax_gaussian.tick_params(labelbottom=False, labelsize=fs_population_ticks)
+    ax_gaussian.tick_params(axis='x', labelbottom=False, labelsize=fs_xticks_population)
+    ax_gaussian.tick_params(axis='y', labelsize=fs_yticks_population)
 
     # Double Gaussian distribution
     pdf_double = double_gaussian_mass_pdf(masses)
     ax_double.fill_between(masses, pdf_double, alpha=0.7, color=NS_COLOR, linewidth=2)
     ax_double.plot(masses, pdf_double, color=NS_COLOR, linewidth=2.5)
     ax_double.set_xlabel(r'Mass [$M_\odot$]', fontsize=fs_population_xlabel)
-    ax_double.set_ylabel('Probability Density', fontsize=fs_population_ylabel)
+    ax_double.set_ylabel('Prob. density', fontsize=fs_population_ylabel)
     ax_double.set_title('Double Gaussian', fontsize=fs_population_title)
     ax_double.set_xlim(m_min, m_max)
     ax_double.set_ylim(0, None)
-    ax_double.tick_params(labelsize=fs_population_ticks)
+    ax_double.tick_params(axis='x', labelsize=fs_xticks_population)
+    ax_double.tick_params(axis='y', labelsize=fs_yticks_population)
 
     # ===== EOS Column: Lambda(M) Curves =====
     # Define EOS color scheme (from plots/utils.py)
@@ -350,6 +372,10 @@ def create_mass_distributions(
 
     # Create mass array for computing credible intervals
     masses_array = np.linspace(M_MIN_EOS, M_MAX_EOS, N_MASSES_LAMBDAS_PLOT)
+
+    # Store legend handles for solid color patches
+    from matplotlib.patches import Patch
+    legend_handles = []
 
     # Plot 90% credible intervals for each dataset
     for eos_name in eos_datasets:
@@ -402,13 +428,16 @@ def create_mass_distributions(
                 lambda_low[i] = np.nan
                 lambda_high[i] = np.nan
 
-        # Plot credible interval with fill_between
+        # Plot credible interval with fill_between (no label here to avoid alpha in legend)
         ax_eos.fill_between(masses_array, lambda_low, lambda_high,
-                            alpha=0.3, color=color, label=EOS_LABELS[eos_name])
+                            alpha=0.3, color=color)
 
         # Draw boundary lines
         ax_eos.plot(masses_array, lambda_low, color=color, linewidth=1.5, alpha=0.8)
         ax_eos.plot(masses_array, lambda_high, color=color, linewidth=1.5, alpha=0.8)
+
+        # Create custom legend handle with solid color (no alpha)
+        legend_handles.append(Patch(facecolor=color, edgecolor=color, label=EOS_LABELS[eos_name]))
 
     # Styling
     ax_eos.set_xlabel(r'Mass [$M_\odot$]', fontsize=fs_eos_xlabel)
@@ -416,26 +445,42 @@ def create_mass_distributions(
     ax_eos.set_xlim(M_MIN_EOS, M_MAX_EOS)
     ax_eos.set_ylim(LAMBDA_MIN_EOS, LAMBDA_MAX_EOS)
     ax_eos.set_yscale('log')
-    ax_eos.tick_params(labelsize=fs_eos_ticks)
+    ax_eos.tick_params(axis='x', labelsize=fs_xticks_eos)
+    ax_eos.tick_params(axis='y', labelsize=fs_yticks_eos)
 
-    # Add legend for EOS datasets
-    ax_eos.legend(loc='upper right', fontsize=fs_eos_legend, framealpha=0.9)
+    # Add legend for EOS datasets with custom handles (solid colors, no alpha)
+    ax_eos.legend(handles=legend_handles, loc='upper right', fontsize=fs_eos_legend, framealpha=0.9)
 
     # ===== Add column headers =====
+    # Import line for drawing underlines
+    from matplotlib.lines import Line2D
+
     # Source header (left column)
     fig.text(header_x_source, header_y, 'Source', ha='center', va='center',
-             fontsize=fs_column_headers, fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='black', linewidth=2))
+             fontsize=fs_column_headers, fontweight='bold')
+    # Add underline for Source
+    line_source = Line2D([header_x_source - underline_width_source/2, header_x_source + underline_width_source/2],
+                         [header_y - underline_offset, header_y - underline_offset],
+                         transform=fig.transFigure, color='black', linewidth=2)
+    fig.add_artist(line_source)
 
     # Population header (middle column)
     fig.text(header_x_population, header_y, 'Population', ha='center', va='center',
-             fontsize=fs_column_headers, fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='black', linewidth=2))
+             fontsize=fs_column_headers, fontweight='bold')
+    # Add underline for Population
+    line_population = Line2D([header_x_population - underline_width_population/2, header_x_population + underline_width_population/2],
+                             [header_y - underline_offset, header_y - underline_offset],
+                             transform=fig.transFigure, color='black', linewidth=2)
+    fig.add_artist(line_population)
 
     # EOS header (right column)
     fig.text(header_x_eos, header_y, 'EOS', ha='center', va='center',
-             fontsize=fs_column_headers, fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='black', linewidth=2))
+             fontsize=fs_column_headers, fontweight='bold')
+    # Add underline for EOS
+    line_eos = Line2D([header_x_eos - underline_width_eos/2, header_x_eos + underline_width_eos/2],
+                      [header_y - underline_offset, header_y - underline_offset],
+                      transform=fig.transFigure, color='black', linewidth=2)
+    fig.add_artist(line_eos)
 
     if save:
         output_path = OUTPUT_DIR / "Figure1.pdf"
