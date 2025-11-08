@@ -42,9 +42,9 @@ MONEY_PARAMETERS.extend([
 # Display name mappings
 POPULATION_DISPLAY = {
     "uniform": "U",
-    "gaussian": "G", 
+    "gaussian": "G",
     "double_gaussian": "DG",
-    "default": "Default"
+    "default": "Uninformed"
 }
 
 EOS_DISPLAY = {
@@ -384,7 +384,7 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                                                       for eos in eos_to_process for param in MONEY_PARAMETERS):
             # Format cells for default (combine Pop and EOS columns)
             event_cell = f"\\multirow{{{event_rows}}}{{*}}{{\\shortstack{{{event}\\\\({source.upper()})}}}}" if event_first else ""
-            combined_cell = "\\multicolumn{2}{c|}{Default}"  # Span both Pop and EOS columns
+            combined_cell = "\\multicolumn{2}{c|}{Uninformed}"  # Span both Pop and EOS columns
             
             # Use first EOS data since all EOS entries are identical for default
             first_eos = eos_to_process[0]
@@ -463,9 +463,9 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                     # Handle math mode symbols specially (need \boldsymbol instead of \textbf)
                     eos_display = EOS_DISPLAY[eos]
                     if "\\chi" in eos_display:
-                        # Replace $\chi_{\rm{EFT}}$ with $\boldsymbol{\chi}_{\rm{EFT}}$ for math mode bold
-                        eos_display_bold = eos_display.replace("$\\chi_{\\rm{EFT}}$", "$\\boldsymbol{\\chi}_{\\rm{EFT}}$")
-                        eos_cell = f"\\textbf{{{eos_display_bold}}}"
+                        # Replace $\chi_{\rm{EFT}}$ with $\boldsymbol{\chi}_{\mathbf{EFT}}$ for math mode bold
+                        eos_display_bold = eos_display.replace("$\\chi_{\\rm{EFT}}$", "$\\boldsymbol{\\chi}_{\\mathbf{EFT}}$")
+                        eos_cell = eos_display_bold
                     else:
                         eos_cell = f"\\textbf{{{eos_display}}}"
                 else:
