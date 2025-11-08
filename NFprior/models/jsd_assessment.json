@@ -1,0 +1,119 @@
+{
+  "double_gaussian/bns/radio": {
+    "chirp_mass_source": 0.00035284168533639777,
+    "mass_ratio": 5.675305799357311e-05,
+    "lambda_1": 0.00015615870604614973,
+    "lambda_2": 0.00028080198692499573,
+    "overall_flattened": 8.794729092633606e-05
+  },
+  "double_gaussian/bns/radio_NICER": {
+    "chirp_mass_source": 0.0001457266315379959,
+    "mass_ratio": 8.029177565891162e-05,
+    "lambda_1": 4.134736640264469e-05,
+    "lambda_2": 7.610480267895708e-05,
+    "overall_flattened": 2.4957006177579436e-05
+  },
+  "double_gaussian/bns/radio_chiEFT": {
+    "chirp_mass_source": 0.00018021440217913602,
+    "mass_ratio": 0.0001087371026202389,
+    "lambda_1": 7.606513793246368e-05,
+    "lambda_2": 6.640445610374089e-05,
+    "overall_flattened": 2.313235852558525e-05
+  },
+  "double_gaussian/nsbh/radio": {
+    "chirp_mass_source": 9.004131379431117e-05,
+    "mass_ratio": 5.576683942644948e-05,
+    "lambda_2": 6.340904134210799e-05,
+    "overall_flattened": 2.1068606218013145e-05
+  },
+  "double_gaussian/nsbh/radio_NICER": {
+    "chirp_mass_source": 7.867787932140773e-05,
+    "mass_ratio": 0.00020850236143204288,
+    "lambda_2": 0.00018471395943052784,
+    "overall_flattened": 4.878464374989947e-05
+  },
+  "double_gaussian/nsbh/radio_chiEFT": {
+    "chirp_mass_source": 9.770877926617028e-05,
+    "mass_ratio": 7.756362550053154e-05,
+    "lambda_2": 5.793979031357707e-05,
+    "overall_flattened": 1.6163814455555154e-05
+  },
+  "gaussian/bns/radio": {
+    "chirp_mass_source": 0.00034427196929510105,
+    "mass_ratio": 0.00026266527495691523,
+    "lambda_1": 0.0002611896794765827,
+    "lambda_2": 0.0001268084130696798,
+    "overall_flattened": 3.9240357004707925e-05
+  },
+  "gaussian/bns/radio_NICER": {
+    "chirp_mass_source": 0.00012770130108679208,
+    "mass_ratio": 0.00010649477576899261,
+    "lambda_1": 0.0003833865222407488,
+    "lambda_2": 0.00028359007664552946,
+    "overall_flattened": 5.4627800881002776e-05
+  },
+  "gaussian/bns/radio_chiEFT": {
+    "chirp_mass_source": 0.000228202183363525,
+    "mass_ratio": 0.0002780754336508275,
+    "lambda_1": 0.00022615746367148586,
+    "lambda_2": 0.00020914662655559452,
+    "overall_flattened": 3.0999847610818934e-05
+  },
+  "gaussian/nsbh/radio": {
+    "chirp_mass_source": 0.00013239337194463377,
+    "mass_ratio": 0.000620717120241122,
+    "lambda_2": 0.00022509096054199292,
+    "overall_flattened": 7.476927835598201e-05
+  },
+  "gaussian/nsbh/radio_NICER": {
+    "chirp_mass_source": 4.606820567332831e-05,
+    "mass_ratio": 0.00021875236594864948,
+    "lambda_2": 0.00019616895860935323,
+    "overall_flattened": 6.5094388737126e-05
+  },
+  "gaussian/nsbh/radio_chiEFT": {
+    "chirp_mass_source": 8.921458822678472e-05,
+    "mass_ratio": 0.0003137159993537199,
+    "lambda_2": 6.86181747770834e-05,
+    "overall_flattened": 2.1042815494956702e-05
+  },
+  "uniform/bns/radio": {
+    "chirp_mass_source": 0.0001333091603948216,
+    "mass_ratio": 0.00025328291939355886,
+    "lambda_1": 0.00021252511631956512,
+    "lambda_2": 0.0001894366487343176,
+    "overall_flattened": 7.807920073734696e-05
+  },
+  "uniform/bns/radio_NICER": {
+    "chirp_mass_source": 0.00013012292380460127,
+    "mass_ratio": 3.873419523753419e-05,
+    "lambda_1": 6.438869004857515e-05,
+    "lambda_2": 0.00015489751933583888,
+    "overall_flattened": 2.6887407757282937e-05
+  },
+  "uniform/bns/radio_chiEFT": {
+    "chirp_mass_source": 0.00012438866449660644,
+    "mass_ratio": 0.00020681625498236795,
+    "lambda_1": 6.147236043436639e-05,
+    "lambda_2": 8.202511359777607e-05,
+    "overall_flattened": 3.249400875427113e-05
+  },
+  "uniform/nsbh/radio": {
+    "chirp_mass_source": 0.00010529262590243481,
+    "mass_ratio": 0.00011251647444434081,
+    "lambda_2": 9.658365138151206e-05,
+    "overall_flattened": 3.0515773905001646e-05
+  },
+  "uniform/nsbh/radio_NICER": {
+    "chirp_mass_source": 6.186712903893005e-05,
+    "mass_ratio": 0.00016718851383886853,
+    "lambda_2": 5.8550848475542186e-05,
+    "overall_flattened": 1.940339210464526e-05
+  },
+  "uniform/nsbh/radio_chiEFT": {
+    "chirp_mass_source": 0.00016438662720488637,
+    "mass_ratio": 0.00011030538522975786,
+    "lambda_2": 4.015041902606238e-05,
+    "overall_flattened": 1.334779153635582e-05
+  }
+}
