@@ -566,7 +566,8 @@ def create_mass_distributions(
     fig.add_artist(patch)
 
     # Add text below the bracket
-    fig.text(bracket_center, bracket_text_y, r'$\pi_{\rm{NF}}(m_1^{\rm{src}}, m_2^{\rm{src}}, \Lambda_1, \Lambda_2)$',
+    # fig.text(bracket_center, bracket_text_y, r'$\pi_{\rm{NF}}(m_1^{\rm{src}}, m_2^{\rm{src}}, \Lambda_1, \Lambda_2)$',
+    fig.text(bracket_center, bracket_text_y, r'$p_{\rm{NF}}(m_1^{\rm{src}}, m_2^{\rm{src}}, \Lambda_1, \Lambda_2 | \mathcal{H})$',
              ha='center', va='top', fontsize=fs_bracket_text, transform=fig.transFigure)
 
     if save:
