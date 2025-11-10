@@ -373,9 +373,9 @@ def create_mass_distributions(
     }
 
     EOS_LABELS = {
-        "radio": r"Heavy PSRs",
-        "radio_chiEFT": r"+$\chi_{\rm{EFT}}$",
-        "radio_NICER": r"+NICER"
+        "radio": r"PSRs",
+        "radio_chiEFT": r"PSRs+$\chi_{\rm{EFT}}$",
+        "radio_NICER": r"PSRs+NICER"
     }
 
     # Load EOS data from each dataset

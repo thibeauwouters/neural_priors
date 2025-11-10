@@ -31,11 +31,11 @@ POPULATION_DISPLAY = {
 }
 
 EOS_DISPLAY = {
-    "radio": "Heavy PSRs",
-    "radio_chiEFT": "+$\\chi_{\\rm{EFT}}$",
-    "radio_NICER": "+NICER",
+    "radio": "PSRs",
+    "radio_chiEFT": "PSRs+$\\chi_{\\rm{EFT}}$",
+    "radio_NICER": "PSRs+NICER",
     "radio_GW170817": "+GW170817",
-    "radio_chiEFT_NICER": "+$\\chi_{\\rm{EFT}}$+NICER"
+    "radio_chiEFT_NICER": "PSRs+$\\chi_{\\rm{EFT}}$+NICER"
 }
 
 def collect_bayes_factors_source_first(base_dir: str = "../GW_runs/", ignore_gw170817_eos: bool = False) -> Dict[str, Any]:

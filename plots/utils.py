@@ -64,10 +64,10 @@ EOS_SAMPLES_NAMES = ["radio",
                      "radio_chiEFT",
                      "radio_NICER",
                      "radio_chiEFT_NICER"]
-EOS_SAMPLES_NAMES_DICT = {"radio": r"Heavy PSRs",
-                          "radio_chiEFT": r"+$\chi_{\rm{EFT}}$",
-                          "radio_chiEFT_NICER": r"+$\chi_{\rm{EFT}}$+NICER",
-                          "radio_NICER": r"+NICER"
+EOS_SAMPLES_NAMES_DICT = {"radio": r"PSRs",
+                          "radio_chiEFT": r"PSRs+$\chi_{\rm{EFT}}$",
+                          "radio_chiEFT_NICER": r"PSRs+$\chi_{\rm{EFT}}$+NICER",
+                          "radio_NICER": r"PSRs+NICER"
                           }
 
 # EOS_COLORS = {

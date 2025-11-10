@@ -959,20 +959,7 @@ def plot_corner_fixed_population_varying_eos_PRESENTATION(gw_event: str,
     plt.savefig(output_path, bbox_inches='tight')
     print(f"Saved PRESENTATION figure to: {output_path}")
 
-    # Copy to paper directory for specific plots
-    copy_to_paper = False
-    if gw_event == "GW170817" and source_type == "bns" and population == "gaussian":
-        copy_to_paper = True
-    elif gw_event == "GW190425" and source_type == "bns" and population == "uniform":
-        copy_to_paper = True
-    elif gw_event == "GW230529" and source_type == "nsbh" and population == "gaussian":
-        copy_to_paper = True
-
-    if copy_to_paper and os.path.exists("../../paper/Figures"):
-        print(f"Also saving to the Overleaf paper repo")
-        save_name_paper = output_path.replace("./figures/money_plots/", "../../paper/Figures/")
-        plt.savefig(save_name_paper, bbox_inches='tight')
-
+    # Note: PRESENTATION figures are not copied to the paper directory
     plt.close()
 
     return output_path

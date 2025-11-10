@@ -28,11 +28,11 @@ POPULATION_DISPLAY = {
 }
 
 EOS_DISPLAY = {
-    "radio": "Radio",
-    "radio_chiEFT": "+\\chiEFT",
-    "radio_NICER": "+NICER",
+    "radio": "PSRs",
+    "radio_chiEFT": "PSRs+\\chiEFT",
+    "radio_NICER": "PSRs+NICER",
     "radio_GW170817": "+GW170817",
-    "radio_chiEFT_NICER": "+\\chiEFT+NICER"
+    "radio_chiEFT_NICER": "PSRs+\\chiEFT+NICER"
 }
 
 

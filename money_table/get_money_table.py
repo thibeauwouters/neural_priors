@@ -48,11 +48,11 @@ POPULATION_DISPLAY = {
 }
 
 EOS_DISPLAY = {
-    "radio": "Heavy PSRs",
-    "radio_chiEFT": "+$\\chi_{\\rm{EFT}}$",
-    "radio_NICER": "+NICER",
+    "radio": "PSRs",
+    "radio_chiEFT": "PSRs+$\\chi_{\\rm{EFT}}$",
+    "radio_NICER": "PSRs+NICER",
     "radio_GW170817": "+GW170817",
-    "radio_chiEFT_NICER": "+$\\chi_{\\rm{EFT}}$+NICER"
+    "radio_chiEFT_NICER": "PSRs+$\\chi_{\\rm{EFT}}$+NICER"
 }
 
 PARAMETER_DISPLAY = {
@@ -463,8 +463,12 @@ def generate_latex_parameter_table(data: Dict[str, Any], ignore_gw170817_eos: bo
                     # Handle math mode symbols specially (need \boldsymbol instead of \textbf)
                     eos_display = EOS_DISPLAY[eos]
                     if "\\chi" in eos_display:
-                        # Replace $\chi_{\rm{EFT}}$ with $\boldsymbol{\chi}_{\mathbf{EFT}}$ for math mode bold
+                        # For entries with math mode, bold the text part with \textbf and math with \boldsymbol
+                        # e.g., "PSRs+$\chi_{\rm{EFT}}$" -> "\textbf{PSRs+}$\boldsymbol{\chi}_{\mathbf{EFT}}$"
                         eos_display_bold = eos_display.replace("$\\chi_{\\rm{EFT}}$", "$\\boldsymbol{\\chi}_{\\mathbf{EFT}}$")
+                        # Bold any text before the math mode
+                        if eos_display_bold.startswith("PSRs"):
+                            eos_display_bold = eos_display_bold.replace("PSRs+", "\\textbf{PSRs+}")
                         eos_cell = eos_display_bold
                     else:
                         eos_cell = f"\\textbf{{{eos_display}}}"
