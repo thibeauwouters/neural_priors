@@ -8,7 +8,8 @@ This script generates "prior" samples by:
 4. Converting to lambda_tilde and delta_lambda_tilde
 
 Then creates KDE plots comparing the "prior" (computed from EOS) vs "posterior"
-(from parameter estimation) for different GW events.
+(from parameter estimation) for different GW events, with KL divergence
+KL(posterior||prior) computed to quantify information gain from the data.
 """
 
 import os
@@ -16,7 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import Dict, List, Tuple
 from scipy.interpolate import interp1d
-from scipy.stats import gaussian_kde
+from scipy.stats import gaussian_kde, entropy
 from scipy.special import kl_div
 
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
@@ -47,17 +48,19 @@ params = {
 plt.rcParams.update(params)
 
 
-def calculate_jsd_bits_histogram(p_samples: np.ndarray, q_samples: np.ndarray, n_bins: int = 50) -> float:
+def calculate_kl_bits_histogram(p_samples: np.ndarray, q_samples: np.ndarray,
+                                n_bins: int = 50, computation: str = 'scipy') -> float:
     """
-    Calculate Jensen-Shannon Divergence in bits using histogram method.
+    Calculate Kullback-Leibler Divergence KL(P||Q) in bits using histogram method.
 
     Args:
-        p_samples: Samples from distribution P
-        q_samples: Samples from distribution Q
+        p_samples: Samples from distribution P (typically posterior)
+        q_samples: Samples from distribution Q (typically prior)
         n_bins: Number of bins for histogram estimation
+        computation: Method for computing KL divergence ('scipy' or 'manual'), default: 'scipy'
 
     Returns:
-        float: JSD in bits
+        float: KL(P||Q) in bits
     """
     # Determine common range for both distributions
     min_val = min(p_samples.min(), q_samples.min())
@@ -77,31 +80,35 @@ def calculate_jsd_bits_histogram(p_samples: np.ndarray, q_samples: np.ndarray, n
     p_prob = np.maximum(p_prob, eps)
     q_prob = np.maximum(q_prob, eps)
 
-    # Calculate mixture distribution M = 0.5 * (P + Q)
-    m_prob = 0.5 * (p_prob + q_prob)
-
-    # Calculate JSD = 0.5 * KL(P||M) + 0.5 * KL(Q||M)
-    kl_pm = np.sum(kl_div(p_prob, m_prob))
-    kl_qm = np.sum(kl_div(q_prob, m_prob))
-    jsd_nats = 0.5 * kl_pm + 0.5 * kl_qm
+    # Calculate KL(P||Q) using selected method
+    if computation == 'scipy':
+        # Use scipy.stats.entropy which computes KL divergence directly
+        kl_nats = entropy(p_prob, q_prob)
+    elif computation == 'manual':
+        # Use scipy.special.kl_div element-wise then sum
+        kl_nats = np.sum(kl_div(p_prob, q_prob))
+    else:
+        raise ValueError(f"Unknown computation method '{computation}'. Choose 'scipy' or 'manual'.")
 
     # Convert from nats to bits
-    jsd_bits = jsd_nats / np.log(2)
+    kl_bits = kl_nats / np.log(2)
 
-    return float(jsd_bits)
+    return float(kl_bits)
 
 
-def calculate_jsd_bits_kde(p_samples: np.ndarray, q_samples: np.ndarray, n_points: int = 1000) -> float:
+def calculate_kl_bits_kde(p_samples: np.ndarray, q_samples: np.ndarray,
+                           n_points: int = 1000, computation: str = 'scipy') -> float:
     """
-    Calculate Jensen-Shannon Divergence in bits using Kernel Density Estimation.
+    Calculate Kullback-Leibler Divergence KL(P||Q) in bits using Kernel Density Estimation.
 
     Args:
-        p_samples: Samples from distribution P
-        q_samples: Samples from distribution Q
+        p_samples: Samples from distribution P (typically posterior)
+        q_samples: Samples from distribution Q (typically prior)
         n_points: Number of points for KDE evaluation
+        computation: Method for computing KL divergence ('scipy' or 'manual'), default: 'scipy'
 
     Returns:
-        float: JSD in bits
+        float: KL(P||Q) in bits
     """
     # Create KDEs for both distributions
     p_kde = gaussian_kde(p_samples)
@@ -133,39 +140,43 @@ def calculate_jsd_bits_kde(p_samples: np.ndarray, q_samples: np.ndarray, n_point
     p_prob = np.maximum(p_prob, eps)
     q_prob = np.maximum(q_prob, eps)
 
-    # Calculate mixture distribution M = 0.5 * (P + Q)
-    m_prob = 0.5 * (p_prob + q_prob)
-
-    # Calculate JSD = 0.5 * KL(P||M) + 0.5 * KL(Q||M)
-    kl_pm = np.sum(kl_div(p_prob, m_prob))
-    kl_qm = np.sum(kl_div(q_prob, m_prob))
-    jsd_nats = 0.5 * kl_pm + 0.5 * kl_qm
+    # Calculate KL(P||Q) using selected method
+    if computation == 'scipy':
+        # Use scipy.stats.entropy which computes KL divergence directly
+        kl_nats = entropy(p_prob, q_prob)
+    elif computation == 'manual':
+        # Use scipy.special.kl_div element-wise then sum
+        kl_nats = np.sum(kl_div(p_prob, q_prob))
+    else:
+        raise ValueError(f"Unknown computation method '{computation}'. Choose 'scipy' or 'manual'.")
 
     # Convert from nats to bits
-    jsd_bits = jsd_nats / np.log(2)
+    kl_bits = kl_nats / np.log(2)
 
-    return float(jsd_bits)
+    return float(kl_bits)
 
 
-def calculate_jsd_bits(p_samples: np.ndarray, q_samples: np.ndarray,
-                       method: str = 'kde', n_bins: int = 50, n_points: int = 1000) -> float:
+def calculate_kl_bits(p_samples: np.ndarray, q_samples: np.ndarray,
+                      method: str = 'kde', n_bins: int = 50, n_points: int = 1000,
+                      computation: str = 'scipy') -> float:
     """
-    Calculate Jensen-Shannon Divergence in bits between two sample distributions.
+    Calculate Kullback-Leibler Divergence KL(P||Q) in bits between two sample distributions.
 
     Args:
-        p_samples: Samples from distribution P
-        q_samples: Samples from distribution Q
+        p_samples: Samples from distribution P (typically posterior)
+        q_samples: Samples from distribution Q (typically prior)
         method: Method to use ('histogram' or 'kde'), default: 'kde'
         n_bins: Number of bins for histogram method
         n_points: Number of evaluation points for KDE method
+        computation: Method for computing KL divergence ('scipy' or 'manual'), default: 'scipy'
 
     Returns:
-        float: JSD in bits
+        float: KL(P||Q) in bits
     """
     if method == 'kde':
-        return calculate_jsd_bits_kde(p_samples, q_samples, n_points=n_points)
+        return calculate_kl_bits_kde(p_samples, q_samples, n_points=n_points, computation=computation)
     elif method == 'histogram':
-        return calculate_jsd_bits_histogram(p_samples, q_samples, n_bins=n_bins)
+        return calculate_kl_bits_histogram(p_samples, q_samples, n_bins=n_bins, computation=computation)
     else:
         raise ValueError(f"Unknown method '{method}'. Choose 'histogram' or 'kde'.")
 
@@ -340,9 +351,10 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
                                      output_dir: str = "./figures/prior_vs_posterior",
                                      output_filename: str = "combined_prior_vs_posterior.pdf",
                                      quantile_range: Tuple[float, float] = (0.0001, 0.9975),
-                                     jsd_method: str = 'kde',
-                                     jsd_n_bins: int = 100,
-                                     jsd_n_points: int = 1000):
+                                     kl_method: str = 'kde',
+                                     kl_n_bins: int = 100,
+                                     kl_n_points: int = 1000,
+                                     kl_computation: str = 'scipy'):
     """
     Create combined KDE comparison plot with 3 vertical panels (one per event).
 
@@ -356,12 +368,13 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
         output_dir (str): Output directory for figures
         output_filename (str): Output filename
         quantile_range (Tuple[float, float]): Quantile range for x-axis limits
-        jsd_method (str): Method for JSD calculation ('histogram' or 'kde'), default: 'kde'
-        jsd_n_bins (int): Number of bins for histogram method, default: 100
-        jsd_n_points (int): Number of evaluation points for KDE method, default: 1000
+        kl_method (str): Method for KL calculation ('histogram' or 'kde'), default: 'kde'
+        kl_n_bins (int): Number of bins for histogram method, default: 100
+        kl_n_points (int): Number of evaluation points for KDE method, default: 1000
+        kl_computation (str): Method for computing KL divergence ('scipy' or 'manual'), default: 'scipy'
     """
     # Create figure with 3 vertical panels
-    fig, axes = plt.subplots(3, 1, figsize=(8, 12))
+    _, axes = plt.subplots(3, 1, figsize=(8, 12))
 
     # Collect legend handles and labels for top panel
     from matplotlib.patches import Rectangle
@@ -412,8 +425,8 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
         else:
             x_min, x_max = 0, 1000  # Fallback
 
-        # Dictionary to store JSD values for this event
-        jsd_values = {}
+        # Dictionary to store KL divergence values for this event
+        kl_values = {}
 
         # Plot each EOS
         for eos_name in eos_samples:
@@ -427,13 +440,14 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
             posterior_data = posterior_dict[eos_name][param]
             prior_data = prior_dict[eos_name][param]
 
-            # Compute JSD between posterior and prior
-            jsd_value = calculate_jsd_bits(posterior_data, prior_data,
-                                          method=jsd_method,
-                                          n_bins=jsd_n_bins,
-                                          n_points=jsd_n_points)
-            jsd_values[eos_name] = jsd_value
-            print(f"  {gw_event} - {eos_name} - {param}: JSD = {jsd_value:.3f} bits ({jsd_method} method)")
+            # Compute KL(posterior||prior) to measure information gain from data
+            kl_value = calculate_kl_bits(posterior_data, prior_data,
+                                         method=kl_method,
+                                         n_bins=kl_n_bins,
+                                         n_points=kl_n_points,
+                                         computation=kl_computation)
+            kl_values[eos_name] = kl_value
+            print(f"  {gw_event} - {eos_name} - {param}: KL(post||prior) = {kl_value:.3f} bits ({kl_method} method, {kl_computation} computation)")
 
             # Create KDEs
             posterior_kde = gaussian_kde(posterior_data)
@@ -473,14 +487,14 @@ def plot_combined_prior_vs_posterior(event_configs: List[Dict],
         legend_handles = []
         legend_labels = []
 
-        # Add EOS color squares with JSD values for this event
+        # Add EOS color squares with KL divergence values for this event
         for eos_name in eos_samples:
             color = EOS_COLORS.get(eos_name, 'black')
             label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
 
-            # Add JSD value in brackets if available
-            if eos_name in jsd_values:
-                label += f" ({jsd_values[eos_name]:.3f})"
+            # Add KL divergence value in brackets if available
+            if eos_name in kl_values:
+                label += f" ({kl_values[eos_name]:.3f})"
 
             legend_handles.append(Rectangle((0, 0), 1, 1, fc=color, alpha=1.0, edgecolor='none'))
             legend_labels.append(label)
@@ -625,21 +639,24 @@ def load_posterior_data_for_event(gw_event: str,
     return posterior_dict
 
 
-def main(jsd_method: str = 'kde', jsd_n_bins: int = 100, jsd_n_points: int = 1000):
+def main(kl_method: str = 'kde', kl_n_bins: int = 100, kl_n_points: int = 1000,
+         kl_computation: str = 'scipy'):
     """
     Main function to generate prior samples and create combined KDE plot.
 
     Args:
-        jsd_method (str): Method for JSD calculation ('histogram' or 'kde'), default: 'kde'
-        jsd_n_bins (int): Number of bins for histogram method, default: 100
-        jsd_n_points (int): Number of evaluation points for KDE method, default: 1000
+        kl_method (str): Method for KL calculation ('histogram' or 'kde'), default: 'kde'
+        kl_n_bins (int): Number of bins for histogram method, default: 100
+        kl_n_points (int): Number of evaluation points for KDE method, default: 1000
+        kl_computation (str): Method for computing KL divergence ('scipy' or 'manual'), default: 'scipy'
     """
 
-    print(f"\nUsing JSD calculation method: {jsd_method}")
-    if jsd_method == 'histogram':
-        print(f"  Number of bins: {jsd_n_bins}")
-    elif jsd_method == 'kde':
-        print(f"  Number of evaluation points: {jsd_n_points}")
+    print(f"\nUsing KL divergence calculation method: {kl_method}")
+    if kl_method == 'histogram':
+        print(f"  Number of bins: {kl_n_bins}")
+    elif kl_method == 'kde':
+        print(f"  Number of evaluation points: {kl_n_points}")
+    print(f"  Computation method: {kl_computation}")
 
     # Configuration for specific events
     events_config = [
@@ -705,9 +722,10 @@ def main(jsd_method: str = 'kde', jsd_n_bins: int = 100, jsd_n_points: int = 100
         event_configs=events_config,
         posterior_dict_all=posterior_dict_all,
         prior_dict_all=prior_dict_all,
-        jsd_method=jsd_method,
-        jsd_n_bins=jsd_n_bins,
-        jsd_n_points=jsd_n_points
+        kl_method=kl_method,
+        kl_n_bins=kl_n_bins,
+        kl_n_points=kl_n_points,
+        kl_computation=kl_computation
     )
 
     print("\n" + "="*60)
@@ -722,29 +740,37 @@ if __name__ == "__main__":
         description="Generate prior samples and create prior vs posterior comparison plots"
     )
     parser.add_argument(
-        "--jsd-method",
+        "--kl-method",
         type=str,
         choices=['histogram', 'kde'],
         default='kde',
-        help="Method for JSD calculation (default: kde)"
+        help="Method for KL divergence calculation (default: kde)"
     )
     parser.add_argument(
-        "--jsd-n-bins",
+        "--kl-n-bins",
         type=int,
         default=100,
         help="Number of bins for histogram method (default: 100)"
     )
     parser.add_argument(
-        "--jsd-n-points",
+        "--kl-n-points",
         type=int,
         default=1000,
         help="Number of evaluation points for KDE method (default: 1000)"
+    )
+    parser.add_argument(
+        "--kl-computation",
+        type=str,
+        choices=['scipy', 'manual'],
+        default='scipy',
+        help="Method for computing KL divergence: 'scipy' uses scipy.stats.entropy, 'manual' uses scipy.special.kl_div (default: scipy)"
     )
 
     args = parser.parse_args()
 
     main(
-        jsd_method=args.jsd_method,
-        jsd_n_bins=args.jsd_n_bins,
-        jsd_n_points=args.jsd_n_points
+        kl_method=args.kl_method,
+        kl_n_bins=args.kl_n_bins,
+        kl_n_points=args.kl_n_points,
+        kl_computation=args.kl_computation
     )
