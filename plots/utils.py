@@ -522,7 +522,7 @@ PARAMETER_LATEX_LABELS = {
 
 # Default corner plot kwargs
 DEFAULT_CORNER_KWARGS = dict(
-    bins=40, 
+    bins=25, 
     smooth=1., 
     show_titles=False,
     label_kwargs=dict(fontsize=16),
