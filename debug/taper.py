@@ -538,6 +538,78 @@ if __name__ == "__main__":
         print(f"Comparison plot saved to: {comparison_file}")
         plt.close()
 
+    # ========== GW190425 Posterior Analysis ==========
+    print("\n" + "="*60)
+    print("GW190425 Posterior Analysis")
+    print("="*60 + "\n")
+
+    # Default analysis
+    gw190425_default_file = base_path / "GW190425" / "bns" / "default" / "samples.npz"
+
+    # BNS uniform radio_NICER analysis
+    gw190425_nf_file = base_path / "GW190425" / "bns" / "uniform" / "radio_NICER" / "samples.npz"
+
+    # Process default analysis
+    if gw190425_default_file.exists():
+        print("\n" + "-"*60)
+        print("Processing: GW190425 Default Analysis")
+        print("-"*60)
+        f_merger_default_190425, med_default_190425, low_default_190425, high_default_190425 = compute_merger_frequency_from_posterior(
+            gw190425_default_file,
+            output_file=output_dir / "merger_freq_GW190425_default.pdf",
+            label="GW190425 Default (Agnostic Prior)"
+        )
+    else:
+        print(f"Warning: Default file not found at {gw190425_default_file}")
+        f_merger_default_190425 = None
+
+    # Process NF analysis
+    if gw190425_nf_file.exists():
+        print("\n" + "-"*60)
+        print("Processing: GW190425 BNS uniform radio_NICER Analysis")
+        print("-"*60)
+        f_merger_nf_190425, med_nf_190425, low_nf_190425, high_nf_190425 = compute_merger_frequency_from_posterior(
+            gw190425_nf_file,
+            output_file=output_dir / "merger_freq_GW190425_bns_uniform_radio_NICER.pdf",
+            label="GW190425 BNS uniform radio_NICER"
+        )
+    else:
+        print(f"Warning: NF file not found at {gw190425_nf_file}")
+        f_merger_nf_190425 = None
+
+    # Create comparison plot
+    if f_merger_default_190425 is not None and f_merger_nf_190425 is not None:
+        print("\n" + "-"*60)
+        print("Creating GW190425 comparison plot")
+        print("-"*60)
+
+        fig, ax = plt.subplots(figsize=(12, 6))
+
+        # Plot both histograms
+        ax.hist(f_merger_default_190425, bins=50, density=True, alpha=0.5,
+                label=f'Default: {med_default_190425:.1f} Hz [{low_default_190425:.1f}, {high_default_190425:.1f}]',
+                color='blue', edgecolor='black', linewidth=0.5)
+        ax.hist(f_merger_nf_190425, bins=50, density=True, alpha=0.5,
+                label=f'NF (radio_NICER): {med_nf_190425:.1f} Hz [{low_nf_190425:.1f}, {high_nf_190425:.1f}]',
+                color='red', edgecolor='black', linewidth=0.5)
+
+        # Add median lines
+        ax.axvline(med_default_190425, color='blue', linestyle='--', linewidth=2, alpha=0.7)
+        ax.axvline(med_nf_190425, color='red', linestyle='--', linewidth=2, alpha=0.7)
+
+        ax.set_xlabel('Merger Frequency (Hz)', fontsize=14)
+        ax.set_ylabel('Probability Density', fontsize=14)
+        ax.set_title('GW190425: NRTidalv3 Merger Frequency Comparison\nDefault vs BNS uniform radio_NICER',
+                     fontsize=13)
+        ax.legend(fontsize=11)
+        ax.grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        comparison_file = output_dir / "merger_freq_GW190425_comparison.pdf"
+        plt.savefig(comparison_file, dpi=150, bbox_inches='tight')
+        print(f"Comparison plot saved to: {comparison_file}")
+        plt.close()
+
     # ========== GW170817 Posterior Analysis ==========
     print("\n" + "="*60)
     print("GW170817 Posterior Analysis")
