@@ -23,8 +23,8 @@ from utils import (
 
 # DEBUG plot specific parameter labels
 DEBUG_PARAMETER_LATEX_LABELS = {
-    'chirp_mass_source': r'$\mathcal{M}_c^{\rm{src}}$ $M_{\odot}$',
-    'redshift': r'$z$',
+    'chirp_mass_source': r'$\mathcal{M}_c^{\rm{src}}$ [$M_{\odot}$]',
+    'luminosity_distance': r'$d_L$ [Mpc]',
 }
 
 # Font size
@@ -1448,8 +1448,7 @@ def plot_debug_corner(gw_event: str,
 
     # Parameters to plot - default to debug set if not specified
     if params_to_plot is None:
-        params_to_plot = ["chirp_mass", "chirp_mass_source", "lambda_tilde",
-                         "luminosity_distance", "redshift"]
+        params_to_plot = ["chirp_mass", "chirp_mass_source", "luminosity_distance"]
 
     # Use radio_chiEFT for all normalization indices if not specified
     if normalization_keys is None:
