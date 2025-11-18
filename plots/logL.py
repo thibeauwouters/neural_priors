@@ -306,13 +306,7 @@ def plot_quantity_histogram(gw_event: str,
     data_max = np.quantile(all_data, quantile_range[1])
     data_range = (data_min, data_max)
 
-    # Plot default run first (so it appears behind)
-    if default_quantity is not None:
-        ax.hist(default_quantity, bins=bins, range=data_range, alpha=1.0,
-                color=DEFAULT_RUN_COLOR, label=DEFAULT_RUN_LABEL,
-                density=normalize, histtype='step', linewidth=2.0)
-
-    # Plot EOS runs
+    # Plot EOS runs first
     for eos_name, data in quantity_dict.items():
         color = EOS_COLORS.get(eos_name, 'black')
         label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
@@ -320,6 +314,12 @@ def plot_quantity_histogram(gw_event: str,
         ax.hist(data, bins=bins, range=data_range, alpha=1.0,
                 color=color, label=label, density=normalize,
                 histtype='step', linewidth=2.0)
+
+    # Plot default run last (for legend ordering)
+    if default_quantity is not None:
+        ax.hist(default_quantity, bins=bins, range=data_range, alpha=1.0,
+                color=DEFAULT_RUN_COLOR, label=DEFAULT_RUN_LABEL,
+                density=normalize, histtype='step', linewidth=2.0)
 
     # Formatting
     ax.set_xlabel(config['label'], fontsize=fs_labels)
@@ -517,14 +517,7 @@ def plot_log_likelihood_cdf(gw_event: str,
     # Create figure
     _, ax = plt.subplots(figsize=(8, 6))
 
-    # Plot default run first (so it appears behind)
-    if default_logL is not None:
-        sorted_logL = np.sort(default_logL)
-        cdf = np.arange(1, len(sorted_logL) + 1) / len(sorted_logL)
-        ax.plot(sorted_logL, cdf, color=DEFAULT_RUN_COLOR,
-                label=DEFAULT_RUN_LABEL, linewidth=2.5, alpha=0.9)
-
-    # Plot EOS runs
+    # Plot EOS runs first
     for eos_name, logL in logL_dict.items():
         color = EOS_COLORS.get(eos_name, 'black')
         label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
@@ -535,6 +528,13 @@ def plot_log_likelihood_cdf(gw_event: str,
 
         ax.plot(sorted_logL, cdf, color=color, label=label,
                 linewidth=2.5, alpha=0.9)
+
+    # Plot default run last (for legend ordering)
+    if default_logL is not None:
+        sorted_logL = np.sort(default_logL)
+        cdf = np.arange(1, len(sorted_logL) + 1) / len(sorted_logL)
+        ax.plot(sorted_logL, cdf, color=DEFAULT_RUN_COLOR,
+                label=DEFAULT_RUN_LABEL, linewidth=2.5, alpha=0.9)
 
     # Formatting
     ax.set_xlabel(r'$\log \mathcal{L}$', fontsize=fs_labels)
@@ -966,13 +966,7 @@ def plot_combined_log_likelihood(base_path: str = "../final_results/",
             if verbose:
                 print(f"  Data range (quantiles {quantile_range[0]:.2f}-{quantile_range[1]:.2f}): [{data_min:.2f}, {data_max:.2f}]")
 
-            # Plot default run first (so it appears behind)
-            if default_quantity is not None:
-                ax.hist(default_quantity, bins=bins, range=data_range, alpha=1.0,
-                       color=DEFAULT_RUN_COLOR, label=DEFAULT_RUN_LABEL,
-                       density=normalize, histtype='step', linewidth=2.0)
-
-            # Plot EOS runs
+            # Plot EOS runs first
             for eos_name, data in quantity_dict.items():
                 color = EOS_COLORS.get(eos_name, 'black')
                 label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
@@ -980,6 +974,12 @@ def plot_combined_log_likelihood(base_path: str = "../final_results/",
                 ax.hist(data, bins=bins, range=data_range, alpha=1.0,
                        color=color, label=label, density=normalize,
                        histtype='step', linewidth=2.0)
+
+            # Plot default run last (for legend ordering)
+            if default_quantity is not None:
+                ax.hist(default_quantity, bins=bins, range=data_range, alpha=1.0,
+                       color=DEFAULT_RUN_COLOR, label=DEFAULT_RUN_LABEL,
+                       density=normalize, histtype='step', linewidth=2.0)
         else:
             print(f"  Warning: No data loaded for {gw_event}")
 
@@ -1129,13 +1129,7 @@ def plot_combined_log_posterior(base_path: str = "../final_results/",
             if verbose:
                 print(f"  Data range (quantiles {quantile_range[0]:.2f}-{quantile_range[1]:.2f}): [{data_min:.2f}, {data_max:.2f}]")
 
-            # Plot default run first (so it appears behind)
-            if default_quantity is not None:
-                ax.hist(default_quantity, bins=bins, range=data_range, alpha=1.0,
-                       color=DEFAULT_RUN_COLOR, label=DEFAULT_RUN_LABEL,
-                       density=normalize, histtype='step', linewidth=2.0)
-
-            # Plot EOS runs
+            # Plot EOS runs first
             for eos_name, data in quantity_dict.items():
                 color = EOS_COLORS.get(eos_name, 'black')
                 label = EOS_SAMPLES_NAMES_DICT.get(eos_name, eos_name)
@@ -1143,6 +1137,12 @@ def plot_combined_log_posterior(base_path: str = "../final_results/",
                 ax.hist(data, bins=bins, range=data_range, alpha=1.0,
                        color=color, label=label, density=normalize,
                        histtype='step', linewidth=2.0)
+
+            # Plot default run last (for legend ordering)
+            if default_quantity is not None:
+                ax.hist(default_quantity, bins=bins, range=data_range, alpha=1.0,
+                       color=DEFAULT_RUN_COLOR, label=DEFAULT_RUN_LABEL,
+                       density=normalize, histtype='step', linewidth=2.0)
         else:
             print(f"  Warning: No data loaded for {gw_event}")
 
