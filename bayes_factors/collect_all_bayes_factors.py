@@ -340,13 +340,7 @@ def generate_latex_table(data: Dict[str, Any], replace_nsbh_zeros: bool = True, 
                         event_cells.append("--")
                 
                 lines.append(f"{source_cell} & {pop_cell} & {eos_cell} & {' & '.join(event_cells)} \\\\")
-                
-                # Add appropriate lines
-                if eos == "radio":
-                    lines.append("\\cline{3-6}")
-                elif eos == "radio_chiEFT":
-                    lines.append("\\cline{3-6}")
-                
+
                 source_first = False
                 pop_first = False
             
