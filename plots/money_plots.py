@@ -28,9 +28,9 @@ DEBUG_PARAMETER_LATEX_LABELS = {
 }
 
 # Font size
-fs_ticks = 20
-fs_labels = 24
-labelpad = 0.085
+fs_ticks = 24
+fs_labels = 28
+labelpad = 0.175
 
 # Matplotlib style parameters
 params = {"axes.grid": False,
@@ -505,7 +505,7 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
     if dummy_dataset is not None:
         if verbose:
             print(f"Plotting invisible dummy dataset for histogram normalization")
-        
+
         # Create corner kwargs that only plots 1D histograms
         invisible_kwargs = DEFAULT_CORNER_KWARGS.copy()
         invisible_kwargs.update({
@@ -513,14 +513,23 @@ def plot_corner_fixed_population_varying_eos(gw_event: str,
             'range': ranges,
             'hist_kwargs': {'alpha': 0, 'density': True},
             'plot_density': False,     # Disable 2D density plots
-            'plot_contours': False,    # Disable 2D contours  
+            'plot_contours': False,    # Disable 2D contours
             'plot_datapoints': False,  # Disable scatter points
             'no_fill_contours': True,  # Disable filled contours
             'color': 'black'
         })
-        
+
         corner.corner(dummy_dataset, fig=fig, **invisible_kwargs)
-    
+
+    # Disable offset notation on all axes to prevent tick label overlap
+    # This forces matplotlib to show full tick values instead of using offset format
+    for ax in fig.get_axes():
+        try:
+            ax.ticklabel_format(useOffset=False, style='plain')
+        except AttributeError:
+            # Some axes use NullFormatter which doesn't support ticklabel_format
+            pass
+
     # Add legend
     # Create custom legend entries
     legend_entries = []
@@ -921,6 +930,15 @@ def plot_corner_fixed_population_varying_eos_PRESENTATION(gw_event: str,
         })
 
         corner.corner(dummy_dataset, fig=fig, **invisible_kwargs)
+
+    # Disable offset notation on all axes to prevent tick label overlap
+    # This forces matplotlib to show full tick values instead of using offset format
+    for ax in fig.get_axes():
+        try:
+            ax.ticklabel_format(useOffset=False, style='plain')
+        except AttributeError:
+            # Some axes use NullFormatter which doesn't support ticklabel_format
+            pass
 
     # Add legend
     # Create custom legend entries
@@ -1656,6 +1674,15 @@ def plot_debug_corner(gw_event: str,
 
         corner.corner(dummy_dataset, fig=fig, **invisible_kwargs)
 
+    # Disable offset notation on all axes to prevent tick label overlap
+    # This forces matplotlib to show full tick values instead of using offset format
+    for ax in fig.get_axes():
+        try:
+            ax.ticklabel_format(useOffset=False, style='plain')
+        except AttributeError:
+            # Some axes use NullFormatter which doesn't support ticklabel_format
+            pass
+
     # Add legend
     legend_entries = []
     legend_colors = []
@@ -1741,44 +1768,44 @@ def main():
         "ra", "dec"
     ]
 
-    # GW170817 full plots
-    for population in ["gaussian", "uniform", "double_gaussian"]:
-        try:
-            plot_debug_corner(
-                "GW170817",
-                population=population,
-                source_type="bns",
-                params_to_plot=full_params_bns,
-                suffix="FULL"
-            )
-        except Exception as e:
-            print(f"Failed to create FULL plot for GW170817 {population}: {e}")
+    # # GW170817 full plots
+    # for population in ["gaussian", "uniform", "double_gaussian"]:
+    #     try:
+    #         plot_debug_corner(
+    #             "GW170817",
+    #             population=population,
+    #             source_type="bns",
+    #             params_to_plot=full_params_bns,
+    #             suffix="FULL"
+    #         )
+    #     except Exception as e:
+    #         print(f"Failed to create FULL plot for GW170817 {population}: {e}")
 
-    # GW190425 full plots
-    for population in ["gaussian", "uniform", "double_gaussian"]:
-        try:
-            plot_debug_corner(
-                "GW190425",
-                population=population,
-                source_type="bns",
-                params_to_plot=full_params_bns,
-                suffix="FULL"
-            )
-        except Exception as e:
-            print(f"Failed to create FULL plot for GW190425 {population}: {e}")
+    # # GW190425 full plots
+    # for population in ["gaussian", "uniform", "double_gaussian"]:
+    #     try:
+    #         plot_debug_corner(
+    #             "GW190425",
+    #             population=population,
+    #             source_type="bns",
+    #             params_to_plot=full_params_bns,
+    #             suffix="FULL"
+    #         )
+    #     except Exception as e:
+    #         print(f"Failed to create FULL plot for GW190425 {population}: {e}")
 
-    # GW230529 full plots
-    for population in ["gaussian", "uniform", "double_gaussian"]:
-        try:
-            plot_debug_corner(
-                "GW230529",
-                population=population,
-                source_type="nsbh",
-                params_to_plot=full_params_nsbh,
-                suffix="FULL"
-            )
-        except Exception as e:
-            print(f"Failed to create FULL plot for GW230529 {population}: {e}")
+    # # GW230529 full plots
+    # for population in ["gaussian", "uniform", "double_gaussian"]:
+    #     try:
+    #         plot_debug_corner(
+    #             "GW230529",
+    #             population=population,
+    #             source_type="nsbh",
+    #             params_to_plot=full_params_nsbh,
+    #             suffix="FULL"
+    #         )
+    #     except Exception as e:
+    #         print(f"Failed to create FULL plot for GW230529 {population}: {e}")
 
 
 if __name__ == "__main__":
