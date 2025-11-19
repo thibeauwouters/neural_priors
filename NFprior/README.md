@@ -2,6 +2,8 @@
 
 This directory contains scripts for training and evaluating normalizing flow (NF) models that encode equation of state (EOS) constraints for neutron star parameter estimation.
 
+*Note from human*: Please use the `glasflow` models, not the `flowjax` models, since the latter have NOT been tested in GW inference.
+
 ## Overview
 
 Normalizing flows are trained on EOS-derived samples of neutron star masses and tidal deformabilities, then used as physics-informed priors in gravitational wave parameter estimation. The trained models enable Bayesian inference to incorporate nuclear physics constraints directly into the analysis.

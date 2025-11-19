@@ -2,6 +2,18 @@
 
 Code and data for the paper *Incorporating neutron star physics into gravitational wave inference with neural priors*.
 
+Note: The README pages in this repo are created with Claude Code at the end of the project, with minor intervention from humans -- read with care and do not believe everything here. 
+
+The bilby code used for this paper is at https://github.com/ThibeauWouters/bilby/tree/neural_prior_bilby_pipe. 
+
+## Citation
+
+If you use this code or the accompanying `bilby` code, please cite us (once we are on arXiv...)
+```bibtex
+@article{todo,
+}
+```
+
 ## Overview
 
 This repository implements a novel approach to gravitational wave (GW) source classification using physics-informed priors based on neutron star equations of state (EOS). We train normalizing flows on EOS constraints from nuclear physics observations, then use these learned priors in Bayesian parameter estimation to improve binary neutron star (BNS) vs neutron star-black hole (NSBH) classification.
@@ -24,14 +36,13 @@ Neutron star observations from pulsars, NICER X-ray measurements, chiral effecti
 ```
 eos_source_classification/
 ├── NFprior/              # Normalizing flow training and evaluation
-├── GW_runs/              # Parameter estimation scripts and results
-├── data/                 # GW strain data and EOS samples
+├── GW_runs/              # Parameter estimation scripts and results, note: these are outdated, as we use bilby pipe configs instead, although with very similar setups
+├── data/                 # GW strain data and EOS samples -- large files are not part of the Github
 ├── plots/                # Visualization and publication figures
 ├── bayes_factors/        # Bayes factor calculation
 ├── money_table/          # Publication-ready results tables
 ├── final_results/        # Consolidated PE results
 ├── Figure1/              # Main paper figure generation
-├── injections/           # Injection studies
 ├── normalization/        # Prior normalization validation
 ├── debug/                # Diagnostic scripts
 └── backup/               # Archived results
@@ -73,30 +84,13 @@ eos_source_classification/
 
 ## Quick Start
 
-### Prerequisites
-
-**Modified bilby with NF support:**
-```bash
-git clone https://github.com/ThibeauWouters/bilby.git
-cd bilby
-git checkout eos_source_classification
-pip install -e .
-```
-
-**Python dependencies:**
-```bash
-pip install jax jaxlib flowjax equinox
-pip install torch glasflow
-pip install numpy scipy matplotlib corner
-pip install gwpy pycbc lalsuite
-```
 
 ### Basic Workflow
 
 **1. Train normalizing flow on EOS data:**
 ```bash
 cd NFprior/
-python train_NF_prior.py --use-flowjax --population-type uniform --eos-samples-name radio
+python train_NF_prior.py --population-type uniform --eos-samples-name radio
 ```
 
 **2. Run parameter estimation:**
@@ -123,7 +117,7 @@ python collect_all_bayes_factors.py
 
 ```
 EOS Observations → NF Training → GW Parameter Estimation → Visualization → Results Tables
-     (data/)        (NFprior/)         (GW_runs/)          (plots/)     (money_table/)
+     (data/)        (NFprior/)         (GW_runs/)          (plots/)     (money_table/, bayes_factors/)
 ```
 
 **Step-by-step:**
@@ -397,52 +391,6 @@ inverter = NumericalInverse(maxiter=200)
 
 Or use CouplingNSF instead (analytically invertible).
 
-### Bilby Cosmology
-
-**Issue:** Default cosmology may differ from reference analyses
-
-**Solution:** Explicitly set cosmology in PE:
-```python
-from astropy.cosmology import Planck15
-bilby.gw.cosmology.set_cosmology(Planck15)
-```
-
-### GW230529 Frequency Range
-
-**Issue:** Single-detector, high-mass event requires careful frequency setup
-
-**Solution:** Check `fmin`, `fmax` settings for L1 sensitivity
-
-## Contributing
-
-### Adding New EOS Dataset
-
-1. Place samples in `data/eos/new_dataset/`
-2. Train NF: `python NFprior/train_NF_prior.py --eos-samples-name new_dataset`
-3. Run PE: `python GW_runs/pe.py --eos-samples-name new_dataset`
-4. Update display names in `bayes_factors/collect_all_bayes_factors.py`
-
-### Adding New Event
-
-1. Download strain/PSD to `data/new_event/`
-2. Create prior file (if needed)
-3. Run PE for BNS and NSBH hypotheses
-4. Update event lists in plotting/analysis scripts
-5. Regenerate Bayes factor tables
-
-## Citation
-
-If you use this code or methodology, please cite:
-
-```bibtex
-@article{wouters2024neural,
-  title={Incorporating neutron star physics into gravitational wave inference with neural priors},
-  author={Wouters, Thibeau and ...},
-  journal={arXiv preprint arXiv:XXXX.XXXXX},
-  year={2024}
-}
-```
-
 ## Related Software
 
 **bilby:** Bayesian inference for gravitational waves
@@ -458,13 +406,9 @@ If you use this code or methodology, please cite:
 - Repository: https://github.com/uofgravity/glasflow
 - Paper: https://arxiv.org/abs/2011.12320
 
-## License
-
-[Specify license here]
-
 ## Contact
 
-Thibeau Wouters - [email/website]
+Thibeau Wouters
 
 For questions about the code or methodology, please open an issue on GitHub or contact the authors directly.
 
@@ -475,4 +419,4 @@ This research uses:
 - EOS constraints from pulsar observations, NICER, and nuclear theory
 - Open-source software: bilby, flowjax, glasflow, numpy, scipy, matplotlib
 
-Computational resources provided by [institution/cluster].
+Computational resources from Snellius, Jarvis, and Nikhef.

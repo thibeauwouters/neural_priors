@@ -2,6 +2,8 @@
 
 This directory contains gravitational wave strain data, power spectral densities (PSDs), EOS posterior samples, and reference datasets for parameter estimation analyses.
 
+*Note from human:* Some files mentioned below might not exist in the Github repo if they are too large -- please reach out if you'd like to use them.
+
 ## Overview
 
 The data directory organizes all input data required for gravitational wave parameter estimation, including:

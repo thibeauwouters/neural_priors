@@ -2,6 +2,8 @@
 
 This directory contains scripts and configuration files for running gravitational wave parameter estimation (PE) with normalizing flow priors.
 
+*Note from human*: These might be outdated, as we switched to using `bilby_pipe` to perform the runs. Please reach out if you need the exact same config files used for this work, but have a look at `GW_runs_jarvis`, which is used more recently.
+
 ## Overview
 
 The parameter estimation pipeline analyzes gravitational wave events using bilby with custom normalizing flow priors that encode equation of state constraints. Runs can be configured for different source types (BNS vs NSBH), population models, and EOS datasets.

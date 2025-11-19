@@ -277,8 +277,3 @@ When comparing NF-informed vs default priors:
 ```
 
 Positive ΔBF indicates NF prior increases evidence for that source hypothesis.
-
-## References
-
-- Jeffreys, H. (1961). Theory of Probability. Oxford University Press.
-- Trotta, R. (2008). Bayes in the sky: Bayesian inference and model selection in cosmology. Contemporary Physics, 49(2), 71-104.

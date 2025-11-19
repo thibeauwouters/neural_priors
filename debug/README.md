@@ -66,11 +66,6 @@ python check_q_comparison.py --compare-hauke --compare-adrian
 - Component mass correlations
 - Convention comparison plots
 
-**When to Use:**
-- Posteriors don't match literature
-- Mass parameter confusion
-- Cross-validating with external analyses
-
 ### `make_cornerplot.py` - Quick diagnostic corner plots
 
 Generates simple corner plots for rapid inspection of posteriors without full plotting pipeline.

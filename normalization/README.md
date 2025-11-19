@@ -336,9 +336,3 @@ python plot_bilby_corner.py --use-nf --n-samples 50000
 4. **Compare implementations:** Cross-check flowjax vs glasflow if available
 5. **Document assumptions:** Note any approximations or numerical tricks
 6. **Monitor evidence:** Track log evidence across runs for consistency
-
-## References
-
-- bilby documentation: https://lscsoft.docs.ligo.org/bilby/
-- Normalizing flows: Papamakarios et al. (2019), arXiv:1912.02762
-- Bayesian inference: Gregory (2005), "Bayesian Logical Data Analysis for the Physical Sciences"
