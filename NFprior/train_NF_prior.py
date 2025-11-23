@@ -97,11 +97,11 @@ def sample_ns_mass_double_gaussian(nb_mass_samples: int):
     """
     mu_1 = 1.34
     sigma_1 = 0.07
-    
+
     mu_2 = 1.80
     sigma_2 = 0.21
     w = 0.65
-    
+
     # Sample from mixture of gaussians
     u = np.random.rand(nb_mass_samples) # uniform [0,1], to determine the mode
     mass_samples = np.where(
@@ -109,17 +109,42 @@ def sample_ns_mass_double_gaussian(nb_mass_samples: int):
         np.random.normal(mu_1, sigma_1, size=nb_mass_samples),
         np.random.normal(mu_2, sigma_2, size=nb_mass_samples)
     )
-    
+
+    if len(mass_samples) == 1:
+        return mass_samples[0]
+    else:
+        return mass_samples
+
+def sample_ns_mass_double_gaussian_niu(nb_mass_samples: int):
+    """
+    Sample from double Gaussian with Niu et al. (2025) hyperparameters.
+    """
+    mu_1 = 1.372
+    sigma_1 = 0.05768
+    w_1 = 0.7137
+
+    mu_2 = 1.534
+    sigma_2 = 0.09102
+    w_2 = 0.2863
+
+    # Sample from mixture of gaussians
+    u = np.random.rand(nb_mass_samples) # uniform [0,1], to determine the mode
+    mass_samples = np.where(
+        u < w_1,
+        np.random.normal(mu_1, sigma_1, size=nb_mass_samples),
+        np.random.normal(mu_2, sigma_2, size=nb_mass_samples)
+    )
+
     if len(mass_samples) == 1:
         return mass_samples[0]
     else:
         return mass_samples
 
 parser = argparse.ArgumentParser(description="Train a normalizing flow prior on EOS samples.")
-parser.add_argument("--population-type", 
-                    type=str, 
-                    default="uniform", 
-                    choices=["uniform", "gaussian", "double_gaussian", "GW170817", "GW190425", "GW230529"], 
+parser.add_argument("--population-type",
+                    type=str,
+                    default="uniform",
+                    choices=["uniform", "gaussian", "double_gaussian", "double_gaussian_niu", "GW170817", "GW190425", "GW230529"], 
                     help="Type of source to model")
 parser.add_argument("--source-type", 
                     type=str, 
@@ -365,7 +390,7 @@ class NFPriorCreator:
         if source_type not in SUPPORTED_SOURCE_TYPES:
             raise ValueError(f"source_type must be one of {SUPPORTED_SOURCE_TYPES}, got {source_type} instead.")
         
-        SUPPORTED_POPULATION_TYPES = ["uniform", "gaussian", "double_gaussian", "GW170817", "GW190425", "GW230529"]
+        SUPPORTED_POPULATION_TYPES = ["uniform", "gaussian", "double_gaussian", "double_gaussian_niu", "GW170817", "GW190425", "GW230529"]
         if population_type not in SUPPORTED_POPULATION_TYPES:
             raise ValueError(f"population_type must be one of {SUPPORTED_POPULATION_TYPES}, got {population_type} instead.")
         
@@ -623,6 +648,8 @@ class NFPriorCreator:
                         mass_samples = sample_ns_mass_gaussian(2)
                     elif self.population_type == "double_gaussian":
                         mass_samples = sample_ns_mass_double_gaussian(2)
+                    elif self.population_type == "double_gaussian_niu":
+                        mass_samples = sample_ns_mass_double_gaussian_niu(2)
                     else:
                         raise ValueError(f"Unsupported population type: {self.population_type}")
                         
@@ -645,6 +672,8 @@ class NFPriorCreator:
                         m2 = sample_ns_mass_gaussian(1)
                     elif self.population_type == "double_gaussian":
                         m2 = sample_ns_mass_double_gaussian(1)
+                    elif self.population_type == "double_gaussian_niu":
+                        m2 = sample_ns_mass_double_gaussian_niu(1)
                     else:
                         raise ValueError(f"Unsupported population type: {self.population_type}")
                     

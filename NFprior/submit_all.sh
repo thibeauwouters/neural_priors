@@ -8,12 +8,19 @@ POPULATIONS=("uniform" "gaussian" "double_gaussian")
 SOURCES=("bns" "nsbh")
 EOS_SAMPLES=("radio" "radio_chiEFT" "radio_NICER")
 
-echo "Submitting flow training jobs..."
-for pop in "${POPULATIONS[@]}"; do
-    for src in "${SOURCES[@]}"; do
-        for eos in "${EOS_SAMPLES[@]}"; do
-            echo "Submitting: $pop $src $eos"
-            python train_NF_prior.py --population-type $pop --source-type $src --eos-samples-name $eos $COMMON_ARGS
-        done
-    done
+# echo "Submitting flow training jobs..." # jobs to train the original flow models in the paper
+# for pop in "${POPULATIONS[@]}"; do
+#     for src in "${SOURCES[@]}"; do
+#         for eos in "${EOS_SAMPLES[@]}"; do
+#             echo "Submitting: $pop $src $eos"
+#             python train_NF_prior.py --population-type $pop --source-type $src --eos-samples-name $eos $COMMON_ARGS
+#         done
+#     done
+# done
+
+# Submit double_gaussian_niu jobs for BNS only, for the ET demo with the GW231109 event
+echo "Submitting double_gaussian_niu jobs for BNS..."
+for eos in "${EOS_SAMPLES[@]}"; do
+    echo "Submitting: double_gaussian_niu bns $eos"
+    python train_NF_prior.py --population-type double_gaussian_niu --source-type bns --eos-samples-name $eos $COMMON_ARGS
 done
