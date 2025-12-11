@@ -6,6 +6,8 @@ Note: The README pages in this repo are created with Claude Code at the end of t
 
 The bilby code used for this paper is at https://github.com/ThibeauWouters/bilby/tree/neural_prior_bilby_pipe. 
 
+Additional data that is too heavy to store on the Github (e.g., the `jester` EOS samples used as input into the neural priors construction) can be found at [this Zenodo page](https://zenodo.org/records/17901001). 
+
 ## Citation
 
 If you use this code or the accompanying `bilby` code, please cite us (once we are on arXiv...)
