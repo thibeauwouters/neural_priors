@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17901001.svg)](https://doi.org/10.5281/zenodo.17901001)
+
 # Incorporating Neutron Star Physics into Gravitational Wave Inference with Neural Priors
 
 Code and data for the paper *Incorporating neutron star physics into gravitational wave inference with neural priors*.
@@ -10,9 +12,16 @@ Additional data that is too heavy to store on the Github (e.g., the `jester` EOS
 
 ## Citation
 
-If you use this code or the accompanying `bilby` code, please cite us (once we are on arXiv...)
+If you use this code or the accompanying `bilby` code, please cite us:
 ```bibtex
-@article{todo,
+@article{Wouters:2025csq,
+    author = "Wouters, Thibeau and Pang, Peter T. H. and Dietrich, Tim and Van Den Broeck, Chris",
+    title = "{Incorporating neutron star physics into gravitational wave inference with neural priors}",
+    eprint = "2511.22987",
+    archivePrefix = "arXiv",
+    primaryClass = "astro-ph.HE",
+    month = "11",
+    year = "2025"
 }
 ```
 
