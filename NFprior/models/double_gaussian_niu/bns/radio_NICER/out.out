@@ -1,0 +1,48 @@
+JAX: devices available: [CudaDevice(id=0)]
+torch: CUDA is available. Number of devices: 1
+torch: Current CUDA device: 0
+Training data will be loaded from: /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_NICER/eos_samples.npz
+Training a normalizing flow for population =  double_gaussian_niu and bns sources
+Before training, we built the following NF kwargs: {'n_transforms': 4, 'n_neurons': 256, 'n_blocks_per_transform': 3, 'nn_depth': 1, 'flow_layers': 1, 'nn_block_dim': 8, 'glasflow_type': 'CouplingNSF', 'batch_norm_within_blocks': False, 'batch_norm_between_transforms': False, 'activation': 'relu', 'dropout_probability': 0.0, 'linear_transform': None, 'tail_bound': 5.0, 'names': ['chirp_mass_source', 'mass_ratio', 'lambda_1', 'lambda_2'], 'n_inputs': 4}
+Everything for this model will be saved to ./models/double_gaussian_niu/bns/radio_NICER
+Starting training with the following parameters:
+Reading the EOS data from /data/gravwav/twouters/projects/eos_source_classification/eos_source_classification/data/eos/radio_NICER/eos_samples.npz
+Number of good samples:  0.9953
+0/200000
+20000/200000
+40000/200000
+60000/200000
+80000/200000
+100000/200000
+120000/200000
+140000/200000
+160000/200000
+180000/200000
+Create data will save the following data:
+  m1: range = [1.2079901603965726, 1.919669708388629]
+  m2: range = [1.0919723448941248, 1.7925628777113454]
+  mass_ratio: range = [0.6523531721402739, 0.9999999600005901]
+  lambda_1: range = [35.889473513376906, 2117.5420467374147]
+  lambda_2: range = [74.48087764765663, 3330.8157677488957]
+  lambda_tilde: range = [69.14319774018219, 2328.1874923242594]
+  delta_lambda_tilde: range = [9.783231480917731e-06, 247.8296991683044]
+  chirp_mass_source: range = [1.050564999746403, 1.5735669434498536]
+Saving to ./models/double_gaussian_niu/bns/radio_NICER/training_data.npz:
+Saving to ./models/double_gaussian_niu/bns/radio_NICER/training_data.npz DONE
+Using source-frame chirp mass and mass ratio (Mc, q) for training
+Using component parameterization for lambdas (lambda_1, lambda_2)
+Training samples: 160000, Validation samples: 40000
+Creating the training data arrays
+4D training data model for bns
+np.shape(self.x)
+(160000, 4)
+Using MinMaxScaler to scale the input data x
+Saved sklearn scaler to ./models/double_gaussian_niu/bns/radio_NICER/scaler.gz
+Going to start training for glasflow . . .
+Only RELU supported for now
+Early stopping triggered at epoch 1153
+Saving the training loss plot to ./models/double_gaussian_niu/bns/radio_NICER/training_loss.pdf
+Training done. Took around 151.06 minutes
+Saving the model weights to ./models/double_gaussian_niu/bns/radio_NICER/model.pt
+Saving the model kwargs to ./models/double_gaussian_niu/bns/radio_NICER/model_kwargs.json
+DONE training!

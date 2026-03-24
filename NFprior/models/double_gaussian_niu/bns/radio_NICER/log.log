@@ -1,0 +1,43 @@
+000 (3427296.000.000) 2025-11-23 17:58:32 Job submitted from host: <145.107.7.246:9618?addrs=145.107.7.246-9618+[2a07-8500-120-e070--3f6]-9618&alias=taai-007.nikhef.nl&noUDP&sock=schedd_2307_fd14>
+...
+001 (3427296.000.000) 2025-11-23 18:24:27 Job executing on host: <145.107.4.165:9618?addrs=145.107.4.165-9618+[2a07-8500-120-e070--a5]-9618&alias=wn-pijl-004.nikhef.nl&noUDP&sock=startd_4370_08f5>
+	SlotName: slot1_15@wn-pijl-004.nikhef.nl
+	AvailableGPUs = { GPUs_GPU_3a90a09e_2f89_5005_c0d7_0fb69e88c7a6 }
+	CondorScratchDir = "/scratch/condor_execute/dir_1745892"
+	Cpus = 1
+	Disk = 16790359
+	GPUs = 1
+	GPUs_GPU_3a90a09e_2f89_5005_c0d7_0fb69e88c7a6 = [ Id = "GPU-3a90a09e-2f89-5005-c0d7-0fb69e88c7a6"; ClockMhz = 2520.0; Capability = 8.9; CoresPerCU = 128; DeviceName = "NVIDIA L40S"; DeviceUuid = "3a90a09e-2f89-5005-c0d7-0fb69e88c7a6"; ECCEnabled = true; ComputeUnits = 142; NvidiaDriver = "580.95.05"; DriverVersion = 13.0; DevicePciBusId = "0000:02:00.0"; GlobalMemoryMb = 45458; MaxSupportedVersion = 13000 ]
+	Memory = 16384
+...
+006 (3427296.000.000) 2025-11-23 18:24:36 Image size of job updated: 610828
+	597  -  MemoryUsage of job (MB)
+	610828  -  ResidentSetSize of job (KB)
+...
+006 (3427296.000.000) 2025-11-23 18:29:36 Image size of job updated: 1312276
+	1281  -  MemoryUsage of job (MB)
+	1310904  -  ResidentSetSize of job (KB)
+...
+006 (3427296.000.000) 2025-11-23 18:34:37 Image size of job updated: 1312276
+	1281  -  MemoryUsage of job (MB)
+	1311172  -  ResidentSetSize of job (KB)
+...
+005 (3427296.000.000) 2025-11-23 20:55:52 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 02:30:37, Sys 0 00:00:21  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 02:30:37, Sys 0 00:00:21  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated Assigned
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            : 17500    16777216  16790359 
+	   GPUs                 :     0.09        1         1 "GPU-3a90a09e-2f89-5005-c0d7-0fb69e88c7a6"
+	   GpusMemory (MB)      :  1329                       
+	   Memory (MB)          :  1281       16384     16384 
+	   TimeExecute (s)      :  9085                       
+	   TimeSlotBusy (s)     :  9085                       
+...
