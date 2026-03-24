@@ -306,337 +306,666 @@ def get_ranges_across_datasets(datasets_dict: dict,
     return apply_ranges_scale_factor(ranges)
 
 
-# def combined_plot(source_type: str,
-#                   convert_masses: bool = True,
-#                   convert_to_lambda_tilde: bool = True,
-#                   levels: list = None,
-#                   filled_eos: str = "radio",
-#                   ranges_dict: dict = None,
-#                   normalization_indices_dict: dict = None) -> None:
-#     """
-#     Create a combined figure with three corner plots side-by-side for different populations.
+def individual_cornerplot(source_type: str,
+                          population: str,
+                          eos_samples_name: str,
+                          convert_masses: bool = True,
+                          convert_to_lambda_tilde: bool = True,
+                          levels: list = None) -> None:
+    """
+    Create a single corner plot for a specific source type, population, and EOS constraint.
 
-#     Args:
-#         source_type (str): Source type ("bns" or "nsbh").
-#         convert_masses (bool): If True, use chirp mass and mass ratio. If False, use component masses.
-#         convert_to_lambda_tilde (bool): If True, convert to lambda_tilde and delta_lambda_tilde.
-#         levels (list): Confidence levels for contours (e.g., [0.68, 0.95]).
-#         filled_eos (str): Which EOS to plot with filled contours (default: "radio").
-#         ranges_dict (dict): Dictionary mapping population names to range lists.
-#         normalization_indices_dict (dict): Dictionary mapping population names to normalization indices lists.
-#             Each list specifies which dataset (0=radio, 1=radio_chiEFT, 2=radio_NICER) to use for
-#             each parameter when creating the normalization dummy dataset. If None, no normalization.
-#     """
+    Args:
+        source_type (str): Source type ("bns" or "nsbh").
+        population (str): Population name ("uniform", "gaussian", "double_gaussian").
+        eos_samples_name (str): EOS constraint name ("radio", "radio_chiEFT", "radio_NICER").
+        convert_masses (bool): If True, use chirp mass and mass ratio. If False, use component masses.
+        convert_to_lambda_tilde (bool): If True, convert to lambda_tilde and delta_lambda_tilde.
+        levels (list): Confidence levels for contours (e.g., [0.68, 0.95]).
+    """
 
-#     if convert_to_lambda_tilde and source_type == "nsbh":
-#         print(f"Not doing lambda tilde conversion for NSBH")
-#         convert_to_lambda_tilde = False
+    if convert_to_lambda_tilde and source_type == "nsbh":
+        print(f"Not doing lambda tilde conversion for NSBH")
+        convert_to_lambda_tilde = False
 
-#     if levels is None:
-#         levels = [0.68, 0.95]
+    if levels is None:
+        levels = [0.68, 0.95]
 
-#     # Use consistent EOS colors (colorblind-friendly)
-#     eos_colors = {
-#         "radio": utils.EOS_COLORS["radio"],
-#         "radio_chiEFT": utils.EOS_COLORS["radio_chiEFT"],
-#         "radio_NICER": utils.EOS_COLORS["radio_NICER"]
-#     }
+    # Use consistent EOS colors (colorblind-friendly)
+    eos_color = utils.EOS_COLORS[eos_samples_name]
 
-#     # Determine which parameters to fetch for the plotting
-#     if convert_masses:
-#         mass_keys = ["chirp_mass_source", "mass_ratio"]
-#     else:
-#         mass_keys = ["m1", "m2"]
-#     if convert_to_lambda_tilde:
-#         lambda_keys = ["lambda_tilde", "delta_lambda_tilde"]
-#     else:
-#         if source_type == "bns":
-#             lambda_keys = ["lambda_1", "lambda_2"]
-#         elif source_type == "nsbh":
-#             lambda_keys = ["lambda_2"]
+    # Determine which parameters to fetch for the plotting
+    if convert_masses:
+        mass_keys = ["chirp_mass_source", "mass_ratio"]
+    else:
+        mass_keys = ["m1", "m2"]
+    if convert_to_lambda_tilde:
+        lambda_keys = ["lambda_tilde", "delta_lambda_tilde"]
+    else:
+        if source_type == "bns":
+            lambda_keys = ["lambda_1", "lambda_2"]
+        elif source_type == "nsbh":
+            lambda_keys = ["lambda_2"]
 
-#     keys = mass_keys + lambda_keys
-#     labels = [utils.TEX_TRANSLATION_DICT[key] for key in keys]
+    keys = mass_keys + lambda_keys
+    labels = [utils.TEX_TRANSLATION_DICT[key] for key in keys]
 
-#     eos_samples_name_list = ["radio", "radio_chiEFT", "radio_NICER"]
-#     populations = ["uniform", "gaussian", "double_gaussian"]
+    print(f"\nPlotting {source_type} - {population} - {eos_samples_name}...")
 
-#     # Create the main figure with three subfigures side-by-side
-#     fig = plt.figure(figsize=(42, 14))
-#     subfigs = fig.subfigures(1, 3, wspace=0.05)
+    # Determine ranges for this combination
+    if USE_CUSTOM_RANGE:
+        range_key = f"{source_type}_{population}"
+        if range_key in CORNERPLOT_RANGES:
+            ranges = CORNERPLOT_RANGES[range_key]
+            print(f"Using custom ranges for {range_key}")
+            if ranges is not None:
+                ranges = apply_ranges_scale_factor(ranges)
+        else:
+            print(f"Warning: No custom ranges found for {range_key}, will auto-compute")
+            ranges = None
+    else:
+        ranges = None
 
-#     # Iterate over each population
-#     for pop_idx, pop in enumerate(populations):
-#         print(f"\nPlotting {pop} population...")
+    # Load the corner plot data
+    path = get_training_data_path(population, source_type, eos_samples_name)
+    data = dict(np.load(path))
+    data = make_conversions(data)
 
-#         # Determine ranges for this population
-#         if USE_CUSTOM_RANGE:
-#             # Use custom ranges from CORNERPLOT_RANGES dictionary
-#             range_key = f"{source_type}_{pop}"
-#             if range_key in CORNERPLOT_RANGES:
-#                 ranges = CORNERPLOT_RANGES[range_key]
-#                 print(f"Using custom ranges for {range_key}")
-#                 # Apply scaling factor to explicit ranges as well
-#                 if ranges is not None:
-#                     ranges = apply_ranges_scale_factor(ranges)
-#             else:
-#                 print(f"Warning: No custom ranges found for {range_key}, will auto-compute")
-#                 ranges = None
-#         else:
-#             # Use ranges from ranges_dict parameter (legacy method)
-#             if ranges_dict is not None and pop in ranges_dict:
-#                 ranges = ranges_dict[pop]
-#                 # Apply scaling factor to explicit ranges as well
-#                 if ranges is not None:
-#                     ranges = apply_ranges_scale_factor(ranges)
-#             else:
-#                 ranges = None
+    # Fetch the relevant data for the corner plot
+    corner_data = [data[k] for k in keys]
+    corner_data = np.array(corner_data).T
 
-#         # Determine normalization indices for this population
-#         normalization_indices = None
-#         if normalization_indices_dict is not None and pop in normalization_indices_dict:
-#             normalization_indices = normalization_indices_dict[pop]
+    # Determine ranges if not provided
+    if ranges is None:
+        print(f"Computing ranges for {population}")
+        ranges = get_ranges(corner_data)
 
-#         # ==============================================
-#         # LOOP 1: DATA LOADING
-#         # ==============================================
-#         datasets = {}  # Dictionary to store all loaded datasets
+    # Apply physical boundaries to ranges
+    print(f"Applying physical boundaries to ranges")
+    ranges = apply_physical_boundaries(ranges, keys)
 
-#         for eos_samples_name in eos_samples_name_list:
-#             # Load the corner plot data
-#             path = get_training_data_path(pop, source_type, eos_samples_name)
-#             data = dict(np.load(path))
-#             data = make_conversions(data)
+    # Create the corner plot
+    fig = plt.figure(figsize=(14, 14))
 
-#             # Fetch the relevant data for the corner plot
-#             corner_data = [data[k] for k in keys]
-#             corner_data = np.array(corner_data).T
+    corner_fig = corner.corner(
+        corner_data,
+        labels=labels,
+        range=ranges,
+        color=eos_color,
+        fig=fig,
+        fill_contours=True,
+        plot_contours=True,
+        levels=levels,
+        hist_kwargs={'linewidth': LINEWIDTH},
+        contour_kwargs={'linewidths': LINEWIDTH},
+        **BASE_CORNER_KWARGS
+    )
 
-#             # Store in datasets dictionary
-#             datasets[eos_samples_name] = corner_data
+    # Add title
+    title_map = {
+        "uniform": "Uniform",
+        "gaussian": "Gaussian",
+        "double_gaussian": "Double Gaussian"
+    }
+    source_label = "BNS" if source_type == "bns" else "NSBH"
+    eos_label = utils.EOS_SAMPLES_NAMES_DICT[eos_samples_name]
 
-#         # Determine ranges across all datasets if not provided
-#         if ranges is None:
-#             print(f"Computing ranges for {pop} across all EOS datasets")
-#             ranges = get_ranges_across_datasets(datasets)
+    fig.suptitle(f"{source_label} - {title_map[population]} - {eos_label}",
+                 fontsize=48, y=0.995)
 
-#         # Apply physical boundaries to ranges
-#         print(f"Applying physical boundaries to ranges for {pop}")
-#         ranges = apply_physical_boundaries(ranges, keys)
+    # Save the figure
+    os.makedirs("./figures/priors/individual", exist_ok=True)
 
-#         # ==============================================
-#         # DUMMY DATASET CONSTRUCTION FOR NORMALIZATION
-#         # ==============================================
-#         dummy_dataset = None
-#         if len(datasets) > 1 and normalization_indices is not None:
-#             # Validate normalization_indices
-#             n_params = len(keys)
-#             if len(normalization_indices) != n_params:
-#                 raise ValueError(f"normalization_indices must have length {n_params} (number of parameters), got {len(normalization_indices)}")
+    # Create filename: bns_gaussian_psr.pdf
+    eos_short = {
+        "radio": "psr",
+        "radio_chiEFT": "chieft",
+        "radio_NICER": "nicer"
+    }
 
-#             # Check that all indices are valid
-#             n_datasets = len(eos_samples_name_list)
-#             for idx in normalization_indices:
-#                 if not (0 <= idx < n_datasets):
-#                     raise ValueError(f"normalization_indices must contain values between 0 and {n_datasets-1}, got {idx}")
+    if convert_masses:
+        save_name = f"./figures/priors/individual/{source_type}_{population}_{eos_short[eos_samples_name]}_chirp.pdf"
+    else:
+        save_name = f"./figures/priors/individual/{source_type}_{population}_{eos_short[eos_samples_name]}_component.pdf"
 
-#             # Create dummy dataset by selecting specified dataset for each parameter
-#             dummy_columns = []
-#             for param_idx, dataset_idx in enumerate(normalization_indices):
-#                 dataset_name = eos_samples_name_list[dataset_idx]
-#                 dataset = datasets[dataset_name]
-#                 dummy_columns.append(dataset[:, param_idx])
+    if convert_to_lambda_tilde:
+        save_name = save_name.replace(".pdf", "_tilde.pdf")
 
-#             dummy_dataset = np.column_stack(dummy_columns)
-#             print(f"Created dummy dataset for {pop} using indices {normalization_indices}")
+    print(f"Saving to {save_name}")
+    plt.savefig(save_name, bbox_inches="tight", dpi=150)
 
-#         # ==============================================
-#         # LOOP 2: PLOTTING
-#         # ==============================================
+    if os.path.exists("../../paper/Figures"):
+        print(f"Also saving to the Overleaf paper repo")
+        save_name_paper = save_name.replace("./figures/priors/individual/", "../../paper/Figures/")
+        plt.savefig(save_name_paper, bbox_inches="tight", dpi=150)
 
-#         if FILL_ALL:
-#             # Plot all EOS with filled contours, all at same zorder
-#             # Order matters for overlapping regions (last plotted on top)
+    plt.close()
 
-#             print(f"Plotting radio_NICER with filled contours...")
-#             corner_fig = corner.corner(
-#                 datasets["radio_NICER"],
-#                 labels=labels,
-#                 range=ranges,
-#                 color=eos_colors["radio_NICER"],
-#                 fig=subfigs[pop_idx],
-#                 fill_contours=True,
-#                 plot_contours=True,
-#                 levels=levels,
-#                 hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
-#                 contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
-#                 contourf_kwargs={'zorder': 999},
-#                 **BASE_CORNER_KWARGS
-#             )
 
-#             print(f"Plotting radio_chiEFT with filled contours...")
-#             corner_fig = corner.corner(
-#                 datasets["radio_chiEFT"],
-#                 labels=labels,
-#                 range=ranges,
-#                 color=eos_colors["radio_chiEFT"],
-#                 fig=corner_fig,
-#                 fill_contours=True,
-#                 plot_contours=True,
-#                 levels=levels,
-#                 hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
-#                 contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
-#                 contourf_kwargs={'zorder': 999},
-#                 **BASE_CORNER_KWARGS
-#             )
+def individual_cornerplot_all_eos(source_type: str,
+                                  population: str,
+                                  convert_masses: bool = True,
+                                  convert_to_lambda_tilde: bool = True,
+                                  levels: list = None,
+                                  filled_eos: str = "radio") -> None:
+    """
+    Create a single corner plot with all three EOS constraints overlaid.
+    PSR constraint is filled, others are shown as thick lines.
 
-#             print(f"Plotting radio with filled contours...")
-#             corner_fig = corner.corner(
-#                 datasets["radio"],
-#                 labels=labels,
-#                 range=ranges,
-#                 color=eos_colors["radio"],
-#                 fig=corner_fig,
-#                 fill_contours=True,
-#                 plot_contours=True,
-#                 levels=levels,
-#                 hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
-#                 contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
-#                 contourf_kwargs={'zorder': 999},
-#                 **BASE_CORNER_KWARGS
-#             )
-#         else:
-#             # Original behavior: only fill radio, others as lines
-#             print(f"Plotting {filled_eos} with filled contours...")
-#             filled_color = eos_colors[filled_eos]
+    Args:
+        source_type (str): Source type ("bns" or "nsbh").
+        population (str): Population name ("uniform", "gaussian", "double_gaussian").
+        convert_masses (bool): If True, use chirp mass and mass ratio. If False, use component masses.
+        convert_to_lambda_tilde (bool): If True, convert to lambda_tilde and delta_lambda_tilde.
+        levels (list): Confidence levels for contours (e.g., [0.68, 0.95]).
+        filled_eos (str): Which EOS to plot with filled contours (default: "radio").
+    """
 
-#             corner_fig = corner.corner(
-#                 datasets[filled_eos],
-#                 labels=labels,
-#                 range=ranges,
-#                 color=filled_color,
-#                 fig=subfigs[pop_idx],
-#                 fill_contours=True,
-#                 plot_contours=True,
-#                 levels=levels,
-#                 hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
-#                 contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
-#                 contourf_kwargs={'zorder': 999},  # Filled regions very high
-#                 **BASE_CORNER_KWARGS
-#             )
+    if convert_to_lambda_tilde and source_type == "nsbh":
+        print(f"Not doing lambda tilde conversion for NSBH")
+        convert_to_lambda_tilde = False
 
-#             # Step 2: Overlay line contours for other EOS datasets (EVEN HIGHER zorder)
-#             for eos_samples_name in eos_samples_name_list:
-#                 if eos_samples_name == filled_eos:
-#                     continue  # Already plotted with fill
+    if levels is None:
+        levels = [0.68, 0.95]
 
-#                 print(f"Plotting {eos_samples_name} with line contours...")
-#                 line_color = eos_colors[eos_samples_name]
+    # Use consistent EOS colors (colorblind-friendly)
+    eos_colors = {
+        "radio": utils.EOS_COLORS["radio"],
+        "radio_chiEFT": utils.EOS_COLORS["radio_chiEFT"],
+        "radio_NICER": utils.EOS_COLORS["radio_NICER"]
+    }
 
-#                 corner_fig = corner.corner(
-#                     datasets[eos_samples_name],
-#                     labels=labels,
-#                     range=ranges,
-#                     color=line_color,
-#                     fig=corner_fig,  # Use the existing figure
-#                     fill_contours=False,  # No fill for overlay
-#                     plot_contours=True,
-#                     levels=levels,
-#                     hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Keep 1D histograms at standard width
-#                     contour_kwargs={'linewidths': LINE_ONLY_LINEWIDTH, 'zorder': 1001},  # Thick 2D contours
-#                     **BASE_CORNER_KWARGS
-#                 )
+    # Determine which parameters to fetch for the plotting
+    if convert_masses:
+        mass_keys = ["chirp_mass_source", "mass_ratio"]
+    else:
+        mass_keys = ["m1", "m2"]
+    if convert_to_lambda_tilde:
+        lambda_keys = ["lambda_tilde", "delta_lambda_tilde"]
+    else:
+        if source_type == "bns":
+            lambda_keys = ["lambda_1", "lambda_2"]
+        elif source_type == "nsbh":
+            lambda_keys = ["lambda_2"]
 
-#         # Step 3: Plot invisible dummy dataset LAST for histogram normalization
-#         if dummy_dataset is not None:
-#             print(f"Plotting invisible dummy dataset for {pop} for histogram normalization")
-#             corner_fig = corner.corner(
-#                 dummy_dataset,
-#                 labels=labels,
-#                 range=ranges,
-#                 fig=corner_fig,
-#                 plot_contours=False,
-#                 fill_contours=False,
-#                 hist_kwargs={'alpha': 0},  # Invisible histograms
-#                 **BASE_CORNER_KWARGS
-#             )
+    keys = mass_keys + lambda_keys
+    labels = [utils.TEX_TRANSLATION_DICT[key] for key in keys]
 
-#         # # Add title for each population (REMOVED)
-#         # title_map = {
-#         #     "uniform": "Uniform",
-#         #     "gaussian": "Gaussian",
-#         #     "double_gaussian": "Double Gaussian"
-#         # }
-#         # subfigs[pop_idx].suptitle(title_map[pop], fontsize=40, y=0.98)
+    eos_samples_name_list = ["radio", "radio_chiEFT", "radio_NICER"]
 
-#     if PLOT_BOXES:
-#         # Add source label to the left of the plots
-#         # Get all axes from the figure
-#         all_axes = fig.get_axes()
-#         x0_list = [ax.get_position().x0 for ax in all_axes]
-#         y0_list = [ax.get_position().y0 for ax in all_axes]
-#         x1_list = [ax.get_position().x1 for ax in all_axes]
-#         y1_list = [ax.get_position().y1 for ax in all_axes]
+    print(f"\nPlotting {source_type} - {population} - all EOS constraints...")
 
-#         min_x = min(x0_list)
-#         min_y = min(y0_list)
-#         max_y = max(y1_list)
+    # Determine ranges for this combination
+    if USE_CUSTOM_RANGE:
+        range_key = f"{source_type}_{population}"
+        if range_key in CORNERPLOT_RANGES:
+            ranges = CORNERPLOT_RANGES[range_key]
+            print(f"Using custom ranges for {range_key}")
+            if ranges is not None:
+                ranges = apply_ranges_scale_factor(ranges)
+        else:
+            print(f"Warning: No custom ranges found for {range_key}, will auto-compute")
+            ranges = None
+    else:
+        ranges = None
 
-#         # Add vertical text to the left
-#         text_x = min_x - 0.08
-#         text_y = (min_y + max_y) / 2
-#         source_label = "BNS" if source_type == "bns" else "NSBH"
+    # Load all datasets
+    datasets = {}
+    for eos_samples_name in eos_samples_name_list:
+        path = get_training_data_path(population, source_type, eos_samples_name)
+        data = dict(np.load(path))
+        data = make_conversions(data)
+        corner_data = [data[k] for k in keys]
+        corner_data = np.array(corner_data).T
+        datasets[eos_samples_name] = corner_data
 
-#         fig.text(
-#             text_x,
-#             text_y,
-#             source_label,
-#             fontsize=SRC_BOX_LABEL_FONTSIZE,
-#             rotation=90,
-#             verticalalignment='center',
-#             horizontalalignment='center',
-#             transform=fig.transFigure,
-#             weight='bold'
-#         )
+    # Determine ranges across all datasets if not provided
+    if ranges is None:
+        print(f"Computing ranges for {population} across all EOS datasets")
+        ranges = get_ranges_across_datasets(datasets)
 
-#     # Add legend in the top-right area of the overall figure
-#     legend_x = 0.875
-#     legend_y = 0.90
-#     dy = 0.080
-#     legend_fontsize = 64
+    # Apply physical boundaries to ranges
+    print(f"Applying physical boundaries to ranges")
+    ranges = apply_physical_boundaries(ranges, keys)
 
-#     for i, eos_samples_name in enumerate(eos_samples_name_list):
-#         fig.text(
-#             legend_x,
-#             legend_y - i * dy,
-#             utils.EOS_SAMPLES_NAMES_DICT[eos_samples_name],
-#             color=eos_colors[eos_samples_name],
-#             fontsize=legend_fontsize,
-#             transform=fig.transFigure,
-#             verticalalignment='top',
-#             horizontalalignment='left'
-#         )
+    # Create the corner plot
+    fig = plt.figure(figsize=(14, 14))
 
-#     # Save the combined figure
-#     os.makedirs("./figures/priors/combined", exist_ok=True)
+    # Plot filled EOS first
+    print(f"Plotting {filled_eos} with filled contours...")
+    corner_fig = corner.corner(
+        datasets[filled_eos],
+        labels=labels,
+        range=ranges,
+        color=eos_colors[filled_eos],
+        fig=fig,
+        fill_contours=True,
+        plot_contours=True,
+        levels=levels,
+        hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+        contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+        contourf_kwargs={'zorder': 999},
+        **BASE_CORNER_KWARGS
+    )
 
-#     if convert_masses:
-#         save_name = f"./figures/priors/combined/{source_type}_all_populations_chirp.pdf"
-#     else:
-#         save_name = f"./figures/priors/combined/{source_type}_all_populations_component.pdf"
+    # Overlay line contours for other EOS datasets
+    for eos_samples_name in eos_samples_name_list:
+        if eos_samples_name == filled_eos:
+            continue  # Already plotted with fill
 
-#     if convert_to_lambda_tilde:
-#         save_name = save_name.replace(".pdf", "_tilde.pdf")
+        print(f"Plotting {eos_samples_name} with line contours...")
+        corner_fig = corner.corner(
+            datasets[eos_samples_name],
+            labels=labels,
+            range=ranges,
+            color=eos_colors[eos_samples_name],
+            fig=corner_fig,
+            fill_contours=False,
+            plot_contours=True,
+            levels=levels,
+            hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},
+            contour_kwargs={'linewidths': LINE_ONLY_LINEWIDTH, 'zorder': 1001},
+            **BASE_CORNER_KWARGS
+        )
 
-#     print(f"\nSaving combined figure to {save_name}")
-#     plt.savefig(save_name, bbox_inches="tight", dpi=150)
+    # Plot invisible dummy dataset for histogram normalization
+    # Use radio_chiEFT (index 1) for all parameters to ensure proper y-axis scaling
+    print(f"Plotting invisible dummy dataset for histogram normalization")
+    dummy_dataset = datasets["radio_chiEFT"]
 
-#     if os.path.exists("../../paper/Figures"):
-#         print(f"Also saving to the Overleaf paper repo")
-#         save_name_paper = save_name.replace("./figures/priors/combined/", "../../paper/Figures/")
-#         plt.savefig(save_name_paper, bbox_inches="tight", dpi=150)
+    corner_fig = corner.corner(
+        dummy_dataset,
+        labels=labels,
+        range=ranges,
+        fig=corner_fig,
+        plot_contours=False,
+        fill_contours=False,
+        hist_kwargs={'alpha': 0},  # Invisible histograms
+        **BASE_CORNER_KWARGS
+    )
 
-#     plt.close()
+    # Add legend
+    legend_x = 0.65
+    legend_y = 0.95
+    dy = 0.05
+    legend_fontsize = 42
+
+    for i, eos_samples_name in enumerate(eos_samples_name_list):
+        fig.text(
+            legend_x,
+            legend_y - i * dy,
+            utils.EOS_SAMPLES_NAMES_DICT[eos_samples_name],
+            color=eos_colors[eos_samples_name],
+            fontsize=legend_fontsize,
+            transform=fig.transFigure,
+            verticalalignment='top',
+            horizontalalignment='left'
+        )
+
+    # Add title
+    title_map = {
+        "uniform": "Uniform",
+        "gaussian": "Gaussian",
+        "double_gaussian": "Double Gaussian"
+    }
+    source_label = "BNS" if source_type == "bns" else "NSBH"
+
+    fig.suptitle(f"{source_label} - {title_map[population]}",
+                 fontsize=48, y=0.995)
+
+    # Save the figure
+    os.makedirs("./figures/priors/individual", exist_ok=True)
+
+    if convert_masses:
+        save_name = f"./figures/priors/individual/{source_type}_{population}_all_eos_chirp.pdf"
+    else:
+        save_name = f"./figures/priors/individual/{source_type}_{population}_all_eos_component.pdf"
+
+    if convert_to_lambda_tilde:
+        save_name = save_name.replace(".pdf", "_tilde.pdf")
+
+    print(f"Saving to {save_name}")
+    plt.savefig(save_name, bbox_inches="tight", dpi=150)
+
+    if os.path.exists("../../paper/Figures"):
+        print(f"Also saving to the Overleaf paper repo")
+        save_name_paper = save_name.replace("./figures/priors/individual/", "../../paper/Figures/")
+        plt.savefig(save_name_paper, bbox_inches="tight", dpi=150)
+
+    plt.close()
+
+
+def combined_plot(source_type: str,
+                  convert_masses: bool = True,
+                  convert_to_lambda_tilde: bool = True,
+                  levels: list = None,
+                  filled_eos: str = "radio",
+                  ranges_dict: dict = None,
+                  normalization_indices_dict: dict = None) -> None:
+    """
+    Create a combined figure with three corner plots side-by-side for different populations.
+
+    Args:
+        source_type (str): Source type ("bns" or "nsbh").
+        convert_masses (bool): If True, use chirp mass and mass ratio. If False, use component masses.
+        convert_to_lambda_tilde (bool): If True, convert to lambda_tilde and delta_lambda_tilde.
+        levels (list): Confidence levels for contours (e.g., [0.68, 0.95]).
+        filled_eos (str): Which EOS to plot with filled contours (default: "radio").
+        ranges_dict (dict): Dictionary mapping population names to range lists.
+        normalization_indices_dict (dict): Dictionary mapping population names to normalization indices lists.
+            Each list specifies which dataset (0=radio, 1=radio_chiEFT, 2=radio_NICER) to use for
+            each parameter when creating the normalization dummy dataset. If None, no normalization.
+    """
+
+    if convert_to_lambda_tilde and source_type == "nsbh":
+        print(f"Not doing lambda tilde conversion for NSBH")
+        convert_to_lambda_tilde = False
+
+    if levels is None:
+        levels = [0.68, 0.95]
+
+    # Use consistent EOS colors (colorblind-friendly)
+    eos_colors = {
+        "radio": utils.EOS_COLORS["radio"],
+        "radio_chiEFT": utils.EOS_COLORS["radio_chiEFT"],
+        "radio_NICER": utils.EOS_COLORS["radio_NICER"]
+    }
+
+    # Determine which parameters to fetch for the plotting
+    if convert_masses:
+        mass_keys = ["chirp_mass_source", "mass_ratio"]
+    else:
+        mass_keys = ["m1", "m2"]
+    if convert_to_lambda_tilde:
+        lambda_keys = ["lambda_tilde", "delta_lambda_tilde"]
+    else:
+        if source_type == "bns":
+            lambda_keys = ["lambda_1", "lambda_2"]
+        elif source_type == "nsbh":
+            lambda_keys = ["lambda_2"]
+
+    keys = mass_keys + lambda_keys
+    labels = [utils.TEX_TRANSLATION_DICT[key] for key in keys]
+
+    eos_samples_name_list = ["radio", "radio_chiEFT", "radio_NICER"]
+    populations = ["uniform", "gaussian", "double_gaussian"]
+
+    # Create the main figure with three subfigures side-by-side
+    fig = plt.figure(figsize=(42, 14))
+    subfigs = fig.subfigures(1, 3, wspace=0.05)
+
+    # Iterate over each population
+    for pop_idx, pop in enumerate(populations):
+        print(f"\nPlotting {pop} population...")
+
+        # Determine ranges for this population
+        if USE_CUSTOM_RANGE:
+            # Use custom ranges from CORNERPLOT_RANGES dictionary
+            range_key = f"{source_type}_{pop}"
+            if range_key in CORNERPLOT_RANGES:
+                ranges = CORNERPLOT_RANGES[range_key]
+                print(f"Using custom ranges for {range_key}")
+                # Apply scaling factor to explicit ranges as well
+                if ranges is not None:
+                    ranges = apply_ranges_scale_factor(ranges)
+            else:
+                print(f"Warning: No custom ranges found for {range_key}, will auto-compute")
+                ranges = None
+        else:
+            # Use ranges from ranges_dict parameter (legacy method)
+            if ranges_dict is not None and pop in ranges_dict:
+                ranges = ranges_dict[pop]
+                # Apply scaling factor to explicit ranges as well
+                if ranges is not None:
+                    ranges = apply_ranges_scale_factor(ranges)
+            else:
+                ranges = None
+
+        # Determine normalization indices for this population
+        normalization_indices = None
+        if normalization_indices_dict is not None and pop in normalization_indices_dict:
+            normalization_indices = normalization_indices_dict[pop]
+
+        # ==============================================
+        # LOOP 1: DATA LOADING
+        # ==============================================
+        datasets = {}  # Dictionary to store all loaded datasets
+
+        for eos_samples_name in eos_samples_name_list:
+            # Load the corner plot data
+            path = get_training_data_path(pop, source_type, eos_samples_name)
+            data = dict(np.load(path))
+            data = make_conversions(data)
+
+            # Fetch the relevant data for the corner plot
+            corner_data = [data[k] for k in keys]
+            corner_data = np.array(corner_data).T
+
+            # Store in datasets dictionary
+            datasets[eos_samples_name] = corner_data
+
+        # Determine ranges across all datasets if not provided
+        if ranges is None:
+            print(f"Computing ranges for {pop} across all EOS datasets")
+            ranges = get_ranges_across_datasets(datasets)
+
+        # Apply physical boundaries to ranges
+        print(f"Applying physical boundaries to ranges for {pop}")
+        ranges = apply_physical_boundaries(ranges, keys)
+
+        # ==============================================
+        # DUMMY DATASET CONSTRUCTION FOR NORMALIZATION
+        # ==============================================
+        dummy_dataset = None
+        if len(datasets) > 1 and normalization_indices is not None:
+            # Validate normalization_indices
+            n_params = len(keys)
+            if len(normalization_indices) != n_params:
+                raise ValueError(f"normalization_indices must have length {n_params} (number of parameters), got {len(normalization_indices)}")
+
+            # Check that all indices are valid
+            n_datasets = len(eos_samples_name_list)
+            for idx in normalization_indices:
+                if not (0 <= idx < n_datasets):
+                    raise ValueError(f"normalization_indices must contain values between 0 and {n_datasets-1}, got {idx}")
+
+            # Create dummy dataset by selecting specified dataset for each parameter
+            dummy_columns = []
+            for param_idx, dataset_idx in enumerate(normalization_indices):
+                dataset_name = eos_samples_name_list[dataset_idx]
+                dataset = datasets[dataset_name]
+                dummy_columns.append(dataset[:, param_idx])
+
+            dummy_dataset = np.column_stack(dummy_columns)
+            print(f"Created dummy dataset for {pop} using indices {normalization_indices}")
+
+        # ==============================================
+        # LOOP 2: PLOTTING
+        # ==============================================
+
+        if FILL_ALL:
+            # Plot all EOS with filled contours, all at same zorder
+            # Order matters for overlapping regions (last plotted on top)
+
+            print(f"Plotting radio_NICER with filled contours...")
+            corner_fig = corner.corner(
+                datasets["radio_NICER"],
+                labels=labels,
+                range=ranges,
+                color=eos_colors["radio_NICER"],
+                fig=subfigs[pop_idx],
+                fill_contours=True,
+                plot_contours=True,
+                levels=levels,
+                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                contourf_kwargs={'zorder': 999},
+                **BASE_CORNER_KWARGS
+            )
+
+            print(f"Plotting radio_chiEFT with filled contours...")
+            corner_fig = corner.corner(
+                datasets["radio_chiEFT"],
+                labels=labels,
+                range=ranges,
+                color=eos_colors["radio_chiEFT"],
+                fig=corner_fig,
+                fill_contours=True,
+                plot_contours=True,
+                levels=levels,
+                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                contourf_kwargs={'zorder': 999},
+                **BASE_CORNER_KWARGS
+            )
+
+            print(f"Plotting radio with filled contours...")
+            corner_fig = corner.corner(
+                datasets["radio"],
+                labels=labels,
+                range=ranges,
+                color=eos_colors["radio"],
+                fig=corner_fig,
+                fill_contours=True,
+                plot_contours=True,
+                levels=levels,
+                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                contourf_kwargs={'zorder': 999},
+                **BASE_CORNER_KWARGS
+            )
+        else:
+            # Original behavior: only fill radio, others as lines
+            print(f"Plotting {filled_eos} with filled contours...")
+            filled_color = eos_colors[filled_eos]
+
+            corner_fig = corner.corner(
+                datasets[filled_eos],
+                labels=labels,
+                range=ranges,
+                color=filled_color,
+                fig=subfigs[pop_idx],
+                fill_contours=True,
+                plot_contours=True,
+                levels=levels,
+                hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1000},
+                contour_kwargs={'linewidths': LINEWIDTH, 'zorder': 1000},
+                contourf_kwargs={'zorder': 999},  # Filled regions very high
+                **BASE_CORNER_KWARGS
+            )
+
+            # Step 2: Overlay line contours for other EOS datasets (EVEN HIGHER zorder)
+            for eos_samples_name in eos_samples_name_list:
+                if eos_samples_name == filled_eos:
+                    continue  # Already plotted with fill
+
+                print(f"Plotting {eos_samples_name} with line contours...")
+                line_color = eos_colors[eos_samples_name]
+
+                corner_fig = corner.corner(
+                    datasets[eos_samples_name],
+                    labels=labels,
+                    range=ranges,
+                    color=line_color,
+                    fig=corner_fig,  # Use the existing figure
+                    fill_contours=False,  # No fill for overlay
+                    plot_contours=True,
+                    levels=levels,
+                    hist_kwargs={'linewidth': LINEWIDTH, 'zorder': 1001},  # Keep 1D histograms at standard width
+                    contour_kwargs={'linewidths': LINE_ONLY_LINEWIDTH, 'zorder': 1001},  # Thick 2D contours
+                    **BASE_CORNER_KWARGS
+                )
+
+        # Step 3: Plot invisible dummy dataset LAST for histogram normalization
+        if dummy_dataset is not None:
+            print(f"Plotting invisible dummy dataset for {pop} for histogram normalization")
+            corner_fig = corner.corner(
+                dummy_dataset,
+                labels=labels,
+                range=ranges,
+                fig=corner_fig,
+                plot_contours=False,
+                fill_contours=False,
+                hist_kwargs={'alpha': 0},  # Invisible histograms
+                **BASE_CORNER_KWARGS
+            )
+
+        # # Add title for each population (REMOVED)
+        # title_map = {
+        #     "uniform": "Uniform",
+        #     "gaussian": "Gaussian",
+        #     "double_gaussian": "Double Gaussian"
+        # }
+        # subfigs[pop_idx].suptitle(title_map[pop], fontsize=40, y=0.98)
+
+    if PLOT_BOXES:
+        # Add source label to the left of the plots
+        # Get all axes from the figure
+        all_axes = fig.get_axes()
+        x0_list = [ax.get_position().x0 for ax in all_axes]
+        y0_list = [ax.get_position().y0 for ax in all_axes]
+        x1_list = [ax.get_position().x1 for ax in all_axes]
+        y1_list = [ax.get_position().y1 for ax in all_axes]
+
+        min_x = min(x0_list)
+        min_y = min(y0_list)
+        max_y = max(y1_list)
+
+        # Add vertical text to the left
+        text_x = min_x - 0.08
+        text_y = (min_y + max_y) / 2
+        source_label = "BNS" if source_type == "bns" else "NSBH"
+
+        fig.text(
+            text_x,
+            text_y,
+            source_label,
+            fontsize=SRC_BOX_LABEL_FONTSIZE,
+            rotation=90,
+            verticalalignment='center',
+            horizontalalignment='center',
+            transform=fig.transFigure,
+            weight='bold'
+        )
+
+    # Add legend in the top-right area of the overall figure
+    legend_x = 0.875
+    legend_y = 0.90
+    dy = 0.080
+    legend_fontsize = 64
+
+    for i, eos_samples_name in enumerate(eos_samples_name_list):
+        fig.text(
+            legend_x,
+            legend_y - i * dy,
+            utils.EOS_SAMPLES_NAMES_DICT[eos_samples_name],
+            color=eos_colors[eos_samples_name],
+            fontsize=legend_fontsize,
+            transform=fig.transFigure,
+            verticalalignment='top',
+            horizontalalignment='left'
+        )
+
+    # Save the individual figure
+    os.makedirs("./figures/priors/individual", exist_ok=True)
+
+    if convert_masses:
+        save_name = f"./figures/priors/individual/{source_type}_all_populations_chirp.pdf"
+    else:
+        save_name = f"./figures/priors/individual/{source_type}_all_populations_component.pdf"
+
+    if convert_to_lambda_tilde:
+        save_name = save_name.replace(".pdf", "_tilde.pdf")
+
+    print(f"\nSaving individual figure to {save_name}")
+    plt.savefig(save_name, bbox_inches="tight", dpi=150)
+
+    if os.path.exists("../../paper/Figures"):
+        print(f"Also saving to the Overleaf paper repo")
+        save_name_paper = save_name.replace("./figures/priors/individual/", "../../paper/Figures/")
+        plt.savefig(save_name_paper, bbox_inches="tight", dpi=150)
+
+    plt.close()
 
 
 def combined_plot_both_sources(convert_masses: bool = True,
@@ -1075,115 +1404,153 @@ def main():
 
     convert_to_lambda_tilde = True
 
-    # First, create individual plots for BNS and NSBH
-    for source_type in ["bns", "nsbh"]:
-        print(f"\n{'='*60}")
-        print(f"Creating combined plot for {source_type}")
-        print(f"{'='*60}")
+    # Generate individual corner plots for each combination
+    eos_samples_name_list = ["radio", "radio_chiEFT", "radio_NICER"]
+    populations = ["uniform", "gaussian", "double_gaussian"]
+    source_types = ["bns", "nsbh"]
 
-        # Define ranges for each population
-        ranges_dict = {}
-
-        if source_type == "bns":
-            if convert_to_lambda_tilde:
-                ranges_dict = {
-                    "uniform": [[0.8, 2.2], [0.40, 1.0], [0.0, 1000.0], [0.0, 300.0]],
-                    "gaussian": [[0.99, 1.35], [0.75, 1.0], [0.0, 1800.0], [0.0, 180.0]],
-                    "double_gaussian": [[1.00, 1.75], [0.50, 1.0], [0.0, 1700.0], [0.0, 180.0]],
-                }
-            else:
-                # No ranges for the m1-m2 version
-                ranges_dict = None
-        else:  # nsbh
-            if convert_to_lambda_tilde:
-                ranges_dict = {
-                    "uniform": [[1.25, 3.0], [0.20, 1.0], [0.0, 1000.0]],
-                    "gaussian": None,
-                    "double_gaussian": None,
-                }
-            else:
-                # No ranges for the m1-m2 version
-                ranges_dict = None
-
-        # Define normalization indices for each population
-        # Index mapping: 0=radio, 1=radio_chiEFT, 2=radio_NICER
-        normalization_indices_dict = {}
-
-        if source_type == "bns":
-            # Use radio_chiEFT for all 4 parameters (chirp_mass, mass_ratio, lambda_tilde, delta_lambda_tilde)
-            normalization_indices_dict = {
-                "uniform": [1, 1, 1, 1],
-                "gaussian": [1, 1, 1, 1],
-                "double_gaussian": [1, 1, 1, 1],
-            }
-        else:  # nsbh
-            # Use radio_chiEFT for all 3 parameters (chirp_mass, mass_ratio, lambda_2)
-            normalization_indices_dict = {
-                "uniform": [1, 1, 1],
-                "gaussian": [1, 1, 1],
-                "double_gaussian": [1, 1, 1],
-            }
-
-        ### Skipping this for now so we can focus on BNS+NSBH plot
-        # combined_plot(
-        #     source_type=source_type,
-        #     convert_masses=True,
-        #     convert_to_lambda_tilde=convert_to_lambda_tilde,
-        #     levels=[0.68, 0.95],
-        #     filled_eos="radio",
-        #     ranges_dict=ranges_dict,
-        #     normalization_indices_dict=normalization_indices_dict
-        # )
-
-    # Now create the combined BNS+NSBH plot
     print(f"\n{'='*60}")
-    print(f"Creating combined BNS+NSBH plot")
+    print(f"Creating individual corner plots for all combinations")
     print(f"{'='*60}")
 
-    # Define ranges for BNS
-    if convert_to_lambda_tilde:
-        ranges_dict_bns = {
-            "uniform": [[0.8, 2.2], [0.40, 1.0], [0.0, 1000.0], [0.0, 300.0]],
-            "gaussian": [[0.99, 1.35], [0.75, 1.0], [0.0, 1800.0], [0.0, 180.0]],
-            "double_gaussian": [[1.00, 1.75], [0.50, 1.0], [0.0, 1700.0], [0.0, 180.0]],
-        }
-    else:
-        ranges_dict_bns = None
+    for source_type in source_types:
+        for population in populations:
+            for eos_samples_name in eos_samples_name_list:
+                individual_cornerplot(
+                    source_type=source_type,
+                    population=population,
+                    eos_samples_name=eos_samples_name,
+                    convert_masses=True,
+                    convert_to_lambda_tilde=convert_to_lambda_tilde,
+                    levels=[0.68, 0.95]
+                )
 
-    # Define ranges for NSBH
-    if convert_to_lambda_tilde:
-        ranges_dict_nsbh = {
-            "uniform": [[1.25, 3.0], [0.20, 1.0], [0.0, 1000.0]],
-            "gaussian": None,
-            "double_gaussian": None,
-        }
-    else:
-        ranges_dict_nsbh = None
+    # Generate individual corner plots with all EOS constraints overlaid
+    print(f"\n{'='*60}")
+    print(f"Creating individual corner plots with all EOS constraints")
+    print(f"{'='*60}")
 
-    # Define normalization indices for BNS
-    normalization_indices_dict_bns = {
-        "uniform": [1, 1, 1, 1],
-        "gaussian": [1, 1, 1, 1],
-        "double_gaussian": [1, 1, 1, 1],
-    }
+    for source_type in source_types:
+        for population in populations:
+            individual_cornerplot_all_eos(
+                source_type=source_type,
+                population=population,
+                convert_masses=True,
+                convert_to_lambda_tilde=convert_to_lambda_tilde,
+                levels=[0.68, 0.95],
+                filled_eos="radio"
+            )
 
-    # Define normalization indices for NSBH
-    normalization_indices_dict_nsbh = {
-        "uniform": [1, 1, 1],
-        "gaussian": [1, 1, 1],
-        "double_gaussian": [1, 1, 1],
-    }
+    # Skip combined plots for now - uncomment sections below if needed
 
-    combined_plot_both_sources(
-        convert_masses=True,
-        convert_to_lambda_tilde=convert_to_lambda_tilde,
-        levels=[0.68, 0.95],
-        filled_eos="radio",  # Only used when FILL_ALL=False
-        ranges_dict_bns=ranges_dict_bns,
-        ranges_dict_nsbh=ranges_dict_nsbh,
-        normalization_indices_dict_bns=normalization_indices_dict_bns,
-        normalization_indices_dict_nsbh=normalization_indices_dict_nsbh
-    )
+    # # Combined plots for BNS and NSBH (commented out)
+    # for source_type in ["bns", "nsbh"]:
+    #     print(f"\n{'='*60}")
+    #     print(f"Creating combined plot for {source_type}")
+    #     print(f"{'='*60}")
+    #
+    #     # Define ranges for each population
+    #     ranges_dict = {}
+    #
+    #     if source_type == "bns":
+    #         if convert_to_lambda_tilde:
+    #             ranges_dict = {
+    #                 "uniform": [[0.8, 2.2], [0.40, 1.0], [0.0, 1000.0], [0.0, 300.0]],
+    #                 "gaussian": [[0.99, 1.35], [0.75, 1.0], [0.0, 1800.0], [0.0, 180.0]],
+    #                 "double_gaussian": [[1.00, 1.75], [0.50, 1.0], [0.0, 1700.0], [0.0, 180.0]],
+    #             }
+    #         else:
+    #             # No ranges for the m1-m2 version
+    #             ranges_dict = None
+    #     else:  # nsbh
+    #         if convert_to_lambda_tilde:
+    #             ranges_dict = {
+    #                 "uniform": [[1.25, 3.0], [0.20, 1.0], [0.0, 1000.0]],
+    #                 "gaussian": None,
+    #                 "double_gaussian": None,
+    #             }
+    #         else:
+    #             # No ranges for the m1-m2 version
+    #             ranges_dict = None
+    #
+    #     # Define normalization indices for each population
+    #     # Index mapping: 0=radio, 1=radio_chiEFT, 2=radio_NICER
+    #     normalization_indices_dict = {}
+    #
+    #     if source_type == "bns":
+    #         # Use radio_chiEFT for all 4 parameters (chirp_mass, mass_ratio, lambda_tilde, delta_lambda_tilde)
+    #         normalization_indices_dict = {
+    #             "uniform": [1, 1, 1, 1],
+    #             "gaussian": [1, 1, 1, 1],
+    #             "double_gaussian": [1, 1, 1, 1],
+    #         }
+    #     else:  # nsbh
+    #         # Use radio_chiEFT for all 3 parameters (chirp_mass, mass_ratio, lambda_2)
+    #         normalization_indices_dict = {
+    #             "uniform": [1, 1, 1],
+    #             "gaussian": [1, 1, 1],
+    #             "double_gaussian": [1, 1, 1],
+    #         }
+    #
+    #     combined_plot(
+    #         source_type=source_type,
+    #         convert_masses=True,
+    #         convert_to_lambda_tilde=convert_to_lambda_tilde,
+    #         levels=[0.68, 0.95],
+    #         filled_eos="radio",
+    #         ranges_dict=ranges_dict,
+    #         normalization_indices_dict=normalization_indices_dict
+    #     )
+
+    # # Combined BNS+NSBH plot (commented out)
+    # print(f"\n{'='*60}")
+    # print(f"Creating combined BNS+NSBH plot")
+    # print(f"{'='*60}")
+    #
+    # # Define ranges for BNS
+    # if convert_to_lambda_tilde:
+    #     ranges_dict_bns = {
+    #         "uniform": [[0.8, 2.2], [0.40, 1.0], [0.0, 1000.0], [0.0, 300.0]],
+    #         "gaussian": [[0.99, 1.35], [0.75, 1.0], [0.0, 1800.0], [0.0, 180.0]],
+    #         "double_gaussian": [[1.00, 1.75], [0.50, 1.0], [0.0, 1700.0], [0.0, 180.0]],
+    #     }
+    # else:
+    #     ranges_dict_bns = None
+    #
+    # # Define ranges for NSBH
+    # if convert_to_lambda_tilde:
+    #     ranges_dict_nsbh = {
+    #         "uniform": [[1.25, 3.0], [0.20, 1.0], [0.0, 1000.0]],
+    #         "gaussian": None,
+    #         "double_gaussian": None,
+    #     }
+    # else:
+    #     ranges_dict_nsbh = None
+    #
+    # # Define normalization indices for BNS
+    # normalization_indices_dict_bns = {
+    #     "uniform": [1, 1, 1, 1],
+    #     "gaussian": [1, 1, 1, 1],
+    #     "double_gaussian": [1, 1, 1, 1],
+    # }
+    #
+    # # Define normalization indices for NSBH
+    # normalization_indices_dict_nsbh = {
+    #     "uniform": [1, 1, 1],
+    #     "gaussian": [1, 1, 1],
+    #     "double_gaussian": [1, 1, 1],
+    # }
+    #
+    # combined_plot_both_sources(
+    #     convert_masses=True,
+    #     convert_to_lambda_tilde=convert_to_lambda_tilde,
+    #     levels=[0.68, 0.95],
+    #     filled_eos="radio",  # Only used when FILL_ALL=False
+    #     ranges_dict_bns=ranges_dict_bns,
+    #     ranges_dict_nsbh=ranges_dict_nsbh,
+    #     normalization_indices_dict_bns=normalization_indices_dict_bns,
+    #     normalization_indices_dict_nsbh=normalization_indices_dict_nsbh
+    # )
 
 
 if __name__ == "__main__":
